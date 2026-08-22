@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Allows an authorized business approver to approve or reject a submitted Resource 360 budget.</description>
+    <isLicensed>false</isLicensed>
+    <label>Resource 360 Approve Budgets</label>
+</CustomPermission>

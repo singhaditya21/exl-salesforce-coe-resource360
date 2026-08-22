@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Classification__c</fullName>
+    <label>Classification</label>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Billing</fullName>
+                <default>true</default>
+                <label>Billing</label>
+            </value>
+            <value>
+                <fullName>Contractual Shadow</fullName>
+                <default>false</default>
+                <label>Contractual Shadow</label>
+            </value>
+            <value>
+                <fullName>WAR</fullName>
+                <default>false</default>
+                <label>WAR</label>
+            </value>
+            <value>
+                <fullName>IFB/PO Awaited</fullName>
+                <default>false</default>
+                <label>IFB/PO Awaited</label>
+            </value>
+            <value>
+                <fullName>Blocked</fullName>
+                <default>false</default>
+                <label>Blocked</label>
+            </value>
+            <value>
+                <fullName>Value Consulting/Pre-sales</fullName>
+                <default>false</default>
+                <label>Value Consulting/Pre-sales</label>
+            </value>
+            <value>
+                <fullName>Shadow Trainee</fullName>
+                <default>false</default>
+                <label>Shadow Trainee</label>
+            </value>
+            <value>
+                <fullName>Shadow Lateral</fullName>
+                <default>false</default>
+                <label>Shadow Lateral</label>
+            </value>
+            <value>
+                <fullName>Leadership/PMO</fullName>
+                <default>false</default>
+                <label>Leadership/PMO</label>
+            </value>
+            <value>
+                <fullName>Testing COE</fullName>
+                <default>false</default>
+                <label>Testing COE</label>
+            </value>
+            <value>
+                <fullName>DLP COE</fullName>
+                <default>false</default>
+                <label>DLP COE</label>
+            </value>
+            <value>
+                <fullName>Regression</fullName>
+                <default>false</default>
+                <label>Regression</label>
+            </value>
+            <value>
+                <fullName>Training</fullName>
+                <default>false</default>
+                <label>Training</label>
+            </value>
+            <value>
+                <fullName>Investment/COE</fullName>
+                <default>false</default>
+                <label>Investment/COE</label>
+            </value>
+            <value>
+                <fullName>AFB</fullName>
+                <default>false</default>
+                <label>AFB</label>
+            </value>
+            <value>
+                <fullName>NAFB</fullName>
+                <default>false</default>
+                <label>NAFB</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

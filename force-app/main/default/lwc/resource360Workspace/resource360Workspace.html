@@ -1,0 +1,99 @@
+<template>
+    <article class="workspace">
+        <header class="hero">
+            <div>
+                <p class="eyebrow">EXL Salesforce COE</p>
+                <h1>Resource 360</h1>
+                <p class="subtitle">Native Salesforce staffing, skills, budgeting, allocation and delivery governance</p>
+            </div>
+            <div class="hero-actions">
+                <lightning-combobox label="Active business role" value={activeRole} options={roleOptions} onchange={handleRole}></lightning-combobox>
+                <lightning-button label="Refresh" icon-name="utility:refresh" onclick={loadData}></lightning-button>
+                <lightning-button variant="brand" label="Load sanitized demo data" icon-name="utility:database" onclick={handleSeed}></lightning-button>
+            </div>
+        </header>
+
+        <div class="status-strip">
+            <span class="status-pill status-pill_good">Salesforce system of record</span>
+            <span>{screenCountLabel}</span>
+            <span>Last refreshed {generatedLabel}</span>
+        </div>
+
+        <template lwc:if={loading}><lightning-spinner alternative-text="Loading Resource 360"></lightning-spinner></template>
+        <template lwc:if={errorMessage}><div class="error-panel" role="alert">{errorMessage}</div></template>
+
+        <div class="layout">
+            <aside class="module-rail" aria-label="Resource 360 modules">
+                <template for:each={modules} for:item="module">
+                    <button key={module.id} class={module.buttonClass} data-module={module.id} onclick={handleModule}>
+                        <lightning-icon icon-name={module.icon} size="small" alternative-text=""></lightning-icon>
+                        <span>{module.label}</span><strong>{module.count}</strong>
+                    </button>
+                </template>
+                <div class="screen-list">
+                    <p class="rail-heading">Screens</p>
+                    <template for:each={moduleScreens} for:item="screen">
+                        <button key={screen.id} class={screen.buttonClass} data-screen={screen.id} onclick={handleScreen}>
+                            <span>{screen.id}</span>{screen.title}
+                        </button>
+                    </template>
+                </div>
+            </aside>
+
+            <main class="content">
+                <section class="metric-grid" aria-label="Resource 360 summary">
+                    <template for:each={summaryCards} for:item="card">
+                        <article key={card.label} class="metric-card"><p>{card.label}</p><strong>{card.value}</strong><span>{card.note}</span></article>
+                    </template>
+                </section>
+
+                <section class="screen-heading">
+                    <div class="screen-copy">
+                        <div class="screen-meta"><span class="screen-id">{selectedScreen.id}</span><span>{selectedScreen.release}</span><span>{selectedScreen.kind}</span></div>
+                        <h2>{selectedScreen.title}</h2>
+                        <p>{selectedScreen.description}</p>
+                    </div>
+                    <div class="screen-context"><span class="role-chip">{activeRole}</span><small>Primary PRD action</small><strong>{selectedScreen.primary}</strong></div>
+                </section>
+
+                <template lwc:if={showStaffingForm}>
+                    <section class="action-panel">
+                        <div class="panel-heading"><div><p class="eyebrow">Governed command</p><h3>Create staffing request</h3></div><span>Approved-budget and capacity gates run in Apex</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Engagement" value={staffingDraft.engagementId} options={engagementOptions} data-field="engagementId" onchange={handleStaffingInput} required></lightning-combobox>
+                            <lightning-combobox label="Candidate" value={staffingDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handleStaffingInput} required></lightning-combobox>
+                            <lightning-input label="Salesforce role" value={staffingDraft.requestedRole} data-field="requestedRole" onchange={handleStaffingInput} required></lightning-input>
+                            <lightning-combobox label="Classification" value={staffingDraft.classification} options={classificationOptions} data-field="classification" onchange={handleStaffingInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Start date" value={staffingDraft.startDate} data-field="startDate" onchange={handleStaffingInput} required></lightning-input>
+                            <lightning-input type="date" label="End date" value={staffingDraft.endDate} data-field="endDate" onchange={handleStaffingInput} required></lightning-input>
+                            <lightning-input type="number" label="Daily hours" value={staffingDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleStaffingInput} required></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Submit staffing request" onclick={handleCreateStaffing}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showSkillsForm}>
+                    <section class="action-panel action-panel_purple">
+                        <div class="panel-heading"><div><p class="eyebrow">Manager-reviewed evidence</p><h3>Submit capability claim</h3></div><span>Only approved levels enter talent search</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Practitioner" value={skillDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handleSkillInput} required></lightning-combobox>
+                            <lightning-combobox label="Capability" value={skillDraft.capabilityId} options={capabilityOptions} data-field="capabilityId" onchange={handleSkillInput} required></lightning-combobox>
+                            <lightning-combobox label="Requested proficiency" value={skillDraft.requestedLevel} options={levelOptions} data-field="requestedLevel" onchange={handleSkillInput} required></lightning-combobox>
+                            <lightning-input type="number" label="Years of experience" value={skillDraft.yearsExperience} min="0" max="50" step="0.25" data-field="yearsExperience" onchange={handleSkillInput}></lightning-input>
+                            <lightning-textarea class="form-span" label="Evidence" value={skillDraft.evidence} data-field="evidence" onchange={handleSkillInput}></lightning-textarea>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Submit capability claim" onclick={handleSubmitClaim}></lightning-button></div>
+                    </section>
+                </template>
+
+                <section class="records-panel">
+                    <div class="panel-heading"><div><p class="eyebrow">Live Salesforce data</p><h3>{selectedScreen.title}</h3></div><span>Open a linked record for the standard Salesforce detail page</span></div>
+                    <template lwc:if={hasRows}>
+                        <lightning-datatable key-field="id" data={tableRows} columns={tableColumns} hide-checkbox-column onrowaction={handleRowAction}></lightning-datatable>
+                    </template>
+                    <template lwc:else><div class="empty-state"><lightning-icon icon-name="utility:inbox" size="medium"></lightning-icon><h3>No records yet</h3><p>Load the compact sanitized dataset or create a governed record.</p></div></template>
+                </section>
+            </main>
+        </div>
+    </article>
+</template>
