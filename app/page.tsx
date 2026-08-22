@@ -2,8 +2,17 @@
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
+import {
+  StaffingDecisionForm,
+  StaffingQueue,
+  StaffingRequestDetail,
+  useStaffingWorkflow,
+  type StaffingDecision,
+  type StaffingRequest,
+} from "./staffing-workflow";
 
 type TableModel = { columns: string[]; rows: string[][] };
+const initialSelectedRequestId = "SR-1842";
 
 const people = [
   ["Aarav Mehta", "Data Cloud Architect", "Data & AI", "94%", "02 Sep", "Available"],
@@ -238,8 +247,31 @@ function SsoCanvas() {
   return <section className="sso-stage"><div className="sso-art"><span className="brand-mark giant">exl</span><span>Salesforce COE</span><h2>One governed view of<br />skills, staffing and delivery.</h2><p>Resource360 connects approved economics to verified capability, committed capacity and actual effort.</p><div className="sso-metrics"><span><strong>1,862</strong>Active practitioners</span><span><strong>38</strong>Active engagements</span><span><strong>91%</strong>Profile ready</span></div></div><div className="sso-card"><div><span className="brand-mark">exl</span><strong>Resource360</strong></div><h3>Welcome back</h3><p>Sign in with your EXL enterprise account to continue.</p><button className="sso-button"><i>▦</i> Continue with EXL SSO</button><span className="secure-note">⌾ Protected by Microsoft Entra ID</span><div className="sso-links"><button>Privacy</button><button>Accessibility</button><button>Get help</button></div></div></section>;
 }
 
-function ScreenCanvas({ screen }: { screen: ScreenSpec }) {
+function ScreenCanvas({
+  screen,
+  staffingRequests,
+  selectedStaffingRequest,
+  onOpenStaffingRequest,
+  onOpenStaffingDecision,
+  onBackToStaffingQueue,
+  onBackToStaffingRequest,
+  onSubmitStaffingDecision,
+  onResetStaffingDemo,
+}: {
+  screen: ScreenSpec;
+  staffingRequests: StaffingRequest[];
+  selectedStaffingRequest: StaffingRequest;
+  onOpenStaffingRequest: (id: string) => void;
+  onOpenStaffingDecision: () => void;
+  onBackToStaffingQueue: () => void;
+  onBackToStaffingRequest: () => void;
+  onSubmitStaffingDecision: (decision: StaffingDecision, reason: string) => void;
+  onResetStaffingDemo: () => void;
+}) {
   if (screen.id === "GLB-01") return <SsoCanvas />;
+  if (screen.id === "STFUI-21") return <StaffingQueue requests={staffingRequests} onOpen={onOpenStaffingRequest} onReset={onResetStaffingDemo} />;
+  if (screen.id === "STFUI-22") return <StaffingRequestDetail request={selectedStaffingRequest} onBack={onBackToStaffingQueue} onDecide={onOpenStaffingDecision} />;
+  if (screen.id === "STFUI-23") return <StaffingDecisionForm request={selectedStaffingRequest} onBack={onBackToStaffingRequest} onSubmit={onSubmitStaffingDecision} />;
   if (screen.kind === "home") return <HomeCanvas module={screen.module} />;
   if (screen.kind === "list") return <ListCanvas screen={screen} />;
   if (screen.kind === "detail") return <DetailCanvas screen={screen} />;
@@ -258,7 +290,9 @@ function ScreenDirectory({ onClose, onSelect }: { onClose: () => void; onSelect:
 }
 
 export default function Home() {
+  const staffingWorkflow = useStaffingWorkflow();
   const [activeId, setActiveId] = useState(defaultScreenId);
+  const [selectedStaffingRequestId, setSelectedStaffingRequestId] = useState(initialSelectedRequestId);
   const [screenFilter, setScreenFilter] = useState("");
   const [globalQuery, setGlobalQuery] = useState("");
   const [showDirectory, setShowDirectory] = useState(false);
@@ -267,6 +301,7 @@ export default function Home() {
   const activeModule = modules.find((module) => module.id === active.module)!;
   const moduleScreens = useMemo(() => screens.filter((screen) => screen.module === active.module && `${screen.id} ${screen.title}`.toLowerCase().includes(screenFilter.toLowerCase())), [active.module, screenFilter]);
   const globalResults = globalQuery.length > 1 ? screens.filter((screen) => `${screen.id} ${screen.title} ${screen.description}`.toLowerCase().includes(globalQuery.toLowerCase())).slice(0, 7) : [];
+  const selectedStaffingRequest = staffingWorkflow.requests.find((request) => request.id === selectedStaffingRequestId) ?? staffingWorkflow.requests[0];
 
   useEffect(() => {
     const syncFromUrl = () => {
@@ -297,6 +332,23 @@ export default function Home() {
     window.setTimeout(() => setToast(""), 2600);
   }
 
+  function openStaffingRequest(id: string) {
+    setSelectedStaffingRequestId(id);
+    selectScreen("STFUI-22");
+  }
+
+  function submitStaffingDecision(decision: StaffingDecision, reason: string) {
+    staffingWorkflow.decide(selectedStaffingRequest.id, decision, reason);
+    selectScreen("STFUI-22");
+    showAction(`${selectedStaffingRequest.id} ${decision.toLowerCase()} and saved in this browser`);
+  }
+
+  function resetStaffingDemo() {
+    staffingWorkflow.reset();
+    setSelectedStaffingRequestId(initialSelectedRequestId);
+    showAction("Staffing demo restored to its initial state");
+  }
+
   return <main className="app-shell" style={{ "--module-accent": activeModule.accent } as CSSProperties}>
     <aside className="sidebar">
       <div className="brand-block"><div className="brand-mark">exl</div><div className="brand-name"><span>Salesforce COE</span><strong>Resource360</strong></div></div>
@@ -310,7 +362,7 @@ export default function Home() {
       <div className="workbench">
         <aside className="screen-rail"><div className="rail-title"><span className="rail-icon">{activeModule.icon}</span><div><small>{activeModule.label}</small><strong>{screens.filter((screen) => screen.module === active.module).length} screens</strong></div></div><label className="rail-search"><span>⌕</span><input value={screenFilter} onChange={(event) => setScreenFilter(event.target.value)} placeholder="Filter screens..." /></label><div className="screen-links">{moduleScreens.map((screen) => <button className={screen.id === active.id ? "active" : ""} key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><b>{screen.release}</b></button>)}</div><button className="rail-all" onClick={() => setShowDirectory(true)}>Browse all 103 screens <span>→</span></button></aside>
 
-        <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Screen design</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Prototype state switched")}>View states <span>⌄</span></button><button className="primary-button" onClick={() => showAction(`${active.primary} is ready for workflow design`)}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · UX prototype</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
+        <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Screen states are represented in the active workflow")}>View states <span>⌄</span></button><button className="primary-button" onClick={() => showAction(`${active.primary} is available in the active product slice`)}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · product build</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
       </div>
     </section>
     {showDirectory && <ScreenDirectory onClose={() => setShowDirectory(false)} onSelect={selectScreen} />}

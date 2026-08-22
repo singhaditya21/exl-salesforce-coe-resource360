@@ -13,14 +13,15 @@
 # testing
 /coverage
 
-# next.js
+# obsolete/generated local framework artifacts
 /.next/
 /.vinext/
-/out/
+/.wrangler/
 
 # misc
 .DS_Store
 *.pem
+*.tsbuildinfo
 
 # debug
 npm-debug.log*
@@ -31,10 +32,6 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# vercel
-.vercel
-
 /dist/
-/.wrangler/
 /outputs/
 /work/
