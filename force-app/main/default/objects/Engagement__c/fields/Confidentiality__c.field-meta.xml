@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Confidentiality__c</fullName>
+    <defaultValue>&quot;EXL Internal&quot;</defaultValue>
+    <label>Confidentiality</label>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>EXL Internal</fullName>
+                <default>true</default>
+                <label>EXL Internal</label>
+            </value>
+            <value>
+                <fullName>EXL Confidential</fullName>
+                <default>false</default>
+                <label>EXL Confidential</label>
+            </value>
+            <value>
+                <fullName>Client Confidential</fullName>
+                <default>false</default>
+                <label>Client Confidential</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

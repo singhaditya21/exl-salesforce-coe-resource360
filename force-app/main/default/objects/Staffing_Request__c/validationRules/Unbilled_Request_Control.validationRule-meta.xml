@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unbilled_Request_Control</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISPICKVAL(Classification__c, &quot;Billing&quot;)), OR(ISBLANK(Responsible_Owner__c), ISBLANK(Review_Date__c), ISBLANK(Control_Reason__c)))</errorConditionFormula>
+    <errorMessage>Unbilled and internal requests require an accountable owner, review date and control reason.</errorMessage>
+</ValidationRule>

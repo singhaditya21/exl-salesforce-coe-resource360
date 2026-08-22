@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tower__c</fullName>
+    <label>Salesforce Tower</label>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Platform</fullName>
+                <default>false</default>
+                <label>Platform</label>
+            </value>
+            <value>
+                <fullName>Sales</fullName>
+                <default>false</default>
+                <label>Sales Cloud</label>
+            </value>
+            <value>
+                <fullName>Service</fullName>
+                <default>false</default>
+                <label>Service Cloud</label>
+            </value>
+            <value>
+                <fullName>Data &amp; AI</fullName>
+                <default>false</default>
+                <label>Data &amp; AI</label>
+            </value>
+            <value>
+                <fullName>Integration</fullName>
+                <default>false</default>
+                <label>Integration</label>
+            </value>
+            <value>
+                <fullName>Industry</fullName>
+                <default>false</default>
+                <label>Industry</label>
+            </value>
+            <value>
+                <fullName>Delivery</fullName>
+                <default>true</default>
+                <label>Delivery</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

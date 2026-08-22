@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Employment_Date_Order</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISBLANK(Employment_End__c)), Employment_End__c &lt; Employment_Start__c)</errorConditionFormula>
+    <errorMessage>Employment end date cannot precede the start date.</errorMessage>
+</ValidationRule>

@@ -12,7 +12,12 @@
     "preview": "vite preview",
     "test": "pnpm run test:unit && pnpm run build && node --test tests/app.test.mjs",
     "test:unit": "vitest run",
-    "lint": "eslint . --ignore-pattern dist"
+    "lint": "eslint . --ignore-pattern dist",
+    "sf:validate": "sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30",
+    "sf:test": "sf apex run test --target-org Resource360Hub --tests Resource360ServiceTest --code-coverage --result-format human --wait 30",
+    "sf:deploy": "sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30",
+    "sf:seed": "sf apex run --target-org Resource360Hub --file scripts/apex/seedResource360.apex",
+    "sf:open": "sf org open --target-org Resource360Hub --path /lightning/app/c__Resource360"
   },
   "dependencies": {
     "react": "19.2.8",

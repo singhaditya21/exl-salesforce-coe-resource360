@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Skill_Levels</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(Requested_Level__c &lt; 1, Requested_Level__c &gt; 4, AND(NOT(ISBLANK(Approved_Level__c)), OR(Approved_Level__c &lt; 1, Approved_Level__c &gt; 4)))</errorConditionFormula>
+    <errorMessage>Requested and approved proficiency levels must be between 1 and 4.</errorMessage>
+</ValidationRule>
