@@ -13,7 +13,7 @@ test("builds a static GitHub Pages application", async () => {
   assert.match(html, /<title>EXL Salesforce COE Resource360<\/title>/i);
   assert.match(html, /id="root"/i);
   assert.match(viteConfig, /GITHUB_REPOSITORY/);
-  assert.match(workflow, /actions\/deploy-pages@v4/);
+  assert.match(workflow, /actions\/deploy-pages@v5/);
   assert.doesNotMatch(`${viteConfig}\n${workflow}`, /openai|chatgpt|cloudflare|vinext/i);
 });
 
