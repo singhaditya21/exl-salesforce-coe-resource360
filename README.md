@@ -36,6 +36,20 @@ pnpm test
 
 `pnpm test` runs domain unit tests, a production build and static artifact checks. Pull requests also run dependency review; CodeQL runs on main, pull requests and a weekly schedule.
 
+## Salesforce org alignment
+
+This repository is a Salesforce DX project permanently associated with the **Resource 360** Developer Edition and Dev Hub. On an authorized workstation, the org uses the local alias `Resource360Hub` and is configured as both `target-org` and `target-dev-hub`.
+
+The repository contains the portable Salesforce project definition and scratch-org template. Authentication remains in the Salesforce CLI keychain and the machine-local `.sf/` directory; neither is committed.
+
+```bash
+sf org login web --alias Resource360Hub --instance-url https://login.salesforce.com
+sf config set target-org=Resource360Hub target-dev-hub=Resource360Hub
+sf org display --target-org Resource360Hub
+```
+
+See [`docs/SALESFORCE_ORG.md`](docs/SALESFORCE_ORG.md) for the environment contract and recovery procedure.
+
 ## GitHub Pages
 
 Every push to `main` runs `.github/workflows/deploy-pages.yml`. The workflow validates, builds and deploys `dist/` through GitHub Pages. Vite derives the repository base path from `GITHUB_REPOSITORY`, so local development continues to use `/` while Pages uses `/<repository>/`.

@@ -35,3 +35,7 @@ yarn-error.log*
 /dist/
 /outputs/
 /work/
+
+# Salesforce CLI authentication and machine-local project state
+/.sf/
+/.sfdx/
