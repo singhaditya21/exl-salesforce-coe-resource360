@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="EXL Resource360 demo">
+  <rect width="192" height="192" rx="38" fill="#11171d"/>
+  <circle cx="148" cy="42" r="24" fill="#fb4e0b" opacity=".18"/>
+  <text x="24" y="112" fill="#fb4e0b" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="900" letter-spacing="-7">exl</text>
+  <text x="27" y="145" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Resource360</text>
+</svg>

@@ -141,11 +141,15 @@ export function useStaffingWorkflow() {
     } : request));
   }
 
+  function create(request: StaffingRequest) {
+    setRequests((current) => current.some((item) => item.id === request.id) ? current : [request, ...current]);
+  }
+
   function reset() {
     setRequests(initialStaffingRequests);
   }
 
-  return { requests, decide, reset };
+  return { requests, create, decide, reset };
 }
 
 function WorkflowStatus({ status }: { status: StaffingStatus }) {

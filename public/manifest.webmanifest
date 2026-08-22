@@ -1,0 +1,13 @@
+{
+  "name": "EXL Salesforce COE Resource360 Demo",
+  "short_name": "Resource360",
+  "description": "Sanitized static demonstration of Resource360 staffing, skills, budgeting and timesheet workflows.",
+  "start_url": "./?screen=GLB-02",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef1f4",
+  "theme_color": "#11171d",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

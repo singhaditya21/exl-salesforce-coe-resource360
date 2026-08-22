@@ -39,6 +39,33 @@ test("ships the working staffing decision slice", async () => {
   assert.match(staffing, /Capacity validation/);
 });
 
+test("connects the full static-demo transaction chain", async () => {
+  const [page, operations, system] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/operational-screens.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/demo-system.ts", import.meta.url), "utf8"),
+  ]);
+  for (const term of ["BudgetDemo", "SkillsDemo", "StaffingPlanningDemo", "TimesheetDemo", "CommandDemo", "AdminDemo"]) assert.match(page, new RegExp(term));
+  for (const action of ["submitBudget", "decideBudget", "submitClaim", "decideClaim", "commitAllocation", "submitTimesheet", "decideTimesheet"]) assert.match(`${operations}\n${system}`, new RegExp(action));
+  assert.match(system, /ALLOCATION_COMMITTED/);
+  assert.match(system, /TIME_SUBMITTED/);
+});
+
+test("includes static-host resilience and repository security controls", async () => {
+  const [html, serviceWorker, manifest, security, codeql] = await Promise.all([
+    readFile(new URL("../index.html", import.meta.url), "utf8"),
+    readFile(new URL("../public/sw.js", import.meta.url), "utf8"),
+    readFile(new URL("../public/manifest.webmanifest", import.meta.url), "utf8"),
+    readFile(new URL("../SECURITY.md", import.meta.url), "utf8"),
+    readFile(new URL("../.github/workflows/codeql.yml", import.meta.url), "utf8"),
+  ]);
+  assert.match(html, /Content-Security-Policy/);
+  assert.match(serviceWorker, /resource360-demo-v2/);
+  assert.match(manifest, /standalone/);
+  assert.match(security, /must not contain EXL production data/i);
+  assert.match(codeql, /javascript-typescript/);
+});
+
 test("has no remaining ChatGPT Sites binding", async () => {
   await assert.rejects(access(new URL("../.openai/hosting.json", root)));
   const [packageJson, readme] = await Promise.all([

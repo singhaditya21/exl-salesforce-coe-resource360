@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
+import { useDemoSystem, type DemoSystem } from "./demo-system";
+import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo } from "./operational-screens";
 import {
   StaffingDecisionForm,
   StaffingQueue,
@@ -243,8 +245,8 @@ function AssistantCanvas() {
   return <section className="assistant-layout"><article className="surface chat-surface"><div className="assistant-hero"><span className="ai-orb">✦</span><div><span className="section-kicker">Resource360 intelligence</span><h2>What would you like to plan?</h2><p>Answers use only your authorized COE data and always show source freshness.</p></div></div><div className="suggestion-grid"><button>Who can start as a Data Cloud Architect in September?<span>→</span></button><button>Which allocations create margin risk this quarter?<span>→</span></button><button>Show Service Cloud credential gaps for the next 90 days.<span>→</span></button><button>What changes if the Claims project moves by four weeks?<span>→</span></button></div><div className="chat-box"><textarea aria-label="Ask Resource360" placeholder="Ask a staffing, capability or delivery question..." rows={3} /><div><span>Scope: Salesforce COE · India</span><button>Ask Resource360 <b>↑</b></button></div></div><p className="ai-disclaimer">Human review is required before any staffing, budget or allocation action. Protected characteristics are excluded.</p></article><aside className="surface source-rail"><div className="surface-heading"><div><span className="section-kicker">Answer controls</span><h2>Trusted context</h2></div></div><ul className="source-list"><li><i className="good" /><span><strong>People Master</strong><small>Fresh · 12 minutes</small></span></li><li><i className="good" /><span><strong>Staffing ledger</strong><small>Live · 36 seconds</small></span></li><li><i className="good" /><span><strong>Skills & credentials</strong><small>Fresh · 2 hours</small></span></li><li><i className="warn" /><span><strong>Learning Gateway</strong><small>Partial · 14 hours</small></span></li></ul><div className="model-card"><span>Recommendation policy</span><strong>R360-fit-v1.3</strong><small>Validated 18 Aug 2026 · Human approval required</small></div></aside></section>;
 }
 
-function SsoCanvas() {
-  return <section className="sso-stage"><div className="sso-art"><span className="brand-mark giant">exl</span><span>Salesforce COE</span><h2>One governed view of<br />skills, staffing and delivery.</h2><p>Resource360 connects approved economics to verified capability, committed capacity and actual effort.</p><div className="sso-metrics"><span><strong>1,862</strong>Active practitioners</span><span><strong>38</strong>Active engagements</span><span><strong>91%</strong>Profile ready</span></div></div><div className="sso-card"><div><span className="brand-mark">exl</span><strong>Resource360</strong></div><h3>Welcome back</h3><p>Sign in with your EXL enterprise account to continue.</p><button className="sso-button"><i>▦</i> Continue with EXL SSO</button><span className="secure-note">⌾ Protected by Microsoft Entra ID</span><div className="sso-links"><button>Privacy</button><button>Accessibility</button><button>Get help</button></div></div></section>;
+function SsoCanvas({ onContinue }: { onContinue: () => void }) {
+  return <section className="sso-stage"><div className="sso-art"><span className="brand-mark giant">exl</span><span>Salesforce COE</span><h2>One governed view of<br />skills, staffing and delivery.</h2><p>Resource360 connects approved economics to verified capability, committed capacity and actual effort.</p><div className="sso-metrics"><span><strong>Sanitized</strong>Demo fixtures</span><span><strong>103</strong>Screen inventory</span><span><strong>5</strong>Connected demo steps</span></div></div><div className="sso-card"><div><span className="brand-mark">exl</span><strong>Resource360</strong></div><h3>Demo access</h3><p>This GitHub Pages build simulates EXL Entra SSO. No password, token or production identity is collected.</p><button className="sso-button" onClick={onContinue}><i>▦</i> Enter sanitized demo</button><span className="secure-note">⌾ Production requires Microsoft Entra ID</span><div className="sso-links"><button>Privacy</button><button>Accessibility</button><button>Get help</button></div></div></section>;
 }
 
 function ScreenCanvas({
@@ -257,6 +259,10 @@ function ScreenCanvas({
   onBackToStaffingRequest,
   onSubmitStaffingDecision,
   onResetStaffingDemo,
+  onCreateStaffingRequest,
+  system,
+  onSelect,
+  onToast,
 }: {
   screen: ScreenSpec;
   staffingRequests: StaffingRequest[];
@@ -267,11 +273,26 @@ function ScreenCanvas({
   onBackToStaffingRequest: () => void;
   onSubmitStaffingDecision: (decision: StaffingDecision, reason: string) => void;
   onResetStaffingDemo: () => void;
+  onCreateStaffingRequest: (request: StaffingRequest) => void;
+  system: DemoSystem;
+  onSelect: (id: string) => void;
+  onToast: (message: string) => void;
 }) {
-  if (screen.id === "GLB-01") return <SsoCanvas />;
+  if (screen.id === "GLB-01") return <SsoCanvas onContinue={() => { system.setSignedIn(true); onSelect("GLB-02"); onToast("Sanitized demo session started"); }} />;
+  if (screen.id === "GLB-02") return <DemoHome system={system} onSelect={onSelect} />;
+  if (screen.id === "GLB-03") return <NotificationDemo system={system} onSelect={onSelect} />;
+  if (screen.id === "GLB-05") return <RoleDemo system={system} onSelect={onSelect} onToast={onToast} />;
+  if (screen.module === "engagement") return <EngagementDemo screen={screen} system={system} onSelect={onSelect} />;
+  if (screen.module === "budget") return <BudgetDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
+  if (screen.module === "skills") return <SkillsDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
   if (screen.id === "STFUI-21") return <StaffingQueue requests={staffingRequests} onOpen={onOpenStaffingRequest} onReset={onResetStaffingDemo} />;
   if (screen.id === "STFUI-22") return <StaffingRequestDetail request={selectedStaffingRequest} onBack={onBackToStaffingQueue} onDecide={onOpenStaffingDecision} />;
   if (screen.id === "STFUI-23") return <StaffingDecisionForm request={selectedStaffingRequest} onBack={onBackToStaffingRequest} onSubmit={onSubmitStaffingDecision} />;
+  if (screen.module === "staffing") return <StaffingPlanningDemo screen={screen} system={system} onSelect={onSelect} onCreate={onCreateStaffingRequest} onToast={onToast} />;
+  if (screen.module === "timesheet") return <TimesheetDemo screen={screen} system={system} onToast={onToast} />;
+  if (screen.id === "CMD-09") return <AdminDemo screen={screen} system={system} onToast={onToast} />;
+  if (screen.module === "command") return <CommandDemo screen={screen} system={system} onSelect={onSelect} />;
+  if (screen.module === "admin") return <AdminDemo screen={screen} system={system} onToast={onToast} />;
   if (screen.kind === "home") return <HomeCanvas module={screen.module} />;
   if (screen.kind === "list") return <ListCanvas screen={screen} />;
   if (screen.kind === "detail") return <DetailCanvas screen={screen} />;
@@ -290,6 +311,7 @@ function ScreenDirectory({ onClose, onSelect }: { onClose: () => void; onSelect:
 }
 
 export default function Home() {
+  const demoSystem = useDemoSystem();
   const staffingWorkflow = useStaffingWorkflow();
   const [activeId, setActiveId] = useState(defaultScreenId);
   const [selectedStaffingRequestId, setSelectedStaffingRequestId] = useState(initialSelectedRequestId);
@@ -297,6 +319,7 @@ export default function Home() {
   const [globalQuery, setGlobalQuery] = useState("");
   const [showDirectory, setShowDirectory] = useState(false);
   const [toast, setToast] = useState("");
+  const [isOnline, setIsOnline] = useState(() => typeof navigator === "undefined" || navigator.onLine);
   const active = screenById[activeId] ?? screenById[defaultScreenId];
   const activeModule = modules.find((module) => module.id === active.module)!;
   const moduleScreens = useMemo(() => screens.filter((screen) => screen.module === active.module && `${screen.id} ${screen.title}`.toLowerCase().includes(screenFilter.toLowerCase())), [active.module, screenFilter]);
@@ -314,6 +337,14 @@ export default function Home() {
       window.clearTimeout(timer);
       window.removeEventListener("popstate", syncFromUrl);
     };
+  }, []);
+
+  useEffect(() => {
+    const online = () => setIsOnline(true);
+    const offline = () => setIsOnline(false);
+    window.addEventListener("online", online);
+    window.addEventListener("offline", offline);
+    return () => { window.removeEventListener("online", online); window.removeEventListener("offline", offline); };
   }, []);
 
   function selectScreen(id: string) {
@@ -339,30 +370,38 @@ export default function Home() {
 
   function submitStaffingDecision(decision: StaffingDecision, reason: string) {
     staffingWorkflow.decide(selectedStaffingRequest.id, decision, reason);
+    if (decision === "Accepted") demoSystem.commitAllocation(selectedStaffingRequest);
     selectScreen("STFUI-22");
     showAction(`${selectedStaffingRequest.id} ${decision.toLowerCase()} and saved in this browser`);
   }
 
   function resetStaffingDemo() {
     staffingWorkflow.reset();
+    demoSystem.reset();
     setSelectedStaffingRequestId(initialSelectedRequestId);
     showAction("Staffing demo restored to its initial state");
+  }
+
+  function createStaffingRequest(request: StaffingRequest) {
+    staffingWorkflow.create(request);
+    setSelectedStaffingRequestId(request.id);
   }
 
   return <main className="app-shell" style={{ "--module-accent": activeModule.accent } as CSSProperties}>
     <aside className="sidebar">
       <div className="brand-block"><div className="brand-mark">exl</div><div className="brand-name"><span>Salesforce COE</span><strong>Resource360</strong></div></div>
       <nav aria-label="Primary navigation">{modules.map((module) => <button className={`nav-item ${active.module === module.id ? "active" : ""}`} key={module.id} onClick={() => selectScreen(screens.find((screen) => screen.module === module.id)!.id)}><span className="nav-icon">{module.icon}</span><span>{module.label}</span><b>{screens.filter((screen) => screen.module === module.id).length}</b></button>)}</nav>
-      <div className="sidebar-bottom"><button className="all-screens-button" onClick={() => setShowDirectory(true)}><span>▦</span><span>All screens</span><b>103</b></button><div className="profile-mini"><span className="avatar">MP</span><span><strong>Maya Patel</strong><small>COE Staffer</small></span><button aria-label="Open profile menu">•••</button></div></div>
+      <div className="sidebar-bottom"><button className="all-screens-button" onClick={() => setShowDirectory(true)}><span>▦</span><span>All screens</span><b>103</b></button><div className="profile-mini"><span className="avatar">MP</span><span><strong>Maya Patel</strong><small>{demoSystem.state.activeRole}</small></span><button aria-label="Open profile menu" onClick={() => selectScreen("GLB-05")}>•••</button></div></div>
     </aside>
 
     <section className="workspace">
-      <header className="topbar"><div className="scope"><span className="eyebrow">Active scope</span><button>Salesforce COE · India <span>⌄</span></button></div><div className="global-search-wrap"><label className="global-search"><span>⌕</span><input aria-label="Search screens and records" value={globalQuery} onChange={(event) => setGlobalQuery(event.target.value)} placeholder="Search screens, people, engagements..." /><kbd>⌘ K</kbd></label>{globalResults.length > 0 && <div className="global-results">{globalResults.map((screen) => <button key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><small>{modules.find((module) => module.id === screen.module)?.label}</small><b>→</b></button>)}</div>}</div><button className="icon-button" aria-label="Notifications">♢<span className="notification-dot" /></button><button className="help-button" aria-label="Help">?</button></header>
+      <header className="topbar"><span className="demo-chip">DEMO</span><div className="scope"><span className="eyebrow">{demoSystem.state.activeRole}</span><button onClick={() => selectScreen("GLB-05")}>Salesforce COE · India <span>⌄</span></button></div><div className="global-search-wrap"><label className="global-search"><span>⌕</span><input aria-label="Search screens and records" value={globalQuery} onChange={(event) => setGlobalQuery(event.target.value)} placeholder="Search screens, people, engagements..." /><kbd>⌘ K</kbd></label>{globalResults.length > 0 && <div className="global-results">{globalResults.map((screen) => <button key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><small>{modules.find((module) => module.id === screen.module)?.label}</small><b>→</b></button>)}</div>}</div><button className="icon-button" aria-label={`${demoSystem.unread} unread notifications`} onClick={() => selectScreen("GLB-03")}>♢{demoSystem.unread > 0 && <span className="notification-count">{demoSystem.unread}</span>}</button><button className="help-button" aria-label="Help" onClick={() => selectScreen("GLB-06")}>?</button></header>
+      {!isOnline && <div className="offline-banner" role="status">Offline demo mode · saved browser data remains available. Changes will stay on this device.</div>}
 
       <div className="workbench">
         <aside className="screen-rail"><div className="rail-title"><span className="rail-icon">{activeModule.icon}</span><div><small>{activeModule.label}</small><strong>{screens.filter((screen) => screen.module === active.module).length} screens</strong></div></div><label className="rail-search"><span>⌕</span><input value={screenFilter} onChange={(event) => setScreenFilter(event.target.value)} placeholder="Filter screens..." /></label><div className="screen-links">{moduleScreens.map((screen) => <button className={screen.id === active.id ? "active" : ""} key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><b>{screen.release}</b></button>)}</div><button className="rail-all" onClick={() => setShowDirectory(true)}>Browse all 103 screens <span>→</span></button></aside>
 
-        <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Screen states are represented in the active workflow")}>View states <span>⌄</span></button><button className="primary-button" onClick={() => showAction(`${active.primary} is available in the active product slice`)}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · product build</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
+        <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Demo states include seeded, changed and empty paths")}>View states <span>⌄</span></button><button className="primary-button" onClick={() => showAction(`${active.primary} is available in the browser demo`)}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} onCreateStaffingRequest={createStaffingRequest} system={demoSystem} onSelect={selectScreen} onToast={showAction} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · sanitized GitHub Pages demo</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
       </div>
     </section>
     {showDirectory && <ScreenDirectory onClose={() => setShowDirectory(false)} onSelect={selectScreen} />}
