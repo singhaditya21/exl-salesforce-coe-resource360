@@ -1,0 +1,10 @@
+**/.git/**
+**/.github/**
+**/.sf/**
+**/.sfdx/**
+**/coverage/**
+**/dist/**
+**/node_modules/**
+**/outputs/**
+**/work/**
+**/.env*
