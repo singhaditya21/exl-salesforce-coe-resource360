@@ -7,7 +7,7 @@
                 <p class="subtitle">Native Salesforce staffing, skills, budgeting, allocation and delivery governance</p>
             </div>
             <div class="hero-actions">
-                <lightning-combobox label="Active business role" value={activeRole} options={roleOptions} onchange={handleRole}></lightning-combobox>
+                <lightning-combobox label="Active business role" value={activeRole} options={businessRoleOptions} onchange={handleRole}></lightning-combobox>
                 <lightning-button label="Refresh" icon-name="utility:refresh" onclick={loadData}></lightning-button>
                 <lightning-button variant="brand" label="Load sanitized demo data" icon-name="utility:database" onclick={handleSeed}></lightning-button>
             </div>
@@ -77,7 +77,7 @@
                         <div class="form-grid">
                             <lightning-combobox label="Engagement" value={staffingDraft.engagementId} options={engagementOptions} data-field="engagementId" onchange={handleStaffingInput} required></lightning-combobox>
                             <lightning-combobox label="Candidate" value={staffingDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handleStaffingInput} required></lightning-combobox>
-                            <lightning-input label="Salesforce role" value={staffingDraft.requestedRole} data-field="requestedRole" onchange={handleStaffingInput} required></lightning-input>
+                            <lightning-combobox label="Salesforce role" value={staffingDraft.requestedRole} options={deliveryRoleOptions} data-field="requestedRole" onchange={handleStaffingInput} required></lightning-combobox>
                             <lightning-combobox label="Classification" value={staffingDraft.classification} options={classificationOptions} data-field="classification" onchange={handleStaffingInput} required></lightning-combobox>
                             <lightning-input type="date" label="Start date" value={staffingDraft.startDate} data-field="startDate" onchange={handleStaffingInput} required></lightning-input>
                             <lightning-input type="date" label="End date" value={staffingDraft.endDate} data-field="endDate" onchange={handleStaffingInput} required></lightning-input>
@@ -90,13 +90,156 @@
                     </section>
                 </template>
 
+                <template lwc:if={showPlanningPreview}>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">Capacity workbench</p><h3>Preview an effective-dated allocation plan</h3></div><span>Accepted commitments, pending demand and calendar exceptions are shown per day</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Practitioner" value={planningDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handlePlanningInput} required></lightning-combobox>
+                            <lightning-combobox label="Effort mode" value={planningDraft.mode} options={effortModeOptions} data-field="mode" onchange={handlePlanningInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Start date" value={planningDraft.startDate} data-field="startDate" onchange={handlePlanningInput} required></lightning-input>
+                            <lightning-input type="date" label="End date" value={planningDraft.endDate} data-field="endDate" onchange={handlePlanningInput} required></lightning-input>
+                            <lightning-input type="number" label="Effort" value={planningDraft.effort} min="0.25" step="0.25" data-field="effort" onchange={handlePlanningInput} required></lightning-input>
+                            <lightning-input type="checkbox" label="Request controlled past-date override" checked={planningDraft.allowPastOverride} data-field="allowPastOverride" onchange={handlePlanningInput}></lightning-input>
+                            <lightning-textarea class="form-span" label="Override evidence" value={planningDraft.overrideReason} data-field="overrideReason" onchange={handlePlanningInput}></lightning-textarea>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Preview capacity" icon-name="utility:preview" onclick={handlePreviewPlan}></lightning-button></div>
+                        <template lwc:if={hasPlanningPreview}>
+                            <div class="preview-summary" role="status">
+                                <div><span>Decision</span><strong>{planningStatus}</strong></div>
+                                <div><span>Working days</span><strong>{planningPreview.workingDays}</strong></div>
+                                <div><span>Proposed hours</span><strong>{planningPreview.requestedTotalHours}</strong></div>
+                                <div><span>Allocation</span><strong>{planningPreview.allocationPercent}%</strong></div>
+                                <div><span>Conflicts</span><strong>{planningPreview.conflictDays}</strong></div>
+                            </div>
+                            <p class="preview-message">{planningPreview.message}</p>
+                            <lightning-datatable key-field="id" data={planningDays} columns={planningColumns} hide-checkbox-column></lightning-datatable>
+                        </template>
+                    </section>
+                </template>
+
+                <template lwc:if={showModifyAllocation}>
+                    <section class="action-panel">
+                        <div class="panel-heading"><div><p class="eyebrow">Effective-dated change</p><h3>Modify accepted allocation</h3></div><span>The prior version is retained and linked to the replacement</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Accepted allocation" value={allocationDraft.allocationId} options={allocationOptions} data-field="allocationId" onchange={handleAllocationInput} required></lightning-combobox>
+                            <lightning-combobox label="Salesforce role" value={allocationDraft.roleName} options={deliveryRoleOptions} data-field="roleName" onchange={handleAllocationInput} required></lightning-combobox>
+                            <lightning-combobox label="Classification" value={allocationDraft.classification} options={classificationOptions} data-field="classification" onchange={handleAllocationInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Start date" value={allocationDraft.startDate} data-field="startDate" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="date" label="End date" value={allocationDraft.endDate} data-field="endDate" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="number" label="Daily hours" value={allocationDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-combobox label="Unbilled control owner" value={allocationDraft.responsibleOwnerId} options={userOptions} data-field="responsibleOwnerId" onchange={handleAllocationInput}></lightning-combobox>
+                            <lightning-input type="date" label="Unbilled review date" value={allocationDraft.reviewDate} data-field="reviewDate" onchange={handleAllocationInput}></lightning-input>
+                            <lightning-textarea class="form-span" label="Change reason" value={allocationDraft.reason} data-field="reason" onchange={handleAllocationInput} required></lightning-textarea>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Create replacement version" onclick={handleModifyAllocation}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showSplitAllocation}>
+                    <section class="action-panel">
+                        <div class="panel-heading"><div><p class="eyebrow">Allocation lineage</p><h3>Split accepted allocation</h3></div><span>Two non-overlapping current segments replace the selected version</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Accepted allocation" value={allocationDraft.allocationId} options={allocationOptions} data-field="allocationId" onchange={handleAllocationInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Second segment starts" value={allocationDraft.splitDate} data-field="splitDate" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="number" label="First segment daily hours" value={allocationDraft.firstDailyHours} min="0.25" max="24" step="0.25" data-field="firstDailyHours" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="number" label="Second segment daily hours" value={allocationDraft.secondDailyHours} min="0.25" max="24" step="0.25" data-field="secondDailyHours" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-textarea class="form-span" label="Split reason" value={allocationDraft.reason} data-field="reason" onchange={handleAllocationInput} required></lightning-textarea>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Split allocation" onclick={handleSplitAllocation}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showDeallocate}>
+                    <section class="action-panel">
+                        <div class="panel-heading"><div><p class="eyebrow">Controlled release</p><h3>Deallocate practitioner</h3></div><span>The allocation is ended; historical records are never deleted</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Accepted allocation" value={allocationDraft.allocationId} options={allocationOptions} data-field="allocationId" onchange={handleAllocationInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Effective end date" value={allocationDraft.effectiveEndDate} data-field="effectiveEndDate" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-textarea class="form-span" label="Deallocation reason" value={allocationDraft.reason} data-field="reason" onchange={handleAllocationInput} required></lightning-textarea>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="destructive" label="End allocation" onclick={handleDeallocate}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showBudgetEditor}>
+                    <section class="action-panel action-panel_purple">
+                        <div class="panel-heading"><div><p class="eyebrow">Commercial assumptions</p><h3>Edit current budget draft</h3></div><span>Approved versions stay immutable; use a successor version for changes</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox class="form-span" label="Current budget" value={budgetDraft.budgetId} options={budgetOptions} data-field="budgetId" onchange={handleBudgetInput} required></lightning-combobox>
+                            <lightning-input type="number" formatter="currency" label="Revenue" value={budgetDraft.revenue} min="0" step="0.01" data-field="revenue" onchange={handleBudgetInput} disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" label="Uplift %" value={budgetDraft.upliftPercent} min="0" max="100" step="0.01" data-field="upliftPercent" onchange={handleBudgetInput} disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" label="Effort contingency %" value={budgetDraft.effortContingencyPercent} min="0" max="100" step="0.01" data-field="effortContingencyPercent" onchange={handleBudgetInput} disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" label="Expense contingency %" value={budgetDraft.expenseContingencyPercent} min="0" max="100" step="0.01" data-field="expenseContingencyPercent" onchange={handleBudgetInput} disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" formatter="currency" label="Travel rate" value={budgetDraft.travelRate} min="0" step="0.01" data-field="travelRate" onchange={handleBudgetInput} disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" label="Onsite months" value={budgetDraft.onsiteMonths} min="0" max="120" step="0.25" data-field="onsiteMonths" onchange={handleBudgetInput} disabled={budgetFieldsDisabled}></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Save assumptions" onclick={handleSaveBudget} disabled={budgetFieldsDisabled}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showBudgetLineEditor}>
+                    <section class="action-panel action-panel_purple">
+                        <div class="panel-heading"><div><p class="eyebrow">Work breakdown</p><h3>Add budget phase and resource line</h3></div><span>Planned hours and base labour recalculate server-side</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox class="form-span" label="Current budget" value={budgetDraft.budgetId} options={budgetOptions} data-field="budgetId" onchange={handleBudgetInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Period start" value={budgetLineDraft.periodStart} data-field="periodStart" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input label="Phase" value={budgetLineDraft.phase} data-field="phase" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input label="Work unit" value={budgetLineDraft.workUnit} data-field="workUnit" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-combobox label="Salesforce role" value={budgetLineDraft.roleName} options={deliveryRoleOptions} data-field="roleName" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
+                            <lightning-input label="Location" value={budgetLineDraft.location} data-field="location" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" label="Planned hours" value={budgetLineDraft.plannedHours} min="0.25" step="0.25" data-field="plannedHours" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" formatter="currency" label="Cost rate" value={budgetLineDraft.costRate} min="0" step="0.01" data-field="costRate" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="number" label="Allocation %" value={budgetLineDraft.allocationPercent} min="0.01" max="100" step="0.01" data-field="allocationPercent" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="checkbox" label="Onsite" checked={budgetLineDraft.onsite} data-field="onsite" onchange={handleBudgetLineInput} disabled={budgetFieldsDisabled}></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Save WBS line" onclick={handleSaveBudgetLine} disabled={budgetFieldsDisabled}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showBudgetLines}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">Current version detail</p><h3>Budget WBS and resource grid</h3></div><span>Every line is version-bound</span></div>
+                        <template lwc:if={hasBudgetLines}><lightning-datatable key-field="Id" data={budgetLineRows} columns={budgetLineColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state"><p>No WBS lines exist for the selected budget version.</p></div></template>
+                    </section>
+                </template>
+
+                <template lwc:if={showBulkOperations}>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">Enhanced-control operation</p><h3>Validate and commit a controlled data batch</h3></div><span>Raw payloads are never retained; file identity, SHA-256 hash, counts and exact row errors are audited</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Entity contract" value={bulkDraft.entityType} options={bulkEntityOptions} data-field="entityType" onchange={handleBulkInput} required></lightning-combobox>
+                            <lightning-combobox label="Commit policy" value={bulkDraft.commitMode} options={bulkModeOptions} data-field="commitMode" onchange={handleBulkInput} required></lightning-combobox>
+                            <lightning-input class="form-span" label="Source file name" value={bulkDraft.sourceFileName} data-field="sourceFileName" onchange={handleBulkInput} required></lightning-input>
+                            <lightning-textarea class="form-full" label="Controlled JSON rows" value={bulkDraft.jsonRows} data-field="jsonRows" onchange={handleBulkInput} required></lightning-textarea>
+                        </div>
+                        <div class="panel-footer panel-footer_split"><span>Maximum 200 rows per interactive batch. Replaying identical content returns the same governed run.</span><div><lightning-button label="Pre-validate" icon-name="utility:check" onclick={handlePreviewBulk}></lightning-button><lightning-button class="button-gap" variant="brand" label="Commit batch" icon-name="utility:upload" onclick={handleCommitBulk}></lightning-button></div></div>
+                        <template lwc:if={hasBulkPreview}>
+                            <div class="preview-summary preview-summary_four" role="status">
+                                <div><span>Decision</span><strong>{bulkPreview.message}</strong></div>
+                                <div><span>Total rows</span><strong>{bulkPreview.totalRows}</strong></div>
+                                <div><span>Valid</span><strong>{bulkPreview.validRows}</strong></div>
+                                <div><span>Invalid</span><strong>{bulkPreview.invalidRows}</strong></div>
+                            </div>
+                            <lightning-datatable key-field="rowNumber" data={bulkPreviewRows} columns={bulkPreviewColumns} hide-checkbox-column></lightning-datatable>
+                            <template lwc:if={hasDownloadableBulkErrors}><div class="download-row"><a class="slds-button slds-button_neutral" href={bulkErrorDownloadUrl} download="resource360-row-errors.csv">Download exact row errors (CSV)</a></div></template>
+                        </template>
+                    </section>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">Batch evidence</p><h3>Integration runs and row outcomes</h3></div><span>Counts reconcile to every accepted/rejected row; sensitive payloads are represented only by hashes</span></div>
+                        <template lwc:if={hasBulkRuns}><lightning-datatable key-field="Id" data={bulkRunRows} columns={bulkRunColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:if={hasBulkErrors}><h4 class="subtable-heading">Recent row errors</h4><lightning-datatable key-field="Id" data={bulkErrorRows} columns={bulkErrorColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:if={hasDownloadableBulkErrors}><div class="download-row"><a class="slds-button slds-button_neutral" href={bulkErrorDownloadUrl} download="resource360-row-errors.csv">Download exact row errors (CSV)</a></div></template>
+                    </section>
+                </template>
+
                 <template lwc:if={showTalentSearch}>
                     <section class="action-panel action-panel_blue">
                         <div class="panel-heading"><div><p class="eyebrow">Explainable matching</p><h3>Search Salesforce talent</h3></div><span>Capability is a hard gate; every weighted score is explained</span></div>
                         <div class="form-grid">
                             <lightning-combobox label="Capability" value={talentDraft.capabilityId} options={capabilityOptions} data-field="capabilityId" onchange={handleTalentInput}></lightning-combobox>
                             <lightning-combobox label="Minimum proficiency" value={talentDraft.minimumLevel} options={levelOptions} data-field="minimumLevel" onchange={handleTalentInput}></lightning-combobox>
-                            <lightning-input label="Requested role" value={talentDraft.requestedRole} data-field="requestedRole" onchange={handleTalentInput}></lightning-input>
+                            <lightning-combobox label="Requested role" value={talentDraft.requestedRole} options={deliveryRoleOptions} data-field="requestedRole" onchange={handleTalentInput}></lightning-combobox>
                             <lightning-input label="Tower" value={talentDraft.tower} data-field="tower" onchange={handleTalentInput}></lightning-input>
                             <lightning-input label="Location" value={talentDraft.location} data-field="location" onchange={handleTalentInput}></lightning-input>
                             <lightning-input type="date" label="Start date" value={talentDraft.startDate} data-field="startDate" onchange={handleTalentInput} required></lightning-input>
@@ -105,6 +248,36 @@
                         </div>
                         <div class="panel-footer"><lightning-button variant="brand" label="Rank eligible talent" onclick={handleTalentSearch}></lightning-button></div>
                         <template lwc:if={hasTalentResults}><lightning-datatable key-field="resourceId" data={talentResults} columns={talentColumns} hide-checkbox-column></lightning-datatable></template>
+                    </section>
+                </template>
+
+                <template lwc:if={showPractitionerProfile}>
+                    <section class="action-panel action-panel_purple">
+                        <div class="panel-heading"><div><p class="eyebrow">Salesforce practitioner 360</p><h3>Source-attributed capability profile</h3></div><span>Claimed proficiency, approved proficiency, credentials, learning and verified delivery evidence remain distinct</span></div>
+                        <lightning-combobox label="Practitioner" value={profileResourceId} options={resourceOptions} onchange={handleProfileInput} required></lightning-combobox>
+                        <div class="profile-facts">
+                            <template for:each={profileFacts} for:item="fact"><div key={fact.label}><span>{fact.label}</span><strong>{fact.value}</strong></div></template>
+                        </div>
+                    </section>
+                    <section class="records-panel profile-section">
+                        <div class="panel-heading"><div><p class="eyebrow">Manager-reviewed</p><h3>Salesforce and industry capability claims</h3></div><span>Requested and approved levels are shown separately</span></div>
+                        <template lwc:if={hasProfileClaims}><lightning-datatable key-field="Id" data={profileClaimRows} columns={profileClaimColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No governed capability claims are available.</p></div></template>
+                    </section>
+                    <section class="records-panel profile-section">
+                        <div class="panel-heading"><div><p class="eyebrow">Externally verified</p><h3>Salesforce certifications</h3></div><span>Only active verified credentials satisfy mandatory certification gates</span></div>
+                        <template lwc:if={hasProfileCredentials}><lightning-datatable key-field="Id" data={profileCredentialRows} columns={profileCredentialColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No credential records are available.</p></div></template>
+                    </section>
+                    <section class="records-panel profile-section">
+                        <div class="panel-heading"><div><p class="eyebrow">Read-only source</p><h3>EXL and Salesforce learning</h3></div><span>Learning completion does not become a proficiency claim</span></div>
+                        <template lwc:if={hasProfileLearning}><lightning-datatable key-field="Id" data={profileLearningRows} columns={profileLearningColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No externally sourced learning records are available.</p></div></template>
+                    </section>
+                    <section class="records-panel profile-section">
+                        <div class="panel-heading"><div><p class="eyebrow">Delivery evidence</p><h3>Verified project experience</h3></div><span>Authorized engagement context supports recency and duration scoring</span></div>
+                        <template lwc:if={hasProfileEvidence}><lightning-datatable key-field="Id" data={profileEvidenceRows} columns={profileEvidenceColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No verified project evidence is available.</p></div></template>
                     </section>
                 </template>
 

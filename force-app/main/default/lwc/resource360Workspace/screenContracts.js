@@ -29,7 +29,7 @@ const SCREEN_OVERRIDES = {
   "TIMEUI-02": { delivery: "Operational command", api: "Resource360TimeService.saveEntry", fields: "Timesheet, allocation, work date, work unit, hours and comment" },
   "TIMEUI-07": { delivery: "Operational command", api: "Resource360TimeService.createCorrection", fields: "Approved current timesheet and correction reason" },
   "ADMUI-07": { delivery: "Operational control", api: "Resource360InboundApi v1.1", fields: "Logical source, run ID, entity contract, cutoff, status and record-level errors" },
-  "ADMUI-08": { delivery: "Operational control", api: "Outbox publisher, notification dispatcher and scheduler", fields: "Run/event state, attempts, next retry, correlation and redacted error" },
+  "ADMUI-08": { delivery: "Operational control", api: "Resource360BulkService preview/commit; integration run and row-error register", fields: "Entity contract, source file name/hash, atomic/partial mode, row validation, run counts and redacted errors" },
   "AIUI-01": { delivery: "Feature-gated future release" },
   "AIUI-02": { delivery: "Feature-gated future release" },
   "AIUI-03": { delivery: "Feature-gated future release" },

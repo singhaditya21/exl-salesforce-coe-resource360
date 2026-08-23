@@ -7,6 +7,7 @@
     <classAccesses><apexClass>Resource360AuditService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BudgetGuard</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BudgetService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360BulkService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360CalendarService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Classification</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360DemoData</apexClass><enabled>true</enabled></classAccesses>
@@ -16,7 +17,9 @@
     <classAccesses><apexClass>Resource360NotificationJob</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360OperationsScheduler</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360OutboxPublisher</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360PlanningService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Policy</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360RoleCatalog</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360ScopeSharingJob</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360ScopeSharingService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Security</apexClass><enabled>true</enabled></classAccesses>
@@ -28,10 +31,14 @@
     <classAccesses><apexClass>Resource360TimeService</apexClass><enabled>true</enabled></classAccesses>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Budgets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Timesheets</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Manage_Budgets</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Manage_Bulk_Operations</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Configuration</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Credentials</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Integrations</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Staffing</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Override_Past_Dates</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Override_Time_Deadline</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Review_Skills</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Run_Reconciliation</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_View_Audit</name></customPermissions>
@@ -107,11 +114,15 @@
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Next_Retry_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Payload_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Retry_Count__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Row_Number__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Commit_Mode__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Completed_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Detail__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Failure_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Processed_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_Cutoff__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_File_Hash__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_File_Name__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Success_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Learning_Achievement__c.Capability__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Deep_Link__c</field><readable>true</readable></fieldPermissions>

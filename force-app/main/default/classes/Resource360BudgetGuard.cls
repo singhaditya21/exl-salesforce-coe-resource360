@@ -2,6 +2,10 @@ public without sharing class Resource360BudgetGuard {
     public static void beforeUpdate(List<Budget__c> records, Map<Id, Budget__c> oldMap) {
         for (Budget__c current : records) {
             Budget__c prior = oldMap.get(current.Id);
+            if (!prior.Current__c && economicFieldsChanged(current, prior)) {
+                current.addError('Historical budget versions are immutable. Create or select the current working version.');
+                continue;
+            }
             if (prior.State__c == 'Approved' && economicFieldsChanged(current, prior)) {
                 current.State__c = 'Invalidated';
                 current.Economic_Signature__c = null;
@@ -9,6 +13,15 @@ public without sharing class Resource360BudgetGuard {
                 current.Approval_Step__c = 0;
             }
         }
+    }
+
+    public static void protectHistoricalLines(List<Budget_Line__c> records) {
+        Set<Id> budgetIds = new Set<Id>();
+        for (Budget_Line__c line : records) if (line.Budget__c != null) budgetIds.add(line.Budget__c);
+        if (budgetIds.isEmpty()) return;
+        Set<Id> historicalIds = new Set<Id>();
+        for (Budget__c budget : [SELECT Id FROM Budget__c WHERE Id IN :budgetIds AND Current__c = false]) historicalIds.add(budget.Id);
+        for (Budget_Line__c line : records) if (historicalIds.contains(line.Budget__c)) line.addError('Historical budget WBS lines are immutable. Create or select the current working version.');
     }
 
     public static void invalidateForLines(Set<Id> budgetIds) {

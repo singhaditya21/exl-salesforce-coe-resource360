@@ -11,16 +11,16 @@ if (new Set(screens).size !== 103) throw new Error(`Expected 103 unique screen c
 
 const evidence = {
   CORE: "Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts",
-  BUD: "Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type",
-  RAS: "Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type",
+  BUD: "Resource360BudgetService draft/WBS APIs, Budget Guard triggers, immutable approval decisions, formulas and budget report type",
+  RAS: "Resource360PlanningService daily capacity preview, Resource360CalendarService, governed delivery-role/classification LOVs, effective-dated Resource360StaffingService allocation changes and allocation report type",
   STF: "Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type",
-  SMS: "Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups",
-  SFCOE: "Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts",
-  TS: "Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type",
+  SMS: "Resource360SkillService, Resource360TalentService v2, source-attributed practitioner profile, project evidence, learning/credential API and permission groups",
+  SFCOE: "Effective-dated Resource360RoleCatalog metadata, capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts",
+  TS: "Resource360TimeService, work-calendar/time-zone deadlines, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type",
   GOV: "Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens",
-  ADM: "Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls"
+  ADM: "Resource360BulkService permission gate, preview/commit policy, hashed file identity, downloadable exact row errors, policy/classification metadata, generated RBAC, immutable audit and release controls"
 };
-const partial = new Set(["BUD-002","BUD-004","BUD-008","BUD-013","BUD-014","BUD-015","RAS-001","RAS-002","RAS-003","RAS-005","RAS-006","RAS-011","RAS-012","RAS-014","RAS-015","RAS-017","RAS-020","STF-008","SMS-003","SMS-005","SMS-006","SMS-007","SMS-015","SMS-016","SMS-017","SMS-018","SFCOE-001","SFCOE-002","SFCOE-006","TS-006","TS-008","TS-009","TS-010","GOV-004","GOV-005","GOV-006","GOV-007","GOV-009","ADM-001","ADM-002","ADM-004","ADM-005","ADM-006"]);
+const partial = new Set(["BUD-002","BUD-004","BUD-008","BUD-013","BUD-014","BUD-015","RAS-001","RAS-002","RAS-003","RAS-005","RAS-006","RAS-020","STF-008","SMS-015","SMS-016","SMS-017","SMS-018","SFCOE-002","SFCOE-006","TS-008","TS-009","TS-010","GOV-004","GOV-005","GOV-006","GOV-007","GOV-009","ADM-001","ADM-002","ADM-005","ADM-006"]);
 const activation = new Set(["CORE-001","CORE-002","CORE-003","ADM-003"]);
 const statusFor = ({ id, priority }) => activation.has(id) ? "Assumed contract; EXL activation" : partial.has(id) ? "Partial / activation backlog" : priority === "P2" ? "Later-phase screen contract" : priority === "P1" ? "Screen contract + implemented foundation" : "Implemented in demo baseline";
 const escape = (value) => value.replaceAll("|", "\\|").replaceAll("\n", " ");
