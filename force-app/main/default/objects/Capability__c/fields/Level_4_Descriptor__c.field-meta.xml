@@ -3,7 +3,7 @@
     <fullName>Level_4_Descriptor__c</fullName>
     <label>SME Descriptor</label>
     <length>1000</length>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>
     <visibleLines>3</visibleLines>

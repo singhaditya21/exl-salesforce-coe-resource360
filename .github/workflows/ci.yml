@@ -22,8 +22,40 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Regenerate governed Salesforce artifacts
+        run: pnpm sf:generate
+      - name: Verify generated metadata and traceability are committed
+        run: |
+          git status --porcelain -- force-app/main/default/customMetadata force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md > "${RUNNER_TEMP}/resource360-governance-status"
+          if [[ -s "${RUNNER_TEMP}/resource360-governance-status" ]]; then
+            cat "${RUNNER_TEMP}/resource360-governance-status"
+            exit 1
+          fi
       - run: pnpm lint
       - run: pnpm test
+
+  salesforce-validate:
+    name: Salesforce metadata and Apex controls
+    runs-on: ubuntu-latest
+    env:
+      RESOURCE360_SFDX_AUTH_URL: ${{ secrets.RESOURCE360_SFDX_AUTH_URL }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Explain optional protected-org gate
+        if: env.RESOURCE360_SFDX_AUTH_URL == ''
+        run: echo "RESOURCE360_SFDX_AUTH_URL is not available; protected Salesforce validation is intentionally skipped."
+      - name: Install Salesforce CLI
+        if: env.RESOURCE360_SFDX_AUTH_URL != ''
+        run: npm install --global @salesforce/cli
+      - name: Authenticate validation org from encrypted secret
+        if: env.RESOURCE360_SFDX_AUTH_URL != ''
+        run: printenv RESOURCE360_SFDX_AUTH_URL | sf org login sfdx-url --sfdx-url-stdin --alias Resource360CI
+      - name: Compile metadata and run Resource 360 controls
+        if: env.RESOURCE360_SFDX_AUTH_URL != ''
+        run: sf project deploy start --target-org Resource360CI --dry-run --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 120
 
   dependency-review:
     name: Dependency review

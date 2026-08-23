@@ -56,6 +56,21 @@
                     <div class="screen-context"><span class="role-chip">{activeRole}</span><small>Primary PRD action</small><strong>{selectedScreen.primary}</strong></div>
                 </section>
 
+                <template lwc:if={isAuthorized}>
+                <section class="contract-panel" aria-label="Governed screen contract">
+                    <div class="contract-grid">
+                        <div><span>Delivery</span><strong>{selectedScreen.delivery}</strong></div>
+                        <div><span>Authorized roles</span><strong>{selectedScreen.roleLabel}</strong></div>
+                        <div><span>Field and source ownership</span><strong>{selectedScreen.fields}</strong><p>{selectedScreen.source}</p></div>
+                        <div><span>Server contract</span><strong>{selectedScreen.api}</strong><p>{selectedScreen.validations}</p></div>
+                        <div><span>Traceability</span><strong>{selectedScreen.requirements}</strong><p>{selectedScreen.events}</p></div>
+                        <div><span>Acceptance</span><strong>{selectedScreen.acceptance}</strong></div>
+                    </div>
+                    <div class="state-row" aria-label="Supported screen states">
+                        <template for:each={stateVariants} for:item="state"><span key={state.key}>{state.label}</span></template>
+                    </div>
+                </section>
+
                 <template lwc:if={showStaffingForm}>
                     <section class="action-panel">
                         <div class="panel-heading"><div><p class="eyebrow">Governed command</p><h3>Create staffing request</h3></div><span>Approved-budget and capacity gates run in Apex</span></div>
@@ -67,8 +82,29 @@
                             <lightning-input type="date" label="Start date" value={staffingDraft.startDate} data-field="startDate" onchange={handleStaffingInput} required></lightning-input>
                             <lightning-input type="date" label="End date" value={staffingDraft.endDate} data-field="endDate" onchange={handleStaffingInput} required></lightning-input>
                             <lightning-input type="number" label="Daily hours" value={staffingDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleStaffingInput} required></lightning-input>
+                            <lightning-combobox label="Unbilled control owner" value={staffingDraft.responsibleOwnerId} options={userOptions} data-field="responsibleOwnerId" onchange={handleStaffingInput}></lightning-combobox>
+                            <lightning-input type="date" label="Unbilled review date" value={staffingDraft.reviewDate} data-field="reviewDate" onchange={handleStaffingInput}></lightning-input>
+                            <lightning-textarea class="form-span" label="Unbilled control reason" value={staffingDraft.controlReason} data-field="controlReason" onchange={handleStaffingInput}></lightning-textarea>
                         </div>
                         <div class="panel-footer"><lightning-button variant="brand" label="Submit staffing request" onclick={handleCreateStaffing}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showTalentSearch}>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">Explainable matching</p><h3>Search Salesforce talent</h3></div><span>Capability is a hard gate; every weighted score is explained</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Capability" value={talentDraft.capabilityId} options={capabilityOptions} data-field="capabilityId" onchange={handleTalentInput}></lightning-combobox>
+                            <lightning-combobox label="Minimum proficiency" value={talentDraft.minimumLevel} options={levelOptions} data-field="minimumLevel" onchange={handleTalentInput}></lightning-combobox>
+                            <lightning-input label="Requested role" value={talentDraft.requestedRole} data-field="requestedRole" onchange={handleTalentInput}></lightning-input>
+                            <lightning-input label="Tower" value={talentDraft.tower} data-field="tower" onchange={handleTalentInput}></lightning-input>
+                            <lightning-input label="Location" value={talentDraft.location} data-field="location" onchange={handleTalentInput}></lightning-input>
+                            <lightning-input type="date" label="Start date" value={talentDraft.startDate} data-field="startDate" onchange={handleTalentInput} required></lightning-input>
+                            <lightning-input type="date" label="End date" value={talentDraft.endDate} data-field="endDate" onchange={handleTalentInput} required></lightning-input>
+                            <lightning-input type="number" label="Daily hours" value={talentDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleTalentInput}></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Rank eligible talent" onclick={handleTalentSearch}></lightning-button></div>
+                        <template lwc:if={hasTalentResults}><lightning-datatable key-field="resourceId" data={talentResults} columns={talentColumns} hide-checkbox-column></lightning-datatable></template>
                     </section>
                 </template>
 
@@ -86,6 +122,56 @@
                     </section>
                 </template>
 
+                <template lwc:if={showCredentialForm}>
+                    <section class="action-panel action-panel_purple">
+                        <div class="panel-heading"><div><p class="eyebrow">Credential gateway</p><h3>Add Salesforce certification</h3></div><span>Evidence remains unverified until an authorized administrator validates it</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Practitioner" value={credentialDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handleCredentialInput} required></lightning-combobox>
+                            <lightning-input label="Credential ID" value={credentialDraft.credentialId} data-field="credentialId" onchange={handleCredentialInput} required></lightning-input>
+                            <lightning-input label="Credential name" value={credentialDraft.credentialName} data-field="credentialName" onchange={handleCredentialInput} required></lightning-input>
+                            <lightning-input label="Issuer" value={credentialDraft.issuer} data-field="issuer" onchange={handleCredentialInput} required></lightning-input>
+                            <lightning-input type="date" label="Issue date" value={credentialDraft.issueDate} data-field="issueDate" onchange={handleCredentialInput}></lightning-input>
+                            <lightning-input type="date" label="Expiry date" value={credentialDraft.expiryDate} data-field="expiryDate" onchange={handleCredentialInput}></lightning-input>
+                            <lightning-input class="form-span" type="url" label="Approved HTTPS evidence URL" value={credentialDraft.evidenceUrl} data-field="evidenceUrl" onchange={handleCredentialInput}></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Submit for verification" onclick={handleAddCredential}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showTimesheetCreate}>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">Weekly actuals</p><h3>Open timesheet week</h3></div><span>Monday week start and employee ownership are server-enforced</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Practitioner" value={timesheetDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handleTimesheetInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Monday week start" value={timesheetDraft.weekStart} data-field="weekStart" onchange={handleTimesheetInput} required></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Open week" onclick={handleCreateTimesheet}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showTimeEntryForm}>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">Allocation-authorized time</p><h3>Add or update time entry</h3></div><span>Employee, allocation date, daily allocation and aggregate calendar capacity are enforced in Apex</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Timesheet" value={timeDraft.timesheetId} options={timesheetOptions} data-field="timesheetId" onchange={handleTimeInput} required></lightning-combobox>
+                            <lightning-combobox label="Accepted allocation" value={timeDraft.allocationId} options={allocationOptions} data-field="allocationId" onchange={handleTimeInput} required></lightning-combobox>
+                            <lightning-input type="date" label="Work date" value={timeDraft.workDate} data-field="workDate" onchange={handleTimeInput} required></lightning-input>
+                            <lightning-input type="number" label="Hours" value={timeDraft.hours} min="0.25" max="24" step="0.25" data-field="hours" onchange={handleTimeInput} required></lightning-input>
+                            <lightning-textarea class="form-span" label="Work comment" value={timeDraft.comment} data-field="comment" onchange={handleTimeInput}></lightning-textarea>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Save time entry" onclick={handleSaveTimeEntry}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showDecisionPanel}>
+                    <section class="decision-panel" role="dialog" aria-modal="true" aria-labelledby="decision-title">
+                        <div class="panel-heading"><div><p class="eyebrow">Attributable decision</p><h3 id="decision-title">{decisionDraft.title}</h3></div><span>{activeRole}</span></div>
+                        <template lwc:if={decisionRequiresLevel}><lightning-combobox label="Approved proficiency" value={decisionDraft.approvedLevel} options={levelOptions} data-field="approvedLevel" onchange={handleDecisionInput}></lightning-combobox></template>
+                        <lightning-textarea label="Decision evidence" value={decisionDraft.note} data-field="note" onchange={handleDecisionInput} required={decisionNoteRequired}></lightning-textarea>
+                        <div class="panel-footer"><lightning-button label="Cancel" onclick={handleCancelDecision}></lightning-button><lightning-button variant="brand" label="Confirm governed decision" onclick={handleConfirmDecision}></lightning-button></div>
+                    </section>
+                </template>
+
                 <section class="records-panel">
                     <div class="panel-heading"><div><p class="eyebrow">Live Salesforce data</p><h3>{selectedScreen.title}</h3></div><span>Open a linked record for the standard Salesforce detail page</span></div>
                     <template lwc:if={hasRows}>
@@ -93,6 +179,10 @@
                     </template>
                     <template lwc:else><div class="empty-state"><lightning-icon icon-name="utility:inbox" size="medium"></lightning-icon><h3>No records yet</h3><p>Load the compact sanitized dataset or create a governed record.</p></div></template>
                 </section>
+                </template>
+                <template lwc:else>
+                    <section class="unauthorized-panel" role="alert"><lightning-icon icon-name="utility:lock" size="small"></lightning-icon><div><h3>Role or scope does not authorize this screen</h3><p>Choose an assigned active role or request a time-bound Resource 360 role scope. The client cannot elevate access.</p></div></section>
+                </template>
             </main>
         </div>
     </article>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Effective-dated Resource 360 policy values. Secrets and endpoint credentials are prohibited.</description>
+    <label>Resource 360 Policy</label>
+    <pluralLabel>Resource 360 Policies</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

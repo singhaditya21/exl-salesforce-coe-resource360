@@ -2,48 +2,55 @@
 
 ## Environment contract
 
-- **Permanent org:** Resource 360
-- **Salesforce edition:** Developer Edition
-- **Role:** Repository development org and Dev Hub
+- **Permanent development/demo org:** Resource 360
+- **Edition:** Developer Edition and Dev Hub
 - **Local CLI alias:** `Resource360Hub`
-- **Source of truth:** This GitHub repository
-- **Salesforce metadata root:** `force-app/main/default`
+- **Source of truth:** this GitHub repository
+- **Metadata root:** `force-app/main/default`
 - **API version:** 67.0
 
-The permanent org is the shared target for integration and demo validation. Its Lightning application developer name is `Resource360`, and the native workspace tab is `Resource360_Workspace`. Disposable scratch orgs may be created from `config/project-scratch-def.json` for isolated feature work; they do not replace the permanent org.
+The Lightning application developer name is `Resource360`; the native tab is `Resource360_Workspace`. This Developer Edition remains aligned with the repository for demo/integration validation. Disposable scratch orgs may be used for isolated changes but do not replace it.
 
-## Local setup or recovery
-
-From the repository root:
+## Setup or recovery
 
 ```bash
 sf org login web --alias Resource360Hub --instance-url https://login.salesforce.com
 sf config set target-org=Resource360Hub target-dev-hub=Resource360Hub
-sf org display --target-org Resource360Hub
-sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30
+pnpm install --frozen-lockfile
+pnpm sf:generate
+sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 120
 sf org assign permset --name Resource360_Administrator --target-org Resource360Hub
 sf apex run --target-org Resource360Hub --file scripts/apex/seedResource360.apex
+sf apex run --target-org Resource360Hub --file scripts/apex/scheduleResource360.apex
 sf org open --target-org Resource360Hub --path /lightning/app/c__Resource360
 ```
 
-The alias and defaults are machine-local. The committed Salesforce DX files make the intended relationship portable, while Salesforce CLI authentication stays outside Git.
+Aliases/authentication are machine-local. Metadata, generators, traceability and workflows are portable; `.sf`, `.sfdx`, auth URLs, tokens and org identifiers stay outside Git.
 
 ## Change discipline
 
-1. Build and review Salesforce metadata in `force-app/main/default`.
-2. Validate in a scratch org or the Resource 360 Developer Edition as appropriate.
-3. Commit metadata and configuration changes through a pull request.
-4. Never commit access tokens, passwords, auth URLs, private keys, usernames, org IDs, or files from `.sf/` and `.sfdx/`.
-
-GitHub Pages continues to host the sanitized React companion. Salesforce is the system of record and native application platform; browser storage remains demo-only.
+1. Edit source under `force-app/main/default` and the governed generators.
+2. Run `pnpm sf:generate`; classifications, permission sets/groups and traceability must have zero drift.
+3. Run frontend and Salesforce dry-run gates.
+4. Deploy/seed/schedule in the permanent demo org and verify operational records.
+5. Commit through a reviewed pull request; never commit credentials, real identities or production data.
 
 ## Validation contract
 
-Before merging Salesforce metadata, run:
-
 ```bash
+pnpm sf:generate
+git diff --exit-code -- force-app/main/default/customMetadata force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md
+pnpm lint
+pnpm test
 pnpm sf:validate
-pnpm sf:test
 ```
 
-The deployment validation must succeed with `Resource360ServiceTest`, all business formulas must reconcile against their documented examples, the screen catalogue must contain 103 unique IDs, and no org authentication artifact may appear in Git.
+The deployment must pass `Resource360ServiceTest` with no coverage warning. The generated register must contain 109 functional/admin requirements, 25 UAT scenarios (134 total items) and 103 unique governed screen IDs. Generated governance files must be committed and no org authentication artifact may be tracked.
+
+## CI secret
+
+Protected Salesforce validation uses encrypted GitHub secret `RESOURCE360_SFDX_AUTH_URL`. It is piped into `sf org login sfdx-url --sfdx-url-stdin`; do not print or persist it. Pages builds and untrusted pull requests work without the secret and explicitly report that the protected-org gate was skipped.
+
+## Production activation gate
+
+The Developer Edition is not an EXL production tenant. Promotion requires an EXL-owned target org, enterprise SSO/group mapping, encrypted Named/External Credentials or approved middleware, certified source data, migration/reconciliation, volume/concurrency and recovery tests, monitoring/backup/retention decisions, privacy/security approval, business UAT and rollback-approved release governance. Execute and retain the evidence defined in `PRODUCTION_ACTIVATION_RUNBOOK.md`.

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Correction_Parent__c</fullName><deleteConstraint>SetNull</deleteConstraint><label>Correction Parent</label><referenceTo>Timesheet__c</referenceTo><relationshipLabel>Timesheet Corrections</relationshipLabel><relationshipName>Timesheet_Corrections</relationshipName><type>Lookup</type></CustomField>

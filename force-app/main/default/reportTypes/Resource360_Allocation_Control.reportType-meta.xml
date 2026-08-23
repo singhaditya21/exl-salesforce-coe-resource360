@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Allocation__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Current and historical Resource 360 allocation, capacity, classification and billability control records.</description><label>Resource 360 Allocation Control</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Resource__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Engagement__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Classification__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Billable_Snapshot__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Daily_Hours__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>State__c</field><table>Allocation__c</table></columns>
+        <masterLabel>Allocation control</masterLabel>
+    </sections>
+</ReportType>

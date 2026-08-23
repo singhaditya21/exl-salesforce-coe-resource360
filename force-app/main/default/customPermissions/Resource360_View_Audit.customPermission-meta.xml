@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata"><description>View immutable Resource 360 audit and decision evidence.</description><isLicensed>false</isLicensed><label>Resource 360 View Audit</label></CustomPermission>

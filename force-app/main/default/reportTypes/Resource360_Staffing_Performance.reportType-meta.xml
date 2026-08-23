@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Staffing_Request__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Resource 360 staffing demand, SLA, decision, outcome and reason performance.</description><label>Resource 360 Staffing Performance</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>Staffing_Request__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Engagement__c</field><table>Staffing_Request__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Resource__c</field><table>Staffing_Request__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Requested_Role__c</field><table>Staffing_Request__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>State__c</field><table>Staffing_Request__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>SLA_Due__c</field><table>Staffing_Request__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Fit_Score__c</field><table>Staffing_Request__c</table></columns>
+        <masterLabel>Staffing performance</masterLabel>
+    </sections>
+</ReportType>

@@ -3,7 +3,7 @@
     <fullName>Level_3_Descriptor__c</fullName>
     <label>Advanced Descriptor</label>
     <length>1000</length>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>
     <visibleLines>3</visibleLines>
