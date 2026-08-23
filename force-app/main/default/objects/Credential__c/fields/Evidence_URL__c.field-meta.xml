@@ -3,7 +3,7 @@
     <fullName>Evidence_URL__c</fullName>
     <label>Evidence URL</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Url</type>
 </CustomField>

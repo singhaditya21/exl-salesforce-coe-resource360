@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata"><deploymentStatus>Deployed</deploymentStatus><description>Allowlisted Resource 360 domain event emitted after transaction commit.</description><eventType>HighVolume</eventType><label>Resource 360 Domain Event</label><pluralLabel>Resource 360 Domain Events</pluralLabel><publishBehavior>PublishAfterCommit</publishBehavior></CustomObject>

@@ -1,0 +1,1 @@
+public without sharing class Resource360ScopeSharingJob implements Queueable{private Set<Id>userIds;public Resource360ScopeSharingJob(Set<Id>userIds){this.userIds=userIds;}public void execute(QueueableContext context){Resource360ScopeSharingService.rebuildUsers(userIds);}}

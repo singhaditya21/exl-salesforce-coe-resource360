@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Skill_Claim__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Approved and pending Salesforce capability supply by practitioner, proficiency, experience and review state.</description><label>Resource 360 Capability Supply</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>Skill_Claim__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Resource__c</field><table>Skill_Claim__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Capability__c</field><table>Skill_Claim__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Approved_Level__c</field><table>Skill_Claim__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Years_Experience__c</field><table>Skill_Claim__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>State__c</field><table>Skill_Claim__c</table></columns>
+        <masterLabel>Capability supply</masterLabel>
+    </sections>
+</ReportType>

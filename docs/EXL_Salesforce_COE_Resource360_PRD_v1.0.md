@@ -4,9 +4,9 @@
 
 | Document field | Value |
 |---|---|
-| Status | Implementation baseline for EXL validation and delivery planning |
-| Version | 1.0 |
-| Date | 21 August 2026 |
+| Status | Implemented Salesforce-native demo baseline; production activation requires the external gates in Section 19 |
+| Version | 1.2 |
+| Date | 23 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
 | Product scope | Engagement 360, Resource Management, Salesforce Skills & Credentials, Budgeting/WBS, Timesheet and COE Command Center |
 | Target organization | EXL Salesforce Center of Excellence (COE) |
@@ -15,7 +15,8 @@
 | Embedded branch reviewed | `sms-system-build`, local archive snapshot at commit `16cfb4d594930a5902f9aa3c754ec3bc26e38ec7` |
 | Video review | 37 archive videos inventoried; 4 exact duplicate pairs; 33 unique videos (approximately 12.9 hours) reviewed across their duration |
 | Screen scope | 103 routed pages, full-screen steps, drawers and decision-critical modals drafted across the target product |
-| Requirement scope | 134 core functional/non-functional requirements, 25 UAT scenarios, 16 resolved product decisions and the build-readiness controls in Section 17 |
+| Requirement scope | 109 functional/admin requirements plus 25 UAT scenarios (134 traced items), 16 resolved product decisions and the build-readiness controls in Section 17 |
+| Traceability register | `docs/REQUIREMENTS_TRACEABILITY.md`, generated from this PRD and the governed screen catalogue; covers all 134 requirement/UAT items and all 103 screens |
 | Intended reviewers | EXL Salesforce COE leadership, COE Staffing, Delivery, Product, Engineering, Finance, HR/L&D, PMO, Information Security, Brand/Marketing and Operations |
 | Assumption policy | Named logical EXL systems, technologies, policies, volumes, service levels and ownership in this version are binding planning assumptions, not claims about EXL's current estate. A later approved change replaces an assumption through versioned change control; it does not block estimation or solution design. |
 
@@ -23,6 +24,8 @@
 |---|---|---|
 | 0.2 | 21 August 2026 | Evidence-led functional requirements, EXL theme and 103-screen catalogue |
 | 1.0 | 21 August 2026 | Resolved all 16 decisions; established MVP/release scope, assumed EXL logical sources, architecture, canonical model/contracts, UX inheritance, security/retention, SLOs, notifications, classification policy, migration, traceability, RACI, AI gates and business case |
+| 1.1 | 22 August 2026 | Re-baselined the production runtime as Salesforce Lightning, Apex and Salesforce data; retained GitHub Pages solely as a sanitized design companion; made EXL production-org activation, identity, integration, migration, monitoring, security and UAT explicit release gates |
+| 1.2 | 23 August 2026 | Aligned the PRD to the implemented demo: effective classifications and billability snapshots, ranked/strict talent matching, KPI definitions, timesheet escalation and exception-free auto-approval, native report types/history, generated permission and traceability controls, and an explicit production-activation runbook |
 
 ---
 
@@ -36,7 +39,7 @@ The ZIP provides a mature functional reference rather than an EXL-ready product.
 
 The target product has five operating components:
 
-1. **Engagement 360 / Resource Management** is the authoritative engagement staffing and allocation experience in the EXL host portal.
+1. **Engagement 360 / Resource Management** is the authoritative engagement staffing and allocation experience in the EXL Salesforce Lightning application.
 2. **Budgeting/WBS** owns versioned planned effort, cost, revenue, margin and approval.
 3. **Salesforce Skills & Credentials** owns the COE capability taxonomy, verified profiles, Salesforce certifications and skill-based talent search.
 4. **Timesheet** captures actual effort only against accepted allocations and returns actuals for variance and profitability reporting.
@@ -1081,59 +1084,48 @@ The system names below are logical EXL contracts and are deliberately independen
 
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is an EXL-hosted web product for the Salesforce COE. It is not implemented as Salesforce custom objects, Apex or an Experience Cloud site in v1. Salesforce systems are integration sources and delivery-domain dimensions, which prevents client/org data from becoming the product's identity or transaction boundary.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.2 target architecture.
 
 ```mermaid
 flowchart LR
-    U["EXL users"] --> P["EXL portal / React TypeScript SPA"]
-    P --> APIM["Azure API Management"]
-    APIM --> BFF["Resource360 API / BFF"]
-    BFF --> ENG["Engagement & Budget modules"]
-    BFF --> STF["Staffing & Allocation module"]
-    BFF --> SKL["Skills & Credentials module"]
-    BFF --> TMS["Timesheet module"]
-    BFF --> ADM["Admin, Audit & Notification module"]
-    ENG --> PG["Azure Database for PostgreSQL"]
-    STF --> PG
-    SKL --> PG
-    TMS --> PG
-    ADM --> PG
-    BFF --> REDIS["Azure Cache for Redis"]
-    ENG --> BUS["Azure Service Bus"]
-    STF --> BUS
-    SKL --> BUS
-    TMS --> BUS
-    BUS --> READ["Analytics read model / Azure data platform"]
-    APIM --> FAC["EXL integration façades"]
-    FAC --> HR["People Master"]
-    FAC --> PSA["Engagement Master"]
-    FAC --> ERP["Commercial Master"]
-    FAC --> LMS["Learning Gateway"]
-    FAC --> SF["Salesforce credential / org APIs"]
+    U["EXL users / Entra ID"] --> SSO["Salesforce My Domain and SSO"]
+    SSO --> LEX["Resource360 Lightning application / LWC"]
+    LEX --> APX["Apex domain and integration services"]
+    APX --> DATA["Salesforce governed objects"]
+    APX --> EVT["Outbox / Platform Events"]
+    APX --> CFG["Custom Metadata policies and calendars"]
+    EVT --> MID["EXL-approved middleware"]
+    MID --> HR["People Master"]
+    MID --> PSA["Engagement Master"]
+    MID --> ERP["Commercial Master"]
+    MID --> LMS["Learning and credential sources"]
+    MID --> MSG["Microsoft Graph / enterprise messaging"]
+    DATA --> RPT["Salesforce reports, dashboards and analytics feed"]
+    GH["GitHub repository and CI/CD"] --> LEX
+    GH --> PAGES["Sanitized GitHub Pages design companion"]
 ```
 
 | Area | v1 decision |
 |---|---|
-| Front end | React + TypeScript single-page application using the EXL design-system tokens in Section 6. It runs as a portal-linked application or micro-frontend with deep-link support. |
-| Back end | Modular FastAPI services packaged as containers. Modules may share a deployment initially but own explicit schemas and API boundaries so they can be separated without changing consumers. |
-| Hosting | EXL-managed Microsoft Azure tenant. Azure App Service or AKS is acceptable; Platform Engineering selects the standard managed container runtime without changing product behavior. |
-| Transaction store | Azure Database for PostgreSQL with zone redundancy in production, point-in-time recovery, encryption and private network access. |
-| Integration | Azure API Management for synchronous APIs and Azure Service Bus topics/queues for durable events, retry and dead-letter handling. |
-| Files | Private Azure Blob Storage with malware scanning, content-type/size controls, short-lived signed access and lifecycle deletion. |
-| Secrets | Azure Key Vault with managed identity; no application secret in source, image, client bundle or ordinary log. |
-| Observability | Application Insights/OpenTelemetry, Azure Monitor/Log Analytics and business-operation dashboards keyed by correlation ID. |
-| Search | PostgreSQL full text/indexes for pilot; introduce Azure AI Search only if load tests fail or semantic retrieval enters approved scope. |
-| Analytics | Event-fed read model in the EXL Azure data platform; certified metrics remain accessible through Resource360 APIs with row-level authorization. |
-| Environments | Development, Test, Pre-production and Production use separate databases, service identities, secrets, queues and external-connector registrations. Production data is prohibited in Development. |
-| Deployment | Trunk-based CI/CD, signed images, automated migration, security scan, contract test and rollback. Production uses blue/green or canary deployment with one-click rollback to the prior compatible version. |
-| Salesforce orgs | `SalesforceOrg` and `OrgConnection` are tenant-scoped records. V1 supports multiple EXL-authorized orgs/sandboxes through named connections, but no client-org write occurs without a separate approved integration scope. |
-| Availability/concurrency | Allocation acceptance and budget approval use database transactions, row/version locks and optimistic `ETag` checks. All create/decision commands require `Idempotency-Key`. |
+| Experience | Salesforce Lightning Experience with the `Resource360` application and Lightning Web Components using SLDS, EXL-approved design tokens, responsive behavior, deep links and the Section 6 screen contract. GitHub Pages is demonstrational only and never handles EXL data. |
+| Domain services | Bulk-safe Apex service classes and asynchronous jobs own transaction boundaries, row locking, CRUD/FLS enforcement, idempotency, business rules, decisions, audit and outbox publication. Declarative Flow is used where it remains testable and does not weaken transactional invariants. |
+| Transaction store | Governed Salesforce custom objects with private organization-wide defaults, role/team sharing, external IDs, effective dates, immutable decision evidence and field-history/audit controls. |
+| Integration | Named Credentials and External Credentials provide secret-free endpoints. EXL-approved middleware consumes/publishes versioned APIs or Platform Events. Sync runs, record errors, retries and dead-letter states are visible to Operations. |
+| Files | Salesforce Files or an approved EXL content service with malware scanning, content-type/size allowlists, least-privilege links, retention and deletion controls. No unrestricted evidence URL is accepted. |
+| Secrets | Salesforce External Credentials, Named Credentials and protected environment configuration. Secrets, auth URLs and tokens are prohibited from Git, browser bundles, custom metadata and ordinary logs. |
+| Observability | Salesforce scheduled-job health, integration run/error records, correlation IDs, event monitoring where licensed, operational dashboards and enterprise alert forwarding. |
+| Search | Selective SOQL/SOSL and indexed external-ID/filter fields for the pilot. Search scale and ranking are load-tested before production; an external search service requires a separately approved architecture decision. |
+| Analytics | Governed Salesforce reports/dashboards for operational control plus an event-fed EXL analytics read model where enterprise history or certified cross-system metrics require it. Every KPI exposes cutoff and reconciliation status. |
+| Environments | Scratch orgs for isolated development, a permanent Developer Edition for repository demonstration, and separate EXL Development, Test/UAT, Pre-production and Production orgs with environment-specific principals and endpoints. Production data is prohibited in lower environments unless irreversibly masked and approved. |
+| Deployment | GitHub is the source of truth. Pull requests run metadata validation, Apex/LWC tests, static analysis, dependency/secret scans and traceability checks. Production deployment uses an approved Salesforce release pipeline, destructive-change review, backup and a tested rollback/forward-fix plan. |
+| Salesforce org boundary | Resource360 operates only in EXL-authorized orgs. Client Salesforce org connectivity is read-only by default and requires a separately approved connection, data classification and write scope. |
+| Availability/concurrency | Allocation acceptance, budget approval and timesheet decisions use Salesforce row locks, current-version/signature checks and idempotency keys. Async integration failure never rolls back the committed business transaction. |
 
-Deployment regions are Central India primary and South India recovery for the initial India-led COE population. A later geography uses the same logical design with an approved regional data boundary; cross-region replication of personal/client data requires Privacy and Security approval.
+The EXL Salesforce production edition, Hyperforce region, data residency, sandbox topology, Shield/Event Monitoring entitlement, backup service and disaster-recovery model are release-gate decisions owned by EXL Platform, Security and Privacy. The Developer Edition attached to this repository is not a production tenant and provides no evidence of production capacity, availability or recovery.
 
 ### 17.4 Canonical domain model and field rules
 
-All records use UUID primary keys internally and retain the authoritative external ID. Business-effective timestamps are stored in UTC with explicit local time zone context. Every mutable aggregate includes `version`, `created_at`, `created_by`, `updated_at` and `updated_by`; effective-dated records include `valid_from`, `valid_to` and `is_current`.
+All records use Salesforce record IDs internally and retain authoritative external IDs in unique External ID fields. Business-effective timestamps are stored in Salesforce UTC `DateTime` fields with explicit resource/calendar time-zone context. Standard audit fields are supplemented with domain `Version`, `Valid From`, `Valid To`, `Current`, correlation and decision-evidence fields wherever the aggregate requires effective dating or immutable lineage.
 
 ```mermaid
 erDiagram
@@ -1504,7 +1496,7 @@ Source files containing personal, customer or commercial data were used to under
 
 ## 19. Definition of done and implementation readiness
 
-Version 1.0 is ready for estimation and solution design because it contains a complete screen inventory, resolved planning decisions, an MVP cut, logical source contracts, target architecture, canonical data model, security/operations policy, migration approach, traceability and accountable roles. It becomes the approved delivery baseline when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
+Version 1.2 is implemented as a production-shaped Salesforce demo and is ready for EXL validation because it contains the complete screen inventory, resolved planning decisions, MVP cut, logical source contracts, target architecture, canonical data model, security/operations policy, migration approach, generated traceability and accountable roles. The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
 
 1. The named EXL accountable roles in Section 17.13 are assigned to people and the Product Owner records approval of DEC-01 through DEC-16.
 2. Each P0 requirement is accepted, explicitly changed or deferred with documented consequence and target release.

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Work_Days__c</fullName><defaultValue>'1,2,3,4,5'</defaultValue><description>ISO weekday numbers, Monday=1 through Sunday=7.</description><label>Work Days</label><length>20</length><required>true</required><type>Text</type></CustomField>

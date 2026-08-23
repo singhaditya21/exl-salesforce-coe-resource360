@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Time_Entry__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Allocation-authorized Resource 360 actual hours, work date, project, work unit, role and approval state.</description><label>Resource 360 Timesheet Actuals</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>Time_Entry__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Timesheet__c</field><table>Time_Entry__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Allocation__c</field><table>Time_Entry__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Engagement__c</field><table>Time_Entry__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Work_Date__c</field><table>Time_Entry__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Hours__c</field><table>Time_Entry__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>State__c</field><table>Time_Entry__c</table></columns>
+        <masterLabel>Timesheet actuals</masterLabel>
+    </sections>
+</ReportType>

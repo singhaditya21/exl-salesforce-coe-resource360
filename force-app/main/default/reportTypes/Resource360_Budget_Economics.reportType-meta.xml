@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Budget__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Versioned Resource 360 budget revenue, cost, margin, WBS reconciliation and approval state.</description><label>Resource 360 Budget Economics</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>Budget__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Engagement__c</field><table>Budget__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Version__c</field><table>Budget__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>State__c</field><table>Budget__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Revenue__c</field><table>Budget__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Total_Cost__c</field><table>Budget__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Margin_Percent__c</field><table>Budget__c</table></columns>
+        <masterLabel>Budget economics</masterLabel>
+    </sections>
+</ReportType>

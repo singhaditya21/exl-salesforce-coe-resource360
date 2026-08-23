@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Integration_Run__c</fullName><label>Integration Run</label><referenceTo>R360_Integration_Run__c</referenceTo><relationshipLabel>Integration Errors</relationshipLabel><relationshipName>Integration_Errors</relationshipName><reparentableMasterDetail>false</reparentableMasterDetail><type>MasterDetail</type><writeRequiresMasterRead>false</writeRequiresMasterRead></CustomField>

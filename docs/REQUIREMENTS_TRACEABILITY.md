@@ -1,0 +1,165 @@
+# Resource 360 requirements traceability
+
+Generated from PRD v1.2 and the repository screen catalogue. This matrix is an engineering truth register: “implemented” means deployable in the Salesforce demo baseline; activation items require EXL-owned identity, endpoint, data, licensing, or operating decisions.
+
+## Coverage summary
+
+- Functional/admin requirements traced: 109
+- UAT scenarios traced: 25
+- Total PRD requirement/UAT items traced: 134
+- Governed screen contracts traced: 103
+- Assumed contract; EXL activation: 4
+- Implemented in demo baseline: 48
+- Screen contract + implemented foundation: 13
+- Partial / activation backlog: 43
+- Later-phase screen contract: 1
+
+## Requirement matrix
+
+| Requirement | Priority | Delivery status | Repository evidence | Acceptance evidence required |
+|---|---|---|---|---|
+| CORE-001 | P0 | Assumed contract; EXL activation | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | No downstream module mints a competing employee or engagement identity; façade contracts in Section 17 are the delivery baseline. |
+| CORE-002 | P0 | Assumed contract; EXL activation | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Each connected module consumes the same versioned field definitions and validation rules. |
+| CORE-003 | P0 | Assumed contract; EXL activation | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Data-lineage register is approved; screens identify source and freshness for critical data. |
+| CORE-004 | P0 | Implemented in demo baseline | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Retries do not create duplicate budgets, allocations, approvals or timesheet permissions. |
+| CORE-005 | P0 | Implemented in demo baseline | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Failed handoffs are visible and recoverable without direct database editing. |
+| CORE-006 | P0 | Implemented in demo baseline | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Production state is stored in governed server-side persistence. |
+| CORE-007 | P1 | Screen contract + implemented foundation | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Values match source systems and expose last-sync time. |
+| CORE-008 | P1 | Screen contract + implemented foundation | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | Unauthorized records cannot be retrieved through UI or API. |
+| CORE-009 | P1 | Screen contract + implemented foundation | Inbound API, integration run/error, role scope/sharing, outbox and workspace source/freshness contracts | A status change produces deterministic actions and an exception report. |
+| BUD-001 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Required assumptions validate before calculation or submission. |
+| BUD-002 | P0 | Partial / activation backlog | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Month/phase grid and roster reconcile to the saved version. |
+| BUD-003 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Client and server results match within the approved rounding tolerance; tampered client totals are ignored. |
+| BUD-004 | P0 | Partial / activation backlog | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Calculation tests cover zero, partial, full and multi-resource months. |
+| BUD-005 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Onsite/offsite classification and contingency are traceable. |
+| BUD-006 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Zero-revenue and zero-effort cases produce defined, non-misleading results. |
+| BUD-007 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Automated reconciliation prevents submission on mismatch. |
+| BUD-008 | P0 | Partial / activation backlog | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Historic versions cannot be edited in place. |
+| BUD-009 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Boundary values route correctly; only the current approver may decide. |
+| BUD-010 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | The project cannot retain Approved status against a changed economic signature. |
+| BUD-011 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Resubmission creates a new decision cycle without erasing the prior one. |
+| BUD-012 | P0 | Implemented in demo baseline | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Allocation API enforces the rule even if the UI is bypassed. |
+| BUD-013 | P1 | Partial / activation backlog | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Partial months calculate consistently; outside-window allocations are visibly flagged. |
+| BUD-014 | P1 | Partial / activation backlog | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | As-of logic and data cutoff are displayed. |
+| BUD-015 | P1 | Partial / activation backlog | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Invalid schema/cells are rejected with row-level errors; server recalculates imported values. |
+| BUD-016 | P1 | Screen contract + implemented foundation | Resource360BudgetService, Budget Guard triggers, immutable approval decisions, formulas and budget report type | Embedded data is read-only and matches the budgeting source. |
+| RAS-001 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Both modes return only in-scope, active employees and show applicable date coverage. |
+| RAS-002 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Filters are consistently defined and testable; unavailable upstream fields are not fabricated. |
+| RAS-003 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Classification and role are mandatory and drawn from governed LOVs. |
+| RAS-004 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Reports and integrations use the classification mapping effective on the allocation date. |
+| RAS-005 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | All three modes produce the same validated daily allocation model. |
+| RAS-006 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Persisted daily hours are deterministically derived; conversions use the active work calendar and capacity. |
+| RAS-007 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | UI and database/service enforcement reject a breach atomically, including concurrent approvals. |
+| RAS-008 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Weekends/holidays/non-working days are excluded according to calendar configuration. |
+| RAS-009 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Invalid range returns a specific validation reason. |
+| RAS-010 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Calendar differences change eligible capacity without rewriting history. |
+| RAS-011 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Duplicate/overlap validation is deterministic and documented. |
+| RAS-012 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Conflict panel shows project, dates, role, classification, pending/accepted state and remaining capacity. |
+| RAS-013 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Pending records are distinguishable from accepted allocations everywhere. |
+| RAS-014 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Each operation applies status, date, capacity and audit rules. |
+| RAS-015 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Past-date override is permission-gated and reported. |
+| RAS-016 | P0 | Implemented in demo baseline | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Timesheet and profitability reports resolve the correct version by work date. |
+| RAS-017 | P0 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | No historical time or audit evidence is deleted. |
+| RAS-018 | P1 | Screen contract + implemented foundation | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Values reconcile to daily allocations. |
+| RAS-019 | P1 | Screen contract + implemented foundation | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Detail is scope-aware and keyboard accessible. |
+| RAS-020 | P1 | Partial / activation backlog | Resource360CalendarService, Resource360StaffingService, effective-dated allocations and allocation report type | Invalid rows are downloadable with exact errors and no silent truncation. |
+| STF-001 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | Queue supports search, filtering, aging and priority sorting. |
+| STF-002 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | Staffer can make a decision without navigating through disconnected records. |
+| STF-003 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | Decision captures actor, active role, timestamp and reason/note. |
+| STF-004 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | A request valid when raised but no longer valid cannot be accepted without resolution. |
+| STF-005 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | No race condition can create over-allocation; every affected PM is notified. |
+| STF-006 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | SLA is configurable; expired requests never commit capacity. |
+| STF-007 | P0 | Implemented in demo baseline | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | Delivery channels and templates are configured; failures are monitored. |
+| STF-008 | P1 | Partial / activation backlog | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | Ownership and SLA treatment remain visible. |
+| STF-009 | P1 | Screen contract + implemented foundation | Staffing request lifecycle, atomic Staffer decision, SLA scheduler, notifications and staffing report type | Metrics reconcile to request history. |
+| SMS-001 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Writes occur only through governed services and are audit logged; externally verified credentials retain their external source. |
+| SMS-002 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | APIs and UI never present a course completion or certification as an equivalent self-assessed proficiency level. |
+| SMS-003 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Claim is Pending until decided; the employee cannot self-approve. |
+| SMS-004 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Employee justification remains unchanged; reviewer and decision actor are distinct fields. |
+| SMS-005 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Unsourced organizational fields render as unavailable, not invented values. |
+| SMS-006 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Externally sourced data is read-only and traceable to learner/credential identifiers where permitted. |
+| SMS-007 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Empty requirement bodies are rejected; invalid ranges return clear errors. |
+| SMS-008 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Returned candidates meet every mandatory criterion. |
+| SMS-009 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Results are ordered by descending score and then name; per-requirement match is visible. |
+| SMS-010 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | The active policy is versioned, testable and visible as contributing dimensions; score explanations show factors and gaps without exposing protected attributes. |
+| SMS-011 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Calculation parity exists across service and any client preview; missing mandatory credentials cannot be offset by unrelated skills. |
+| SMS-012 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Deactivation is a soft delete and preserves history. |
+| SMS-013 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Existing claims remain readable; new selection excludes inactive skills. |
+| SMS-014 | P0 | Implemented in demo baseline | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | UI gating is supported by API enforcement; individual minimum permissions cannot be removed. |
+| SMS-015 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Reordering identical upstream rows cannot change the surviving employee record. |
+| SMS-016 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Operations can distinguish a successful fresh sync from stale fallback. |
+| SMS-017 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | A production-like sync yields expected matched records and reports unmatched identities without fabricating data. |
+| SMS-018 | P0 | Partial / activation backlog | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Team and portfolio features pass completeness thresholds before enablement. |
+| SMS-019 | P1 | Screen contract + implemented foundation | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Counts reconcile to profile and review records. |
+| SMS-020 | P1 | Screen contract + implemented foundation | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Metric population, freshness and permissions are visible. |
+| SMS-021 | P1 | Screen contract + implemented foundation | Resource360SkillService, Resource360TalentService v2, project evidence, learning/credential API and permission groups | Unsafe schemes/content are rejected; access follows profile scope. |
+| SFCOE-001 | P0 | Partial / activation backlog | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Roles are configurable, effective-dated and searchable without code deployment. |
+| SFCOE-002 | P0 | Partial / activation backlog | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Capability names and hierarchy are administered; deprecated Salesforce products remain historically resolvable. |
+| SFCOE-003 | P0 | Implemented in demo baseline | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Each badge/row shows type, source, status and verification/decision date. |
+| SFCOE-004 | P0 | Implemented in demo baseline | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Expired, unverified or maintenance-due credentials are visually distinct and cannot satisfy an active-certification gate. |
+| SFCOE-005 | P0 | Implemented in demo baseline | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Search can use recency/duration without exposing unauthorized client details. |
+| SFCOE-006 | P1 | Partial / activation backlog | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Candidate results distinguish eligible, partial and unavailable candidates with reasons. |
+| SFCOE-007 | P1 | Screen contract + implemented foundation | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Each metric drills to authorized source records and shows freshness. |
+| SFCOE-008 | P1 | Screen contract + implemented foundation | Capability/credential/evidence model, explainable fit policy v1 and 103 governed screen contracts | Alert owner, due date, severity and resolution are recorded. |
+| TS-001 | P0 | Implemented in demo baseline | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Pending, declined, expired and future-deallocated periods are absent. |
+| TS-002 | P0 | Implemented in demo baseline | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Invalid role/project combinations are rejected server-side. |
+| TS-003 | P0 | Implemented in demo baseline | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | One authoritative entry exists per configured cell/key; edits are versioned/audited. |
+| TS-004 | P0 | Implemented in demo baseline | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Validation includes entries across all projects. |
+| TS-005 | P0 | Implemented in demo baseline | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Decisions include actor, date and rejection reason. |
+| TS-006 | P0 | Partial / activation backlog | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | The active deadline and time zone are displayed and enforced consistently; holidays use the employee calendar. |
+| TS-007 | P0 | Implemented in demo baseline | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Auto-approved rows remain distinguishable from human approvals; exception-bearing rows never auto-approve. |
+| TS-008 | P0 | Partial / activation backlog | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Original and corrected values remain available in audit history. |
+| TS-009 | P0 | Partial / activation backlog | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Totals reconcile to approved timesheet source. |
+| TS-010 | P1 | Partial / activation backlog | Resource360TimeService, immutable actuals, correction lineage, escalation/auto-approval scheduler and actuals report type | Exceptions have owner, age and drill-down. |
+| GOV-001 | P0 | Implemented in demo baseline | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Historical reports use the mapping effective on the work/allocation date. |
+| GOV-002 | P0 | Implemented in demo baseline | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | The active v1 mapping is in Section 17.10.1; changes are effective-dated and historical classifications remain resolvable. |
+| GOV-003 | P0 | Implemented in demo baseline | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | No governed unbilled allocation can be accepted without required control fields. |
+| GOV-004 | P1 | Partial / activation backlog | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Timer tests and notification/escalation records are available. |
+| GOV-005 | P1 | Partial / activation backlog | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Each KPI can drill to its contributing records. |
+| GOV-006 | P1 | Partial / activation backlog | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Metric definitions, refresh time, source and filters are visible. |
+| GOV-007 | P1 | Partial / activation backlog | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Totals reconcile across hierarchy; double counting is prevented. |
+| GOV-008 | P1 | Screen contract + implemented foundation | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Dashboards show actual versus active target and effective dates. |
+| GOV-009 | P1 | Partial / activation backlog | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Closing an alert does not erase the triggering record. |
+| GOV-010 | P2 | Later-phase screen contract | Effective classification metadata, KPI snapshot, role scope sharing, audit/outbox and Command Center screens | Scenario data is isolated, labelled and removable without production impact. |
+| ADM-001 | P0 | Partial / activation backlog | Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls | Changes are effective-dated, validated and audited. |
+| ADM-002 | P0 | Partial / activation backlog | Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls | Audit identifies actor, active role, action, timestamp, entity, before/after or event payload, reason and correlation ID. |
+| ADM-003 | P0 | Assumed contract; EXL activation | Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls | Retention jobs are tested; legal hold and access controls are documented. |
+| ADM-004 | P0 | Partial / activation backlog | Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls | Each import has batch ID, source file metadata and row outcome. |
+| ADM-005 | P0 | Partial / activation backlog | Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls | Override cannot be hidden by subsequent ordinary edits. |
+| ADM-006 | P1 | Partial / activation backlog | Policy/classification metadata, generated RBAC, field history, immutable audit, operations screens and release controls | Changes are versioned, effective-dated and testable in a preview mode. |
+
+## UAT register
+
+Automated tests are implementation evidence, not a substitute for EXL business acceptance. Every scenario remains explicitly open for named business execution and sign-off.
+
+| Scenario | Status | Business scenario | Expected result |
+|---|---|---|---|
+| UAT-01 | Business UAT required | PM attempts staffing on a project without approved current WBS | Request is blocked with budget status and remediation path |
+| UAT-02 | Business UAT required | PM searches three Salesforce capabilities, a mandatory certification and minimum experience in Engagement 360 | Strict mode returns only employees meeting all requirements |
+| UAT-03 | Business UAT required | SMS user performs the same search in rank mode | Ranked shortlist includes partial matches with transparent per-requirement results |
+| UAT-04 | Business UAT required | PM requests 40% of a resource with 50% accepted elsewhere | Pending request is allowed and shows 10% remaining if otherwise eligible |
+| UAT-05 | Business UAT required | Staffer attempts to accept a request after another decision raises capacity to 80% | Acceptance revalidates and blocks the resulting >100% state |
+| UAT-06 | Business UAT required | Pending request remains undecided for configured 3-day SLA | System expires/declines it, releases soft demand and records notification/audit |
+| UAT-07 | Business UAT required | Staffer accepts valid request | Allocation commits and appears on employee timesheet only for effective dates/roles |
+| UAT-08 | Business UAT required | Staffer declines request | No capacity or timesheet eligibility is created; reason is visible to PM |
+| UAT-09 | Business UAT required | PM changes classification midway through utilized allocation | Existing line ends and a new effective-dated line is created; old time retains old classification |
+| UAT-10 | Business UAT required | Admin backdates allocation | Elevated permission and reason are required; exception appears in audit report |
+| UAT-11 | Business UAT required | Employee submits an industry skill | It remains pending and does not influence search until manager approval |
+| UAT-12 | Business UAT required | Manager approves claim at adjusted level | Approved level, claimant input, decision note and both actors are retained |
+| UAT-13 | Business UAT required | Employee-to-learning/credential join is missing | Sync reports unmatched identity; search does not fabricate learning or certification data |
+| UAT-14 | Business UAT required | PM changes an approved budget's cost | Approval is invalidated and staffing gate uses the new unapproved state |
+| UAT-15 | Business UAT required | Budget margin equals exactly 30%, 25% and 20% | Each boundary routes to the configured correct tier |
+| UAT-16 | Business UAT required | Employee has multiple accepted roles on one project | Timesheet allows only those roles for applicable dates |
+| UAT-17 | Business UAT required | Wrong-project time is corrected after lock | Controlled correction captures reason, approvals and before/after history |
+| UAT-18 | Business UAT required | Leadership drills from utilization KPI to employee records | Totals reconcile and unauthorized records remain inaccessible |
+| UAT-19 | Business UAT required | Employee upstream returns stale fallback | Dashboard and sync log identify staleness; Operations alert fires according to threshold |
+| UAT-20 | Business UAT required | Database is restored from backup | Agreed RPO/RTO is met and decision/audit relationships remain intact |
+| UAT-21 | Business UAT required | Staffer requires Service Cloud Advanced, Financial Services Cloud experience and an active mandatory Salesforce credential | Strict results include only practitioners meeting all mandatory gates and show preferred gaps separately |
+| UAT-22 | Business UAT required | A previously qualifying credential becomes expired or maintenance-due | Candidate no longer satisfies an active-certification gate; existing historical decisions remain explainable |
+| UAT-23 | Business UAT required | Practitioner profile has approved proficiency but client/project evidence is confidential | Search uses authorized recency/duration signals without exposing restricted client details |
+| UAT-24 | Business UAT required | User traverses all screens permitted to one role and attempts deep links to restricted screens | Navigation shows only permitted destinations; restricted routes and APIs deny access without leaking record existence |
+| UAT-25 | Business UAT required | Keyboard-only user completes search, Gantt scheduling, request submission and staffer decision at 200% zoom | Focus, reflow, labels, grid alternatives and decisions remain usable and meet agreed accessibility criteria |
+
+## Screen assurance
+
+All 103 screen IDs are declared once in `app/screen-data.ts`, transformed into Salesforce authorization/source/API/state/acceptance contracts by `screenContracts.js`, and checked by `tests/app.test.mjs`. A screen contract is not a claim that every external EXL dependency is activated.

@@ -31,6 +31,14 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Verify generated governance artifacts
+        run: |
+          pnpm sf:generate
+          git status --porcelain -- force-app/main/default/customMetadata force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md > "${RUNNER_TEMP}/resource360-governance-status"
+          if [[ -s "${RUNNER_TEMP}/resource360-governance-status" ]]; then
+            cat "${RUNNER_TEMP}/resource360-governance-status"
+            exit 1
+          fi
       - name: Validate source
         run: pnpm lint && pnpm test
       - name: Configure Pages
