@@ -9,11 +9,11 @@ The governed chain is:
 ## Salesforce implementation
 
 - EXL-themed Lightning app/LWC with nine modules and all 103 routed screen contracts.
-- 29 Salesforce data/config/event types, 343 fields/formulas, 20 validation rules, six guard triggers and native field history on material controls.
-- 22 Apex domain/operations services for economics, staffing, daily calendars, explainable talent matching, skills, credentials, time, scope sharing, master-data ingestion, durable events, KPI snapshots and immutable audit.
+- 30 Salesforce data/config/event types, 352 fields/formulas, 20 validation rules, six guard triggers and native field history on material controls.
+- 25 Apex application classes for economics, capacity planning, governed delivery roles, staffing, explainable talent matching, practitioner evidence, time, bulk/master-data ingestion, scope sharing, durable events, KPI snapshots and immutable audit, plus the deployment test suite.
 - Approved-budget signatures, sequential separation of duties, atomic capacity, effective classification snapshots, allocation lineage, self-approval, eligible time, controlled corrections and five-/seven-day timesheet controls.
-- Ten least-privilege permission sets composed into eight business-role groups, effective organizational/portfolio scopes and Apex-managed sharing.
-- Five standard Salesforce report types, 24 effective policy/classification records and idempotent fictional demo seeding.
+- Eleven least-privilege permission sets composed into eight business-role groups, 14 custom permissions, effective organizational/portfolio scopes and Apex-managed sharing.
+- Five standard Salesforce report types, 44 effective policy/classification/delivery-role records and idempotent fictional demo seeding.
 - A clean Salesforce deployment gate with all Resource360 service tests passing and no component coverage warnings.
 
 Requirements are in the [consolidated PRD](docs/EXL_Salesforce_COE_Resource360_PRD_v1.0.md); delivery truth is in [requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md). See [Salesforce architecture](docs/SALESFORCE_ARCHITECTURE.md), [org contract](docs/SALESFORCE_ORG.md), [production activation runbook](docs/PRODUCTION_ACTIVATION_RUNBOOK.md) and [ADR-001](docs/ADR-001-SALESFORCE-NATIVE.md).

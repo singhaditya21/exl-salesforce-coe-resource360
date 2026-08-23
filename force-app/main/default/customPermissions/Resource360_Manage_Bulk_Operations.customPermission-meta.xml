@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <isLicensed>false</isLicensed>
+    <label>Resource 360 Manage Bulk Operations</label>
+    <description>Allows controlled pre-validation and execution of attributable bulk data operations.</description>
+</CustomPermission>

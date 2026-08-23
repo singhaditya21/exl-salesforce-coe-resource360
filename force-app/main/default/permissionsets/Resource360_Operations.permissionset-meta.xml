@@ -3,27 +3,33 @@
     <description>Operate integrations, reconciliation, schedules, outbox recovery and configuration without business approval authority.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Operations</label>
+    <classAccesses><apexClass>Resource360BulkService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360InboundApi</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360NotificationDispatcher</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360OperationsScheduler</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360OutboxPublisher</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
+    <customPermissions><enabled>true</enabled><name>Resource360_Manage_Bulk_Operations</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Configuration</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Integrations</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Run_Reconciliation</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_View_Audit</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_View_Operations</name></customPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Commit_Mode__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Completed_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Detail__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Failure_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Processed_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_Cutoff__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_File_Hash__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_File_Name__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Success_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Error_Message__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.External_Record_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Next_Retry_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Payload_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Retry_Count__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Row_Number__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Outbox_Event__c.Attempt_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Outbox_Event__c.Last_Error__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Outbox_Event__c.Next_Attempt_At__c</field><readable>true</readable></fieldPermissions>

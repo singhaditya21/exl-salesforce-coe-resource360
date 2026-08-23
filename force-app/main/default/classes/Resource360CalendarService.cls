@@ -1,4 +1,18 @@
 public inherited sharing class Resource360CalendarService {
+    public class CapacityDay {
+        @AuraEnabled public Date workDate;
+        @AuraEnabled public Decimal capacityHours;
+        @AuraEnabled public Boolean workingDay;
+        @AuraEnabled public String reason;
+    }
+
+    public class Deadline {
+        @AuraEnabled public Date dueDate;
+        @AuraEnabled public DateTime dueAt;
+        @AuraEnabled public String timeZoneName;
+        @AuraEnabled public Integer businessDaysAfter;
+    }
+
     public class CapacityCheck {
         @AuraEnabled public Boolean allowed;
         @AuraEnabled public Date conflictDate;
@@ -88,6 +102,23 @@ public inherited sharing class Resource360CalendarService {
             for (R360_Calendar_Exception__c exceptionRecord : [SELECT Exception_Date__c, Capacity_Hours__c FROM R360_Calendar_Exception__c WHERE Calendar__c=:resource.Work_Calendar__c AND Exception_Date__c=:workDate WITH USER_MODE]) exceptions.put(workDate, exceptionRecord.Capacity_Hours__c);
         }
         return capacityFor(resource, workDate, exceptions);
+    }
+
+    public static List<CapacityDay> capacityProfile(Id resourceId,Date startDate,Date endDate){
+        if(resourceId==null||startDate==null||endDate==null||endDate<startDate)throw new AuraHandledException('Provide a resource and valid inclusive date range.');
+        Integer rangeDays=startDate.daysBetween(endDate)+1;if(rangeDays>366)throw new AuraHandledException('Interactive capacity preview cannot exceed 366 days.');
+        Resource__c resource=[SELECT Id,Daily_Capacity_Hours__c,Work_Calendar__c,Work_Calendar__r.Work_Days__c,Work_Calendar__r.Daily_Capacity_Hours__c,Work_Calendar__r.Effective_From__c,Work_Calendar__r.Effective_To__c,Work_Calendar__r.Current__c FROM Resource__c WHERE Id=:resourceId WITH USER_MODE LIMIT 1];
+        Map<Date,Decimal>exceptions=new Map<Date,Decimal>();Map<Date,String>reasons=new Map<Date,String>();
+        if(resource.Work_Calendar__c!=null)for(R360_Calendar_Exception__c exceptionRecord:[SELECT Exception_Date__c,Capacity_Hours__c,Reason__c FROM R360_Calendar_Exception__c WHERE Calendar__c=:resource.Work_Calendar__c AND Exception_Date__c>=:startDate AND Exception_Date__c<=:endDate WITH USER_MODE]){exceptions.put(exceptionRecord.Exception_Date__c,exceptionRecord.Capacity_Hours__c);reasons.put(exceptionRecord.Exception_Date__c,exceptionRecord.Reason__c);}
+        List<CapacityDay>result=new List<CapacityDay>();for(Integer offset=0;offset<rangeDays;offset++){Date workDate=startDate.addDays(offset);CapacityDay day=new CapacityDay();day.workDate=workDate;day.capacityHours=capacityFor(resource,workDate,exceptions);day.workingDay=day.capacityHours>0;day.reason=reasons.containsKey(workDate)?reasons.get(workDate):(day.workingDay?'Configured work day':'Non-working day');result.add(day);}return result;
+    }
+
+    public static Deadline deadline(Id resourceId,Date periodEnd,Integer businessDaysAfter,Time localTime){
+        if(resourceId==null||periodEnd==null||businessDaysAfter==null||businessDaysAfter<1)throw new AuraHandledException('Provide a resource, period end and positive business-day offset.');
+        Resource__c resource=[SELECT Work_Calendar__c,Work_Calendar__r.Time_Zone__c FROM Resource__c WHERE Id=:resourceId WITH USER_MODE LIMIT 1];
+        Date cursor=periodEnd;Integer counted=0;while(counted<businessDaysAfter){cursor=cursor.addDays(1);List<CapacityDay>profile=capacityProfile(resourceId,cursor,cursor);if(profile[0].workingDay)counted++;if(periodEnd.daysBetween(cursor)>31)throw new AuraHandledException('Calendar configuration produced no deadline within 31 days.');}
+        String zone=resource.Work_Calendar__c==null||String.isBlank(resource.Work_Calendar__r.Time_Zone__c)?UserInfo.getTimeZone().getID():resource.Work_Calendar__r.Time_Zone__c;
+        Time deadlineTime=localTime==null?Time.newInstance(18,0,0,0):localTime;DateTime localAsGmt=DateTime.newInstanceGMT(cursor,deadlineTime);Integer offsetMilliseconds=TimeZone.getTimeZone(zone).getOffset(localAsGmt);Deadline result=new Deadline();result.dueDate=cursor;result.dueAt=localAsGmt.addSeconds(-offsetMilliseconds/1000);result.timeZoneName=zone;result.businessDaysAfter=businessDaysAfter;return result;
     }
 
     private static Decimal capacityFor(Resource__c resource, Date workDate, Map<Date, Decimal> exceptions) {

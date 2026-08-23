@@ -5,6 +5,7 @@
     <label>Resource 360 Budget Approver Actions</label>
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Budgets</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Manage_Budgets</name></customPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Approval_Level__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Blended_Cost__c</field><readable>true</readable></fieldPermissions>

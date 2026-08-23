@@ -46,7 +46,7 @@ private class Resource360ServiceTest {
         Resource360Service.ServiceResult modified=Resource360Service.modifyAllocation(accepted.recordId,startDate,endDate,3,'MuleSoft Lead','Billing',null,null,'Approved delivery-plan change.');
         System.assertEquals(2,[SELECT Version__c FROM Allocation__c WHERE Id=:modified.recordId].Version__c);
         Resource360Service.ServiceResult ended=Resource360Service.deallocate(modified.recordId,endDate.addDays(-1),'Controlled early release.');
-        System.assertEquals('Ended',[SELECT State__c FROM Allocation__c WHERE Id=:ended.recordId].State__c);
+        Allocation__c shortened=[SELECT State__c,End_Date__c FROM Allocation__c WHERE Id=:ended.recordId];System.assertEquals('Accepted',shortened.State__c);System.assertEquals(endDate.addDays(-1),shortened.End_Date__c);
     }
 
     @IsTest
@@ -65,7 +65,7 @@ private class Resource360ServiceTest {
         Budget__c budget;
         System.runAs(submitter) {
             budget = new Budget__c(
-                Engagement__c=engagement.Id, Version__c=99, Current__c=false, State__c='Draft', Revenue__c=10000000,
+                Engagement__c=engagement.Id, Version__c=99, Current__c=true, State__c='Draft', Revenue__c=10000000,
                 Base_Labour__c=8500000, Uplift_Percent__c=0, Effort_Contingency_Percent__c=0,
                 Expense_Contingency_Percent__c=0, Travel_Rate__c=0, Onsite_Months__c=0,
                 Planned_Hours__c=100, Idempotency_Key__c='TEST-BUDGET-LOW-MARGIN'
@@ -108,13 +108,13 @@ private class Resource360ServiceTest {
         Budget__c invalidated = [SELECT State__c, Economic_Signature__c FROM Budget__c WHERE Id=:budget.Id];
         System.assertEquals('Invalidated', invalidated.State__c);
         System.assertEquals(null, invalidated.Economic_Signature__c);
-        Resource360Service.ServiceResult versioned=Resource360Service.createBudgetVersion(budget.Id);
-        System.assertEquals('Draft',[SELECT State__c FROM Budget__c WHERE Id=:versioned.recordId].State__c);
-        System.assertEquals(1,[SELECT COUNT() FROM Budget_Line__c WHERE Budget__c=:versioned.recordId]);
         Budget__c approvedDemo=[SELECT Id FROM Budget__c WHERE Idempotency_Key__c='DEMO-BUDGET-1001'];
         Budget_Line__c approvedLine=[SELECT Id,Cost_Rate__c FROM Budget_Line__c WHERE Budget__c=:approvedDemo.Id LIMIT 1];
-        approvedLine.Cost_Rate__c+=1;update approvedLine;
+        System.runAs(submitter){approvedLine.Cost_Rate__c+=1;update approvedLine;}
         System.assertEquals('Invalidated',[SELECT State__c FROM Budget__c WHERE Id=:approvedDemo.Id].State__c);
+        Resource360Service.ServiceResult versioned;System.runAs(submitter){versioned=Resource360Service.createBudgetVersion(budget.Id);}
+        System.assertEquals('Draft',[SELECT State__c FROM Budget__c WHERE Id=:versioned.recordId].State__c);
+        System.assertEquals(1,[SELECT COUNT() FROM Budget_Line__c WHERE Budget__c=:versioned.recordId]);
     }
 
     @IsTest
@@ -235,7 +235,8 @@ private class Resource360ServiceTest {
         String criteria=JSON.serialize(new Map<String,Object>{'mode'=>'rank','startDate'=>Date.today(),'endDate'=>Date.today().addDays(5),'dailyHours'=>2,'requestedRole'=>'Data Cloud Architect','industry'=>'Retail','minimumExperience'=>3,'preferredCredentials'=>new List<String>{'Data Cloud'},'capabilityRequirements'=>new List<Object>{new Map<String,Object>{'capabilityId'=>capability.Id,'minimumLevel'=>4,'mandatory'=>true}}});
         List<Resource360TalentService.Candidate>ranked=Resource360TalentService.searchCandidatesV2(criteria);System.assert(!ranked.isEmpty());System.assert(ranked[0].score>0);System.assert(ranked[0].eligible);
         String workspace=Resource360Service.getWorkspaceData();
-        System.assert(workspace.contains('activeRoles'));System.assert(workspace.contains('integrationRuns'));System.assert(workspace.contains('utilizationPercent'));
+        System.assert(workspace.contains('activeRoles'));System.assert(workspace.contains('integrationRuns'));System.assert(workspace.contains('integrationErrors'));System.assert(workspace.contains('utilizationPercent'));
+        System.assert(workspace.contains('deliveryRoles'));System.assert(workspace.contains('learningAchievements'));System.assert(workspace.contains('projectEvidence'));
         Resource360ScopeSharingService.rebuildUser(UserInfo.getUserId());
     }
 
@@ -303,6 +304,73 @@ private class Resource360ServiceTest {
         System.assertEquals(true,Resource360Classification.requiresSow('Contractual Shadow'));
         System.assertEquals(false,Resource360Classification.requiresSow('Billing'));
         try{Resource360Classification.requireActive('Unknown classification');System.assert(false,'Inactive or unknown classifications must fail closed.');}catch(AuraHandledException expected){System.assertNotEquals(null,expected.getMessage());}
+        List<Resource360RoleCatalog.DeliveryRole>roles=Resource360RoleCatalog.activeRoles();System.assert(roles.size()>=20);System.assertEquals('Data Cloud Architect',Resource360RoleCatalog.requireActive('R360-ROLE-DCA'));
+        System.assertEquals('Solution Architect',Resource360RoleCatalog.requireActive('R360-ROLE-SA'));System.assertEquals('Scrum Master',Resource360RoleCatalog.requireActive('R360-ROLE-SM'));
+        try{Resource360RoleCatalog.requireActive('Uncontrolled role');System.assert(false,'Unknown delivery roles must fail closed.');}catch(AuraHandledException expected){System.assertNotEquals(null,expected.getMessage());}
+    }
+
+    @IsTest
+    static void planningModesCalendarDeadlineAndSplitLineageAreGoverned(){
+        Staffing_Request__c pending=[SELECT Id,Resource__c,Start_Date__c,End_Date__c,Daily_Hours__c FROM Staffing_Request__c WHERE Idempotency_Key__c='DEMO-SR-1001'];
+        Resource360PlanningService.PlanningPreview daily=Resource360PlanningService.preview(pending.Resource__c,pending.Start_Date__c,pending.End_Date__c,'Daily Hours',4,null,false,null);
+        System.assert(daily.allowed,daily.message);System.assert(daily.workingDays>0);System.assertEquals(4,daily.requestedDailyHours);System.assert(daily.pendingHours>0,'Pending soft demand must remain visible in context.');
+        Resource360PlanningService.PlanningPreview percent=Resource360PlanningService.preview(pending.Resource__c,pending.Start_Date__c,pending.End_Date__c,'Allocation Percent',50,null,false,null);
+        System.assertEquals(50,percent.allocationPercent);System.assertEquals(4,percent.requestedDailyHours);
+        Resource360PlanningService.PlanningPreview total=Resource360PlanningService.preview(pending.Resource__c,pending.Start_Date__c,pending.End_Date__c,'Total Hours',40,null,false,null);
+        System.assertEquals(40,total.requestedTotalHours);System.assert(total.requestedDailyHours>0);
+
+        Resource__c resource=[SELECT Id,Work_Calendar__c FROM Resource__c WHERE Id=:pending.Resource__c];
+        Date friday=nextMonday(Date.today().addDays(1)).addDays(4);Date holiday=friday.addDays(3);
+        insert new R360_Calendar_Exception__c(Calendar__c=resource.Work_Calendar__c,Exception_Key__c='TEST-HOLIDAY-'+String.valueOf(holiday),Exception_Date__c=holiday,Capacity_Hours__c=0,Reason__c='Test regional holiday');
+        Resource360CalendarService.Deadline deadline=Resource360CalendarService.deadline(resource.Id,friday,2,Time.newInstance(18,0,0,0));
+        System.assertEquals(holiday.addDays(2),deadline.dueDate,'Weekend and configured holiday must be skipped.');System.assertEquals('Asia/Kolkata',deadline.timeZoneName);
+
+        Id allocationId=Resource360Service.decideStaffingRequest(pending.Id,true,'Capacity revalidated.','ignored').recordId;
+        Allocation__c allocation=[SELECT Id,Start_Date__c,End_Date__c,Daily_Hours__c FROM Allocation__c WHERE Id=:allocationId];
+        List<Resource360CalendarService.CapacityDay> profile=Resource360CalendarService.capacityProfile(pending.Resource__c,allocation.Start_Date__c,allocation.End_Date__c);
+        Date firstWorking;Date splitDate;
+        for(Resource360CalendarService.CapacityDay day:profile){if(day.workingDay&&firstWorking==null)firstWorking=day.workDate;else if(day.workingDay&&firstWorking!=null){splitDate=day.workDate;break;}}
+        System.assertNotEquals(null,splitDate,'Demo allocation must contain at least two working days.');
+        Resource360Service.ServiceResult split=Resource360Service.splitAllocation(allocation.Id,splitDate,3,4,'Approved phase transition.');
+        System.assert(split.success);System.assertEquals('Superseded',[SELECT State__c FROM Allocation__c WHERE Id=:allocation.Id].State__c);
+        List<Allocation__c> segments=[SELECT Start_Date__c,End_Date__c,Daily_Hours__c,Current__c,Parent_Allocation__c FROM Allocation__c WHERE Parent_Allocation__c=:allocation.Id ORDER BY Start_Date__c];
+        System.assertEquals(2,segments.size());System.assertEquals(splitDate.addDays(-1),segments[0].End_Date__c);System.assertEquals(splitDate,segments[1].Start_Date__c);System.assert(segments[0].Current__c&&segments[1].Current__c);
+    }
+
+    @IsTest
+    static void budgetDraftEditorReconcilesWbsAndProtectsHistory(){
+        Budget__c source=[SELECT Id,Revenue__c FROM Budget__c WHERE Idempotency_Key__c='DEMO-BUDGET-1001'];
+        Id draftId=Resource360Service.createBudgetVersion(source.Id).recordId;
+        Resource360Service.saveBudgetDraft(draftId,85000000,4,2,1,150000,4);
+        Budget__c draft=[SELECT Id,Engagement__r.Start_Date__c FROM Budget__c WHERE Id=:draftId];
+        Date periodStart=Date.newInstance(draft.Engagement__r.Start_Date__c.year(),draft.Engagement__r.Start_Date__c.month(),1);
+        AggregateResult priorTotals=[SELECT SUM(Planned_Hours__c) total FROM Budget_Line__c WHERE Budget__c=:draftId];Decimal priorHours=(Decimal)priorTotals.get('total');if(priorHours==null)priorHours=0;
+        Resource360Service.ServiceResult savedLine=Resource360Service.saveBudgetLine(draftId,null,periodStart,'Discover','Architecture','Salesforce Technical Architect','India',40,100,50,false);
+        System.assert(savedLine.success);Budget__c reconciled=[SELECT Revenue__c,Uplift_Percent__c,Planned_Hours__c,Base_Labour__c FROM Budget__c WHERE Id=:draftId];
+        System.assertEquals(85000000,reconciled.Revenue__c);System.assertEquals(4,reconciled.Uplift_Percent__c);System.assertEquals(priorHours+40,reconciled.Planned_Hours__c);System.assert(reconciled.Base_Labour__c>0);
+
+        source=[SELECT Id,Revenue__c,Current__c FROM Budget__c WHERE Id=:source.Id];System.assertEquals(false,source.Current__c);source.Revenue__c+=1;
+        try{update source;System.assert(false,'Historical budget economics must be immutable.');}catch(DmlException expected){System.assert(expected.getMessage().contains('Historical budget versions'));}
+        Budget_Line__c historicalLine=[SELECT Id,Budget__c,Role__c FROM Budget_Line__c WHERE Budget__c=:source.Id LIMIT 1];historicalLine.Role__c='Mutated role';
+        try{update historicalLine;System.assert(false,'Historical budget WBS must be immutable.');}catch(DmlException expected){System.assertNotEquals(null,expected.getMessage());}
+        System.assertNotEquals('Mutated role',[SELECT Role__c FROM Budget_Line__c WHERE Id=:historicalLine.Id].Role__c);
+    }
+
+    @IsTest
+    static void bulkOperationsPrevalidateCommitAndBlockReplayOrAtomicErrors(){
+        String mixedRows=JSON.serialize(new List<Object>{
+            new Map<String,Object>{'employeeId'=>'BULK-EMP-001','preferredName'=>'Controlled Import','employmentStart'=>'2026-01-01','tower'=>'Delivery','status'=>'Active','dailyCapacityHours'=>8},
+            new Map<String,Object>{'employeeId'=>'BULK-EMP-INVALID','employmentStart'=>'not-a-date','tower'=>'Delivery'}
+        });
+        Resource360BulkService.BulkPreview preview=Resource360BulkService.preview('Employee',mixedRows);
+        System.assertEquals(false,preview.valid);System.assertEquals(2,preview.totalRows);System.assertEquals(1,preview.validRows);System.assertEquals(1,preview.invalidRows);System.assert(preview.rows[1].message.contains('preferredName is required'));
+        try{Resource360BulkService.executeBatch('Employee',mixedRows,'employees.csv','Atomic');System.assert(false,'Atomic batch with row errors must be blocked before DML.');}catch(AuraHandledException expected){System.assertNotEquals(null,expected.getMessage());}
+        Resource360Service.ServiceResult committed=Resource360BulkService.executeBatch('Employee',mixedRows,'employees.csv','Partial');System.assert(committed.success,committed.message);
+        System.assertEquals(1,[SELECT COUNT() FROM Resource__c WHERE Employee_ID__c='BULK-EMP-001']);
+        R360_Integration_Run__c run=[SELECT Id,Run_ID__c,State__c,Processed_Count__c,Success_Count__c,Failure_Count__c,Source_File_Name__c,Source_File_Hash__c,Commit_Mode__c FROM R360_Integration_Run__c WHERE Id=:committed.recordId];
+        System.assertEquals('Succeeded',run.State__c);System.assertEquals(1,run.Processed_Count__c);System.assertEquals('employees.csv',run.Source_File_Name__c);System.assertEquals('Partial',run.Commit_Mode__c);System.assertEquals(64,run.Source_File_Hash__c.length());
+        Resource360Service.ServiceResult replay=Resource360BulkService.executeBatch('Employee',mixedRows,'employees.csv','Partial');System.assertEquals(run.Id,replay.recordId);System.assertEquals(1,[SELECT COUNT() FROM R360_Integration_Run__c WHERE Run_ID__c=:run.Run_ID__c]);
+        Resource360BulkService.BulkPreview unsafe=Resource360BulkService.preview('Capability','[{"capabilityId":"BULK-CAP-001","name":"=HYPERLINK(1)","type":"Salesforce"}]');System.assertEquals(false,unsafe.valid);System.assert(unsafe.rows[0].message.contains('Formula-like'));
     }
 
     private static Resource360InboundApi.ApiResponse ingest(String runId,String entityType,List<Object> records){

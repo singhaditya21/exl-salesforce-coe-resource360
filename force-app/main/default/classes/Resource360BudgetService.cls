@@ -1,5 +1,6 @@
 public inherited sharing class Resource360BudgetService {
     public static Resource360Service.ServiceResult submit(Id budgetId) {
+        Resource360Security.requirePermission('Resource360_Manage_Budgets','Budget management permission is required to submit a budget.');
         String correlation = correlationId();
         Budget__c budget = budgetForUpdate(budgetId);
         if (budget.State__c != 'Draft' && budget.State__c != 'Rejected' && budget.State__c != 'Invalidated') {
@@ -112,6 +113,7 @@ public inherited sharing class Resource360BudgetService {
     }
 
     public static Resource360Service.ServiceResult createVersion(Id sourceBudgetId) {
+        Resource360Security.requirePermission('Resource360_Manage_Budgets','Budget management permission is required to create a budget version.');
         String correlation = correlationId();
         Budget__c source = budgetForUpdate(sourceBudgetId);
         List<Budget__c> currentVersions = [SELECT Id, Current__c FROM Budget__c WHERE Engagement__c = :source.Engagement__c AND Current__c = true FOR UPDATE];
@@ -144,6 +146,14 @@ public inherited sharing class Resource360BudgetService {
         if (!clonedLines.isEmpty()) insert clonedLines;
         recordBudgetEvent(correlation, 'BUDGET_VERSION_CREATED', next, 'VERSIONED_EDIT', 'New immutable budget working version created.', null, 'Draft');
         return result(true, 'Budget version ' + String.valueOf(next.Version__c) + ' created.', next.Id, correlation);
+    }
+
+    public static Resource360Service.ServiceResult saveDraft(Id budgetId,Decimal revenue,Decimal upliftPercent,Decimal effortContingencyPercent,Decimal expenseContingencyPercent,Decimal travelRate,Decimal onsiteMonths){
+        Resource360Security.requirePermission('Resource360_Manage_Budgets','Budget management permission is required to edit economics.');String correlation=correlationId();Budget__c budget=budgetForUpdate(budgetId);requireEditable(budget);if(revenue==null||revenue<0)fail('Revenue must be zero or greater.');for(Decimal value:new List<Decimal>{upliftPercent,effortContingencyPercent,expenseContingencyPercent})if(value!=null&&(value<0||value>100))fail('Percentage assumptions must be between zero and 100.');if(travelRate!=null&&travelRate<0)fail('Travel rate cannot be negative.');if(onsiteMonths!=null&&onsiteMonths<0)fail('Onsite months cannot be negative.');budget.Revenue__c=revenue;budget.Uplift_Percent__c=upliftPercent==null?0:upliftPercent;budget.Effort_Contingency_Percent__c=effortContingencyPercent==null?0:effortContingencyPercent;budget.Expense_Contingency_Percent__c=expenseContingencyPercent==null?0:expenseContingencyPercent;budget.Travel_Rate__c=travelRate==null?0:travelRate;budget.Onsite_Months__c=onsiteMonths==null?0:onsiteMonths;budget.Economic_Signature__c=null;budget.Approval_Step__c=0;update (Budget__c)Resource360Security.updateable(new List<SObject>{budget})[0];recordBudgetEvent(correlation,'BUDGET_DRAFT_SAVED',budget,'WORKING_VERSION_EDIT','Server-validated economic assumptions saved.',budget.State__c,budget.State__c);return result(true,'Budget assumptions saved and formulas recalculated.',budget.Id,correlation);
+    }
+
+    public static Resource360Service.ServiceResult saveLine(Id budgetId,Id lineId,Date periodStart,String phase,String workUnit,String roleName,String location,Decimal plannedHours,Decimal costRate,Decimal allocationPercent,Boolean onsite){
+        Resource360Security.requirePermission('Resource360_Manage_Budgets','Budget management permission is required to edit WBS lines.');String correlation=correlationId();Budget__c budget=budgetForUpdate(budgetId);requireEditable(budget);if(periodStart==null||String.isBlank(phase)||String.isBlank(workUnit)||String.isBlank(roleName)||String.isBlank(location))fail('Period, phase, work unit, role and location are required.');roleName=Resource360RoleCatalog.requireActive(roleName);if(plannedHours==null||plannedHours<=0||costRate==null||costRate<0||allocationPercent==null||allocationPercent<=0||allocationPercent>100)fail('Hours and allocation must be positive, allocation cannot exceed 100%, and cost rate cannot be negative.');Date periodMonth=Date.newInstance(periodStart.year(),periodStart.month(),1);Date engagementStart=Date.newInstance(budget.Engagement__r.Start_Date__c.year(),budget.Engagement__r.Start_Date__c.month(),1);Date engagementEnd=Date.newInstance(budget.Engagement__r.End_Date__c.year(),budget.Engagement__r.End_Date__c.month(),1);if(periodMonth<engagementStart||periodMonth>engagementEnd)fail('The WBS period must fall within the engagement months.');Budget_Line__c line;if(lineId==null){line=new Budget_Line__c(Budget__c=budget.Id);}else{line=[SELECT Id,Budget__c FROM Budget_Line__c WHERE Id=:lineId AND Budget__c=:budget.Id WITH USER_MODE LIMIT 1];}line.Period_Start__c=periodMonth;line.Phase__c=phase.trim();line.Work_Unit__c=workUnit.trim();line.Role__c=roleName;line.Location__c=location.trim();line.Planned_Hours__c=plannedHours;line.Cost_Rate__c=costRate;line.Allocation_Percent__c=allocationPercent;line.Onsite__c=onsite==true;if(lineId==null){line=(Budget_Line__c)Resource360Security.createable(new List<SObject>{line})[0];insert line;}else{line=(Budget_Line__c)Resource360Security.updateable(new List<SObject>{line})[0];update line;}AggregateResult totals=[SELECT SUM(Planned_Hours__c) hours,SUM(Planned_Cost__c) cost FROM Budget_Line__c WHERE Budget__c=:budget.Id];budget.Planned_Hours__c=(Decimal)totals.get('hours');budget.Base_Labour__c=(Decimal)totals.get('cost');budget.Economic_Signature__c=null;budget.Approval_Step__c=0;update budget;recordBudgetEvent(correlation,'BUDGET_WBS_LINE_SAVED',budget,'WBS_RECALCULATED','WBS line saved; planned hours and base labour were recalculated server-side.',budget.State__c,budget.State__c);return result(true,'WBS line saved and budget totals reconciled.',line.Id,correlation);
     }
 
     public static Budget__c currentApprovedBudget(Id engagementId, Date startDate, Date endDate) {
@@ -186,6 +196,8 @@ public inherited sharing class Resource360BudgetService {
         for (Budget_Line__c line : lines) total += line.Planned_Hours__c == null ? 0 : line.Planned_Hours__c;
         if ((total - budget.Planned_Hours__c).abs() > 0.01) fail('Budget planned hours must reconcile to WBS line planned hours.');
     }
+
+    private static void requireEditable(Budget__c budget){if(!budget.Current__c||!new Set<String>{'Draft','Rejected','Invalidated'}.contains(budget.State__c))fail('Create or select the current editable working version before changing budget economics.');}
 
     private static void requireCommercialReference(Budget__c budget) {
         Date today = Date.today();
