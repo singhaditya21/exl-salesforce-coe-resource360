@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Composed least-privilege access for Resource360 Account Owner.</description>
+    <label>Resource360 Account Owner</label>
+    <permissionSets>Resource360_Base_User</permissionSets>
+    <permissionSets>Resource360_Portfolio_Control_Actions</permissionSets>
+</PermissionSetGroup>

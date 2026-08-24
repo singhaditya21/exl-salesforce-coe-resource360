@@ -5,9 +5,17 @@
     <label>Resource 360 Base User</label>
     <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>
     <classAccesses><apexClass>Resource360AssuranceService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360GovernanceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360PlanningService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360RoleScopeService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360TalentService</apexClass><enabled>true</enabled></classAccesses>
+    <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Classification__mdt</name></customMetadataTypeAccesses>
+    <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Delivery_Role__mdt</name></customMetadataTypeAccesses>
+    <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Persona__mdt</name></customMetadataTypeAccesses>
+    <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Policy__mdt</name></customMetadataTypeAccesses>
+    <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Retention_Rule__mdt</name></customMetadataTypeAccesses>
+    <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Source_Contract__mdt</name></customMetadataTypeAccesses>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>

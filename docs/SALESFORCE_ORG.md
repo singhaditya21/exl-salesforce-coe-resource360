@@ -20,7 +20,7 @@ sf org login web --alias Resource360Hub --instance-url https://login.salesforce.
 sf config set target-org=Resource360Hub target-dev-hub=Resource360Hub
 pnpm install --frozen-lockfile
 pnpm sf:generate
-sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 120
+sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunLocalTests --wait 120
 sf org assign permset --name Resource360_Administrator --target-org Resource360Hub
 sf apex run --target-org Resource360Hub --file scripts/apex/seedResource360.apex
 sf apex run --target-org Resource360Hub --file scripts/apex/scheduleResource360.apex
@@ -44,10 +44,11 @@ pnpm sf:generate
 git diff --exit-code -- force-app/main/default/customMetadata force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md
 pnpm lint
 pnpm test
+pnpm test:e2e
 pnpm sf:validate
 ```
 
-The deployment must pass `Resource360ServiceTest` with no coverage warning. The generated register must contain 109 functional/admin requirements, 25 UAT scenarios (134 total items) and 103 unique governed screen IDs. Generated governance files must be committed and no org authentication artifact may be tracked.
+The deployment must pass all six local Resource 360 Apex test classes (31 methods at this baseline) with no component failure. The generated register must contain 109 functional/admin requirements, 25 UAT scenarios (134 total items), 103 unique governed screen IDs, 13 source contracts, 18 persona mappings and eight retention rules. Generated governance files must be committed and no org authentication artifact may be tracked.
 
 ## CI secret
 

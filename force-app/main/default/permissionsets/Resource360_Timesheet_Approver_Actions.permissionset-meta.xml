@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Approve or reject timesheets and controlled correction stages without capability-review authority.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Resource 360 Timesheet Approver Actions</label>
+    <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
+    <customPermissions><enabled>true</enabled><name>Resource360_Approve_Timesheets</name></customPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Approver__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Auto_Approved__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Correction_Parent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Correction_Requested_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Current__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Decision_Due_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Dual_Control_Required__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Due_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Escalated_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Exception_Code__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Required_Approval_Role__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Time_Entry__c.Comment__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Time_Entry__c.Correction_Parent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Time_Entry__c.Correction_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Time_Entry__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Active__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Approval_Reference__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Assignment_Source__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Certified_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Delegated_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Delegation_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.External_Group_Alias__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Last_Certified_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.User__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Valid_To__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Approver__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Decided_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Approval_Decision__c.Economic_Signature__c</field><readable>true</readable></fieldPermissions>
+    <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Approval_Decision__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Role_Scope__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Time_Entry__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Timesheet__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+</PermissionSet>

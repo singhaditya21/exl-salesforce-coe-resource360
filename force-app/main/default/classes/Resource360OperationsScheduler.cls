@@ -2,6 +2,34 @@ global without sharing class Resource360OperationsScheduler implements Schedulab
     private class EscalationTier { public Integer days;public String role;public String severity; }
     global void execute(SchedulableContext context) {
         String correlation = EncodingUtil.convertToHex(Crypto.generateAesKey(128));
+        Integer overlapMinutes = Integer.valueOf(Resource360Policy.numberValue('Operations_Overlap_Window_Minutes', 120));
+        DateTime overlapCutoff = System.now().addMinutes(-overlapMinutes);
+        List<R360_Integration_Run__c> activeRuns = [
+            SELECT Id, Run_ID__c, Started_At__c FROM R360_Integration_Run__c
+            WHERE Entity_Type__c = 'Operational Controls' AND State__c = 'Running' AND Started_At__c >= :overlapCutoff
+            LIMIT 1 FOR UPDATE
+        ];
+        if (!activeRuns.isEmpty()) {
+            R360_Integration_Run__c skipped = new R360_Integration_Run__c(
+                Run_ID__c = 'OPS-SKIPPED-' + correlation,
+                Source_System__c = 'Resource360',
+                Entity_Type__c = 'Operational Controls',
+                State__c = 'Skipped',
+                Started_At__c = System.now(),
+                Completed_At__c = System.now(),
+                Source_Cutoff__c = System.now(),
+                Correlation_ID__c = correlation,
+                Contract_Version__c = Resource360GovernanceService.currentContractVersion(),
+                Commit_Mode__c = 'Scheduled',
+                Processed_Count__c = 0,
+                Success_Count__c = 0,
+                Failure_Count__c = 0,
+                Detail__c = 'Overlap prevented; active run ' + activeRuns[0].Run_ID__c + ' started at ' + activeRuns[0].Started_At__c + '.'
+            );
+            insert skipped;
+            Resource360AuditService.record(correlation, 'Resource 360 System', 'OPERATIONS_RUN_SKIPPED', 'R360_Integration_Run__c', skipped.Id, 1, 'OVERLAP_PREVENTED', skipped.Detail__c, null, new Map<String,Object>{'activeRunId'=>activeRuns[0].Run_ID__c,'overlapWindowMinutes'=>overlapMinutes});
+            return;
+        }
         R360_Integration_Run__c run = new R360_Integration_Run__c(
             Run_ID__c = 'OPS-' + correlation,
             Source_System__c = 'Resource360',
@@ -9,7 +37,9 @@ global without sharing class Resource360OperationsScheduler implements Schedulab
             State__c = 'Running',
             Started_At__c = System.now(),
             Source_Cutoff__c = System.now(),
-            Correlation_ID__c = correlation
+            Correlation_ID__c = correlation,
+            Contract_Version__c = Resource360GovernanceService.currentContractVersion(),
+            Commit_Mode__c = 'Scheduled'
         );
         insert run;
         Integer processed = 0;

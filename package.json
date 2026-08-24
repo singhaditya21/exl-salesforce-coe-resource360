@@ -12,20 +12,24 @@
     "preview": "vite preview",
     "test": "pnpm run test:unit && pnpm run build && node --test tests/app.test.mjs",
     "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:all": "pnpm test && pnpm test:e2e",
     "lint": "eslint . --ignore-pattern dist",
-    "sf:generate": "node scripts/generate-classification-metadata.mjs && node scripts/generate-policy-metadata.mjs && node scripts/generate-salesforce-permissions.mjs && node scripts/generate-traceability.mjs",
-    "sf:validate": "sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30",
-    "sf:test": "sf apex run test --target-org Resource360Hub --tests Resource360ServiceTest --code-coverage --result-format human --wait 30",
-    "sf:deploy": "sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30",
+    "sf:generate": "node scripts/generate-classification-metadata.mjs && node scripts/generate-policy-metadata.mjs && node scripts/generate-governance-metadata.mjs && node scripts/generate-salesforce-permissions.mjs && node scripts/generate-traceability.mjs",
+    "sf:validate": "sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunLocalTests --wait 120",
+    "sf:test": "sf apex run test --target-org Resource360Hub --test-level RunLocalTests --code-coverage --result-format human --wait 120",
+    "sf:deploy": "sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunLocalTests --wait 120",
     "sf:seed": "sf apex run --target-org Resource360Hub --file scripts/apex/seedResource360.apex",
     "sf:open": "sf org open --target-org Resource360Hub --path /lightning/app/c__Resource360"
   },
   "dependencies": {
     "react": "19.2.8",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "9.39.4",
+    "@playwright/test": "^1.62.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.3",

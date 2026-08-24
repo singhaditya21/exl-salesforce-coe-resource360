@@ -1,3 +1,5 @@
+import type { DemoRole } from "./demo-system";
+
 export type ModuleId = "global" | "engagement" | "staffing" | "skills" | "budget" | "timesheet" | "command" | "admin" | "ai";
 export type ScreenKind = "home" | "list" | "detail" | "form" | "planner" | "dashboard" | "admin" | "assistant";
 
@@ -13,7 +15,7 @@ export type ScreenSpec = {
 };
 
 export const modules: { id: ModuleId; label: string; icon: string; accent: string }[] = [
-  { id: "global", label: "Home & global", icon: "⌂", accent: "#fb4e0b" },
+  { id: "global", label: "Home & global", icon: "⌂", accent: "#c93600" },
   { id: "engagement", label: "Engagement 360", icon: "◫", accent: "#005071" },
   { id: "staffing", label: "Staffing & allocation", icon: "◎", accent: "#006b72" },
   { id: "skills", label: "Skills & credentials", icon: "◇", accent: "#6558a6" },
@@ -23,6 +25,24 @@ export const modules: { id: ModuleId; label: string; icon: string; accent: strin
   { id: "admin", label: "Administration", icon: "⚙", accent: "#59636c" },
   { id: "ai", label: "Planning intelligence", icon: "✦", accent: "#814f94" },
 ];
+
+const allRoles: readonly DemoRole[] = ["Practitioner", "Project Manager", "Reporting Manager", "COE Staffer", "Budget Approver", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Timesheet Approver", "Capability Administrator", "Configuration Operator", "Configuration Approver", "Operations", "Auditor", "Executive Viewer", "Administrator"];
+
+export const moduleRoles: Record<ModuleId, readonly DemoRole[]> = {
+  global: allRoles,
+  engagement: ["Project Manager", "COE Staffer", "Budget Approver", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Operations", "Auditor", "Executive Viewer", "Administrator"],
+  staffing: ["Project Manager", "COE Staffer", "Reporting Manager", "Budget Approver", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Operations", "Auditor", "Executive Viewer", "Administrator"],
+  skills: ["Practitioner", "Reporting Manager", "Project Manager", "COE Staffer", "Portfolio Manager", "HOD", "Capability Administrator", "Operations", "Auditor", "Executive Viewer", "Administrator"],
+  budget: ["Project Manager", "Budget Approver", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Operations", "Auditor", "Executive Viewer", "Administrator"],
+  timesheet: ["Practitioner", "Reporting Manager", "Timesheet Approver", "Project Manager", "Finance/PMO", "Operations", "Auditor", "Administrator"],
+  command: ["COE Staffer", "Project Manager", "Budget Approver", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Timesheet Approver", "Capability Administrator", "Operations", "Auditor", "Executive Viewer", "Administrator"],
+  admin: ["Capability Administrator", "Configuration Operator", "Configuration Approver", "Operations", "Auditor", "Administrator"],
+  ai: ["COE Staffer", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Operations", "Auditor", "Executive Viewer", "Administrator"],
+};
+
+export function canAccessScreen(role: DemoRole, screen: ScreenSpec) {
+  return role === "Administrator" || moduleRoles[screen.module].includes(role);
+}
 
 const s = (id: string, title: string, module: ModuleId, kind: ScreenKind, description: string, primary: string, release: ScreenSpec["release"], eyebrow?: string): ScreenSpec => ({ id, title, module, kind, description, primary, release, eyebrow });
 

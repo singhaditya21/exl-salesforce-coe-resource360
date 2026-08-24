@@ -53,7 +53,7 @@ The object guard rejects direct activation, illegal state transitions, post-subm
 | KPI | Billed target, WAR maximum, IFB maximum, approved-actuals lookback and staffing lifecycle lookback | Command Center actual-versus-target metrics, populations and definitions |
 | Assurance and retention | Standard monthly budget hours, source completeness, alert closure note, scenario horizon, audit/business retention days and legal-hold switch | Roster variance checks, source health, accountable alerts, bounded scenarios and non-destructive retention preview |
 
-The repository currently contains 74 policy defaults, 20 effective delivery-role defaults and 16 classification defaults. Runtime overrides are records, so the catalog can grow without recompiling consumers when the domain contract already supports the new code or value.
+The repository currently contains 75 policy defaults, 20 effective delivery-role defaults, 16 classification defaults, 13 source contracts, 18 persona mappings and eight retention rules (150 custom-metadata records). Runtime overrides are records, so the catalog can grow without recompiling consumers when the domain contract already supports the new code or value.
 
 Two or more draft settings may share a release key. Release preview enforces one version per configuration key, one effective date and cross-setting budget threshold order. Submission moves the entire bundle to pending approval; an independent approver activates or rejects every member atomically. The release identity becomes immutable after submission.
 

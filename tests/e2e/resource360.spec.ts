@@ -1,0 +1,96 @@
+import { readFileSync } from "node:fs";
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test } from "@playwright/test";
+
+const screenSource = readFileSync(new URL("../../app/screen-data.ts", import.meta.url), "utf8");
+const screens = [...screenSource.matchAll(/^\s*s\("([A-Z]+[A-Z0-9-]*)",\s*"([^"]+)"/gm)].map((match) => ({ id: match[1], title: match[2] }));
+
+async function switchRole(page: import("@playwright/test").Page, role: string) {
+  await page.goto("/?screen=GLB-05");
+  await page.locator(".role-grid button").filter({ has: page.getByText(role, { exact: true }) }).click();
+  await page.getByRole("button", { name: /Apply role and scope/ }).click();
+}
+
+test("publishes the complete governed screen directory", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator(".page-header h1")).toHaveText("Role-aware home");
+  await page.getByRole("button", { name: "Product workspace" }).click();
+  const directory = page.getByRole("dialog", { name: "All Resource360 screens" });
+  await expect(directory.getByRole("heading", { name: "All 103 Resource360 screens" })).toBeVisible();
+  await expect(directory.locator(".screen-card-grid > button")).toHaveCount(103);
+});
+
+test("renders every one of the 103 PRD routes", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile-chromium", "Full catalogue is exercised once in desktop Chromium.");
+  test.slow();
+  expect(screens).toHaveLength(103);
+  for (const screen of screens) {
+    await page.goto(`/?screen=${screen.id}`);
+    await expect(page.locator(".page-header h1")).toHaveText(screen.title);
+    await expect(page.locator(".prototype-footer")).toContainText("of 103");
+  }
+});
+
+test("executes the attributable staffing decision path", async ({ page }) => {
+  await page.goto("/?screen=GLB-05");
+  await page.getByRole("button", { name: /COE Staffer Salesforce COE/ }).click();
+  await page.getByRole("button", { name: /Apply role and scope/ }).click();
+  await expect(page.locator(".topbar .eyebrow")).toHaveText("COE Staffer");
+
+  await page.goto("/?screen=STFUI-21");
+  await page.getByRole("row", { name: /SR-1842/ }).getByRole("button", { name: /Review/ }).click();
+  await page.locator(".decision-panel").getByRole("button", { name: /Make decision/ }).click();
+  await page.getByLabel(/I confirm the current controls/).check();
+  await page.getByRole("button", { name: /Confirm accepted/ }).click();
+  await expect(page.locator(".decision-outcome").getByText("Request accepted", { exact: true })).toBeVisible();
+  await expect(page.getByText(/SR-1842 accepted and saved/)).toBeVisible();
+});
+
+test("shows all approved persona, lineage and retention contracts", async ({ page }) => {
+  await switchRole(page, "Operations");
+  await page.goto("/?screen=ADMUI-03");
+  await expect(page.getByRole("heading", { name: "Persona assignment matrix" })).toBeVisible();
+  await expect(page.locator(".responsive-table tbody tr")).toHaveCount(18);
+
+  await page.goto("/?screen=ADMUI-07");
+  await expect(page.locator(".source-contract-grid > article")).toHaveCount(13);
+  await expect(page.getByRole("heading", { name: "Approved mock retention schedule" })).toBeVisible();
+  await expect(page.locator(".data-surface .responsive-table tbody tr")).toHaveCount(8);
+});
+
+test("applies positive and negative persona navigation contracts", async ({ page }) => {
+  await switchRole(page, "Executive Viewer");
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Command center/ })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Administration/ })).toHaveCount(0);
+  await page.goto("/?screen=ADMUI-03");
+  await expect(page.getByRole("heading", { name: "Screen unavailable for Executive Viewer" })).toBeVisible();
+
+  await switchRole(page, "Configuration Approver");
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Administration/ })).toBeVisible();
+  await page.goto("/?screen=ADMUI-06");
+  await expect(page.getByRole("heading", { name: "Approval and escalation policy", level: 1 })).toBeVisible();
+
+  await switchRole(page, "Finance/PMO");
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Budgeting & WBS/ })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Administration/ })).toHaveCount(0);
+});
+
+test("has no serious or critical automated accessibility findings on control surfaces", async ({ page }) => {
+  await switchRole(page, "Administrator");
+  for (const id of ["GLB-02", "STFUI-23", "BUDUI-08", "TIMEUI-01", "ADMUI-03", "ADMUI-07"]) {
+    await page.goto(`/?screen=${id}`);
+    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+    const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact || ""));
+    expect(blocking, `${id}: ${blocking.map((item) => `${item.id} (${item.nodes.length})`).join(", ")}`).toEqual([]);
+  }
+});
+
+test("keeps primary content usable at a narrow viewport approximating 200 percent zoom", async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 900 });
+  await switchRole(page, "Administrator");
+  await page.goto("/?screen=ADMUI-03");
+  await expect(page.locator(".page-header h1")).toHaveText("Role-permission matrix");
+  await expect(page.getByRole("heading", { name: "Persona assignment matrix" })).toBeVisible();
+  const documentOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(documentOverflow).toBeLessThanOrEqual(1);
+});

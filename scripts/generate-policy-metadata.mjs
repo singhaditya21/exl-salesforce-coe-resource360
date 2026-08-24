@@ -62,6 +62,7 @@ const policies=[
   ["Outbox_Max_Attempts","Outbox Maximum Attempts","number",3,"Maximum durable-event publication attempts before dead letter."],
   ["Outbox_Retry_Minutes","Outbox Retry Minutes","text","1|5|30","Retry delay sequence in minutes for durable-event publication."],
   ["Operations_Schedule_Cron","Operations Schedule Cron","text","0 0 * * * ?","Salesforce cron expression for operational controls."],
+  ["Operations_Overlap_Window_Minutes","Operations Overlap Window Minutes","number",120,"Recent running-window used to prevent overlapping operational-control executions."],
   ["Audit_Retention_Days","Audit Retention Days","number",2555,"Mock-baseline retention period for immutable audit evidence; production legal policy must replace this assumption."],
   ["Business_History_Retention_Days","Business History Retention Days","number",2555,"Mock-baseline retention period for inactive business history."],
   ["Retention_Legal_Hold","Retention Legal Hold","boolean",false,"Prevents retention execution while an authorized legal hold is active."],

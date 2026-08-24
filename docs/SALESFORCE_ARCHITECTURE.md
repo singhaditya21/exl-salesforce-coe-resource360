@@ -5,10 +5,10 @@
 | Layer | Implementation | Responsibility |
 |---|---|---|
 | Experience | Lightning app `Resource360`; LWC `resource360Workspace` | Role-aware EXL shell, 103-screen routes/contracts, commands and record drill-down |
-| Domain services | 30 Apex application classes, including `Resource360Service`, `Resource360AssuranceService`, `Resource360BudgetImportService`, `Resource360ConfigurationService`, `Resource360FreshnessService`, `Resource360PlanningService` and `Resource360BulkService` | User-mode access, locking, business gates, roster/capacity/freshness planning, governed runtime configuration, decisions, analytics, integration, notifications and audit |
+| Domain services | 37 Apex classes, including six focused test classes and services such as `Resource360Service`, `Resource360AssuranceService`, `Resource360BudgetImportService`, `Resource360GovernanceService`, `Resource360RoleScopeService` and `Resource360PlanningService` | Scoped access, locking, business gates, roster/capacity/freshness planning, governed runtime configuration, decisions, analytics, integration, notifications and audit |
 | Demo bootstrap | `Resource360DemoData` Apex | Idempotent fictional records for the Developer Edition demo |
-| Data | 27 custom record objects, three custom-metadata types and one platform event | Engagement, economics, staffing, capability, allocation, time, runtime configuration, operations and evidence |
-| Policy | 110 governed defaults plus effective-dated runtime overrides and atomic release bundles, validation/formulas, guard triggers and role permission groups | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, assurance, retention preview and access |
+| Data | 27 custom record objects, six custom-metadata types and one platform event | Engagement, economics, staffing, capability, allocation, time, runtime configuration, operations and evidence |
+| Policy | 150 governed policy/classification/delivery-role/source/persona/retention records plus effective-dated runtime overrides and atomic release bundles | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, assurance, lineage, retention preview and access |
 | Analytics | `Resource360AnalyticsService` and five custom report types | Scoped KPI populations/definitions/cutoffs and Salesforce report-builder access |
 | Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
 
@@ -21,7 +21,7 @@
 | People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c` |
 | Staffing and allocation | `Staffing_Request__c`, `Allocation__c` |
 | Time | `Timesheet__c`, `Time_Entry__c` |
-| Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt` |
+| Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt`, `R360_Persona__mdt`, `R360_Source_Contract__mdt`, `R360_Retention_Rule__mdt` |
 | Operations and evidence | `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
 
 Relationships preserve decision lineage: accepted staffing creates a versioned current allocation; only eligible accepted allocation periods receive time; budgets and approval decisions remain versioned; capability/credential/project evidence remains attributable to source and reviewer.
@@ -52,8 +52,8 @@ For the demo, EXL People Master, engagement/commercial, learning, credential, ca
 
 ## Security and operations
 
-- `with/inherited sharing`, user-mode SOQL, field sanitization, twelve permission sets, nine role groups, 15 custom permissions, effective role scopes, Apex-managed shares, validation and immutable decisions form the control baseline.
-- The administrator is break-glass. Normal users compose Practitioner, Project Manager, Reporting Manager, COE Staffer, Budget Approver, Capability Administrator, Operations and Audit groups.
+- `with/inherited sharing`, user-mode business-data queries, exact-user system-mode entitlement lookup, field sanitization, 17 permission sets, 17 role groups, 15 custom permissions, effective role scopes, Apex-managed shares, validation and immutable decisions form the control baseline.
+- Eighteen governed personas cover self service, project/staffing, leadership/finance, capability, time, configuration, operations, audit and executive viewing. The administrator is technical break-glass and not implicit business authority.
 - Material object changes have native field history; immutable audit records add correlation, actor, active role, before/after summaries and hashes.
 - Hourly operations process staffing expiry, credential state, timesheet escalation/auto-approval, outbox publication and notification delivery.
 - Configuration operators draft/preview/submit; independent configuration approvers activate/rollback and apply the governed cron. See `CONFIGURATION_CONTROL_MATRIX.md` for the full boundary.

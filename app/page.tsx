@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
+import { canAccessScreen, defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
 import { useDemoSystem, type DemoSystem } from "./demo-system";
 import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, ScenarioDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo } from "./operational-screens";
 import {
@@ -278,6 +278,7 @@ function ScreenCanvas({
   onSelect: (id: string) => void;
   onToast: (message: string) => void;
 }) {
+  if (!canAccessScreen(system.state.activeRole, screen)) return <section className="surface access-denied" role="alert"><span className="section-kicker">Access control</span><h2>Screen unavailable for {system.state.activeRole}</h2><p>This sanitized demo applies the same persona-to-module contract as Salesforce. Switch to an authorized active role to open {screen.id}; restricted data has not been rendered.</p><button className="primary-button" onClick={() => onSelect("GLB-05")}>Switch role and scope →</button></section>;
   if (screen.id === "GLB-01") return <SsoCanvas onContinue={() => { system.setSignedIn(true); onSelect("GLB-02"); onToast("Sanitized demo session started"); }} />;
   if (screen.id === "GLB-02") return <DemoHome system={system} onSelect={onSelect} />;
   if (screen.id === "GLB-03") return <NotificationDemo system={system} onSelect={onSelect} />;
@@ -323,8 +324,10 @@ export default function Home() {
   const [isOnline, setIsOnline] = useState(() => typeof navigator === "undefined" || navigator.onLine);
   const active = screenById[activeId] ?? screenById[defaultScreenId];
   const activeModule = modules.find((module) => module.id === active.module)!;
-  const moduleScreens = useMemo(() => screens.filter((screen) => screen.module === active.module && `${screen.id} ${screen.title}`.toLowerCase().includes(screenFilter.toLowerCase())), [active.module, screenFilter]);
-  const globalResults = globalQuery.length > 1 ? screens.filter((screen) => `${screen.id} ${screen.title} ${screen.description}`.toLowerCase().includes(globalQuery.toLowerCase())).slice(0, 7) : [];
+  const authorizedScreens = useMemo(() => screens.filter((screen) => canAccessScreen(demoSystem.state.activeRole, screen)), [demoSystem.state.activeRole]);
+  const authorizedModules = useMemo(() => modules.filter((module) => authorizedScreens.some((screen) => screen.module === module.id)), [authorizedScreens]);
+  const moduleScreens = useMemo(() => authorizedScreens.filter((screen) => screen.module === active.module && `${screen.id} ${screen.title}`.toLowerCase().includes(screenFilter.toLowerCase())), [active.module, authorizedScreens, screenFilter]);
+  const globalResults = globalQuery.length > 1 ? authorizedScreens.filter((screen) => `${screen.id} ${screen.title} ${screen.description}`.toLowerCase().includes(globalQuery.toLowerCase())).slice(0, 7) : [];
   const selectedStaffingRequest = staffingWorkflow.requests.find((request) => request.id === selectedStaffingRequestId) ?? staffingWorkflow.requests[0];
 
   useEffect(() => {
@@ -347,6 +350,17 @@ export default function Home() {
     window.addEventListener("offline", offline);
     return () => { window.removeEventListener("online", online); window.removeEventListener("offline", offline); };
   }, []);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      document.querySelectorAll<HTMLElement>(".responsive-table, .timesheet-workspace").forEach((region, index) => {
+        region.tabIndex = 0;
+        region.setAttribute("role", "region");
+        region.setAttribute("aria-label", `Scrollable workspace region ${index + 1}`);
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [activeId]);
 
   function selectScreen(id: string) {
     setActiveId(id);
@@ -391,7 +405,7 @@ export default function Home() {
   return <main className="app-shell" style={{ "--module-accent": activeModule.accent } as CSSProperties}>
     <aside className="sidebar">
       <div className="brand-block"><div className="brand-mark">exl</div><div className="brand-name"><span>Salesforce COE</span><strong>Resource360</strong></div></div>
-      <nav aria-label="Primary navigation">{modules.map((module) => <button className={`nav-item ${active.module === module.id ? "active" : ""}`} key={module.id} onClick={() => selectScreen(screens.find((screen) => screen.module === module.id)!.id)}><span className="nav-icon">{module.icon}</span><span>{module.label}</span><b>{screens.filter((screen) => screen.module === module.id).length}</b></button>)}</nav>
+      <nav aria-label="Primary navigation">{authorizedModules.map((module) => <button className={`nav-item ${active.module === module.id ? "active" : ""}`} key={module.id} onClick={() => selectScreen(authorizedScreens.find((screen) => screen.module === module.id)!.id)}><span className="nav-icon">{module.icon}</span><span>{module.label}</span><b>{authorizedScreens.filter((screen) => screen.module === module.id).length}</b></button>)}</nav>
       <div className="sidebar-bottom"><button className="all-screens-button" onClick={() => setShowDirectory(true)}><span>▦</span><span>All screens</span><b>103</b></button><div className="profile-mini"><span className="avatar">MP</span><span><strong>Maya Patel</strong><small>{demoSystem.state.activeRole}</small></span><button aria-label="Open profile menu" onClick={() => selectScreen("GLB-05")}>•••</button></div></div>
     </aside>
 
@@ -400,7 +414,7 @@ export default function Home() {
       {!isOnline && <div className="offline-banner" role="status">Offline demo mode · saved browser data remains available. Changes will stay on this device.</div>}
 
       <div className="workbench">
-        <aside className="screen-rail"><div className="rail-title"><span className="rail-icon">{activeModule.icon}</span><div><small>{activeModule.label}</small><strong>{screens.filter((screen) => screen.module === active.module).length} screens</strong></div></div><label className="rail-search"><span>⌕</span><input value={screenFilter} onChange={(event) => setScreenFilter(event.target.value)} placeholder="Filter screens..." /></label><div className="screen-links">{moduleScreens.map((screen) => <button className={screen.id === active.id ? "active" : ""} key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><b>{screen.release}</b></button>)}</div><button className="rail-all" onClick={() => setShowDirectory(true)}>Browse all 103 screens <span>→</span></button></aside>
+        <aside className="screen-rail"><div className="rail-title"><span className="rail-icon">{activeModule.icon}</span><div><small>{activeModule.label}</small><strong>{authorizedScreens.filter((screen) => screen.module === active.module).length} authorized screens</strong></div></div><label className="rail-search"><span>⌕</span><input value={screenFilter} onChange={(event) => setScreenFilter(event.target.value)} placeholder="Filter screens..." /></label><div className="screen-links">{moduleScreens.map((screen) => <button className={screen.id === active.id ? "active" : ""} key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><b>{screen.release}</b></button>)}</div><button className="rail-all" onClick={() => setShowDirectory(true)}>Browse all 103 screens <span>→</span></button></aside>
 
         <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Demo states include seeded, changed and empty paths")}>View states <span>⌄</span></button><button className="primary-button" onClick={() => showAction(`${active.primary} is available in the browser demo`)}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} onCreateStaffingRequest={createStaffingRequest} system={demoSystem} onSelect={selectScreen} onToast={showAction} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · sanitized GitHub Pages demo</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
       </div>

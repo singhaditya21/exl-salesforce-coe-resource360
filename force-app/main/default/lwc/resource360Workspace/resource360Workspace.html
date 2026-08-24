@@ -314,11 +314,35 @@
                     </section>
                 </template>
 
+                <template lwc:if={showPersonaAssurance}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">R360-MOCK-ACTIVATION-2026-08-24</p><h3>Persona, scope, Entra and decision-authority matrix</h3></div><span>Every active business role resolves to an approved mock Salesforce assignment and segregation class</span></div>
+                        <template lwc:if={hasPersonas}><lightning-datatable key-field="id" data={personaRows} columns={personaColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No active governed persona mapping is available.</p></div></template>
+                        <div class="panel-footer"><span>Delegation is effective-dated, attributable and validated against the persona contract. Production Entra group IDs and named EXL assignees remain environment-owned activation data.</span></div>
+                    </section>
+                </template>
+
                 <template lwc:if={showSourceAssurance}>
                     <section class="records-panel records-panel_compact">
                         <div class="panel-heading"><div><p class="eyebrow">R360-MOCK-1.2</p><h3>Explicit EXL source contracts and reconciliation evidence</h3></div><span>{data.assurance.notice}</span></div>
                         <template lwc:if={hasSourceContracts}><lightning-datatable key-field="id" data={sourceContractRows} columns={sourceContractColumns} hide-checkbox-column></lightning-datatable></template>
                         <div class="panel-footer panel-footer_split"><span>These are deterministic sanitized source assumptions—not connected EXL production integrations. Production endpoints and credentials remain activation dependencies.</span><lightning-button label="Run non-destructive retention dry run" icon-name="utility:shield" onclick={handleRunRetention}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showRetentionAssurance}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">ADM-003 · approved mock schedule</p><h3>Retention, recovery and legal-hold contract</h3></div><span>{data.assurance.retention.notice}</span></div>
+                        <template lwc:if={hasRetentionRules}><lightning-datatable key-field="id" data={retentionRows} columns={retentionColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No approved mock retention rule is available.</p></div></template>
+                        <div class="preview-summary preview-summary_four" role="status">
+                            <div><span>Execution mode</span><strong>{data.assurance.retention.executionMode}</strong></div>
+                            <div><span>Legal hold active</span><strong>{data.assurance.retention.legalHold}</strong></div>
+                            <div><span>Audit candidates</span><strong>{data.assurance.retention.auditCandidateCount}</strong></div>
+                            <div><span>Run candidates</span><strong>{data.assurance.retention.integrationRunCandidateCount}</strong></div>
+                        </div>
+                        <div class="panel-footer"><span>Deletion remains disabled. A production EXL release must supply approved legal-hold, backup, recovery and disposition evidence before destructive execution can be enabled.</span></div>
                     </section>
                 </template>
 
