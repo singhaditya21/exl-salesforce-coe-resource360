@@ -13,7 +13,8 @@
 | Retention | Eight legal-hold-eligible rules and a non-destructive preview; deletion disabled in the demo |
 | Analytics/operations | Five report types, KPI definitions/drill-down, source/control health, scheduler overlap protection and recovery controls |
 | Demo activation | Five-pillar interactive rehearsal for SSO, integrations, production-like fictional data, six explicit legal/risk/business decisions and operational controls; 5/5 evidence, zero external calls and zero destructive actions |
-| Quality | Unit, static contract, 16-pass desktop/mobile browser suite, axe, 38 Salesforce Apex tests, CodeQL and Pages release gates |
+| Recorded validation | Five H.264 walkthroughs on `GLB-06` cover the 103-screen inventory, skills, staffing acceptance, budget/time approval and five-pillar activation; integrity manifest and posters are checked in CI |
+| Quality | Unit, static contract, 18-pass desktop/mobile browser suite, video integrity, axe, 38 Salesforce Apex tests, CodeQL and Pages release gates |
 | Credential hygiene | Previously exposed classic PAT revoked on 24 August 2026; repository access verified through SSH and GitHub CLI OAuth; tracked/untracked credential-pattern scan clean |
 
 ## Not a software backlog
