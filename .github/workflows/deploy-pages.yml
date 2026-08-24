@@ -41,6 +41,10 @@ jobs:
           fi
       - name: Validate source
         run: pnpm lint && pnpm test
+      - name: Install Chromium for release assurance
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run critical browser and accessibility acceptance
+        run: pnpm test:e2e
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload site artifact

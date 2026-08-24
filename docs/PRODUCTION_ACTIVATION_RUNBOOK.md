@@ -27,7 +27,7 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 2. Enable My Domain, EXL Entra SSO/MFA, session controls, audit retention and the approved deployment identity.
 3. Create Named Credentials and External Credentials in the target org for each approved façade. Store secrets only in Salesforce/GitHub encrypted secret stores; never commit authentication URLs or tokens.
 4. Add the encrypted GitHub Actions secret `RESOURCE360_SFDX_AUTH_URL` for the non-production CI validation org. Use a least-privilege integration user and rotate it under EXL policy.
-5. Run `pnpm sf:generate`, `pnpm lint`, `pnpm test`, and a Salesforce dry-run with `Resource360ServiceTest`. Generated-file drift, any test failure, component failure or coverage warning blocks promotion.
+5. Run `pnpm sf:generate`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, and a Salesforce dry-run with `RunLocalTests`. Generated-file drift, any test failure or component failure blocks promotion.
 6. Before an Apex deployment to an already scheduled org, run `scripts/apex/pauseResource360Schedule.apex` and verify that no Resource360 asynchronous job is queued or processing. This avoids Salesforce’s scheduled-class deployment lock.
 7. Deploy through the approved EXL release pipeline; assign the smallest applicable Resource360 permission-set group, not the Administrator set by default.
 8. Restore `scripts/apex/scheduleResource360.apex` only after a successful deploy/seed. Verify exactly one waiting cron, job execution, outbox retries/dead letters, notification routing and integration-run evidence.
@@ -37,7 +37,8 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 ## Data, security and control gates
 
 - Approve the data protection impact assessment, threat model, field-level classification, retention/deletion schedule and non-production masking method.
-- Map EXL roles and scopes to the delivered permission sets/groups; test positive, negative, delegated and expired access. Administrator rights do not grant business decision authority.
+- Map named EXL users and Entra groups to all 18 delivered personas and scopes in `PERSONA_ACCESS_MATRIX.md`; test positive, negative, delegated, future, expired and revoked access. Administrator rights do not grant business decision authority.
+- Certify the machine-readable common project and ingestion schemas under `contracts/`, including stable identities, version compatibility, source ownership, freshness, error semantics and lineage.
 - Reconcile a representative migration at record, aggregate and financial-control levels. Load masters before budgets, budgets before staffing/allocations, and allocations before timesheets.
 - Certify the effective classification catalogue, billability, SOW/control gates, review periods, escalation policies, capacity calendars, margin thresholds and timesheet deadlines.
 - Certify People, Engagement, Commercial and Learning freshness thresholds and prove that stale staffing/budget decisions fail closed. Use `CONFIGURATION_CONTROL_MATRIX.md` as the sign-off inventory.

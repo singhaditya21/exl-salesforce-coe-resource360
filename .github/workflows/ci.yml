@@ -33,6 +33,10 @@ jobs:
           fi
       - run: pnpm lint
       - run: pnpm test
+      - name: Install Chromium for browser and accessibility assurance
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run routed workflow, responsive and accessibility tests
+        run: pnpm test:e2e
 
   salesforce-validate:
     name: Salesforce metadata and Apex controls
@@ -55,7 +59,7 @@ jobs:
         run: printenv RESOURCE360_SFDX_AUTH_URL | sf org login sfdx-url --sfdx-url-stdin --alias Resource360CI
       - name: Compile metadata and run Resource 360 controls
         if: env.RESOURCE360_SFDX_AUTH_URL != ''
-        run: sf project deploy start --target-org Resource360CI --dry-run --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 120
+        run: sf project deploy start --target-org Resource360CI --dry-run --test-level RunLocalTests --wait 120
 
   dependency-review:
     name: Dependency review

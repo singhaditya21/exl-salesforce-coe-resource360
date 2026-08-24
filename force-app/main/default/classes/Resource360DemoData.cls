@@ -100,7 +100,7 @@ public with sharing class Resource360DemoData {
         List<R360_Notification__c>alerts=[SELECT Id,Occurred_At__c,Resolution_Status__c,Accountable_Owner__c,First_Seen_At__c FROM R360_Notification__c WHERE Event_ID__c LIKE 'DEMO-NTF-%'];for(R360_Notification__c alert:alerts){alert.Resolution_Status__c=String.isBlank(alert.Resolution_Status__c)?'Open':alert.Resolution_Status__c;alert.Accountable_Owner__c=alert.Accountable_Owner__c==null?UserInfo.getUserId():alert.Accountable_Owner__c;alert.First_Seen_At__c=alert.First_Seen_At__c==null?alert.Occurred_At__c:alert.First_Seen_At__c;}if(!alerts.isEmpty())update alerts;
         ensureRoleScopes(today);
         ensureMockSourceRuns();
-        return new Resource360Service.ServiceResult(true,'Sanitized demo data upgraded to the governed v1.4 mock-complete model.',anchorResourceId,runKey);
+        return new Resource360Service.ServiceResult(true,'Sanitized demo data upgraded to the governed v1.5 mock-complete model.',anchorResourceId,runKey);
     }
 
     private static void ensureMockSourceRuns(){
@@ -108,7 +108,7 @@ public with sharing class Resource360DemoData {
     }
 
     private static void ensureRoleScopes(Date today){
-        Set<String>existingRoles=new Set<String>();for(R360_Role_Scope__c scope:[SELECT Business_Role__c FROM R360_Role_Scope__c WHERE User__c=:UserInfo.getUserId()])existingRoles.add(scope.Business_Role__c);List<R360_Role_Scope__c>records=new List<R360_Role_Scope__c>();for(String role:new List<String>{'Project Manager','COE Staffer','Portfolio Manager','Budget Approver','Reporting Manager','Capability Administrator','Timesheet Approver','Operations','Auditor'})if(!existingRoles.contains(role))records.add(new R360_Role_Scope__c(Scope_Key__c='DEMO-'+UserInfo.getUserId()+'-'+role.replace(' ','-').replace('/','-'),User__c=UserInfo.getUserId(),Business_Role__c=role,Valid_From__c=today.addDays(-1),Active__c=true));if(!records.isEmpty())insert records;
+        Set<String>existingRoles=new Set<String>();for(R360_Role_Scope__c scope:[SELECT Business_Role__c FROM R360_Role_Scope__c WHERE User__c=:UserInfo.getUserId()])existingRoles.add(scope.Business_Role__c);List<R360_Role_Scope__c>records=new List<R360_Role_Scope__c>();for(String role:new List<String>{'Practitioner','Project Manager','COE Staffer','Portfolio Manager','Account Owner','HOD','GM/COO Delegate','Finance/PMO','Budget Approver','Reporting Manager','Capability Administrator','Timesheet Approver','Configuration Operator','Configuration Approver','Operations','Auditor','Executive Viewer'})if(!existingRoles.contains(role))records.add(new R360_Role_Scope__c(Scope_Key__c='DEMO-'+UserInfo.getUserId()+'-'+role.replace(' ','-').replace('/','-'),User__c=UserInfo.getUserId(),Business_Role__c=role,Valid_From__c=today.addDays(-1),Active__c=true,Assignment_Source__c='Manual approved mock',Approval_Reference__c='R360-MOCK-ACTIVATION-2026-08-24',Last_Certified_At__c=System.now(),Certified_By__c=UserInfo.getUserId()));if(!records.isEmpty())insert records;
     }
 
     private static Date mondayFor(Date value) {

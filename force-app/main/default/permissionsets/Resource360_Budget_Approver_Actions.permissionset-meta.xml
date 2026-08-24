@@ -36,9 +36,17 @@
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Economic_Signature__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Active__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Approval_Reference__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Assignment_Source__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Certified_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Delegated_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Delegation_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.External_Group_Alias__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Last_Certified_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Valid_To__c</field><readable>true</readable></fieldPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Budget__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>

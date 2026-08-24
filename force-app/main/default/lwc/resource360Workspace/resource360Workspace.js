@@ -165,13 +165,18 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get modules() {
         return MODULES.map((module) => ({
             ...module,
-            count: SCREENS.filter((screen) => screen.module === module.id).length,
+            count: this.authorizedScreens.filter((screen) => screen.module === module.id).length,
             buttonClass: `module-button ${module.id === this.selectedModule ? "module-button_active" : ""}`
-        }));
+        })).filter((module) => module.count > 0);
+    }
+
+    get authorizedScreens() {
+        if (!this.activeRole) return [];
+        return SCREENS.filter((screen) => this.activeRole === "Administrator" || screen.allowedRoles.includes(this.activeRole));
     }
 
     get moduleScreens() {
-        return SCREENS.filter((screen) => screen.module === this.selectedModule).map((screen) => ({
+        return this.authorizedScreens.filter((screen) => screen.module === this.selectedModule).map((screen) => ({
             ...screen,
             buttonClass: `screen-button ${screen.id === this.selectedScreenId ? "screen-button_active" : ""}`
         }));
@@ -266,7 +271,9 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showTimesheetCreate() { return this.selectedScreenId === "TIMEUI-01"; }
     get showTimeEntryForm() { return this.selectedScreenId === "TIMEUI-02"; }
     get showTimeExceptions() { return this.selectedScreenId === "TIMEUI-08"; }
+    get showPersonaAssurance() { return ["ADMUI-02", "ADMUI-03"].includes(this.selectedScreenId); }
     get showSourceAssurance() { return ["ADMUI-07", "CMD-08"].includes(this.selectedScreenId); }
+    get showRetentionAssurance() { return this.selectedScreenId === "ADMUI-07"; }
     get showKpiHierarchy() { return ["CMD-01", "CMD-02", "CMD-04", "CMD-07"].includes(this.selectedScreenId); }
     get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
     get showAlertLifecycle() { return this.selectedScreenId === "GLB-03"; }
@@ -299,9 +306,15 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get budgetAssuranceRosterRows() { return (this.budgetAssuranceResult?.rosterAssurance || []).map((row)=>({...row,windowReady:Boolean(row.roleWindowCoversMonth)})); }
     get budgetAssuranceMonthlyColumns() { return [{label:"Month",fieldName:"period",type:"date"},{label:"Plan hours",fieldName:"plannedHours",type:"number"},{label:"Actual hours",fieldName:"actualHours",type:"number"},{label:"Variance",fieldName:"varianceHours",type:"number"},{label:"Plan cost",fieldName:"plannedCost",type:"currency"},{label:"As-of state",fieldName:"asOfState"}]; }
     get budgetAssuranceRosterColumns() { return [{label:"Practitioner",fieldName:"resource"},{label:"Role",fieldName:"role"},{label:"Month",fieldName:"period",type:"date"},{label:"Planned",fieldName:"plannedHours",type:"number"},{label:"160h allocation standard",fieldName:"standardHoursAtAllocation",type:"number"},{label:"Variance",fieldName:"varianceFromStandardHours",type:"number"},{label:"Role window valid",fieldName:"windowReady",type:"boolean"},{label:"State",fieldName:"state"}]; }
-    get sourceContractRows() { return (this.data.assurance?.sourceContracts || []).map((row,index)=>({...row,id:`source-${index}`})); }
+    get personaRows() { return (this.data.assurance?.personas || []).map((row,index)=>({...row,id:row.id||`persona-${index}`,delegationLabel:row.delegationAllowed?"Effective-dated":"Not permitted"})); }
+    get hasPersonas() { return this.personaRows.length > 0; }
+    get personaColumns() { return [{label:"Business role",fieldName:"businessRole"},{label:"Salesforce assignment",fieldName:"permissionSetGroup"},{label:"Entra group alias",fieldName:"entraGroupAlias"},{label:"Scope",fieldName:"scopeType"},{label:"Decision authority",fieldName:"decisionAuthority",wrapText:true},{label:"SoD class",fieldName:"segregationClass"},{label:"Delegation",fieldName:"delegationLabel"},{label:"Control owner",fieldName:"controlOwner"},{label:"Status",fieldName:"approvalStatus"}]; }
+    get sourceContractRows() { return (this.data.assurance?.sourceContracts || []).map((row,index)=>({...row,id:row.id||`source-${index}`,blockingLabel:row.blocking?"Fail closed":"Advisory"})); }
     get hasSourceContracts() { return this.sourceContractRows.length > 0; }
-    get sourceContractColumns() { return [{label:"Mock source",fieldName:"source"},{label:"Entity",fieldName:"entity"},{label:"Stable identity",fieldName:"identity"},{label:"Cadence (h)",fieldName:"expectedCadenceHours",type:"number"},{label:"Latest state",fieldName:"latestState"},{label:"Freshness",fieldName:"freshness"},{label:"Complete %",fieldName:"completenessPercent",type:"number"},{label:"Inserted",fieldName:"inserted",type:"number"},{label:"Updated",fieldName:"updated",type:"number"},{label:"Collisions",fieldName:"collisions",type:"number"}]; }
+    get sourceContractColumns() { return [{label:"Mock source",fieldName:"source"},{label:"Entity",fieldName:"entity"},{label:"Stable identity",fieldName:"identity",wrapText:true},{label:"Canonical fields",fieldName:"canonicalFields",wrapText:true},{label:"Owner",fieldName:"owner"},{label:"Direction",fieldName:"direction"},{label:"Gate",fieldName:"blockingLabel"},{label:"Cadence (h)",fieldName:"expectedCadenceHours",type:"number"},{label:"Latest state",fieldName:"latestState"},{label:"Freshness",fieldName:"freshness"},{label:"Complete %",fieldName:"completenessPercent",type:"number"},{label:"Collisions",fieldName:"collisions",type:"number"},{label:"Contract",fieldName:"contractVersion"},{label:"Status",fieldName:"approvalStatus"}]; }
+    get retentionRows() { return (this.data.assurance?.retention?.rules || []).map((row,index)=>({...row,id:row.id||`retention-${index}`,legalHoldLabel:row.legalHoldEligible?"Eligible":"Not applicable"})); }
+    get hasRetentionRules() { return this.retentionRows.length > 0; }
+    get retentionColumns() { return [{label:"Record category",fieldName:"category"},{label:"Retention days",fieldName:"retentionDays",type:"number"},{label:"Disposition contract",fieldName:"dispositionAction",wrapText:true},{label:"Recovery days",fieldName:"recoveryWindowDays",type:"number"},{label:"Legal hold",fieldName:"legalHoldLabel"},{label:"Control owner",fieldName:"controlOwner"},{label:"Status",fieldName:"approvalStatus"},{label:"Evidence",fieldName:"evidenceReference",wrapText:true}]; }
     get timeExceptionRows() { return (this.data.assurance?.timeExceptions || []).map((row)=>({...row,reasonsText:(row.reasons || []).join(" · ")})); }
     get hasTimeExceptions() { return this.timeExceptionRows.length > 0; }
     get timeExceptionColumns() { return [{label:"Timesheet",fieldName:"timesheet"},{label:"Practitioner",fieldName:"resource"},{label:"Week",fieldName:"weekStart",type:"date"},{label:"Status",fieldName:"status"},{label:"Exception and accountable route",fieldName:"reasonsText",wrapText:true}]; }
@@ -420,14 +433,23 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
 
     handleModule(event) {
         this.selectedModule = event.currentTarget.dataset.module;
-        this.selectedScreenId = SCREENS.find((screen) => screen.module === this.selectedModule)?.id;
+        this.selectedScreenId = this.authorizedScreens.find((screen) => screen.module === this.selectedModule)?.id;
     }
 
     handleScreen(event) {
         this.selectedScreenId = event.currentTarget.dataset.screen;
         this[NavigationMixin.Navigate]({ type: "standard__navItemPage", attributes: { apiName: "Resource360_Workspace" }, state: { c__screen: this.selectedScreenId } });
     }
-    handleRole(event) { this.activeRole = event.detail.value; }
+    handleRole(event) {
+        this.activeRole = event.detail.value;
+        if (!this.isAuthorized) {
+            const fallback = this.authorizedScreens.find((screen) => screen.module === "global") || this.authorizedScreens[0];
+            if (fallback) {
+                this.selectedModule = fallback.module;
+                this.selectedScreenId = fallback.id;
+            }
+        }
+    }
     handleStaffingInput(event) { this.staffingDraft = { ...this.staffingDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handlePlanningInput(event) { const value = event.target.type === "checkbox" ? event.target.checked : event.detail?.value ?? event.target.value; this.planningDraft = { ...this.planningDraft, [event.target.dataset.field]: value }; }
     handleAllocationInput(event) { this.allocationDraft = { ...this.allocationDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; if (event.target.dataset.field === "allocationId") this.selectAllocation((this.data.allocations || []).find((item) => item.Id === event.detail.value)); }

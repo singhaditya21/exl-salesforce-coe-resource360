@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { calculateBudget, fitForPerson, initialDemoState, type DemoBudget, type DemoPerson } from "../app/demo-system";
+import { calculateBudget, demoRoles, fitForPerson, initialDemoState, type DemoBudget, type DemoPerson } from "../app/demo-system";
+import { canAccessScreen, moduleRoles, screens } from "../app/screen-data";
 
 describe("budget policy calculations", () => {
   const budget: DemoBudget = {
@@ -45,15 +46,29 @@ describe("explainable candidate fit", () => {
 
 describe("sanitized fixture integrity", () => {
   it("ships every connected demo aggregate with a versioned state", () => {
-    expect(initialDemoState.version).toBe(4);
+    expect(initialDemoState.version).toBe(5);
     expect(initialDemoState.budgets.length).toBeGreaterThan(0);
     expect(initialDemoState.people.length).toBeGreaterThan(0);
     expect(initialDemoState.configurations.some((item) => item.code === "People_Freshness_Block_Hours" && item.state === "Active")).toBe(true);
     expect(initialDemoState.allocations.length).toBeGreaterThan(0);
     expect(initialDemoState.timesheets.length).toBeGreaterThan(0);
     expect(initialDemoState.audit.length).toBeGreaterThan(0);
-    expect(initialDemoState.sourceContracts).toHaveLength(7);
+    expect(initialDemoState.sourceContracts).toHaveLength(13);
     expect(initialDemoState.sourceContracts.every((item) => item.contractVersion === "R360-MOCK-1.2")).toBe(true);
+    expect(initialDemoState.personas).toHaveLength(18);
+    expect(initialDemoState.personas.every((item) => item.approvalStatus === "Approved mock assumption")).toBe(true);
+    expect(initialDemoState.retentionRules).toHaveLength(8);
+    expect(initialDemoState.retentionRules.every((item) => item.legalHoldEligible)).toBe(true);
     expect(initialDemoState.budgetRoster.length).toBeGreaterThan(0);
+  });
+
+  it("maps every governed persona to at least one screen and preserves least privilege", () => {
+    expect(demoRoles).toHaveLength(18);
+    expect(Object.values(moduleRoles).flat()).toEqual(expect.arrayContaining([...demoRoles]));
+    for (const role of demoRoles) expect(screens.some((screen) => canAccessScreen(role, screen)), role).toBe(true);
+    expect(canAccessScreen("Executive Viewer", screens.find((screen) => screen.id === "CMD-01")!)).toBe(true);
+    expect(canAccessScreen("Executive Viewer", screens.find((screen) => screen.id === "ADMUI-03")!)).toBe(false);
+    expect(canAccessScreen("Configuration Approver", screens.find((screen) => screen.id === "ADMUI-06")!)).toBe(true);
+    expect(canAccessScreen("Finance/PMO", screens.find((screen) => screen.id === "BUDUI-10")!)).toBe(true);
   });
 });

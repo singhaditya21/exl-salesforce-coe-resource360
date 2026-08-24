@@ -75,3 +75,25 @@ test("has no remaining ChatGPT Sites binding", async () => {
   assert.doesNotMatch(packageJson, /openai|sites-vite-plugin|cloudflare|vinext|wrangler/i);
   assert.match(readme, /GitHub Pages/);
 });
+
+test("publishes complete, version-aligned governance and integration contracts", async () => {
+  const [registerText, projectText, envelopeText] = await Promise.all([
+    readFile(new URL("../contracts/resource360-governance-register.json", import.meta.url), "utf8"),
+    readFile(new URL("../contracts/resource360-common-project-contract.schema.json", import.meta.url), "utf8"),
+    readFile(new URL("../contracts/resource360-master-data-envelope.schema.json", import.meta.url), "utf8"),
+  ]);
+  const register = JSON.parse(registerText);
+  const project = JSON.parse(projectText);
+  const envelope = JSON.parse(envelopeText);
+  assert.equal(register.contractVersion, "R360-MOCK-1.2");
+  assert.equal(register.sourceContracts.length, 13);
+  assert.equal(register.personas.length, 18);
+  assert.equal(register.retentionRules.length, 8);
+  assert.equal(new Set(register.personas.map((item) => item.businessRole)).size, 18);
+  assert.ok(register.personas.every((item) => item.permissionSetGroup && item.entraGroupAlias));
+  assert.ok(register.retentionRules.every((item) => item.legalHoldEligible));
+  assert.equal(project["x-resource360"].contractVersion, register.contractVersion);
+  assert.equal(envelope.properties.contractVersion.const, register.contractVersion);
+  assert.equal(envelope.properties.records.maxItems, 200);
+  assert.deepEqual(project.required, ["engagementId", "name", "startDate", "endDate", "status", "revenueType", "currency"]);
+});

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { StaffingRequest } from "./staffing-workflow";
 
-export type DemoRole = "Practitioner" | "Reporting Manager" | "Project Manager" | "COE Staffer" | "Budget Approver" | "Administrator";
+export const demoRoles = ["Practitioner", "Project Manager", "Reporting Manager", "COE Staffer", "Budget Approver", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Timesheet Approver", "Capability Administrator", "Configuration Operator", "Configuration Approver", "Operations", "Auditor", "Executive Viewer", "Administrator"] as const;
+export type DemoRole = typeof demoRoles[number];
 export type BudgetState = "Draft" | "Pending approval" | "Approved" | "Rejected";
 export type ClaimState = "Pending" | "Approved" | "Rejected";
 export type TimeState = "Draft" | "Submitted" | "Approved" | "Rejected";
@@ -43,11 +44,13 @@ export type DemoConfiguration = {
 };
 
 export type DemoBudgetRosterLine = { id: string; budgetId: string; employeeId: string; employee: string; role: string; month: string; allocation: number; plannedHours: number; costRate: number; roleStart: string; roleEnd: string };
-export type MockSourceContract = { id: string; source: string; entity: string; identity: string; cadenceHours: number; state: "Fresh" | "Stale" | "Partial" | "Not run"; completeness: number; inserted: number; updated: number; collisions: number; cutoff: string; contractVersion: "R360-MOCK-1.2" };
+export type MockSourceContract = { id: string; source: string; entity: string; identity: string; canonicalFields: string; owner: string; cadenceHours: number; blocking: boolean; direction: "Inbound" | "Outbound" | "Native"; approvalStatus: "Approved mock assumption"; state: "Fresh" | "Stale" | "Partial" | "Not run" | "Native"; completeness: number; inserted: number; updated: number; collisions: number; cutoff: string; contractVersion: "R360-MOCK-1.2" };
+export type DemoPersona = { id: string; role: DemoRole; permissionSetGroup: string; entraGroupAlias: string; scope: string; authority: string; segregation: string; delegationAllowed: boolean; owner: string; approvalStatus: "Approved mock assumption" };
+export type DemoRetentionRule = { id: string; category: string; retentionDays: number; legalHoldEligible: boolean; action: string; recoveryDays: number; owner: string; approvalStatus: "Approved mock assumption" };
 export type DemoScenario = { id: string; name: string; startDate: string; endDate: string; headcountDelta: number; billableAllocation: number; capacityHours: number; billableHours: number; savedAt: string };
 
 export type DemoState = {
-  version: 4;
+  version: 5;
   signedIn: boolean;
   activeRole: DemoRole;
   budgets: DemoBudget[];
@@ -60,10 +63,12 @@ export type DemoState = {
   configurations: DemoConfiguration[];
   budgetRoster: DemoBudgetRosterLine[];
   sourceContracts: MockSourceContract[];
+  personas: DemoPersona[];
+  retentionRules: DemoRetentionRule[];
   scenarios: DemoScenario[];
 };
 
-const STORAGE_KEY = "exl-resource360-demo-v4";
+const STORAGE_KEY = "exl-resource360-demo-v5";
 const roleNames = ["Beginner", "Intermediate", "Advanced", "SME"];
 
 function now() {
@@ -94,7 +99,7 @@ export function fitForPerson(person: DemoPerson, capability: string, requiredLev
 }
 
 export const initialDemoState: DemoState = {
-  version: 4,
+  version: 5,
   signedIn: true,
   activeRole: "COE Staffer",
   budgets: [
@@ -143,14 +148,50 @@ export const initialDemoState: DemoState = {
     { id: "BR-1003", budgetId: "BUD-1004", employeeId: "EXL-DEMO-1003", employee: "Riya Sen", role: "Service Cloud Lead", month: "2026-10", allocation: 35, plannedHours: 56, costRate: 3500, roleStart: "2026-10-01", roleEnd: "2027-02-28" },
   ],
   sourceContracts: [
-    { id: "SRC-PEOPLE", source: "People Master", entity: "Employee", identity: "Employee ID", cadenceHours: 24, state: "Fresh", completeness: 99.7, inserted: 4, updated: 1858, collisions: 0, cutoff: "24 Aug 2026, 9:48 am", contractVersion: "R360-MOCK-1.2" },
-    { id: "SRC-ENG", source: "Engagement Master", entity: "Engagement", identity: "Engagement ID", cadenceHours: 4, state: "Fresh", completeness: 100, inserted: 1, updated: 37, collisions: 0, cutoff: "24 Aug 2026, 10:03 am", contractVersion: "R360-MOCK-1.2" },
-    { id: "SRC-LEARN", source: "Learning Hub", entity: "LearningAchievement", identity: "Achievement ID", cadenceHours: 168, state: "Partial", completeness: 96.4, inserted: 82, updated: 214, collisions: 3, cutoff: "23 Aug 2026, 7:00 pm", contractVersion: "R360-MOCK-1.2" },
-    { id: "SRC-CRED", source: "Credential Gateway", entity: "Credential", identity: "Credential ID", cadenceHours: 168, state: "Fresh", completeness: 99.2, inserted: 11, updated: 1273, collisions: 0, cutoff: "24 Aug 2026, 8:00 am", contractVersion: "R360-MOCK-1.2" },
-    { id: "SRC-COM", source: "Commercial Master", entity: "CommercialReference", identity: "External reference ID", cadenceHours: 24, state: "Fresh", completeness: 100, inserted: 0, updated: 38, collisions: 0, cutoff: "24 Aug 2026, 9:30 am", contractVersion: "R360-MOCK-1.2" },
-    { id: "SRC-ORG", source: "Org Hierarchy", entity: "OrgUnit", identity: "Org unit ID", cadenceHours: 24, state: "Fresh", completeness: 98.9, inserted: 2, updated: 47, collisions: 0, cutoff: "24 Aug 2026, 9:45 am", contractVersion: "R360-MOCK-1.2" },
-    { id: "SRC-PORT", source: "Portfolio Master", entity: "Portfolio", identity: "Portfolio ID", cadenceHours: 24, state: "Fresh", completeness: 100, inserted: 0, updated: 8, collisions: 0, cutoff: "24 Aug 2026, 9:45 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "People_Master", source: "Mock EXL People Master", entity: "Employee", identity: "Employee ID", canonicalFields: "Name, employment, manager, grade, tower, location, org and capacity", owner: "HRIS / People Data", cadenceHours: 24, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 99.7, inserted: 4, updated: 1858, collisions: 0, cutoff: "24 Aug 2026, 9:48 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Entra_Identity", source: "Mock Microsoft Entra ID", entity: "Identity", identity: "Entra Object ID + Salesforce User ID", canonicalFields: "Authentication, MFA, lifecycle and governed group aliases", owner: "Identity and Access Management", cadenceHours: 1, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 100, inserted: 0, updated: 18, collisions: 0, cutoff: "24 Aug 2026, 10:12 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Engagement_Master", source: "Mock EXL Engagement Master", entity: "Engagement", identity: "Engagement ID", canonicalFields: "Name, account, category, revenue type, dates, status, PM and PO value", owner: "PSA / Delivery Operations", cadenceHours: 4, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 100, inserted: 1, updated: 37, collisions: 0, cutoff: "24 Aug 2026, 10:03 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Commercial_Master", source: "Mock EXL Commercial Master", entity: "CommercialReference", identity: "External reference ID + Engagement ID", canonicalFields: "Type, value, validity, status, signature and currency", owner: "Finance / Commercial Operations", cadenceHours: 24, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 100, inserted: 0, updated: 38, collisions: 0, cutoff: "24 Aug 2026, 9:30 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Learning_Hub", source: "Mock EXL Learning Gateway", entity: "LearningAchievement", identity: "Achievement ID + Employee ID", canonicalFields: "Course, provider, completion, mapped capability and state", owner: "L&D", cadenceHours: 168, blocking: false, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Partial", completeness: 96.4, inserted: 82, updated: 214, collisions: 3, cutoff: "23 Aug 2026, 7:00 pm", contractVersion: "R360-MOCK-1.2" },
+    { id: "Credential_Gateway", source: "Mock Salesforce Credential Gateway", entity: "Credential", identity: "Credential ID + Employee ID", canonicalFields: "Name, issuer, issue, expiry, maintenance and verification state", owner: "Salesforce Capability / L&D", cadenceHours: 168, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 99.2, inserted: 11, updated: 1273, collisions: 0, cutoff: "24 Aug 2026, 8:00 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Org_Hierarchy", source: "Mock EXL Org Hierarchy", entity: "OrgUnit", identity: "Org Unit ID", canonicalFields: "Name, type, parent, effective dates and current state", owner: "HRIS / People Data", cadenceHours: 24, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 98.9, inserted: 2, updated: 47, collisions: 0, cutoff: "24 Aug 2026, 9:45 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Portfolio_Master", source: "Mock EXL Portfolio Master", entity: "Portfolio", identity: "Portfolio ID", canonicalFields: "Name, parent, effective dates and current state", owner: "Delivery Operations", cadenceHours: 24, blocking: true, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 100, inserted: 0, updated: 8, collisions: 0, cutoff: "24 Aug 2026, 9:45 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "Capability_Catalogue", source: "Resource360 governed catalogue", entity: "Capability", identity: "Capability ID", canonicalFields: "Name, type, tower, category, aliases, effective dates and active state", owner: "Salesforce Capability Lead", cadenceHours: 0, blocking: false, direction: "Inbound", approvalStatus: "Approved mock assumption", state: "Native", completeness: 100, inserted: 3, updated: 0, collisions: 0, cutoff: "Current Salesforce metadata", contractVersion: "R360-MOCK-1.2" },
+    { id: "Capability_Evidence", source: "Resource360", entity: "SkillClaim", identity: "Skill Claim ID + Resource ID + Capability ID", canonicalFields: "Requested and approved level, evidence, reviewer and decision", owner: "Salesforce Capability Lead", cadenceHours: 0, blocking: false, direction: "Native", approvalStatus: "Approved mock assumption", state: "Native", completeness: 100, inserted: 1, updated: 3, collisions: 0, cutoff: "Transactional", contractVersion: "R360-MOCK-1.2" },
+    { id: "Budget_WBS", source: "Resource360", entity: "Budget", identity: "Engagement ID + Budget Version", canonicalFields: "Economics, roster, WBS, signature, approvals and policy version", owner: "Finance / PMO", cadenceHours: 0, blocking: true, direction: "Native", approvalStatus: "Approved mock assumption", state: "Native", completeness: 100, inserted: 3, updated: 4, collisions: 0, cutoff: "Transactional", contractVersion: "R360-MOCK-1.2" },
+    { id: "Staffing_Allocation", source: "Resource360", entity: "Allocation", identity: "Request ID + Allocation Version", canonicalFields: "Candidate, role, classification, dates, effort, decision and lineage", owner: "COE Staffing", cadenceHours: 0, blocking: true, direction: "Native", approvalStatus: "Approved mock assumption", state: "Native", completeness: 100, inserted: 1, updated: 1, collisions: 0, cutoff: "Transactional", contractVersion: "R360-MOCK-1.2" },
+    { id: "Approved_Time", source: "Resource360", entity: "ApprovedTime", identity: "Timesheet ID + Entry Key + Version", canonicalFields: "Allocation, engagement, date, hours, approval and correction lineage", owner: "Delivery Operations", cadenceHours: 0, blocking: true, direction: "Outbound", approvalStatus: "Approved mock assumption", state: "Fresh", completeness: 100, inserted: 0, updated: 1, collisions: 0, cutoff: "Post-approval event", contractVersion: "R360-MOCK-1.2" },
   ],
+  personas: [
+    ["Practitioner","Resource360_Practitioner","EXL-R360-Practitioner","Self","Own skills, credentials and time","Self service",false,"Salesforce COE"],
+    ["Project Manager","Resource360_Project_Manager","EXL-R360-Project-Manager","Engagement","Budget/WBS and staffing demand","Requester",true,"Delivery Operations"],
+    ["Reporting Manager","Resource360_Reporting_Manager","EXL-R360-Reporting-Manager","Manager subtree","Skill review and first-line time approval","People approver",true,"HR / Delivery"],
+    ["COE Staffer","Resource360_COE_Staffer","EXL-R360-COE-Staffer","Talent pool and engagement","Staffing arbitration and allocation","Staffing approver",true,"COE Staffing"],
+    ["Budget Approver","Resource360_Budget_Approver","EXL-R360-Budget-Approver","Assigned portfolio/engagement","Assigned budget decisions","Budget approver",true,"Finance / Delivery"],
+    ["Portfolio Manager","Resource360_Portfolio_Lead","EXL-R360-Portfolio-Lead","Portfolio","First routed budget approval","Budget approver L1",true,"Delivery Leadership"],
+    ["Account Owner","Resource360_Account_Owner","EXL-R360-Account-Owner","Account/portfolio","Commercial and unbilled controls","Commercial owner",true,"Account Leadership"],
+    ["HOD","Resource360_Head_of_Delivery","EXL-R360-HOD","Delivery hierarchy","Margin and delivery exception approval","Budget approver L2",true,"Delivery Leadership"],
+    ["GM/COO Delegate","Resource360_GM_COO_Delegate","EXL-R360-GM-COO","Organization","Highest-risk budget approval","Budget approver L3",true,"COE Leadership"],
+    ["Finance/PMO","Resource360_Finance_PMO","EXL-R360-Finance-PMO","Portfolio/engagement","Economics review and reconciliation","Financial control",true,"Finance / PMO"],
+    ["Timesheet Approver","Resource360_Timesheet_Approver","EXL-R360-Time-Approver","Manager subtree","Independent correction approval","Time approver L2",true,"Delivery Operations"],
+    ["Capability Administrator","Resource360_Capability_Administrator","EXL-R360-Capability-Admin","Capability catalogue","Taxonomy and evidence governance","Capability control",true,"Capability / L&D"],
+    ["Configuration Operator","Resource360_Configuration_Operator","EXL-R360-Config-Operator","Configuration","Draft, preview and submit","Configuration maker",false,"Product Operations"],
+    ["Configuration Approver","Resource360_Configuration_Approver","EXL-R360-Config-Approver","Configuration","Approve, activate and rollback","Configuration checker",false,"Control Owner"],
+    ["Operations","Resource360_Operations_User","EXL-R360-Operations","Organization","Integrations, schedules and recovery","Technical operator",true,"Product Operations"],
+    ["Auditor","Resource360_Audit_User","EXL-R360-Auditor","Authorized audit scope","Read immutable evidence","Independent assurance",false,"Risk / Audit"],
+    ["Executive Viewer","Resource360_Executive_Viewer","EXL-R360-Executive-Viewer","Organization","Read KPI and portfolio controls","Read-only leadership",true,"COE Leadership"],
+    ["Administrator","Resource360_Administrator","EXL-R360-Break-Glass","Organization","Technical break-glass only","Break glass",false,"Salesforce Platform Owner"],
+  ].map(([role,permissionSetGroup,entraGroupAlias,scope,authority,segregation,delegationAllowed,owner],index)=>({id:`PER-${String(index+1).padStart(2,"0")}`,role:role as DemoRole,permissionSetGroup:String(permissionSetGroup),entraGroupAlias:String(entraGroupAlias),scope:String(scope),authority:String(authority),segregation:String(segregation),delegationAllowed:Boolean(delegationAllowed),owner:String(owner),approvalStatus:"Approved mock assumption" as const})),
+  retentionRules: [
+    ["RET-01","Immutable audit evidence",2555,"Retain immutable; production disposition disabled","Risk / Audit"],
+    ["RET-02","Approval decisions",2555,"Retain immutable; production disposition disabled","Control Owners"],
+    ["RET-03","Budget, staffing and allocation history",2555,"Archive then dispose after approval","Delivery Operations / Finance"],
+    ["RET-04","Approved time and corrections",2555,"Archive then dispose after approval","Delivery Operations / Finance"],
+    ["RET-05","Skill, credential and learning evidence",2555,"Anonymize or dispose after approval","Capability / L&D"],
+    ["RET-06","Integration runs and redacted errors",365,"Dispose after recovery window","Product Operations"],
+    ["RET-07","Notifications and closure evidence",365,"Dispose after recovery window","Product Operations"],
+    ["RET-08","Outbox and dead-letter evidence",90,"Dispose after recovery window","Product Operations"],
+  ].map(([id,category,retentionDays,action,owner])=>({id:String(id),category:String(category),retentionDays:Number(retentionDays),legalHoldEligible:true,action:String(action),recoveryDays:30,owner:String(owner),approvalStatus:"Approved mock assumption" as const})),
   scenarios: [],
 };
 
@@ -244,7 +285,7 @@ export function useDemoSystem() {
   function submitConfigurationRelease(releaseKey: string) { transact("CONFIG_RELEASE_SUBMITTED", releaseKey, "Atomic release submitted for independent approval", (current) => ({ ...current, configurations: current.configurations.map((item) => item.releaseKey === releaseKey && ["Draft", "Rejected"].includes(item.state) ? { ...item, state: "Pending approval" } : item) })); }
   function decideConfigurationRelease(releaseKey: string, approve: boolean, note: string) { transact(approve ? "CONFIG_RELEASE_ACTIVATED" : "CONFIG_RELEASE_REJECTED", releaseKey, note, (current) => ({ ...current, configurations: current.configurations.map((item) => item.releaseKey === releaseKey && item.state === "Pending approval" ? { ...item, state: approve ? "Active" : "Rejected" } : approve && current.configurations.some((target) => target.releaseKey === releaseKey && target.code === item.code) && item.state === "Active" ? { ...item, state: "Retired" } : item) })); }
   function runMockReconciliation(sourceId: string) { transact("MOCK_SOURCE_RECONCILED", sourceId, "R360-MOCK-1.2 deterministic completeness and collision checks passed", (current) => ({ ...current, sourceContracts: current.sourceContracts.map((item) => item.id === sourceId ? { ...item, state: "Fresh", completeness: 100, collisions: 0, cutoff: now(), updated: item.updated + 1 } : item) }), { title: "Mock source reconciled", detail: `${sourceId} is fresh and 100% complete`, severity: "Normal" }); }
-  function runRetentionDryRun() { transact("RETENTION_DRY_RUN", "R360-MOCK-RETENTION", "No records deleted; 2,555-day mock assumptions evaluated", (current) => current, { title: "Retention dry run complete", detail: "No data deleted · legal hold false · production approval still required", severity: "Normal" }); }
+  function runRetentionDryRun() { transact("RETENTION_DRY_RUN", "R360-MOCK-ACTIVATION-2026-08-24", `${state.retentionRules.length} approved mock retention rules evaluated; no records deleted`, (current) => current, { title: "Retention dry run complete", detail: "Approved mock schedule · no data deleted · legal hold false", severity: "Normal" }); }
   function saveScenario(input: Omit<DemoScenario, "id" | "savedAt">) { const scenario = { ...input, id: `SCN-${Date.now().toString().slice(-6)}`, savedAt: now() }; transact("WHAT_IF_SCENARIO_SAVED", scenario.id, `${scenario.headcountDelta} HC · ${scenario.billableAllocation}% billable`, (current) => ({ ...current, scenarios: [scenario, ...current.scenarios] })); return scenario.id; }
 
   function reset() { setState(initialDemoState); }

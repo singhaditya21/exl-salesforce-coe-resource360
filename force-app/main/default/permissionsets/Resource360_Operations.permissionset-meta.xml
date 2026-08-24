@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Operate integrations, reconciliation, schedules, outbox recovery and configuration without business approval authority.</description>
+    <description>Operate integrations, reconciliation, schedules and outbox recovery without business or configuration approval authority.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Operations</label>
     <classAccesses><apexClass>Resource360AssuranceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BulkService</apexClass><enabled>true</enabled></classAccesses>
-    <classAccesses><apexClass>Resource360ConfigurationService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360GovernanceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360InboundApi</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360NotificationDispatcher</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360OperationsScheduler</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360OutboxPublisher</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360RoleScopeService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Bulk_Operations</name></customPermissions>
-    <customPermissions><enabled>true</enabled><name>Resource360_Manage_Configuration</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Integrations</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Run_Reconciliation</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_View_Audit</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_View_Operations</name></customPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Approved_At__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Approved_By__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Attributes_JSON__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Boolean_Value__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Change_Reason__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Current__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Display_Label__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Numeric_Value__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Release_Key__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Text_Value__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Unit__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Validation_Summary__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Approved_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Approved_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Attributes_JSON__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Boolean_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Change_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Current__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Display_Label__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Numeric_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Release_Key__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Text_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Validation_Summary__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Collision_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Commit_Mode__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Completed_At__c</field><readable>true</readable></fieldPermissions>
@@ -67,9 +67,17 @@
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Payload_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Reason_Code__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Active__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Approval_Reference__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Assignment_Source__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Certified_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Delegated_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Delegation_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.External_Group_Alias__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Last_Certified_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Revoked_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Revoked_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Role_Scope__c.Valid_To__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Work_Calendar__c.Current__c</field><readable>true</readable></fieldPermissions>
@@ -94,7 +102,7 @@
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Recipient__c</field><readable>true</readable></fieldPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Audit_Event__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Calendar_Exception__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
-    <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Integration_Error__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Integration_Run__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Notification__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
