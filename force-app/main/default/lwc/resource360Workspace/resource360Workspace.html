@@ -183,10 +183,10 @@
                         <div class="form-grid">
                             <lightning-combobox class="form-span" label="Current budget" value={budgetDraft.budgetId} options={budgetOptions} data-field="budgetId" onchange={handleBudgetInput} required></lightning-combobox>
                             <lightning-input type="date" label="Period start" value={budgetLineDraft.periodStart} data-field="periodStart" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
-                            <lightning-input label="Phase" value={budgetLineDraft.phase} data-field="phase" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
-                            <lightning-input label="Work unit" value={budgetLineDraft.workUnit} data-field="workUnit" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-combobox label="Phase" value={budgetLineDraft.phase} options={budgetPhaseOptions} data-field="phase" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
+                            <lightning-combobox label="Work unit" value={budgetLineDraft.workUnit} options={workUnitOptions} data-field="workUnit" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
                             <lightning-combobox label="Salesforce role" value={budgetLineDraft.roleName} options={deliveryRoleOptions} data-field="roleName" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
-                            <lightning-input label="Location" value={budgetLineDraft.location} data-field="location" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-combobox label="Location" value={budgetLineDraft.location} options={locationOptions} data-field="location" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
                             <lightning-input type="number" label="Planned hours" value={budgetLineDraft.plannedHours} min="0.25" step="0.25" data-field="plannedHours" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
                             <lightning-input type="number" formatter="currency" label="Cost rate" value={budgetLineDraft.costRate} min="0" step="0.01" data-field="costRate" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
                             <lightning-input type="number" label="Allocation %" value={budgetLineDraft.allocationPercent} min="0.01" max="100" step="0.01" data-field="allocationPercent" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
@@ -204,6 +204,43 @@
                     </section>
                 </template>
 
+                <template lwc:if={showConfigurationConsole}>
+                    <template lwc:if={canManageConfiguration}><section class="action-panel configuration-panel">
+                        <div class="panel-heading"><div><p class="eyebrow">Governed runtime control plane</p><h3>Stage and validate configuration</h3></div><span>Every change is effective-dated, independently approved, audited and recoverable as a new version</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox label="Domain" value={configurationDraft.domain} options={configurationDomainOptions} data-field="domain" onchange={handleConfigurationInput} required></lightning-combobox>
+                            <lightning-input label="Stable code" value={configurationDraft.code} data-field="code" onchange={handleConfigurationInput} required></lightning-input>
+                            <lightning-input label="Display label" value={configurationDraft.displayLabel} data-field="displayLabel" onchange={handleConfigurationInput} required></lightning-input>
+                            <lightning-combobox label="Value type" value={configurationDraft.valueType} options={configurationTypeOptions} data-field="valueType" onchange={handleConfigurationInput} required></lightning-combobox>
+                            <template lwc:if={configurationIsNumber}><lightning-input type="number" label="Numeric value" value={configurationDraft.numericValue} step="0.01" data-field="numericValue" onchange={handleConfigurationInput} required></lightning-input></template>
+                            <template lwc:if={configurationIsText}><lightning-input label="Text value" value={configurationDraft.textValue} data-field="textValue" onchange={handleConfigurationInput} required></lightning-input></template>
+                            <template lwc:if={configurationIsBoolean}><lightning-input type="checkbox" label="Enabled" checked={configurationDraft.booleanValue} data-field="booleanValue" onchange={handleConfigurationInput}></lightning-input></template>
+                            <lightning-input label="Unit" value={configurationDraft.unit} data-field="unit" onchange={handleConfigurationInput}></lightning-input>
+                            <lightning-input type="date" label="Effective from" value={configurationDraft.effectiveFrom} data-field="effectiveFrom" onchange={handleConfigurationInput} required></lightning-input>
+                            <lightning-input type="date" label="Effective to" value={configurationDraft.effectiveTo} data-field="effectiveTo" onchange={handleConfigurationInput}></lightning-input>
+                            <lightning-textarea class="form-full" label="Attributes JSON" value={configurationDraft.attributesJson} data-field="attributesJson" onchange={handleConfigurationInput} field-level-help="Required for JSON values and enabled delivery roles/classifications. Never place credentials or secrets here."></lightning-textarea>
+                            <lightning-textarea class="form-full" label="Change reason and evidence" value={configurationDraft.reason} data-field="reason" onchange={handleConfigurationInput} required></lightning-textarea>
+                        </div>
+                        <div class="panel-footer panel-footer_split"><span>Secrets, credentials, schema, permissions and platform safety limits remain controlled release assets.</span><div><lightning-button label="Preview impact" icon-name="utility:preview" onclick={handlePreviewConfiguration}></lightning-button><lightning-button class="button-gap" variant="brand" label="Save validated draft" icon-name="utility:save" onclick={handleSaveConfiguration}></lightning-button><template lwc:if={canApproveConfiguration}><lightning-button class="button-gap" label="Apply operations schedule" icon-name="utility:clock" onclick={handleRescheduleOperations}></lightning-button></template></div></div>
+                        <template lwc:if={hasConfigurationPreview}>
+                            <div class={configurationPreviewClass} role="status">
+                                <div><span>Decision</span><strong>{configurationPreviewDecision}</strong></div>
+                                <div><span>Key</span><strong>{configurationPreview.key}</strong></div>
+                                <div><span>Current</span><strong>{configurationPreview.currentValue}</strong></div>
+                                <div><span>Proposed</span><strong>{configurationPreview.normalizedValue}</strong></div>
+                            </div>
+                            <p class="preview-message"><strong>Impact:</strong> {configurationPreview.impact}</p>
+                            <template lwc:if={hasConfigurationErrors}><div class="configuration-messages configuration-messages_error"><strong>Blocking validation</strong><p>{configurationPreviewErrors}</p></div></template>
+                            <template lwc:if={hasConfigurationWarnings}><div class="configuration-messages configuration-messages_warning"><strong>Review before submission</strong><p>{configurationPreviewWarnings}</p></div></template>
+                        </template>
+                    </section></template>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">Version register</p><h3>Defaults, runtime overrides and decision history</h3></div><span>Use row actions to create an override, submit, approve, reject or restore a prior value</span></div>
+                        <template lwc:if={hasConfigurationRows}><lightning-datatable key-field="key" data={configurationRows} columns={configurationColumns} onrowaction={handleConfigurationAction} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No configuration records are visible for this permission context.</p></div></template>
+                    </section>
+                </template>
+
                 <template lwc:if={showBulkOperations}>
                     <section class="action-panel action-panel_blue">
                         <div class="panel-heading"><div><p class="eyebrow">Enhanced-control operation</p><h3>Validate and commit a controlled data batch</h3></div><span>Raw payloads are never retained; file identity, SHA-256 hash, counts and exact row errors are audited</span></div>
@@ -213,7 +250,7 @@
                             <lightning-input class="form-span" label="Source file name" value={bulkDraft.sourceFileName} data-field="sourceFileName" onchange={handleBulkInput} required></lightning-input>
                             <lightning-textarea class="form-full" label="Controlled JSON rows" value={bulkDraft.jsonRows} data-field="jsonRows" onchange={handleBulkInput} required></lightning-textarea>
                         </div>
-                        <div class="panel-footer panel-footer_split"><span>Maximum 200 rows per interactive batch. Replaying identical content returns the same governed run.</span><div><lightning-button label="Pre-validate" icon-name="utility:check" onclick={handlePreviewBulk}></lightning-button><lightning-button class="button-gap" variant="brand" label="Commit batch" icon-name="utility:upload" onclick={handleCommitBulk}></lightning-button></div></div>
+                        <div class="panel-footer panel-footer_split"><span>Maximum {bulkMaxRows} rows per interactive batch. Replaying identical content returns the same governed run.</span><div><lightning-button label="Pre-validate" icon-name="utility:check" onclick={handlePreviewBulk}></lightning-button><lightning-button class="button-gap" variant="brand" label="Commit batch" icon-name="utility:upload" onclick={handleCommitBulk}></lightning-button></div></div>
                         <template lwc:if={hasBulkPreview}>
                             <div class="preview-summary preview-summary_four" role="status">
                                 <div><span>Decision</span><strong>{bulkPreview.message}</strong></div>

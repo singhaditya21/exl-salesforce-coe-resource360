@@ -28,6 +28,7 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 5. Run `pnpm sf:generate`, `pnpm lint`, `pnpm test`, and a Salesforce dry-run with `Resource360ServiceTest`. Generated-file drift, any test failure, component failure or coverage warning blocks promotion.
 6. Deploy through the approved EXL release pipeline; assign the smallest applicable Resource360 permission-set group, not the Administrator set by default.
 7. Schedule the operations and sharing jobs with dedicated monitoring ownership. Verify job execution, outbox retries/dead letters, notification routing and integration-run evidence.
+8. Assign configuration operators and independent configuration approvers. Review the deployed catalog, create any EXL-specific runtime versions, preview them, retain approvals and explicitly apply the governed scheduler cron.
 
 ## Data, security and control gates
 
@@ -35,6 +36,7 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 - Map EXL roles and scopes to the delivered permission sets/groups; test positive, negative, delegated and expired access. Administrator rights do not grant business decision authority.
 - Reconcile a representative migration at record, aggregate and financial-control levels. Load masters before budgets, budgets before staffing/allocations, and allocations before timesheets.
 - Certify the effective classification catalogue, billability, SOW/control gates, review periods, escalation policies, capacity calendars, margin thresholds and timesheet deadlines.
+- Certify People, Engagement, Commercial and Learning freshness thresholds and prove that stale staffing/budget decisions fail closed. Use `CONFIGURATION_CONTROL_MATRIX.md` as the sign-off inventory.
 - Complete performance tests against the PRD volume/concurrency assumptions and accessibility testing at keyboard-only operation and 200% zoom.
 - Configure backup/restore, monitoring, alert routing, incident severity, recovery objectives and a tested rollback plan.
 

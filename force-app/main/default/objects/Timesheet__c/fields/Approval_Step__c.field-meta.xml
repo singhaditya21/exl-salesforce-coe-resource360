@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approval_Step__c</fullName>
+    <defaultValue>0</defaultValue>
+    <label>Approval Step</label>
+    <precision>2</precision>
+    <scale>0</scale>
+    <trackHistory>true</trackHistory>
+    <type>Number</type>
+</CustomField>

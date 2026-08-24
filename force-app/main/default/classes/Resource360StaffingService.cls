@@ -3,7 +3,7 @@ public inherited sharing class Resource360StaffingService {
         String correlation = correlationId();
         requireText(requestedRole, 'Requested Salesforce role is required.');requestedRole=Resource360RoleCatalog.requireActive(requestedRole);
         requireText(classification, 'Classification is required.');
-        R360_Classification__mdt classificationPolicy=Resource360Classification.requireActive(classification);
+        Resource360Classification.ClassificationPolicy classificationPolicy=Resource360Classification.requireActive(classification);
         requireDates(startDate, endDate);
         Boolean pastDateOverride=validatePastDate(startDate,controlReason);
         if (dailyHours == null || dailyHours <= 0) fail('Daily requested hours must be greater than zero.');
@@ -18,12 +18,13 @@ public inherited sharing class Resource360StaffingService {
 
         Engagement__c engagement = [SELECT Id, Start_Date__c, End_Date__c, Status__c FROM Engagement__c WHERE Id = :engagementId WITH USER_MODE LIMIT 1];
         if (engagement.Status__c != 'Active' || startDate < engagement.Start_Date__c || endDate > engagement.End_Date__c) fail('Requested dates must be within an active engagement.');
+        Resource360FreshnessService.requireStaffingFresh(resourceId,engagementId);
         Budget__c budget = Resource360BudgetService.currentApprovedBudget(engagementId, startDate, endDate);
-        if (classificationPolicy.Requires_Control__c) {
+        if (classificationPolicy.requiresControl) {
             if (responsibleOwnerId == null || reviewDate == null || String.isBlank(controlReason)) fail('Unbilled staffing requires a responsible owner, review date and control reason.');
             if (reviewDate < Date.today() || reviewDate > endDate) fail('Unbilled review date must be current and within the staffing range.');
         }
-        if (classificationPolicy.Requires_SOW__c) requireSow(engagementId, startDate, endDate);
+        if (classificationPolicy.requiresSow) requireSow(engagementId, startDate, endDate);
         requireNoDuplicate(engagementId,resourceId,requestedRole,classification,startDate,endDate);
         Resource360CalendarService.CapacityCheck check = Resource360CalendarService.checkCapacity(resourceId, startDate, endDate, dailyHours, null);
         if (!check.allowed) fail(check.message);
@@ -49,7 +50,7 @@ public inherited sharing class Resource360StaffingService {
     public static Resource360Service.ServiceResult decide(Id requestId, Boolean accept, String note) {
         Resource360Security.requirePermission('Resource360_Manage_Staffing', 'COE Staffer permission is required to decide staffing requests.');
         String correlation = correlationId();
-        Staffing_Request__c request = [SELECT Id, Name, Engagement__c, Resource__c, Requested_Role__c, Classification__c, Start_Date__c, End_Date__c, Daily_Hours__c, State__c, Request_Version__c, Requester__c, Budget_Signature__c, Responsible_Owner__c, Review_Date__c, Control_Reason__c FROM Staffing_Request__c WHERE Id = :requestId WITH USER_MODE LIMIT 1 FOR UPDATE];
+        Staffing_Request__c request = [SELECT Id, Name, Engagement__c, Engagement__r.Source_Last_Sync__c, Resource__c, Resource__r.Source_Last_Sync__c, Requested_Role__c, Classification__c, Start_Date__c, End_Date__c, Daily_Hours__c, State__c, Request_Version__c, Requester__c, Budget_Signature__c, Responsible_Owner__c, Review_Date__c, Control_Reason__c FROM Staffing_Request__c WHERE Id = :requestId WITH USER_MODE LIMIT 1 FOR UPDATE];
         if (request.State__c != 'Pending') fail('Only a pending staffing request can be decided.');
         if (!accept && String.isBlank(note)) fail('A decline reason is required.');
         String role = Resource360Security.decisionRole('Resource360_Manage_Staffing', 'COE Staffer');
@@ -62,6 +63,7 @@ public inherited sharing class Resource360StaffingService {
         }
 
         Budget__c budget = Resource360BudgetService.currentApprovedBudget(request.Engagement__c, request.Start_Date__c, request.End_Date__c);
+        Resource360FreshnessService.requireStaffingFresh(request.Resource__r.Source_Last_Sync__c,request.Engagement__r.Source_Last_Sync__c);
         if (budget.Economic_Signature__c != request.Budget_Signature__c) fail('The approved budget changed after request submission; resubmit the staffing request.');
         Resource360CalendarService.CapacityCheck check = Resource360CalendarService.checkCapacity(request.Resource__c, request.Start_Date__c, request.End_Date__c, request.Daily_Hours__c, null);
         if (!check.allowed) fail('Capacity changed after submission. ' + check.message);
@@ -80,17 +82,18 @@ public inherited sharing class Resource360StaffingService {
         requireDates(startDate, endDate); requireText(reason, 'A modification reason is required.');
         Boolean pastDateOverride=validatePastDate(startDate,reason);
         String correlation = correlationId();
-        Allocation__c prior = [SELECT Id, Originating_Request__c, Resource__c, Engagement__c, Role__c, Classification__c, Billable_Snapshot__c, Start_Date__c, End_Date__c, Daily_Hours__c, State__c, Version__c, Current__c, Responsible_Owner__c, Review_Date__c, Control_Reason__c FROM Allocation__c WHERE Id=:allocationId WITH USER_MODE LIMIT 1 FOR UPDATE];
+        Allocation__c prior = [SELECT Id, Originating_Request__c, Resource__c, Resource__r.Source_Last_Sync__c, Engagement__c, Engagement__r.Source_Last_Sync__c, Role__c, Classification__c, Billable_Snapshot__c, Start_Date__c, End_Date__c, Daily_Hours__c, State__c, Version__c, Current__c, Responsible_Owner__c, Review_Date__c, Control_Reason__c FROM Allocation__c WHERE Id=:allocationId WITH USER_MODE LIMIT 1 FOR UPDATE];
         if (!prior.Current__c || prior.State__c != 'Accepted') fail('Only a current accepted allocation can be modified.');
         Resource360BudgetService.currentApprovedBudget(prior.Engagement__c, startDate, endDate);
+        Resource360FreshnessService.requireStaffingFresh(prior.Resource__r.Source_Last_Sync__c,prior.Engagement__r.Source_Last_Sync__c);
         Resource360CalendarService.CapacityCheck check = Resource360CalendarService.checkCapacity(prior.Resource__c, startDate, endDate, dailyHours, prior.Id);
         if (!check.allowed) fail(check.message);
         String nextClassification = String.isBlank(classification) ? prior.Classification__c : classification;String nextRole=String.isBlank(roleName)?prior.Role__c:Resource360RoleCatalog.requireActive(roleName);
-        R360_Classification__mdt nextPolicy=Resource360Classification.requireActive(nextClassification);
-        if (nextPolicy.Requires_Control__c && (responsibleOwnerId == null || reviewDate == null || String.isBlank(reason))) fail('The selected classification requires owner, review date and reason.');
-        if(nextPolicy.Requires_SOW__c)requireSow(prior.Engagement__c,startDate,endDate);
+        Resource360Classification.ClassificationPolicy nextPolicy=Resource360Classification.requireActive(nextClassification);
+        if (nextPolicy.requiresControl && (responsibleOwnerId == null || reviewDate == null || String.isBlank(reason))) fail('The selected classification requires owner, review date and reason.');
+        if(nextPolicy.requiresSow)requireSow(prior.Engagement__c,startDate,endDate);
         prior.Current__c=false; prior.State__c='Superseded'; update prior;
-        Allocation__c next = new Allocation__c(Parent_Allocation__c=prior.Id, Originating_Request__c=prior.Originating_Request__c, Resource__c=prior.Resource__c, Engagement__c=prior.Engagement__c, Role__c=nextRole, Classification__c=nextClassification, Billable_Snapshot__c=nextPolicy.Billable__c, Start_Date__c=startDate, End_Date__c=endDate, Daily_Hours__c=dailyHours, State__c='Accepted', Version__c=prior.Version__c+1, Current__c=true, Responsible_Owner__c=responsibleOwnerId, Review_Date__c=reviewDate, Control_Reason__c=reason);
+        Allocation__c next = new Allocation__c(Parent_Allocation__c=prior.Id, Originating_Request__c=prior.Originating_Request__c, Resource__c=prior.Resource__c, Engagement__c=prior.Engagement__c, Role__c=nextRole, Classification__c=nextClassification, Billable_Snapshot__c=nextPolicy.billable, Start_Date__c=startDate, End_Date__c=endDate, Daily_Hours__c=dailyHours, State__c='Accepted', Version__c=prior.Version__c+1, Current__c=true, Responsible_Owner__c=responsibleOwnerId, Review_Date__c=reviewDate, Control_Reason__c=reason);
         insert next;
         recordEvent(correlation, 'ALLOCATION_VERSION_CREATED', next.Id, next.Version__c, pastDateOverride?'PAST_DATE_OVERRIDE':'EFFECTIVE_DATED_CHANGE', reason, 'Accepted v'+prior.Version__c, 'Accepted v'+next.Version__c);
         return result(true, 'Allocation version created.', next.Id, correlation);

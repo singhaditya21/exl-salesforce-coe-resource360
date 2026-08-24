@@ -45,9 +45,10 @@ describe("explainable candidate fit", () => {
 
 describe("sanitized fixture integrity", () => {
   it("ships every connected demo aggregate with a versioned state", () => {
-    expect(initialDemoState.version).toBe(2);
+    expect(initialDemoState.version).toBe(3);
     expect(initialDemoState.budgets.length).toBeGreaterThan(0);
     expect(initialDemoState.people.length).toBeGreaterThan(0);
+    expect(initialDemoState.configurations.some((item) => item.code === "People_Freshness_Block_Hours" && item.state === "Active")).toBe(true);
     expect(initialDemoState.allocations.length).toBeGreaterThan(0);
     expect(initialDemoState.timesheets.length).toBeGreaterThan(0);
     expect(initialDemoState.audit.length).toBeGreaterThan(0);

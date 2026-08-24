@@ -35,7 +35,7 @@ public inherited sharing class Resource360BulkService {
     @AuraEnabled(cacheable=true)
     public static BulkPreview preview(String entityType,String jsonRows){
         Resource360Security.requirePermission('Resource360_Manage_Bulk_Operations','Bulk-operation permission is required.');
-        String normalized=normalize(entityType);List<Object> rows=parse(jsonRows);if(rows.size()>200)fail('Interactive bulk validation is limited to 200 rows per batch.');
+        String normalized=normalize(entityType);List<Object> rows=parse(jsonRows);Integer maximumRows=Integer.valueOf(Resource360Policy.numberValue('Bulk_Max_Rows',200));if(rows.size()>maximumRows)fail('Interactive bulk validation is limited to the configured '+maximumRows+' rows per batch.');
         BulkPreview result=new BulkPreview();result.entityType=canonical(normalized);result.totalRows=rows.size();result.validRows=0;result.invalidRows=0;result.rows=new List<RowResult>();result.fileHash=hash(jsonRows);Set<String>seen=new Set<String>();
         for(Integer index=0;index<rows.size();index++){
             RowResult rowResult=new RowResult();rowResult.rowNumber=index+1;List<String>errors=new List<String>();Map<String,Object> row;

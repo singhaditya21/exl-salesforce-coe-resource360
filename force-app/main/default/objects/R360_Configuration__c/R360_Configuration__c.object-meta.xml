@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Versioned, effective-dated Resource360 runtime configuration overrides. Secrets are prohibited.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <externalSharingModel>Private</externalSharingModel>
+    <label>Resource 360 Configuration</label>
+    <nameField><displayFormat>CFG-{00000}</displayFormat><label>Configuration Number</label><type>AutoNumber</type></nameField>
+    <pluralLabel>Resource 360 Configurations</pluralLabel>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

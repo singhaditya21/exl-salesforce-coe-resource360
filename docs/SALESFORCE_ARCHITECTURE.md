@@ -5,10 +5,10 @@
 | Layer | Implementation | Responsibility |
 |---|---|---|
 | Experience | Lightning app `Resource360`; LWC `resource360Workspace` | Role-aware EXL shell, 103-screen routes/contracts, commands and record drill-down |
-| Domain services | 25 Apex application classes, including `Resource360Service`, `Resource360PlanningService` and `Resource360BulkService` | User-mode access, locking, business gates, capacity planning, decisions, analytics, integration, notifications and audit |
+| Domain services | 28 Apex application classes, including `Resource360Service`, `Resource360ConfigurationService`, `Resource360FreshnessService`, `Resource360PlanningService` and `Resource360BulkService` | User-mode access, locking, business gates, capacity/freshness planning, governed runtime configuration, decisions, analytics, integration, notifications and audit |
 | Demo bootstrap | `Resource360DemoData` Apex | Idempotent fictional records for the Developer Edition demo |
-| Data | 26 custom record objects, three custom-metadata types and one platform event | Engagement, economics, staffing, capability, allocation, time, configuration, operations and evidence |
-| Policy | 44 metadata records, validation/formulas, guard triggers and role permission groups | Effective thresholds, classifications, delivery roles, lifecycle controls, margin calculation and access |
+| Data | 27 custom record objects, three custom-metadata types and one platform event | Engagement, economics, staffing, capability, allocation, time, runtime configuration, operations and evidence |
+| Policy | 103 governed defaults plus effective-dated runtime overrides, validation/formulas, guard triggers and role permission groups | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation and access |
 | Analytics | `Resource360AnalyticsService` and five custom report types | Scoped KPI populations/definitions/cutoffs and Salesforce report-builder access |
 | Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
 
@@ -21,7 +21,7 @@
 | People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c` |
 | Staffing and allocation | `Staffing_Request__c`, `Allocation__c` |
 | Time | `Timesheet__c`, `Time_Entry__c` |
-| Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt` |
+| Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt` |
 | Operations and evidence | `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
 
 Relationships preserve decision lineage: accepted staffing creates a versioned current allocation; only eligible accepted allocation periods receive time; budgets and approval decisions remain versioned; capability/credential/project evidence remains attributable to source and reviewer.
@@ -32,12 +32,14 @@ Relationships preserve decision lineage: accepted staffing creates a versioned c
 2. A Staffer decision locks/revalidates the request and creates allocation only on acceptance.
 3. Newly impossible competing requests close with `CAPACITY_CONSUMED`, audit and notification; feasible demand stays pending.
 4. Budget economics reconcile to WBS and route at ≥30%, 25%, 20% and below-20% thresholds through immutable sequential decisions with separation of duties.
-5. Talent filter/rank uses policy v1 weights 35/20/15/10/10/10; mandatory capability, credential, employment, scope and availability gates cannot be compensated.
+5. Talent filter/rank starts with governed weights 35/20/15/10/10/10 under `R360-POLICY-2.0`; active non-zero weights are normalized to 100, while mandatory capability, credential, employment, scope and availability gates cannot be compensated.
 6. Skill and credential evidence follows ownership/reviewer/verification controls and blocks self-approval.
 7. Time uses accepted allocation/date/role and aggregate calendar capacity; approved rows are immutable and corrections create new lineage.
 8. Submitted time escalates after five days and auto-approves after seven only when no allocation, compliance or financial exception exists.
 9. Every material transition writes minimized immutable audit evidence and a durable post-commit outbox event.
 10. Interactive bulk ingestion is permission-gated, pre-validates up to 200 JSON rows, supports declared atomic/partial commit, prevents content replay with SHA-256 identity and exposes downloadable exact row errors without retaining raw payloads.
+11. People and Engagement freshness fail staffing closed, Commercial freshness fails budget submission closed, and all thresholds are effective-dated governed configuration.
+12. Unbilled allocations follow configurable machine-readable escalation tiers; notifications are idempotent by allocation and threshold.
 
 ## Source-system contract
 
@@ -47,10 +49,11 @@ For the demo, EXL People Master, engagement/commercial, learning, credential, ca
 
 ## Security and operations
 
-- `with/inherited sharing`, user-mode SOQL, field sanitization, eleven permission sets, eight role groups, 14 custom permissions, effective role scopes, Apex-managed shares, validation and immutable decisions form the control baseline.
+- `with/inherited sharing`, user-mode SOQL, field sanitization, twelve permission sets, nine role groups, 15 custom permissions, effective role scopes, Apex-managed shares, validation and immutable decisions form the control baseline.
 - The administrator is break-glass. Normal users compose Practitioner, Project Manager, Reporting Manager, COE Staffer, Budget Approver, Capability Administrator, Operations and Audit groups.
 - Material object changes have native field history; immutable audit records add correlation, actor, active role, before/after summaries and hashes.
 - Hourly operations process staffing expiry, credential state, timesheet escalation/auto-approval, outbox publication and notification delivery.
+- Configuration operators draft/preview/submit; independent configuration approvers activate/rollback and apply the governed cron. See `CONFIGURATION_CONTROL_MATRIX.md` for the full boundary.
 - GitHub Pages never receives Salesforce authentication or business records.
 
 ## Implemented versus activation-dependent

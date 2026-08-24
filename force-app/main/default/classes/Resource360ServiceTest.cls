@@ -221,6 +221,7 @@ private class Resource360ServiceTest {
         pending.SLA_Due__c=System.now().addMinutes(-1);update pending;
         Resource__c owner=[SELECT Id FROM Resource__c WHERE Employee_ID__c='EXL-018462'];
         insert new Credential__c(Resource__c=owner.Id,Credential_ID__c='TEST-EXPIRED-001',Credential_Name__c='Expired Certification',Issuer__c='Salesforce',State__c='Verified',Issue_Date__c=Date.today().addYears(-2),Expiry_Date__c=Date.today().addDays(-1));
+        Engagement__c engagement=[SELECT Id FROM Engagement__c WHERE Engagement_ID__c='ENG-1001'];Allocation__c unbilled=new Allocation__c(Originating_Request__c=pending.Id,Resource__c=owner.Id,Engagement__c=engagement.Id,Role__c='Salesforce Architect',Classification__c='IFB/PO Awaited',Billable_Snapshot__c=false,Start_Date__c=Date.today().addDays(-15),End_Date__c=Date.today().addDays(30),Daily_Hours__c=1,State__c='Accepted',Version__c=1,Current__c=true,Responsible_Owner__c=UserInfo.getUserId(),Review_Date__c=Date.today().addDays(1),Control_Reason__c='Test effective-dated escalation.');insert unbilled;
 
         Test.startTest();
         new Resource360OperationsScheduler().execute(null);
@@ -228,16 +229,20 @@ private class Resource360ServiceTest {
         System.assertEquals('Expired',[SELECT State__c FROM Staffing_Request__c WHERE Id=:pending.Id].State__c);
         System.assertEquals('Expired',[SELECT State__c FROM Credential__c WHERE Credential_ID__c='TEST-EXPIRED-001'].State__c);
         System.assert([SELECT COUNT() FROM R360_Integration_Run__c WHERE Entity_Type__c='Operational Controls' AND State__c='Succeeded']>0);
+        String escalationCorrelation='UNBILLED-'+unbilled.Id+'-14';System.assertEquals(1,[SELECT COUNT() FROM R360_Outbox_Event__c WHERE Correlation_ID__c=:escalationCorrelation AND Event_Type__c='NOTIFICATION_REQUESTED']);
+    }
 
+    @IsTest
+    static void talentWorkspaceAndSharingAreOperational(){
         Capability__c capability=[SELECT Id FROM Capability__c WHERE Capability_ID__c='CAP-DATA-CLOUD'];
         List<Resource360TalentService.Candidate> candidates=Resource360TalentService.searchCandidates(capability.Id,4,'Data Cloud Architect',Date.today(),Date.today().addDays(5),2,'Data & AI','Bengaluru',10);
-        System.assert(!candidates.isEmpty());System.assert(candidates[0].explanation.contains('fit policy v1'));
+        System.assert(!candidates.isEmpty());System.assert(candidates[0].explanation.contains('R360-POLICY-2.0'));
         String criteria=JSON.serialize(new Map<String,Object>{'mode'=>'rank','startDate'=>Date.today(),'endDate'=>Date.today().addDays(5),'dailyHours'=>2,'requestedRole'=>'Data Cloud Architect','industry'=>'Retail','minimumExperience'=>3,'preferredCredentials'=>new List<String>{'Data Cloud'},'capabilityRequirements'=>new List<Object>{new Map<String,Object>{'capabilityId'=>capability.Id,'minimumLevel'=>4,'mandatory'=>true}}});
         List<Resource360TalentService.Candidate>ranked=Resource360TalentService.searchCandidatesV2(criteria);System.assert(!ranked.isEmpty());System.assert(ranked[0].score>0);System.assert(ranked[0].eligible);
         String workspace=Resource360Service.getWorkspaceData();
         System.assert(workspace.contains('activeRoles'));System.assert(workspace.contains('integrationRuns'));System.assert(workspace.contains('integrationErrors'));System.assert(workspace.contains('utilizationPercent'));
         System.assert(workspace.contains('deliveryRoles'));System.assert(workspace.contains('learningAchievements'));System.assert(workspace.contains('projectEvidence'));
-        Resource360ScopeSharingService.rebuildUser(UserInfo.getUserId());
+        Test.startTest();Resource360ScopeSharingService.rebuildUser(UserInfo.getUserId());Test.stopTest();
     }
 
     @IsTest
@@ -371,6 +376,75 @@ private class Resource360ServiceTest {
         System.assertEquals('Succeeded',run.State__c);System.assertEquals(1,run.Processed_Count__c);System.assertEquals('employees.csv',run.Source_File_Name__c);System.assertEquals('Partial',run.Commit_Mode__c);System.assertEquals(64,run.Source_File_Hash__c.length());
         Resource360Service.ServiceResult replay=Resource360BulkService.executeBatch('Employee',mixedRows,'employees.csv','Partial');System.assertEquals(run.Id,replay.recordId);System.assertEquals(1,[SELECT COUNT() FROM R360_Integration_Run__c WHERE Run_ID__c=:run.Run_ID__c]);
         Resource360BulkService.BulkPreview unsafe=Resource360BulkService.preview('Capability','[{"capabilityId":"BULK-CAP-001","name":"=HYPERLINK(1)","type":"Salesforce"}]');System.assertEquals(false,unsafe.valid);System.assert(unsafe.rows[0].message.contains('Formula-like'));
+    }
+
+    @IsTest
+    static void configurationControlPlaneVersionsValidatesAndRollsBack(){
+        Date today=Resource360Policy.effectiveDate();
+        Profile adminProfile=[SELECT Id FROM Profile WHERE Name='System Administrator'];User configApprover=testUser(adminProfile.Id,'cfgappr');insert configApprover;Id configApproverSet=[SELECT Id FROM PermissionSet WHERE Name='Resource360_Configuration_Approver'].Id;insert new PermissionSetAssignment(AssigneeId=configApprover.Id,PermissionSetId=configApproverSet);
+        Resource360ConfigurationService.ConfigurationPreview weightPreview=Resource360ConfigurationService.preview('Policy','Talent_Weight_Capability','Capability score weight','Number',40,null,false,null,'percent',today,null,'Tune explainable matching based on approved COE evidence.');
+        System.assert(weightPreview.valid);System.assert(!weightPreview.warnings.isEmpty(),'A non-100 aggregate should be normalized with an explicit warning.');
+        Resource360ConfigurationService.ConfigurationPreview unsafe=Resource360ConfigurationService.preview('Integration','Unregistered_Connector','Unsafe connector','Text',null,'client_secret=forbidden',false,null,null,today,null,'Negative security test.');
+        System.assertEquals(false,unsafe.valid);System.assert(String.join(unsafe.errors,' ').contains('prohibited'));
+
+        Resource360Service.ServiceResult first=Resource360ConfigurationService.saveDraft(null,'Policy','Staffing_Expiry_Hours','Staffing expiry','Number',96,null,false,null,'hours',today,null,'Approved EXL Salesforce COE staffing SLA change.');
+        Resource360ConfigurationService.submit(first.recordId);Boolean selfApprovalBlocked=false;try{Resource360ConfigurationService.decide(first.recordId,true,'Invalid self approval.');}catch(AuraHandledException expected){selfApprovalBlocked=true;}System.assert(selfApprovalBlocked,'Configuration activation requires a different identity.');System.runAs(configApprover){Resource360ConfigurationService.decide(first.recordId,true,'Control owner approval.');}Resource360ConfigurationService.clearCache();
+        System.assertEquals(96,Resource360Policy.numberValue('Staffing_Expiry_Hours',72));
+        Resource360Service.ServiceResult second=Resource360ConfigurationService.saveDraft(null,'Policy','Staffing_Expiry_Hours','Staffing expiry','Number',120,null,false,null,'hours',today,null,'Second governed SLA version.');
+        Resource360ConfigurationService.submit(second.recordId);System.runAs(configApprover){Resource360ConfigurationService.decide(second.recordId,true,'Second control owner approval.');}Resource360ConfigurationService.clearCache();
+        System.assertEquals(120,Resource360Policy.numberValue('Staffing_Expiry_Hours',72));
+        System.runAs(configApprover){Resource360ConfigurationService.rollback(first.recordId,'Operational evidence requires the prior 96-hour SLA.');}Resource360ConfigurationService.clearCache();
+        List<R360_Configuration__c> restored=[SELECT State__c,Current__c,Version__c,Value_Type__c,Numeric_Value__c,Effective_From__c,Effective_To__c FROM R360_Configuration__c WHERE Configuration_Key__c='POLICY.Staffing_Expiry_Hours' ORDER BY Version__c DESC];System.assertEquals(3,restored.size(),'Rollback must create a third version.');System.assertEquals('Active',restored[0].State__c,'Newest rollback version must be active.');System.assertEquals(96,restored[0].Numeric_Value__c,'Rollback must copy the selected prior numeric value.');System.assert(restored[0].Effective_From__c<=Resource360Policy.effectiveDate(),'Rollback version must be effective now.');
+        System.assertEquals(96,Resource360Policy.numberValue('Staffing_Expiry_Hours',72));
+        System.assertEquals(3,[SELECT COUNT() FROM R360_Configuration__c WHERE Configuration_Key__c='POLICY.Staffing_Expiry_Hours']);
+
+        Resource360Service.ServiceResult lov=Resource360ConfigurationService.saveDraft(null,'General LOV','Hypercare','Hypercare','Boolean',null,null,true,'{"listKey":"Budget_Phases"}',null,today,null,'Add a controlled delivery phase.');
+        Resource360ConfigurationService.submit(lov.recordId);System.runAs(configApprover){Resource360ConfigurationService.decide(lov.recordId,true,'Phase governance approved.');}Resource360ConfigurationService.clearCache();
+        System.assert(Resource360ConfigurationService.lookupValues('Budget_Phases',new List<String>{'Deliver'}).contains('Hypercare'));
+        Resource360Service.ServiceResult role=Resource360ConfigurationService.saveDraft(null,'Delivery Role','R360-ROLE-CPQ','Revenue Cloud Architect','Boolean',null,null,true,'{"tower":"Revenue Cloud"}',null,today,null,'Add a governed Salesforce delivery role.');
+        Resource360ConfigurationService.submit(role.recordId);System.runAs(configApprover){Resource360ConfigurationService.decide(role.recordId,true,'COE taxonomy owner approved.');}Resource360ConfigurationService.clearCache();
+        System.assertEquals('Revenue Cloud Architect',Resource360RoleCatalog.requireActive('R360-ROLE-CPQ'));
+        Resource360Service.ServiceResult classification=Resource360ConfigurationService.saveDraft(null,'Classification','Innovation Lab','Innovation Lab','Boolean',null,null,true,'{"billable":false,"requiresControl":true,"requiresSow":false,"defaultReviewDays":21,"escalationPolicy":"Operations day 21"}',null,today,null,'Add controlled innovation classification.');
+        Resource360ConfigurationService.submit(classification.recordId);System.runAs(configApprover){Resource360ConfigurationService.decide(classification.recordId,true,'Classification owner approved.');}Resource360ConfigurationService.clearCache();
+        System.assert(Resource360Classification.requiresControl('Innovation Lab'));System.assertEquals(false,Resource360Classification.isBillable('Innovation Lab'));
+        System.assert(Resource360ConfigurationService.catalog().size()>53);
+    }
+
+    @IsTest
+    static void sourceFreshnessPoliciesFailClosedAtBusinessDecisions(){
+        Resource__c resource=[SELECT Id,Source_Last_Sync__c FROM Resource__c WHERE Employee_ID__c='EXL-019830'];
+        Engagement__c engagement=[SELECT Id,Source_Last_Sync__c FROM Engagement__c WHERE Engagement_ID__c='ENG-1001'];
+        resource.Source_Last_Sync__c=System.now().addHours(-25);update resource;
+        Boolean peopleBlocked=false;try{
+            Resource360Service.createStaffingRequest(engagement.Id,resource.Id,'MuleSoft Developer','Billing',nextMonday(Date.today().addDays(1)),nextMonday(Date.today().addDays(1)).addDays(4),2,'TEST-STALE-PEOPLE');
+        }catch(AuraHandledException expected){peopleBlocked=true;}System.assert(peopleBlocked,'Staffing must fail closed when People Master exceeds the configured threshold.');
+        resource.Source_Last_Sync__c=System.now();update resource;
+        engagement.Source_Last_Sync__c=System.now().addHours(-5);update engagement;
+        Boolean engagementBlocked=false;try{
+            Resource360Service.createStaffingRequest(engagement.Id,resource.Id,'MuleSoft Developer','Billing',nextMonday(Date.today().addDays(1)),nextMonday(Date.today().addDays(1)).addDays(4),2,'TEST-STALE-ENGAGEMENT');
+        }catch(AuraHandledException expected){engagementBlocked=true;}System.assert(engagementBlocked,'Staffing must fail closed when Engagement Master exceeds the configured threshold.');
+
+        Commercial_Reference__c commercial=[SELECT Id,Source_Last_Sync__c FROM Commercial_Reference__c WHERE Engagement__c=:engagement.Id LIMIT 1];
+        commercial.Source_Last_Sync__c=System.now().addHours(-25);update commercial;
+        Budget__c source=[SELECT Id FROM Budget__c WHERE Idempotency_Key__c='DEMO-BUDGET-1001'];
+        Id draftId=Resource360Service.createBudgetVersion(source.Id).recordId;
+        Boolean commercialBlocked=false;try{Resource360Service.submitBudget(draftId);}catch(AuraHandledException expected){commercialBlocked=true;}System.assert(commercialBlocked,'Budget submission must fail closed when Commercial Master exceeds the configured threshold.');
+        Map<String,Object> thresholds=Resource360FreshnessService.configuredThresholds();System.assertEquals(24,thresholds.get('peopleBlockHours'));System.assertEquals(168,thresholds.get('learningDisableHours'));
+        System.assertEquals('Unavailable',Resource360FreshnessService.status('Test',null,8,24).state);
+        System.assertEquals('Fresh',Resource360FreshnessService.status('Test',System.now(),8,24).state);
+        System.assertEquals('Stale',Resource360FreshnessService.status('Test',System.now().addHours(-9),8,24).state);
+        System.assertEquals('Blocked',Resource360FreshnessService.status('Test',System.now().addHours(-25),8,24).state);
+    }
+
+    @IsTest
+    static void correctedTimeEnforcesConfigurableDualControl(){
+        Profile adminProfile=[SELECT Id FROM Profile WHERE Name='System Administrator'];User firstApprover=testUser(adminProfile.Id,'timeone');User secondApprover=testUser(adminProfile.Id,'timetwo');insert new List<User>{firstApprover,secondApprover};Id adminPermissionSetId=[SELECT Id FROM PermissionSet WHERE Name='Resource360_Administrator'].Id;insert new List<PermissionSetAssignment>{new PermissionSetAssignment(AssigneeId=firstApprover.Id,PermissionSetId=adminPermissionSetId),new PermissionSetAssignment(AssigneeId=secondApprover.Id,PermissionSetId=adminPermissionSetId)};
+        Staffing_Request__c pending=[SELECT Id FROM Staffing_Request__c WHERE Idempotency_Key__c='DEMO-SR-1001'];Id allocationId=Resource360Service.decideStaffingRequest(pending.Id,true,'Capacity revalidated for correction control.','ignored').recordId;Allocation__c allocation=[SELECT Id,Resource__c,Start_Date__c,End_Date__c FROM Allocation__c WHERE Id=:allocationId];Date weekStart=nextMonday(allocation.Start_Date__c);if(weekStart>allocation.End_Date__c)weekStart=mondayFor(allocation.Start_Date__c);Id sheetId=Resource360Service.createTimesheet(allocation.Resource__c,weekStart).recordId;Resource360Service.saveTimeEntry(sheetId,allocation.Id,weekStart,2,null,'Original approved entry.');Resource360Service.submitTimesheet(sheetId);Resource360Service.decideTimesheet(sheetId,true,'Original manager approval.');Id correctionId=Resource360Service.createTimeCorrection(sheetId,'Move approved time to the correct project context.').recordId;Resource360Service.submitTimesheet(correctionId);
+        Timesheet__c submitted=[SELECT Status__c,Dual_Control_Required__c,Approval_Step__c,Required_Approval_Role__c,Correction_Requested_By__c FROM Timesheet__c WHERE Id=:correctionId];System.assert(submitted.Dual_Control_Required__c);System.assertEquals(1,submitted.Approval_Step__c);System.assertEquals('Reporting Manager',submitted.Required_Approval_Role__c);System.assertEquals(UserInfo.getUserId(),submitted.Correction_Requested_By__c);
+        System.runAs(firstApprover){Resource360Service.decideTimesheet(correctionId,true,'Reporting manager correction control passed.');}
+        submitted=[SELECT Status__c,Approval_Step__c,Required_Approval_Role__c FROM Timesheet__c WHERE Id=:correctionId];System.assertEquals('Submitted',submitted.Status__c);System.assertEquals(2,submitted.Approval_Step__c);System.assertEquals('Timesheet Approver',submitted.Required_Approval_Role__c);
+        System.runAs(secondApprover){Resource360Service.decideTimesheet(correctionId,true,'Independent timesheet control passed.');}
+        System.assertEquals('Approved',[SELECT Status__c FROM Timesheet__c WHERE Id=:correctionId].Status__c);System.assertEquals(2,[SELECT COUNT() FROM R360_Approval_Decision__c WHERE Entity_Type__c='Timesheet__c' AND Entity_ID__c=:String.valueOf(correctionId) AND State__c='Approved']);
     }
 
     private static Resource360InboundApi.ApiResponse ingest(String runId,String entityType,List<Object> records){

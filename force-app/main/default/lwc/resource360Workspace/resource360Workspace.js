@@ -16,6 +16,12 @@ import saveBudgetDraft from "@salesforce/apex/Resource360Service.saveBudgetDraft
 import saveBudgetLine from "@salesforce/apex/Resource360Service.saveBudgetLine";
 import previewBulk from "@salesforce/apex/Resource360BulkService.preview";
 import commitBulk from "@salesforce/apex/Resource360BulkService.executeBatch";
+import previewConfiguration from "@salesforce/apex/Resource360ConfigurationService.preview";
+import saveConfigurationDraft from "@salesforce/apex/Resource360ConfigurationService.saveDraft";
+import submitConfiguration from "@salesforce/apex/Resource360ConfigurationService.submit";
+import decideConfiguration from "@salesforce/apex/Resource360ConfigurationService.decide";
+import rollbackConfiguration from "@salesforce/apex/Resource360ConfigurationService.rollback";
+import rescheduleOperations from "@salesforce/apex/Resource360ConfigurationService.rescheduleOperations";
 import submitSkillClaim from "@salesforce/apex/Resource360Service.submitSkillClaim";
 import decideSkillClaim from "@salesforce/apex/Resource360Service.decideSkillClaim";
 import addCredential from "@salesforce/apex/Resource360Service.addCredential";
@@ -45,6 +51,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     budgetDraft = { revenue: 0, upliftPercent: 0, effortContingencyPercent: 0, expenseContingencyPercent: 0, travelRate: 0, onsiteMonths: 0 };
     budgetLineDraft = { phase: "Deliver", workUnit: "Delivery", roleName: "Salesforce Architect", location: "India", plannedHours: 160, costRate: 1, allocationPercent: 100, onsite: false };
     bulkDraft = { entityType: "Employee", commitMode: "Partial", sourceFileName: "resource360-controlled-import.json", jsonRows: '[{"employeeId":"EXL-DEMO-9001","preferredName":"Demo Practitioner","employmentStart":"2026-01-01","tower":"Delivery","status":"Active","dailyCapacityHours":8}]' };
+    configurationDraft = { domain: "Policy", code: "Staffing_Expiry_Hours", displayLabel: "Staffing Expiry Hours", valueType: "Number", numericValue: 72, booleanValue: false, unit: "hours", reason: "Governed policy adjustment for EXL Salesforce COE operations." };
     profileResourceId;
     skillDraft = { requestedLevel: "3", yearsExperience: 3, evidence: "Sanitized delivery evidence for manager review." };
     credentialDraft = { issuer: "Salesforce", state: "Unverified" };
@@ -54,6 +61,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     talentResults = [];
     planningPreview;
     bulkPreview;
+    configurationPreview;
     decisionDraft;
 
     @wire(CurrentPageReference)
@@ -80,6 +88,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
         this.timesheetDraft = { weekStart: this.isoDate(monday) };
         this.budgetLineDraft = { ...this.budgetLineDraft, periodStart: `${this.isoDate(today).slice(0, 7)}-01` };
+        this.configurationDraft = { ...this.configurationDraft, effectiveFrom: this.isoDate(today) };
         this.loadData();
     }
 
@@ -99,6 +108,14 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     }
 
     defaultFormSelections() {
+        const effortModes = this.data.configuration?.effortModes || [];
+        if (effortModes.length && !effortModes.includes(this.planningDraft.mode)) this.planningDraft = { ...this.planningDraft, mode: effortModes[0] };
+        const phases = this.data.configuration?.budgetPhases || [];
+        const workUnits = this.data.configuration?.workUnits || [];
+        const locations = this.data.configuration?.locations || [];
+        if (phases.length && !phases.includes(this.budgetLineDraft.phase)) this.budgetLineDraft = { ...this.budgetLineDraft, phase: phases[0] };
+        if (workUnits.length && !workUnits.includes(this.budgetLineDraft.workUnit)) this.budgetLineDraft = { ...this.budgetLineDraft, workUnit: workUnits[0] };
+        if (locations.length && !locations.includes(this.budgetLineDraft.location)) this.budgetLineDraft = { ...this.budgetLineDraft, location: locations[0] };
         if (!this.staffingDraft.engagementId && this.data.engagements?.length) {
             this.staffingDraft = { ...this.staffingDraft, engagementId: this.data.engagements[0].Id };
         }
@@ -158,11 +175,12 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
 
     get summaryCards() {
         const metrics = this.data.metrics || {};
+        const targets = metrics.targets || {};
         return [
-            { label: "Active resources", value: metrics.activeHeadcount ?? 0, note: `${metrics.utilizationPercent ?? 0}% current allocation utilization` },
+            { label: "Active resources", value: metrics.activeHeadcount ?? 0, note: `${metrics.billingMixPercent ?? 0}% billed mix · target ${targets.billedUtilizationPercent ?? 75}%` },
             { label: "Pending staffing", value: metrics.pendingStaffing ?? 0, note: `${metrics.overdueStaffing ?? 0} beyond configured SLA` },
             { label: "Approved revenue", value: this.money(metrics.approvedRevenue || 0), note: `${metrics.approvedMarginPercent ?? 0}% weighted gross margin` },
-            { label: "Time approvals", value: metrics.overdueTimesheets ?? 0, note: `${metrics.approvedActualHours30Days ?? 0} approved hours · 30 days` }
+            { label: "Unbilled guardrails", value: `WAR ${metrics.warPercent ?? 0}%`, note: `target ≤${targets.warMaximumPercent ?? 10}% · IFB ${metrics.ifbPercent ?? 0}% / ≤${targets.ifbMaximumPercent ?? 2}%` }
         ];
     }
 
@@ -203,7 +221,10 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         ];
     }
 
-    get effortModeOptions() { return ["Daily Hours", "Allocation Percent", "Total Hours"].map((value) => ({ label: value, value })); }
+    get effortModeOptions() { return (this.data.configuration?.effortModes || ["Daily Hours", "Allocation Percent", "Total Hours"]).map((value) => ({ label: value, value })); }
+    get budgetPhaseOptions() { return (this.data.configuration?.budgetPhases || ["Discover","Design","Build","Test","Deploy","Deliver"]).map((value)=>({label:value,value})); }
+    get workUnitOptions() { return (this.data.configuration?.workUnits || ["Architecture","Delivery"]).map((value)=>({label:value,value})); }
+    get locationOptions() { return (this.data.configuration?.locations || ["India"]).map((value)=>({label:value,value})); }
 
     get showStaffingForm() { return this.selectedScreenId === "STFUI-01"; }
     get showPlanningPreview() { return ["STFUI-05", "STFUI-10", "STFUI-11", "STFUI-12"].includes(this.selectedScreenId); }
@@ -214,6 +235,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showBudgetLineEditor() { return ["BUDUI-03", "BUDUI-04"].includes(this.selectedScreenId); }
     get showBudgetLines() { return ["BUDUI-03", "BUDUI-04", "BUDUI-05", "BUDUI-06", "BUDUI-07"].includes(this.selectedScreenId); }
     get showBulkOperations() { return this.selectedScreenId === "ADMUI-08"; }
+    get showConfigurationConsole() { return ["ADMUI-01","ADMUI-04","ADMUI-06","ADMUI-07"].includes(this.selectedScreenId); }
     get showPractitionerProfile() { return ["SKLUI-01","SKLUI-05","SKLUI-06","SKLUI-07","SKLUI-08","SKLUI-09"].includes(this.selectedScreenId); }
     get showTalentSearch() { return ["STFUI-02", "STFUI-03", "STFUI-06", "STFUI-07", "SKLUI-16", "SKLUI-17"].includes(this.selectedScreenId); }
     get showSkillsForm() { return this.selectedScreenId === "SKLUI-10"; }
@@ -233,6 +255,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get bulkEntityOptions() { return ["Employee","Engagement","Capability","Credential","LearningAchievement","CommercialReference","OrgUnit","Portfolio"].map((value)=>({label:value.replace(/([a-z])([A-Z])/g,"$1 $2"),value})); }
     get bulkModeOptions() { return [{label:"Atomic — all rows or none",value:"Atomic"},{label:"Partial — valid rows only",value:"Partial"}]; }
     get hasBulkPreview() { return Boolean(this.bulkPreview); }
+    get bulkMaxRows() { return this.data.configuration?.bulkMaxRows || 200; }
     get bulkPreviewRows() { return this.bulkPreview?.rows || []; }
     get bulkPreviewColumns() { return [{label:"Row",fieldName:"rowNumber",type:"number"},{label:"External ID",fieldName:"externalId"},{label:"Valid",fieldName:"valid",type:"boolean"},{label:"Outcome",fieldName:"message",wrapText:true}]; }
     get bulkRunRows() { return this.data.integrationRuns || []; }
@@ -250,6 +273,23 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         return `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`;
     }
     get bulkErrorColumns() { return [{label:"Run",fieldName:"runId"},{label:"Row",fieldName:"Row_Number__c",type:"number"},{label:"External ID",fieldName:"External_Record_ID__c"},{label:"Code",fieldName:"Error_Code__c"},{label:"Exact error",fieldName:"Error_Message__c",wrapText:true},{label:"State",fieldName:"State__c"}]; }
+    get configurationDomainOptions() { return ["Policy","Delivery Role","Classification","General LOV","Approval","Escalation","Notification","Integration","KPI"].map((value)=>({label:value,value})); }
+    get configurationTypeOptions() { return ["Number","Text","Boolean","JSON"].map((value)=>({label:value,value})); }
+    get canManageConfiguration() { return Boolean(this.data.configurationCapabilities?.manage); }
+    get canApproveConfiguration() { return Boolean(this.data.configurationCapabilities?.approve); }
+    get configurationIsNumber() { return this.configurationDraft.valueType === "Number"; }
+    get configurationIsText() { return this.configurationDraft.valueType === "Text"; }
+    get configurationIsBoolean() { return this.configurationDraft.valueType === "Boolean"; }
+    get configurationRows() { return (this.data.configurationCatalog||[]).map((row)=>({...row,rowActions:this.configurationActions(row)})); }
+    get hasConfigurationRows() { return this.configurationRows.length>0; }
+    get hasConfigurationPreview() { return Boolean(this.configurationPreview); }
+    get configurationPreviewDecision() { return this.configurationPreview?.valid ? "Ready to save" : "Blocked"; }
+    get configurationPreviewClass() { return `preview-summary preview-summary_four ${this.configurationPreview?.valid ? "configuration-preview_valid" : "configuration-preview_invalid"}`; }
+    get configurationPreviewErrors() { return (this.configurationPreview?.errors||[]).join(" · "); }
+    get configurationPreviewWarnings() { return (this.configurationPreview?.warnings||[]).join(" · "); }
+    get hasConfigurationErrors() { return Boolean(this.configurationPreview?.errors?.length); }
+    get hasConfigurationWarnings() { return Boolean(this.configurationPreview?.warnings?.length); }
+    get configurationColumns() { return [{label:"Source",fieldName:"source"},{label:"Domain",fieldName:"domain"},{label:"Code",fieldName:"code"},{label:"Label",fieldName:"label"},{label:"Value",fieldName:"value",wrapText:true},{label:"State",fieldName:"state"},{label:"Version",fieldName:"version",type:"number"},{label:"Effective",fieldName:"effectiveFrom",type:"date"},{label:"Impact",fieldName:"impact",wrapText:true},{type:"action",typeAttributes:{rowActions:{fieldName:"rowActions"}}}]; }
     get selectedProfile() { return (this.data.resources||[]).find((resource)=>resource.Id===this.profileResourceId); }
     get profileFacts() { const item=this.selectedProfile;if(!item)return [];const unavailable="Unavailable from EXL source";return [{label:"Employee ID",value:item.Employee_ID__c||unavailable},{label:"Primary Salesforce role",value:item.Primary_Role__c||unavailable},{label:"Tower",value:item.Tower__c||unavailable},{label:"Grade",value:item.Grade__c||unavailable},{label:"Location",value:item.Location__c||unavailable},{label:"Time zone",value:item.Time_Zone__c||item.Work_Calendar__r?.Time_Zone__c||unavailable},{label:"Manager",value:item.Manager__r?.Preferred_Name__c||unavailable},{label:"Organization",value:item.Org_Unit_ID__c||unavailable},{label:"Work email",value:item.Work_Email__c||unavailable},{label:"Source freshness",value:item.Source_Last_Sync__c||unavailable}]; }
     get profileClaimRows() { return (this.data.skillClaims||[]).filter((row)=>row.Resource__c===this.profileResourceId).map((row)=>({...row,type:row.Capability__r?.Type__c,capability:row.Capability__r?.Name,reviewer:row.Reviewer__r?.Name,source:"Practitioner claim + manager decision"})); }
@@ -277,7 +317,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
             staffing: [this.linkColumn("Request", "label"), { label: "Engagement", fieldName: "secondary" }, { label: "Candidate", fieldName: "person" }, { label: "Role", fieldName: "detail" }, { label: "State", fieldName: "status" }, { label: "Daily hours", fieldName: "value", type: "number" }, RECORD_ACTION],
             skills: [this.linkColumn("Claim", "label"), { label: "Practitioner", fieldName: "person" }, { label: "Capability", fieldName: "secondary" }, { label: "Requested", fieldName: "value", type: "number" }, { label: "State", fieldName: "status" }, RECORD_ACTION],
             budget: [this.linkColumn("Budget", "label"), { label: "Engagement", fieldName: "secondary" }, { label: "Version", fieldName: "value", type: "number" }, { label: "State", fieldName: "status" }, { label: "Revenue", fieldName: "money", type: "currency", typeAttributes: { currencyCode: "INR" } }, { label: "Margin", fieldName: "percent", type: "percent", typeAttributes: { minimumFractionDigits: 1 } }, RECORD_ACTION],
-            timesheet: [this.linkColumn("Timesheet", "label"), { label: "Practitioner", fieldName: "person" }, { label: "Week", fieldName: "date", type: "date" }, { label: "State", fieldName: "status" }, RECORD_ACTION],
+            timesheet: [this.linkColumn("Timesheet", "label"), { label: "Practitioner", fieldName: "person" }, { label: "Week", fieldName: "date", type: "date" }, { label: "State", fieldName: "status" }, { label: "Required approval", fieldName: "secondary" }, RECORD_ACTION],
             command: [this.linkColumn("Allocation", "label"), { label: "Practitioner", fieldName: "person" }, { label: "Engagement", fieldName: "secondary" }, { label: "Classification", fieldName: "status" }, { label: "Allocation", fieldName: "percent", type: "percent" }],
             admin: [this.linkColumn("Audit event", "label"), { label: "Action", fieldName: "status" }, { label: "Entity", fieldName: "secondary" }, { label: "Actor", fieldName: "person" }, { label: "Occurred", fieldName: "date", type: "date" }, { label: "Detail", fieldName: "detail", wrapText: true }],
             ai: [this.linkColumn("Candidate", "label"), { label: "Role", fieldName: "secondary" }, { label: "Tower", fieldName: "status" }, { label: "Location", fieldName: "detail" }, { label: "Availability", fieldName: "percent", type: "percent" }]
@@ -290,7 +330,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         if (this.selectedModule === "staffing") return (this.data.staffingRequests || []).map((item) => ({ ...this.row(item, item.Name, item.Engagement__r?.Name, item.State__c, item.Requested_Role__c, item.Start_Date__c, item.Daily_Hours__c, item.Resource__r?.Preferred_Name__c), rowActions: this.staffingActions(item) }));
         if (this.selectedModule === "skills") return (this.data.skillClaims || []).map((item) => ({ ...this.row(item, item.Name, item.Capability__r?.Name, item.State__c, item.Decision_Note__c, item.Submitted_At__c, item.Requested_Level__c, item.Resource__r?.Preferred_Name__c), rowActions: this.skillActions(item) }));
         if (this.selectedModule === "budget") return (this.data.budgets || []).map((item) => ({ ...this.row(item, item.Name, item.Engagement__r?.Name, item.State__c, item.Approval_Level__c, null, item.Version__c), money: item.Revenue__c, percent: (item.Margin_Percent__c || 0) / 100, rowActions: this.budgetActions(item) }));
-        if (this.selectedModule === "timesheet") return (this.data.timesheets || []).map((item) => ({ ...this.row(item, item.Name, item.Decision_Note__c, item.Status__c, null, item.Week_Start__c, null, item.Resource__r?.Preferred_Name__c), rowActions: this.timesheetActions(item) }));
+        if (this.selectedModule === "timesheet") return (this.data.timesheets || []).map((item) => ({ ...this.row(item, item.Name, item.Required_Approval_Role__c || item.Decision_Note__c, item.Status__c, null, item.Week_Start__c, null, item.Resource__r?.Preferred_Name__c), rowActions: this.timesheetActions(item) }));
         if (this.selectedModule === "command") return (this.data.allocations || []).map((item) => ({ ...this.row(item, item.Name, item.Engagement__r?.Name, item.Classification__c, item.Role__c, item.Start_Date__c, item.Daily_Hours__c, item.Resource__r?.Preferred_Name__c), percent: (item.Allocation_Percent__c || 0) / 100 }));
         if (this.selectedModule === "admin") return (this.data.auditEvents || []).map((item) => this.row(item, item.Name, `${item.Entity_Type__c} · ${item.Entity_ID__c}`, item.Action__c, item.Detail__c, item.Occurred_At__c, item.Entity_Version__c, item.Actor__r?.Name));
         if (this.selectedModule === "ai") return (this.data.resources || []).map((item) => ({ ...this.row(item, item.Preferred_Name__c, item.Primary_Role__c, item.Tower__c, item.Location__c, null, null, null), percent: (item.Available_Percent__c || 0) / 100 }));
@@ -315,6 +355,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     skillActions(item) { return item.State__c === "Pending" ? [{ label: "Approve requested level", name: "approveClaim" }, { label: "Reject claim", name: "rejectClaim" }, { label: "Open record", name: "view" }] : [{ label: "Open record", name: "view" }]; }
     budgetActions(item) { return item.State__c === "Draft" || item.State__c === "Rejected" || item.State__c === "Invalidated" ? [{ label: "Submit budget", name: "submitBudget" }, { label: "Open record", name: "view" }] : item.State__c === "Pending Approval" ? [{ label: "Approve current step", name: "approveBudget" }, { label: "Reject budget", name: "rejectBudget" }, { label: "Open record", name: "view" }] : [{ label: "Create next version", name: "createBudgetVersion" }, { label: "Open record", name: "view" }]; }
     timesheetActions(item) { return item.Status__c === "Draft" || item.Status__c === "Rejected" ? [{ label: "Submit week", name: "submitTimesheet" }, { label: "Open record", name: "view" }] : item.Status__c === "Submitted" ? [{ label: "Approve week", name: "approveTimesheet" }, { label: "Reject week", name: "rejectTimesheet" }, { label: "Open record", name: "view" }] : [{ label: "Create correction", name: "correctTimesheet" }, { label: "Open record", name: "view" }]; }
+    configurationActions(item) { if(item.source==="Deployed Default")return this.canManageConfiguration?[{label:"Create runtime override",name:"override"}]:[];if(["Draft","Rejected"].includes(item.state))return this.canManageConfiguration?[{label:"Edit draft",name:"edit"},{label:"Submit for approval",name:"submit"}]:[];if(item.state==="Pending Approval")return this.canApproveConfiguration?[{label:"Approve and activate",name:"approve"},{label:"Reject",name:"reject"}]:[];return this.canApproveConfiguration?[{label:"Restore as new version",name:"rollback"}]:[]; }
 
     handleModule(event) {
         this.selectedModule = event.currentTarget.dataset.module;
@@ -332,6 +373,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     handleBudgetInput(event) { this.budgetDraft = { ...this.budgetDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; if (event.target.dataset.field === "budgetId") this.selectBudget((this.data.budgets || []).find((item) => item.Id === event.detail.value)); }
     handleBudgetLineInput(event) { const value = event.target.type === "checkbox" ? event.target.checked : event.detail?.value ?? event.target.value; this.budgetLineDraft = { ...this.budgetLineDraft, [event.target.dataset.field]: value }; }
     handleBulkInput(event) { this.bulkDraft = { ...this.bulkDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
+    handleConfigurationInput(event) { const value=event.target.type==="checkbox"?event.target.checked:event.detail?.value??event.target.value;this.configurationDraft={...this.configurationDraft,[event.target.dataset.field]:value}; }
     handleProfileInput(event) { this.profileResourceId = event.detail.value; }
     handleSkillInput(event) { this.skillDraft = { ...this.skillDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleCredentialInput(event) { this.credentialDraft = { ...this.credentialDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
@@ -368,6 +410,10 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     async handleSaveBudgetLine() { const draft=this.budgetLineDraft;await this.execute("Save WBS line",()=>saveBudgetLine({ budgetId:this.budgetDraft.budgetId,lineId:draft.lineId||null,periodStart:draft.periodStart,phase:draft.phase,workUnit:draft.workUnit,roleName:draft.roleName,location:draft.location,plannedHours:Number(draft.plannedHours),costRate:Number(draft.costRate),allocationPercent:Number(draft.allocationPercent),onsite:Boolean(draft.onsite) })); }
     async handlePreviewBulk() { const draft=this.bulkDraft;this.loading=true;try{this.bulkPreview=await previewBulk({entityType:draft.entityType,jsonRows:draft.jsonRows});}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Bulk pre-validation",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
     async handleCommitBulk() { const draft=this.bulkDraft;await this.execute("Commit controlled batch",()=>commitBulk({entityType:draft.entityType,jsonRows:draft.jsonRows,sourceFileName:draft.sourceFileName,commitMode:draft.commitMode})); }
+    async handlePreviewConfiguration() { const draft=this.configurationDraft;this.loading=true;try{this.configurationPreview=await previewConfiguration({domain:draft.domain,code:draft.code,displayLabel:draft.displayLabel,valueType:draft.valueType,numericValue:draft.numericValue===undefined||draft.numericValue===""?null:Number(draft.numericValue),textValue:draft.textValue||null,booleanValue:Boolean(draft.booleanValue),attributesJson:draft.attributesJson||null,unit:draft.unit||null,effectiveFrom:draft.effectiveFrom,effectiveTo:draft.effectiveTo||null,reason:draft.reason});}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Configuration preview",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
+    async handleSaveConfiguration() { const draft=this.configurationDraft;await this.execute("Save configuration draft",()=>saveConfigurationDraft({settingId:draft.settingId||null,domain:draft.domain,code:draft.code,displayLabel:draft.displayLabel,valueType:draft.valueType,numericValue:draft.numericValue===undefined||draft.numericValue===""?null:Number(draft.numericValue),textValue:draft.textValue||null,booleanValue:Boolean(draft.booleanValue),attributesJson:draft.attributesJson||null,unit:draft.unit||null,effectiveFrom:draft.effectiveFrom,effectiveTo:draft.effectiveTo||null,reason:draft.reason}));this.configurationPreview=undefined; }
+    async handleRescheduleOperations() { await this.execute("Apply operations schedule",()=>rescheduleOperations()); }
+    async handleConfigurationAction(event) { const {action,row}=event.detail;if(action.name==="override"||action.name==="edit"){const numberValue=row.valueType==="Number"?Number(row.value):undefined;this.configurationDraft={settingId:action.name==="edit"?row.id:null,domain:row.domain,code:row.code,displayLabel:row.label,valueType:row.valueType,numericValue:numberValue,textValue:row.valueType==="Text"?row.value:undefined,booleanValue:row.valueType==="Boolean"&&row.value==="true",attributesJson:row.valueType==="JSON"?row.value:undefined,unit:row.unit,effectiveFrom:action.name==="edit"&&row.effectiveFrom?row.effectiveFrom:this.isoDate(new Date()),effectiveTo:action.name==="edit"?row.effectiveTo:undefined,reason:`${action.name==="edit"?"Edit":"Override"} ${row.key} with reviewed EXL control evidence.`};this.configurationPreview=undefined;return;}if(action.name==="submit")return this.execute("Submit configuration",()=>submitConfiguration({settingId:row.id}));if(action.name==="approve")return this.execute("Activate configuration",()=>decideConfiguration({settingId:row.id,approve:true,note:this.configurationDraft.reason||"Validated configuration activation."}));if(action.name==="reject")return this.execute("Reject configuration",()=>decideConfiguration({settingId:row.id,approve:false,note:this.configurationDraft.reason||"Configuration requires correction."}));if(action.name==="rollback")return this.execute("Restore configuration",()=>rollbackConfiguration({priorSettingId:row.id,reason:this.configurationDraft.reason||"Controlled rollback from administration console."})); }
 
     async handleSubmitClaim() {
         const draft = this.skillDraft;

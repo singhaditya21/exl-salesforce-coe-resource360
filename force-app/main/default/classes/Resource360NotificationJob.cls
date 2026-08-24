@@ -27,8 +27,8 @@ public without sharing class Resource360NotificationJob implements Queueable {
         } catch (Exception failure) {
             outbox.Attempt_Count__c = (outbox.Attempt_Count__c == null ? 0 : outbox.Attempt_Count__c) + 1;
             outbox.Last_Error__c = truncate(failure.getMessage(), 2000);
-            outbox.State__c = outbox.Attempt_Count__c >= 3 ? 'Dead Letter' : 'Retry Pending';
-            outbox.Next_Attempt_At__c = outbox.State__c == 'Retry Pending' ? System.now().addMinutes(5) : null;
+            Integer attempts=Integer.valueOf(outbox.Attempt_Count__c);Integer maximumAttempts=Integer.valueOf(Resource360Policy.numberValue('Outbox_Max_Attempts',3));outbox.State__c = attempts >= maximumAttempts ? 'Dead Letter' : 'Retry Pending';
+            List<String>delays=Resource360Policy.listValue('Outbox_Retry_Minutes',new List<String>{'1','5','30'});Integer delayIndex=Math.min(Math.max(attempts-1,0),delays.size()-1);outbox.Next_Attempt_At__c = outbox.State__c == 'Retry Pending' ? System.now().addMinutes(Integer.valueOf(delays[delayIndex])) : null;
         }
         update outbox;
     }

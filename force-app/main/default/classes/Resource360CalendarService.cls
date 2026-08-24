@@ -28,7 +28,7 @@ public inherited sharing class Resource360CalendarService {
             throw new AuraHandledException('Provide a resource, inclusive dates and positive daily hours.');
         }
         Integer rangeDays = startDate.daysBetween(endDate) + 1;
-        if (rangeDays > 1100) throw new AuraHandledException('A capacity check cannot exceed 36 months.');
+        Integer maximumRange=Integer.valueOf(Resource360Policy.numberValue('Capacity_Max_Range_Days',1100));if (rangeDays > maximumRange) throw new AuraHandledException('A capacity check cannot exceed the configured '+maximumRange+'-day range.');
 
         Resource__c resource = [
             SELECT Id, Status__c, Employment_Start__c, Employment_End__c, Daily_Capacity_Hours__c,
@@ -106,7 +106,7 @@ public inherited sharing class Resource360CalendarService {
 
     public static List<CapacityDay> capacityProfile(Id resourceId,Date startDate,Date endDate){
         if(resourceId==null||startDate==null||endDate==null||endDate<startDate)throw new AuraHandledException('Provide a resource and valid inclusive date range.');
-        Integer rangeDays=startDate.daysBetween(endDate)+1;if(rangeDays>366)throw new AuraHandledException('Interactive capacity preview cannot exceed 366 days.');
+        Integer rangeDays=startDate.daysBetween(endDate)+1;Integer maximumRange=Integer.valueOf(Resource360Policy.numberValue('Planning_Preview_Max_Days',366));if(rangeDays>maximumRange)throw new AuraHandledException('Interactive capacity preview cannot exceed the configured '+maximumRange+' days.');
         Resource__c resource=[SELECT Id,Daily_Capacity_Hours__c,Work_Calendar__c,Work_Calendar__r.Work_Days__c,Work_Calendar__r.Daily_Capacity_Hours__c,Work_Calendar__r.Effective_From__c,Work_Calendar__r.Effective_To__c,Work_Calendar__r.Current__c FROM Resource__c WHERE Id=:resourceId WITH USER_MODE LIMIT 1];
         Map<Date,Decimal>exceptions=new Map<Date,Decimal>();Map<Date,String>reasons=new Map<Date,String>();
         if(resource.Work_Calendar__c!=null)for(R360_Calendar_Exception__c exceptionRecord:[SELECT Exception_Date__c,Capacity_Hours__c,Reason__c FROM R360_Calendar_Exception__c WHERE Calendar__c=:resource.Work_Calendar__c AND Exception_Date__c>=:startDate AND Exception_Date__c<=:endDate WITH USER_MODE]){exceptions.put(exceptionRecord.Exception_Date__c,exceptionRecord.Capacity_Hours__c);reasons.put(exceptionRecord.Exception_Date__c,exceptionRecord.Reason__c);}

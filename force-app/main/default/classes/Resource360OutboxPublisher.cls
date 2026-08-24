@@ -38,12 +38,12 @@ public without sharing class Resource360OutboxPublisher implements Queueable {
     @TestVisible private static void applyFailure(R360_Outbox_Event__c record, String message) {
         Integer attempts = Integer.valueOf(record.Attempt_Count__c);
         record.Last_Error__c = truncate(message, 2000);
-        if (attempts >= 3) {
+        Integer maximumAttempts=Integer.valueOf(Resource360Policy.numberValue('Outbox_Max_Attempts',3));if (attempts >= maximumAttempts) {
             record.State__c = 'Dead Letter';
             record.Next_Attempt_At__c = null;
         } else {
             record.State__c = 'Retry Pending';
-            Integer delayMinutes = attempts == 1 ? 1 : attempts == 2 ? 5 : 30;
+            List<String>delays=Resource360Policy.listValue('Outbox_Retry_Minutes',new List<String>{'1','5','30'});Integer delayIndex=Math.min(Math.max(attempts-1,0),delays.size()-1);Integer delayMinutes=Integer.valueOf(delays[delayIndex]);
             record.Next_Attempt_At__c = System.now().addMinutes(delayMinutes);
         }
     }
