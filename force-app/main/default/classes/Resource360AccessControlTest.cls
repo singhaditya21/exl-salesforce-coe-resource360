@@ -13,13 +13,14 @@ private class Resource360AccessControlTest {
             PermissionSetId=[SELECT Id FROM PermissionSet WHERE Name='Resource360_Base_User' LIMIT 1].Id
         );
 
-        insert new List<R360_Role_Scope__c>{
-            scope(user.Id, 'ACTIVE-PM', 'Project Manager', Date.today().addDays(-5), Date.today().addDays(30), true),
-            scope(user.Id, 'ACTIVE-MANAGER', 'Reporting Manager', Date.today().addDays(-5), Date.today().addDays(30), true),
-            scope(user.Id, 'EXPIRED-STAFFER', 'COE Staffer', Date.today().addDays(-30), Date.today().addDays(-1), true),
-            scope(user.Id, 'FUTURE-FINANCE', 'Finance/PMO', Date.today().addDays(1), Date.today().addDays(30), true)
-        };
-
+        System.runAs(new User(Id=UserInfo.getUserId())) {
+            insert new List<R360_Role_Scope__c>{
+                scope(user.Id, 'ACTIVE-PM', 'Project Manager', Date.today().addDays(-5), Date.today().addDays(30), true),
+                scope(user.Id, 'ACTIVE-MANAGER', 'Reporting Manager', Date.today().addDays(-5), Date.today().addDays(30), true),
+                scope(user.Id, 'EXPIRED-STAFFER', 'COE Staffer', Date.today().addDays(-30), Date.today().addDays(-1), true),
+                scope(user.Id, 'FUTURE-FINANCE', 'Finance/PMO', Date.today().addDays(1), Date.today().addDays(30), true)
+            };
+        }
         System.runAs(user) {
             Set<String> active = Resource360Security.activeRoles();
             System.assertEquals(new Set<String>{'Project Manager','Reporting Manager'}, active);
@@ -81,8 +82,9 @@ private class Resource360AccessControlTest {
             scopes.add(scope(expiredUser.Id, 'ALL-EXPIRED-'+sequence, persona.Business_Role__c, Date.today().addDays(-10), Date.today().addDays(-1), true));
         }
         System.assertEquals(18, expectedRoles.size(), 'Every governed persona must participate in the boundary test.');
-        insert scopes;
-
+        System.runAs(new User(Id=UserInfo.getUserId())) {
+            insert scopes;
+        }
         System.runAs(multiRoleUser) {
             System.assertEquals(expectedRoles, Resource360Security.activeRoles(), 'All effective multi-role personas must be returned exactly once.');
         }

@@ -12,7 +12,7 @@
 | Governance | Effective-dated classifications, roles and policies; maker/checker configuration releases; audit/outbox; role-scope sharing |
 | Retention | Eight legal-hold-eligible rules and a non-destructive preview; deletion disabled in the demo |
 | Analytics/operations | Five report types, KPI definitions/drill-down, source/control health, scheduler overlap protection and recovery controls |
-| Quality | Unit, static contract, 14-test desktop/mobile browser suite, axe, 32 Salesforce Apex tests, CodeQL and Pages release gates |
+| Quality | Unit, static contract, 14-test desktop/mobile browser suite, axe, 38 Salesforce Apex tests, CodeQL and Pages release gates |
 | Credential hygiene | Previously exposed classic PAT revoked on 24 August 2026; repository access verified through SSH and GitHub CLI OAuth; tracked/untracked credential-pattern scan clean |
 
 ## Not a software backlog

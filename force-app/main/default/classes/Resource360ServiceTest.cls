@@ -382,6 +382,7 @@ private class Resource360ServiceTest {
     static void configurationControlPlaneVersionsValidatesAndRollsBack(){
         Date today=Resource360Policy.effectiveDate();
         Profile adminProfile=[SELECT Id FROM Profile WHERE Name='System Administrator'];User configApprover=testUser(adminProfile.Id,'cfgappr');insert configApprover;Id configApproverSet=[SELECT Id FROM PermissionSet WHERE Name='Resource360_Configuration_Approver_Actions'].Id;insert new PermissionSetAssignment(AssigneeId=configApprover.Id,PermissionSetId=configApproverSet);
+        System.runAs(new User(Id=UserInfo.getUserId())) {
         Resource360ConfigurationService.ConfigurationPreview weightPreview=Resource360ConfigurationService.preview('Policy','Talent_Weight_Capability','Capability score weight','Number',40,null,false,null,'percent',today,null,'Tune explainable matching based on approved COE evidence.');
         System.assert(weightPreview.valid);System.assert(!weightPreview.warnings.isEmpty(),'A non-100 aggregate should be normalized with an explicit warning.');
         Resource360ConfigurationService.ConfigurationPreview unsafe=Resource360ConfigurationService.preview('Integration','Unregistered_Connector','Unsafe connector','Text',null,'client_secret=forbidden',false,null,null,today,null,'Negative security test.');
@@ -408,12 +409,15 @@ private class Resource360ServiceTest {
         Resource360ConfigurationService.submit(classification.recordId);System.runAs(configApprover){Resource360ConfigurationService.decide(classification.recordId,true,'Classification owner approved.');}Resource360ConfigurationService.clearCache();
         System.assert(Resource360Classification.requiresControl('Innovation Lab'));System.assertEquals(false,Resource360Classification.isBillable('Innovation Lab'));
         System.assert(Resource360ConfigurationService.catalog().size()>53);
+        }
     }
 
     @IsTest
     static void configurationReleaseActivatesAtomicallyWithIndependentApprover(){
         Date today=Resource360Policy.effectiveDate();Profile adminProfile=[SELECT Id FROM Profile WHERE Name='System Administrator'];User configApprover=testUser(adminProfile.Id,'relappr');insert configApprover;Id configApproverSet=[SELECT Id FROM PermissionSet WHERE Name='Resource360_Configuration_Approver_Actions'].Id;insert new PermissionSetAssignment(AssigneeId=configApprover.Id,PermissionSetId=configApproverSet);
+        System.runAs(new User(Id=UserInfo.getUserId())) {
         String releaseKey='EXL-MOCK-ATOMIC-R1';Resource360Service.ServiceResult releaseA=Resource360ConfigurationService.saveDraft(null,'Policy','Release_Test_A','Release test A','Text',null,'alpha',false,null,null,today,null,'Atomic configuration release test A.');Resource360Service.ServiceResult releaseB=Resource360ConfigurationService.saveDraft(null,'Policy','Release_Test_B','Release test B','Text',null,'beta',false,null,null,today,null,'Atomic configuration release test B.');Resource360ConfigurationService.assignRelease(releaseA.recordId,releaseKey);Resource360ConfigurationService.assignRelease(releaseB.recordId,releaseKey);Resource360ConfigurationService.ReleasePreview releasePreview=Resource360ConfigurationService.previewRelease(releaseKey);System.assert(releasePreview.valid,String.join(releasePreview.errors,' '));System.assertEquals(2,releasePreview.itemCount);Resource360ConfigurationService.submitRelease(releaseKey);Boolean releaseSelfApprovalBlocked=false;try{Resource360ConfigurationService.decideRelease(releaseKey,true,'Invalid self approval.');}catch(AuraHandledException expected){releaseSelfApprovalBlocked=true;}System.assert(releaseSelfApprovalBlocked,'Atomic configuration releases require an independent approver.');System.runAs(configApprover){Resource360ConfigurationService.decideRelease(releaseKey,true,'Independent atomic release approval.');}System.assertEquals(2,[SELECT COUNT() FROM R360_Configuration__c WHERE Release_Key__c=:releaseKey AND State__c='Active' AND Current__c=true]);
+        }
     }
 
     @IsTest
@@ -445,12 +449,14 @@ private class Resource360ServiceTest {
     @IsTest
     static void correctedTimeEnforcesConfigurableDualControl(){
         Profile adminProfile=[SELECT Id FROM Profile WHERE Name='System Administrator'];User firstApprover=testUser(adminProfile.Id,'timeone');User secondApprover=testUser(adminProfile.Id,'timetwo');insert new List<User>{firstApprover,secondApprover};Id adminPermissionSetId=[SELECT Id FROM PermissionSet WHERE Name='Resource360_Administrator'].Id;insert new List<PermissionSetAssignment>{new PermissionSetAssignment(AssigneeId=firstApprover.Id,PermissionSetId=adminPermissionSetId),new PermissionSetAssignment(AssigneeId=secondApprover.Id,PermissionSetId=adminPermissionSetId)};
+        System.runAs(new User(Id=UserInfo.getUserId())) {
         Staffing_Request__c pending=[SELECT Id FROM Staffing_Request__c WHERE Idempotency_Key__c='DEMO-SR-1001'];Id allocationId=Resource360Service.decideStaffingRequest(pending.Id,true,'Capacity revalidated for correction control.','ignored').recordId;Allocation__c allocation=[SELECT Id,Resource__c,Start_Date__c,End_Date__c FROM Allocation__c WHERE Id=:allocationId];Date weekStart=nextMonday(allocation.Start_Date__c);if(weekStart>allocation.End_Date__c)weekStart=mondayFor(allocation.Start_Date__c);Id sheetId=Resource360Service.createTimesheet(allocation.Resource__c,weekStart).recordId;Resource360Service.saveTimeEntry(sheetId,allocation.Id,weekStart,2,null,'Original approved entry.');Resource360Service.submitTimesheet(sheetId);Resource360Service.decideTimesheet(sheetId,true,'Original manager approval.');Id correctionId=Resource360Service.createTimeCorrection(sheetId,'Move approved time to the correct project context.').recordId;Resource360Service.submitTimesheet(correctionId);
         Timesheet__c submitted=[SELECT Status__c,Dual_Control_Required__c,Approval_Step__c,Required_Approval_Role__c,Correction_Requested_By__c FROM Timesheet__c WHERE Id=:correctionId];System.assert(submitted.Dual_Control_Required__c);System.assertEquals(1,submitted.Approval_Step__c);System.assertEquals('Reporting Manager',submitted.Required_Approval_Role__c);System.assertEquals(UserInfo.getUserId(),submitted.Correction_Requested_By__c);
         System.runAs(firstApprover){Resource360Service.decideTimesheet(correctionId,true,'Reporting manager correction control passed.');}
         submitted=[SELECT Status__c,Approval_Step__c,Required_Approval_Role__c FROM Timesheet__c WHERE Id=:correctionId];System.assertEquals('Submitted',submitted.Status__c);System.assertEquals(2,submitted.Approval_Step__c);System.assertEquals('Timesheet Approver',submitted.Required_Approval_Role__c);
         System.runAs(secondApprover){Resource360Service.decideTimesheet(correctionId,true,'Independent timesheet control passed.');}
         System.assertEquals('Approved',[SELECT Status__c FROM Timesheet__c WHERE Id=:correctionId].Status__c);System.assertEquals(2,[SELECT COUNT() FROM R360_Approval_Decision__c WHERE Entity_Type__c='Timesheet__c' AND Entity_ID__c=:String.valueOf(correctionId) AND State__c='Approved']);
+        }
     }
 
     @IsTest
