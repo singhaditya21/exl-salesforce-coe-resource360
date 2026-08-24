@@ -9,9 +9,9 @@ Generated from PRD v1.3 and the repository screen catalogue. This matrix is an e
 - Total PRD requirement/UAT items traced: 134
 - Governed screen contracts traced: 103
 - Assumed contract; EXL activation: 4
-- Implemented in demo baseline: 64
+- Implemented in demo baseline: 65
 - Screen contract + implemented foundation: 12
-- Partial / activation backlog: 28
+- Partial / activation backlog: 27
 - Later-phase screen contract: 1
 
 ## Requirement matrix
@@ -126,7 +126,7 @@ Generated from PRD v1.3 and the repository screen catalogue. This matrix is an e
 | ADM-003 | P0 | Assumed contract; EXL activation | Resource360ConfigurationService governed control plane, controlled LOV overlays, bulk permission/preview/commit, hashed file identity, generated RBAC, immutable audit and release controls | Retention jobs are tested; legal hold and access controls are documented. |
 | ADM-004 | P0 | Implemented in demo baseline | Resource360ConfigurationService governed control plane, controlled LOV overlays, bulk permission/preview/commit, hashed file identity, generated RBAC, immutable audit and release controls | Each import has batch ID, source file metadata and row outcome. |
 | ADM-005 | P0 | Partial / activation backlog | Resource360ConfigurationService governed control plane, controlled LOV overlays, bulk permission/preview/commit, hashed file identity, generated RBAC, immutable audit and release controls | Override cannot be hidden by subsequent ordinary edits. |
-| ADM-006 | P1 | Partial / activation backlog | Resource360ConfigurationService governed control plane, controlled LOV overlays, bulk permission/preview/commit, hashed file identity, generated RBAC, immutable audit and release controls | Changes are versioned, effective-dated and testable in a preview mode. |
+| ADM-006 | P1 | Implemented in demo baseline | Resource360ConfigurationService governed control plane, controlled LOV overlays, bulk permission/preview/commit, hashed file identity, generated RBAC, immutable audit and release controls | Changes are versioned, effective-dated and testable in a preview mode. |
 
 ## UAT register
 
