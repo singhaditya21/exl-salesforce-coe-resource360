@@ -97,3 +97,21 @@ test("publishes complete, version-aligned governance and integration contracts",
   assert.equal(envelope.properties.records.maxItems, 200);
   assert.deepEqual(project.required, ["engagementId", "name", "startDate", "endDate", "status", "revenueType", "currency"]);
 });
+
+test("keeps all Salesforce LWC persona routes positive and least-privilege negative", async () => {
+  const [screenSource, registerText, lwcContracts] = await Promise.all([
+    readFile(new URL("../app/screen-data.ts", import.meta.url), "utf8"),
+    readFile(new URL("../contracts/resource360-governance-register.json", import.meta.url), "utf8"),
+    import(new URL("../force-app/main/default/lwc/resource360Workspace/screenContracts.js", import.meta.url)),
+  ]);
+  const catalogue = [...screenSource.matchAll(/^\s*s\("([A-Z]+[A-Z0-9-]*)",\s*"([^"]+)",\s*"([^"]+)"/gm)].map((match) => ({ id: match[1], title: match[2], module: match[3], kind: "contract" }));
+  const governed = lwcContracts.governedScreens(catalogue);
+  const roles = JSON.parse(registerText).personas.map((persona) => persona.businessRole);
+  assert.equal(governed.length, 103);
+  assert.equal(roles.length, 18);
+  for (const role of roles) {
+    assert.ok(governed.some((screen) => screen.allowedRoles.includes(role)), `${role} requires a positive LWC route`);
+    if (role === "Administrator") assert.ok(governed.every((screen) => screen.allowedRoles.includes(role)), "Administrator is the explicit unrestricted control persona");
+    else assert.ok(governed.some((screen) => !screen.allowedRoles.includes(role)), `${role} requires a negative LWC route`);
+  }
+});

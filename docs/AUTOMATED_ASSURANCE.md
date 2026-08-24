@@ -17,7 +17,7 @@
 
 - approved budget signature and immutable decision lineage;
 - capacity locking, deterministic competing-request outcome and accepted-allocation-only time;
-- effective-dated roles, positive/negative persona access, delegation, revocation and separation of duties;
+- all 18 personas with positive/negative routed access, plus active multi-role and expired-scope Salesforce boundaries, delegation, revocation and separation of duties;
 - source schema version, idempotent run identity, deterministic duplicate survivor, completeness/freshness and redacted errors;
 - outbox retry/dead-letter recovery and exactly one governed operations schedule;
 - corrected-time dual control, compliance exceptions and immutable approved actuals;

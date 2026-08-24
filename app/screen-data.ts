@@ -40,8 +40,13 @@ export const moduleRoles: Record<ModuleId, readonly DemoRole[]> = {
   ai: ["COE Staffer", "Portfolio Manager", "Account Owner", "HOD", "GM/COO Delegate", "Finance/PMO", "Operations", "Auditor", "Executive Viewer", "Administrator"],
 };
 
+export const screenRoleOverrides: Readonly<Partial<Record<string, readonly DemoRole[]>>> = {
+  "STFUI-23": ["COE Staffer", "Administrator"],
+};
+
 export function canAccessScreen(role: DemoRole, screen: ScreenSpec) {
-  return role === "Administrator" || moduleRoles[screen.module].includes(role);
+  if (role === "Administrator") return true;
+  return (screenRoleOverrides[screen.id] ?? moduleRoles[screen.module]).includes(role);
 }
 
 const s = (id: string, title: string, module: ModuleId, kind: ScreenKind, description: string, primary: string, release: ScreenSpec["release"], eyebrow?: string): ScreenSpec => ({ id, title, module, kind, description, primary, release, eyebrow });

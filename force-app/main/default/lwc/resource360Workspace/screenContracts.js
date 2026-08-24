@@ -18,6 +18,7 @@ const SCREEN_OVERRIDES = {
   "STFUI-02": { delivery: "Operational search", fields: "Capability, minimum level, role, tower, location, dates and daily hours" },
   "STFUI-15": { delivery: "Operational command", api: "Resource360StaffingService.modifyAllocation", fields: "Current allocation, effective dates, role, classification, daily hours and reason" },
   "STFUI-17": { delivery: "Operational command", api: "Resource360StaffingService.deallocate", fields: "Current allocation, effective end date and mandatory reason" },
+  "STFUI-23": { roles: ["COE Staffer","Administrator"], delivery: "Operational decision", api: "Resource360StaffingService.decide", fields: "Staffing request, capacity and commercial revalidation, outcome and mandatory decision evidence" },
   "SKLUI-10": { delivery: "Operational command", fields: "Practitioner, capability, requested proficiency, experience and evidence" },
   "SKLUI-11": { delivery: "Operational command", api: "Resource360SkillService.addCredential", fields: "Credential identity, issuer, dates and HTTPS evidence" },
   "SKLUI-15": { delivery: "Operational decision", api: "Resource360SkillService.decideClaim", fields: "Claim, approved level and mandatory decision evidence" },

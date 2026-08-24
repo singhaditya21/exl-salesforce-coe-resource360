@@ -59,6 +59,38 @@ private class Resource360AccessControlTest {
         System.assert(immutable, 'Revocation evidence and state must be immutable.');
     }
 
+    @IsTest
+    static void everyPersonaHonorsActiveMultiRoleAndExpiredScopeBoundaries() {
+        Profile standardProfile = [SELECT Id FROM Profile WHERE Name='Standard User' LIMIT 1];
+        User multiRoleUser = testUser(standardProfile.Id, 'allroles');
+        User expiredUser = testUser(standardProfile.Id, 'expired');
+        insert new List<User>{multiRoleUser, expiredUser};
+        Id basePermissionSetId = [SELECT Id FROM PermissionSet WHERE Name='Resource360_Base_User' LIMIT 1].Id;
+        insert new List<PermissionSetAssignment>{
+            new PermissionSetAssignment(AssigneeId=multiRoleUser.Id, PermissionSetId=basePermissionSetId),
+            new PermissionSetAssignment(AssigneeId=expiredUser.Id, PermissionSetId=basePermissionSetId)
+        };
+
+        List<R360_Role_Scope__c> scopes = new List<R360_Role_Scope__c>();
+        Set<String> expectedRoles = new Set<String>();
+        Integer sequence = 0;
+        for (R360_Persona__mdt persona : [SELECT Business_Role__c FROM R360_Persona__mdt WHERE Active__c=true ORDER BY Business_Role__c]) {
+            sequence++;
+            expectedRoles.add(persona.Business_Role__c);
+            scopes.add(scope(multiRoleUser.Id, 'ALL-ACTIVE-'+sequence, persona.Business_Role__c, Date.today().addDays(-1), Date.today().addDays(1), true));
+            scopes.add(scope(expiredUser.Id, 'ALL-EXPIRED-'+sequence, persona.Business_Role__c, Date.today().addDays(-10), Date.today().addDays(-1), true));
+        }
+        System.assertEquals(18, expectedRoles.size(), 'Every governed persona must participate in the boundary test.');
+        insert scopes;
+
+        System.runAs(multiRoleUser) {
+            System.assertEquals(expectedRoles, Resource360Security.activeRoles(), 'All effective multi-role personas must be returned exactly once.');
+        }
+        System.runAs(expiredUser) {
+            System.assertEquals(new Set<String>(), Resource360Security.activeRoles(), 'Every expired persona scope must fail closed.');
+        }
+    }
+
     private static R360_Role_Scope__c scope(Id userId, String key, String role, Date fromDate, Date toDate, Boolean active) {
         return new R360_Role_Scope__c(
             Scope_Key__c=key, User__c=userId, Business_Role__c=role,
