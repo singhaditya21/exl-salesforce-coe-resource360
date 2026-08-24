@@ -1,9 +1,7 @@
-import { readFileSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-
-const screenSource = readFileSync(new URL("../../app/screen-data.ts", import.meta.url), "utf8");
-const screens = [...screenSource.matchAll(/^\s*s\("([A-Z]+[A-Z0-9-]*)",\s*"([^"]+)"/gm)].map((match) => ({ id: match[1], title: match[2] }));
+import { demoRoles } from "../../app/demo-system";
+import { canAccessScreen, screens } from "../../app/screen-data";
 
 async function switchRole(page: import("@playwright/test").Page, role: string) {
   await page.goto("/?screen=GLB-05");
@@ -73,6 +71,29 @@ test("applies positive and negative persona navigation contracts", async ({ page
   await switchRole(page, "Finance/PMO");
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Budgeting & WBS/ })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Administration/ })).toHaveCount(0);
+});
+
+test("enforces positive and negative screen contracts for every governed persona", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile-chromium", "The complete persona matrix is exercised once in desktop Chromium.");
+  test.slow();
+  expect(demoRoles).toHaveLength(18);
+  for (const role of demoRoles) {
+    const authorized = screens.find((screen) => canAccessScreen(role, screen));
+    const restricted = screens.find((screen) => !canAccessScreen(role, screen));
+    expect(authorized, `${role} must have an authorized route`).toBeDefined();
+    await switchRole(page, role);
+    await page.goto(`/?screen=${authorized!.id}`);
+    await expect(page.locator(".page-header h1")).toHaveText(authorized!.title);
+    await expect(page.locator(".access-denied")).toHaveCount(0);
+
+    if (role === "Administrator") {
+      expect(restricted, "Administrator is the explicit unrestricted control persona").toBeUndefined();
+    } else {
+      expect(restricted, `${role} must have a restricted route`).toBeDefined();
+      await page.goto(`/?screen=${restricted!.id}`);
+      await expect(page.getByRole("heading", { name: `Screen unavailable for ${role}` })).toBeVisible();
+    }
+  }
 });
 
 test("has no serious or critical automated accessibility findings on control surfaces", async ({ page }) => {

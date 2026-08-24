@@ -65,7 +65,13 @@ describe("sanitized fixture integrity", () => {
   it("maps every governed persona to at least one screen and preserves least privilege", () => {
     expect(demoRoles).toHaveLength(18);
     expect(Object.values(moduleRoles).flat()).toEqual(expect.arrayContaining([...demoRoles]));
-    for (const role of demoRoles) expect(screens.some((screen) => canAccessScreen(role, screen)), role).toBe(true);
+    for (const role of demoRoles) {
+      const authorized = screens.filter((screen) => canAccessScreen(role, screen));
+      const restricted = screens.filter((screen) => !canAccessScreen(role, screen));
+      expect(authorized.length, `${role} requires a positive screen contract`).toBeGreaterThan(0);
+      if (role === "Administrator") expect(restricted, "Administrator is the explicit unrestricted control persona").toHaveLength(0);
+      else expect(restricted.length, `${role} requires a negative screen contract`).toBeGreaterThan(0);
+    }
     expect(canAccessScreen("Executive Viewer", screens.find((screen) => screen.id === "CMD-01")!)).toBe(true);
     expect(canAccessScreen("Executive Viewer", screens.find((screen) => screen.id === "ADMUI-03")!)).toBe(false);
     expect(canAccessScreen("Configuration Approver", screens.find((screen) => screen.id === "ADMUI-06")!)).toBe(true);
