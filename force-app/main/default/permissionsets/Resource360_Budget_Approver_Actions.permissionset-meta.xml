@@ -3,6 +3,7 @@
     <description>Create budget versions and decide current signed approval steps within role scope.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Budget Approver Actions</label>
+    <classAccesses><apexClass>Resource360BudgetImportService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Budgets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Budgets</name></customPermissions>
@@ -25,6 +26,9 @@
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Location__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Onsite__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Planned_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Resource__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_End__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_Start__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Signature__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Approver__c</field><readable>true</readable></fieldPermissions>

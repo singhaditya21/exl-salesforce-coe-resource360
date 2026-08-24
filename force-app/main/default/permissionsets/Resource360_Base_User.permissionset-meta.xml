@@ -4,6 +4,7 @@
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Base User</label>
     <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>
+    <classAccesses><apexClass>Resource360AssuranceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360PlanningService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360TalentService</apexClass><enabled>true</enabled></classAccesses>
@@ -18,6 +19,9 @@
     <fieldPermissions><editable>false</editable><field>Budget_Line__c.Location__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget_Line__c.Onsite__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget_Line__c.Planned_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget_Line__c.Resource__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget_Line__c.Role_End__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget_Line__c.Role_Start__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Approval_Level__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Blended_Cost__c</field><readable>true</readable></fieldPermissions>
@@ -64,7 +68,12 @@
     <fieldPermissions><editable>false</editable><field>Engagement__c.Salesforce_Tower__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Learning_Achievement__c.Capability__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Notification__c.Accountable_Owner__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Notification__c.Closed_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Notification__c.Closed_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Notification__c.Closure_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Deep_Link__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Notification__c.First_Seen_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Message__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Read__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Recipient__c</field><readable>true</readable></fieldPermissions>

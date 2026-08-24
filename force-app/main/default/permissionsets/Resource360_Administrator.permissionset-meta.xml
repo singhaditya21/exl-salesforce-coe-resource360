@@ -4,8 +4,10 @@
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Administrator</label>
     <classAccesses><apexClass>Resource360AnalyticsService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360AssuranceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360AuditService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BudgetGuard</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360BudgetImportService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BudgetService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BulkService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360CalendarService</apexClass><enabled>true</enabled></classAccesses>
@@ -57,6 +59,9 @@
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Location__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Onsite__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Planned_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Resource__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_End__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_Start__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Approval_Level__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Blended_Cost__c</field><readable>true</readable></fieldPermissions>
@@ -122,6 +127,7 @@
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Display_Label__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Numeric_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Release_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Text_Value__c</field><readable>true</readable></fieldPermissions>
@@ -133,17 +139,29 @@
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Payload_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Retry_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Row_Number__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Collision_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Commit_Mode__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Completed_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Completeness_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Contract_Version__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Deactivated_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Detail__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Failure_Count__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Freshness_State__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Inserted_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Processed_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_Cutoff__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_File_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Source_File_Name__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Success_Count__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Integration_Run__c.Updated_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Learning_Achievement__c.Capability__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Notification__c.Accountable_Owner__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Notification__c.Closed_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Notification__c.Closed_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Notification__c.Closure_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Deep_Link__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Notification__c.First_Seen_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Message__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Read__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Recipient__c</field><readable>true</readable></fieldPermissions>

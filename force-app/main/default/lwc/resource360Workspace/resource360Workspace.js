@@ -14,6 +14,13 @@ import decideBudget from "@salesforce/apex/Resource360Service.decideBudget";
 import createBudgetVersion from "@salesforce/apex/Resource360Service.createBudgetVersion";
 import saveBudgetDraft from "@salesforce/apex/Resource360Service.saveBudgetDraft";
 import saveBudgetLine from "@salesforce/apex/Resource360Service.saveBudgetLine";
+import saveBudgetRosterLine from "@salesforce/apex/Resource360Service.saveBudgetRosterLine";
+import previewBudgetRoster from "@salesforce/apex/Resource360BudgetImportService.preview";
+import commitBudgetRoster from "@salesforce/apex/Resource360BudgetImportService.commitRoster";
+import budgetAssurance from "@salesforce/apex/Resource360AssuranceService.budgetAssurance";
+import runWhatIf from "@salesforce/apex/Resource360AssuranceService.whatIf";
+import runMockRetention from "@salesforce/apex/Resource360AssuranceService.runMockRetention";
+import closeAlert from "@salesforce/apex/Resource360Service.closeAlert";
 import previewBulk from "@salesforce/apex/Resource360BulkService.preview";
 import commitBulk from "@salesforce/apex/Resource360BulkService.executeBatch";
 import previewConfiguration from "@salesforce/apex/Resource360ConfigurationService.preview";
@@ -22,6 +29,10 @@ import submitConfiguration from "@salesforce/apex/Resource360ConfigurationServic
 import decideConfiguration from "@salesforce/apex/Resource360ConfigurationService.decide";
 import rollbackConfiguration from "@salesforce/apex/Resource360ConfigurationService.rollback";
 import rescheduleOperations from "@salesforce/apex/Resource360ConfigurationService.rescheduleOperations";
+import assignConfigurationRelease from "@salesforce/apex/Resource360ConfigurationService.assignRelease";
+import previewConfigurationRelease from "@salesforce/apex/Resource360ConfigurationService.previewRelease";
+import submitConfigurationRelease from "@salesforce/apex/Resource360ConfigurationService.submitRelease";
+import decideConfigurationRelease from "@salesforce/apex/Resource360ConfigurationService.decideRelease";
 import submitSkillClaim from "@salesforce/apex/Resource360Service.submitSkillClaim";
 import decideSkillClaim from "@salesforce/apex/Resource360Service.decideSkillClaim";
 import addCredential from "@salesforce/apex/Resource360Service.addCredential";
@@ -50,18 +61,27 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     allocationDraft = { firstDailyHours: 4, secondDailyHours: 4, dailyHours: 4, reason: "Approved effective-dated delivery plan change." };
     budgetDraft = { revenue: 0, upliftPercent: 0, effortContingencyPercent: 0, expenseContingencyPercent: 0, travelRate: 0, onsiteMonths: 0 };
     budgetLineDraft = { phase: "Deliver", workUnit: "Delivery", roleName: "Salesforce Architect", location: "India", plannedHours: 160, costRate: 1, allocationPercent: 100, onsite: false };
+    budgetImportDraft = { sourceFileName: "resource360-monthly-roster.json", jsonRows: '[{"employeeId":"EXL-019830","periodStart":"2026-09-01","phase":"Deliver","workUnit":"Delivery","role":"Salesforce Architect","location":"India","plannedHours":160,"costRate":25,"allocationPercent":100,"roleStart":"2026-09-01","roleEnd":"2026-09-30"}]' };
     bulkDraft = { entityType: "Employee", commitMode: "Partial", sourceFileName: "resource360-controlled-import.json", jsonRows: '[{"employeeId":"EXL-DEMO-9001","preferredName":"Demo Practitioner","employmentStart":"2026-01-01","tower":"Delivery","status":"Active","dailyCapacityHours":8}]' };
     configurationDraft = { domain: "Policy", code: "Staffing_Expiry_Hours", displayLabel: "Staffing Expiry Hours", valueType: "Number", numericValue: 72, booleanValue: false, unit: "hours", reason: "Governed policy adjustment for EXL Salesforce COE operations." };
+    configurationReleaseKey = "EXL-MOCK-2026-09-R1";
+    configurationReleaseSettingId;
     profileResourceId;
     skillDraft = { requestedLevel: "3", yearsExperience: 3, evidence: "Sanitized delivery evidence for manager review." };
     credentialDraft = { issuer: "Salesforce", state: "Unverified" };
     talentDraft = { minimumLevel: "3", requestedRole: "Salesforce Architect", dailyHours: 4, limitSize: 25 };
+    scenarioDraft = { name: "EXL Salesforce COE capacity option", headcountDelta: 3, billableAllocationPercent: 75 };
+    alertClosureNote = "Reviewed in the EXL sanitized mock baseline; accountable follow-up recorded.";
     timeDraft = { hours: 4, comment: "Allocation-aligned delivery work." };
     timesheetDraft = {};
     talentResults = [];
     planningPreview;
     bulkPreview;
+    budgetImportPreview;
+    budgetAssuranceResult;
+    scenarioResult;
     configurationPreview;
+    configurationReleasePreview;
     decisionDraft;
 
     @wire(CurrentPageReference)
@@ -88,6 +108,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
         this.timesheetDraft = { weekStart: this.isoDate(monday) };
         this.budgetLineDraft = { ...this.budgetLineDraft, periodStart: `${this.isoDate(today).slice(0, 7)}-01` };
+        this.scenarioDraft = { ...this.scenarioDraft, startDate: this.isoDate(today), endDate: this.isoDate(end) };
         this.configurationDraft = { ...this.configurationDraft, effectiveFrom: this.isoDate(today) };
         this.loadData();
     }
@@ -138,6 +159,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         if (!this.profileResourceId && this.data.resources?.length) this.profileResourceId = this.data.resources[0].Id;
         if (!this.allocationDraft.allocationId && this.data.allocations?.length) this.selectAllocation(this.data.allocations.find((item) => item.State__c === "Accepted" && item.Current__c));
         if (!this.budgetDraft.budgetId && this.data.budgets?.length) this.selectBudget(this.data.budgets.find((item) => ["Draft", "Rejected", "Invalidated"].includes(item.State__c)) || this.data.budgets[0]);
+        if (!this.configurationReleaseSettingId && this.configurationReleaseSettingOptions.length) this.configurationReleaseSettingId = this.configurationReleaseSettingOptions[0].value;
     }
 
     get modules() {
@@ -234,6 +256,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showBudgetEditor() { return this.selectedScreenId === "BUDUI-02"; }
     get showBudgetLineEditor() { return ["BUDUI-03", "BUDUI-04"].includes(this.selectedScreenId); }
     get showBudgetLines() { return ["BUDUI-03", "BUDUI-04", "BUDUI-05", "BUDUI-06", "BUDUI-07"].includes(this.selectedScreenId); }
+    get showBudgetImport() { return this.selectedScreenId === "BUDUI-11"; }
     get showBulkOperations() { return this.selectedScreenId === "ADMUI-08"; }
     get showConfigurationConsole() { return ["ADMUI-01","ADMUI-04","ADMUI-06","ADMUI-07"].includes(this.selectedScreenId); }
     get showPractitionerProfile() { return ["SKLUI-01","SKLUI-05","SKLUI-06","SKLUI-07","SKLUI-08","SKLUI-09"].includes(this.selectedScreenId); }
@@ -242,14 +265,19 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showCredentialForm() { return this.selectedScreenId === "SKLUI-11"; }
     get showTimesheetCreate() { return this.selectedScreenId === "TIMEUI-01"; }
     get showTimeEntryForm() { return this.selectedScreenId === "TIMEUI-02"; }
+    get showTimeExceptions() { return this.selectedScreenId === "TIMEUI-08"; }
+    get showSourceAssurance() { return ["ADMUI-07", "CMD-08"].includes(this.selectedScreenId); }
+    get showKpiHierarchy() { return ["CMD-01", "CMD-02", "CMD-04", "CMD-07"].includes(this.selectedScreenId); }
+    get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
+    get showAlertLifecycle() { return this.selectedScreenId === "GLB-03"; }
     get hasTalentResults() { return this.talentResults.length > 0; }
     get hasPlanningPreview() { return Boolean(this.planningPreview); }
     get planningDays() { return (this.planningPreview?.days || []).map((day) => ({ ...day, id: day.workDate, status: !day.workingDay ? "Non-working" : day.conflict ? "Conflict" : "Available" })); }
     get planningStatus() { return this.planningPreview?.allowed ? "Valid capacity plan" : "Capacity conflict"; }
     get planningColumns() { return [{ label: "Date", fieldName: "workDate", type: "date" }, { label: "Calendar", fieldName: "status" }, { label: "Capacity", fieldName: "capacityHours", type: "number" }, { label: "Accepted", fieldName: "acceptedHours", type: "number" }, { label: "Pending", fieldName: "pendingHours", type: "number" }, { label: "Proposed", fieldName: "requestedHours", type: "number" }, { label: "Remaining", fieldName: "remainingHours", type: "number" }, { label: "Accepted context", fieldName: "acceptedContext", wrapText: true }, { label: "Pending context", fieldName: "pendingContext", wrapText: true }]; }
-    get budgetLineRows() { return (this.data.budgetLines || []).filter((line) => !this.budgetDraft.budgetId || line.Budget__c === this.budgetDraft.budgetId).map((line) => ({ ...line, allocationFraction: (line.Allocation_Percent__c || 0) / 100 })); }
+    get budgetLineRows() { return (this.data.budgetLines || []).filter((line) => !this.budgetDraft.budgetId || line.Budget__c === this.budgetDraft.budgetId).map((line) => ({ ...line, resourceName: line.Resource__r?.Preferred_Name__c || "Role placeholder", allocationFraction: (line.Allocation_Percent__c || 0) / 100 })); }
     get hasBudgetLines() { return this.budgetLineRows.length > 0; }
-    get budgetLineColumns() { return [{ label: "Period", fieldName: "Period_Start__c", type: "date" }, { label: "Phase", fieldName: "Phase__c" }, { label: "Work unit", fieldName: "Work_Unit__c" }, { label: "Role", fieldName: "Role__c" }, { label: "Location", fieldName: "Location__c" }, { label: "Hours", fieldName: "Planned_Hours__c", type: "number" }, { label: "Rate", fieldName: "Cost_Rate__c", type: "currency" }, { label: "Cost", fieldName: "Planned_Cost__c", type: "currency" }, { label: "Allocation", fieldName: "allocationFraction", type: "percent" }]; }
+    get budgetLineColumns() { return [{ label: "Period", fieldName: "Period_Start__c", type: "date" }, { label: "Practitioner", fieldName: "resourceName" }, { label: "Role start", fieldName: "Role_Start__c", type: "date" }, { label: "Role end", fieldName: "Role_End__c", type: "date" }, { label: "Phase", fieldName: "Phase__c" }, { label: "Work unit", fieldName: "Work_Unit__c" }, { label: "Role", fieldName: "Role__c" }, { label: "Location", fieldName: "Location__c" }, { label: "Hours", fieldName: "Planned_Hours__c", type: "number" }, { label: "Rate", fieldName: "Cost_Rate__c", type: "currency" }, { label: "Cost", fieldName: "Planned_Cost__c", type: "currency" }, { label: "Allocation", fieldName: "allocationFraction", type: "percent" }]; }
     get budgetIsEditable() { const budget=(this.data.budgets||[]).find((item)=>item.Id===this.budgetDraft.budgetId);return Boolean(budget&&budget.Current__c&&["Draft","Rejected","Invalidated"].includes(budget.State__c)); }
     get budgetFieldsDisabled() { return !this.budgetIsEditable; }
     get bulkEntityOptions() { return ["Employee","Engagement","Capability","Credential","LearningAchievement","CommercialReference","OrgUnit","Portfolio"].map((value)=>({label:value.replace(/([a-z])([A-Z])/g,"$1 $2"),value})); }
@@ -260,7 +288,26 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get bulkPreviewColumns() { return [{label:"Row",fieldName:"rowNumber",type:"number"},{label:"External ID",fieldName:"externalId"},{label:"Valid",fieldName:"valid",type:"boolean"},{label:"Outcome",fieldName:"message",wrapText:true}]; }
     get bulkRunRows() { return this.data.integrationRuns || []; }
     get hasBulkRuns() { return this.bulkRunRows.length > 0; }
-    get bulkRunColumns() { return [{label:"Run ID",fieldName:"Run_ID__c"},{label:"Entity",fieldName:"Entity_Type__c"},{label:"State",fieldName:"State__c"},{label:"Mode",fieldName:"Commit_Mode__c"},{label:"File",fieldName:"Source_File_Name__c"},{label:"Processed",fieldName:"Processed_Count__c",type:"number"},{label:"Succeeded",fieldName:"Success_Count__c",type:"number"},{label:"Failed",fieldName:"Failure_Count__c",type:"number"},{label:"Started",fieldName:"Started_At__c",type:"date"}]; }
+    get bulkRunColumns() { return [{label:"Run ID",fieldName:"Run_ID__c"},{label:"Entity",fieldName:"Entity_Type__c"},{label:"State",fieldName:"State__c"},{label:"Mode",fieldName:"Commit_Mode__c"},{label:"Contract",fieldName:"Contract_Version__c"},{label:"Inserted",fieldName:"Inserted_Count__c",type:"number"},{label:"Updated",fieldName:"Updated_Count__c",type:"number"},{label:"Collisions",fieldName:"Collision_Count__c",type:"number"},{label:"Complete %",fieldName:"Completeness_Percent__c",type:"number"},{label:"Freshness",fieldName:"Freshness_State__c"},{label:"Failed",fieldName:"Failure_Count__c",type:"number"},{label:"Started",fieldName:"Started_At__c",type:"date"}]; }
+    get hasBudgetImportPreview() { return Boolean(this.budgetImportPreview); }
+    get budgetImportRows() { return this.budgetImportPreview?.rows || []; }
+    get budgetImportColumns() { return [{label:"Row",fieldName:"rowNumber",type:"number"},{label:"Employee ID",fieldName:"employeeId"},{label:"Valid",fieldName:"valid",type:"boolean"},{label:"Exact outcome",fieldName:"message",wrapText:true}]; }
+    get hasBudgetImportErrors() { return Boolean(this.budgetImportPreview?.errorCsv); }
+    get budgetImportErrorUrl() { return `data:text/csv;charset=utf-8,${encodeURIComponent(this.budgetImportPreview?.errorCsv || "")}`; }
+    get hasBudgetAssurance() { return Boolean(this.budgetAssuranceResult); }
+    get budgetAssuranceMonthlyRows() { return (this.budgetAssuranceResult?.monthlyGrid || []).map((row,index)=>({...row,id:`month-${index}`})); }
+    get budgetAssuranceRosterRows() { return (this.budgetAssuranceResult?.rosterAssurance || []).map((row)=>({...row,windowReady:Boolean(row.roleWindowCoversMonth)})); }
+    get budgetAssuranceMonthlyColumns() { return [{label:"Month",fieldName:"period",type:"date"},{label:"Plan hours",fieldName:"plannedHours",type:"number"},{label:"Actual hours",fieldName:"actualHours",type:"number"},{label:"Variance",fieldName:"varianceHours",type:"number"},{label:"Plan cost",fieldName:"plannedCost",type:"currency"},{label:"As-of state",fieldName:"asOfState"}]; }
+    get budgetAssuranceRosterColumns() { return [{label:"Practitioner",fieldName:"resource"},{label:"Role",fieldName:"role"},{label:"Month",fieldName:"period",type:"date"},{label:"Planned",fieldName:"plannedHours",type:"number"},{label:"160h allocation standard",fieldName:"standardHoursAtAllocation",type:"number"},{label:"Variance",fieldName:"varianceFromStandardHours",type:"number"},{label:"Role window valid",fieldName:"windowReady",type:"boolean"},{label:"State",fieldName:"state"}]; }
+    get sourceContractRows() { return (this.data.assurance?.sourceContracts || []).map((row,index)=>({...row,id:`source-${index}`})); }
+    get hasSourceContracts() { return this.sourceContractRows.length > 0; }
+    get sourceContractColumns() { return [{label:"Mock source",fieldName:"source"},{label:"Entity",fieldName:"entity"},{label:"Stable identity",fieldName:"identity"},{label:"Cadence (h)",fieldName:"expectedCadenceHours",type:"number"},{label:"Latest state",fieldName:"latestState"},{label:"Freshness",fieldName:"freshness"},{label:"Complete %",fieldName:"completenessPercent",type:"number"},{label:"Inserted",fieldName:"inserted",type:"number"},{label:"Updated",fieldName:"updated",type:"number"},{label:"Collisions",fieldName:"collisions",type:"number"}]; }
+    get timeExceptionRows() { return (this.data.assurance?.timeExceptions || []).map((row)=>({...row,reasonsText:(row.reasons || []).join(" · ")})); }
+    get hasTimeExceptions() { return this.timeExceptionRows.length > 0; }
+    get timeExceptionColumns() { return [{label:"Timesheet",fieldName:"timesheet"},{label:"Practitioner",fieldName:"resource"},{label:"Week",fieldName:"weekStart",type:"date"},{label:"Status",fieldName:"status"},{label:"Exception and accountable route",fieldName:"reasonsText",wrapText:true}]; }
+    get hierarchyRows() { return (this.data.assurance?.hierarchy || []).map((row,index)=>({...row,id:`hierarchy-${index}`,billingMixFraction:(row.billingMixPercent || 0)/100})); }
+    get hasHierarchyRows() { return this.hierarchyRows.length > 0; }
+    get hierarchyColumns() { return [{label:"Portfolio / Salesforce tower",fieldName:"path"},{label:"Daily capacity",fieldName:"totalDailyHours",type:"number"},{label:"Billable",fieldName:"billableDailyHours",type:"number"},{label:"WAR",fieldName:"warDailyHours",type:"number"},{label:"Billing mix",fieldName:"billingMixFraction",type:"percent"}]; }
     get bulkErrorRows() { return (this.data.integrationErrors || []).map((row)=>({...row,runId:row.Integration_Run__r?.Run_ID__c})); }
     get hasBulkErrors() { return this.bulkErrorRows.length > 0; }
     get hasDownloadableBulkErrors() { return this.bulkPreviewRows.some((row)=>!row.valid)||this.hasBulkErrors; }
@@ -289,7 +336,17 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get configurationPreviewWarnings() { return (this.configurationPreview?.warnings||[]).join(" · "); }
     get hasConfigurationErrors() { return Boolean(this.configurationPreview?.errors?.length); }
     get hasConfigurationWarnings() { return Boolean(this.configurationPreview?.warnings?.length); }
-    get configurationColumns() { return [{label:"Source",fieldName:"source"},{label:"Domain",fieldName:"domain"},{label:"Code",fieldName:"code"},{label:"Label",fieldName:"label"},{label:"Value",fieldName:"value",wrapText:true},{label:"State",fieldName:"state"},{label:"Version",fieldName:"version",type:"number"},{label:"Effective",fieldName:"effectiveFrom",type:"date"},{label:"Impact",fieldName:"impact",wrapText:true},{type:"action",typeAttributes:{rowActions:{fieldName:"rowActions"}}}]; }
+    get configurationColumns() { return [{label:"Source",fieldName:"source"},{label:"Domain",fieldName:"domain"},{label:"Code",fieldName:"code"},{label:"Label",fieldName:"label"},{label:"Value",fieldName:"value",wrapText:true},{label:"State",fieldName:"state"},{label:"Release",fieldName:"releaseKey"},{label:"Version",fieldName:"version",type:"number"},{label:"Effective",fieldName:"effectiveFrom",type:"date"},{label:"Impact",fieldName:"impact",wrapText:true},{type:"action",typeAttributes:{rowActions:{fieldName:"rowActions"}}}]; }
+    get configurationReleaseSettingOptions() { return this.configurationRows.filter((row)=>row.id&&["Draft","Rejected"].includes(row.state)).map((row)=>({label:`${row.key} v${row.version} · ${row.state}`,value:row.id})); }
+    get hasConfigurationReleaseCandidates() { return this.configurationReleaseSettingOptions.length > 0; }
+    get configurationReleaseAssignmentDisabled() { return !this.configurationReleaseSettingId; }
+    get hasConfigurationReleasePreview() { return Boolean(this.configurationReleasePreview); }
+    get configurationReleaseItems() { return this.configurationReleasePreview?.items || []; }
+    get configurationReleaseColumns() { return [{label:"Key",fieldName:"key"},{label:"Current",fieldName:"currentValue"},{label:"Proposed",fieldName:"normalizedValue"},{label:"Valid",fieldName:"valid",type:"boolean"},{label:"Impact",fieldName:"impact",wrapText:true},{label:"Validation",fieldName:"validation",wrapText:true}]; }
+    get configurationReleaseErrors() { return (this.configurationReleasePreview?.errors || []).join(" · "); }
+    get configurationReleaseWarnings() { return (this.configurationReleasePreview?.warnings || []).join(" · "); }
+    get hasConfigurationReleaseErrors() { return Boolean(this.configurationReleasePreview?.errors?.length); }
+    get hasConfigurationReleaseWarnings() { return Boolean(this.configurationReleasePreview?.warnings?.length); }
     get selectedProfile() { return (this.data.resources||[]).find((resource)=>resource.Id===this.profileResourceId); }
     get profileFacts() { const item=this.selectedProfile;if(!item)return [];const unavailable="Unavailable from EXL source";return [{label:"Employee ID",value:item.Employee_ID__c||unavailable},{label:"Primary Salesforce role",value:item.Primary_Role__c||unavailable},{label:"Tower",value:item.Tower__c||unavailable},{label:"Grade",value:item.Grade__c||unavailable},{label:"Location",value:item.Location__c||unavailable},{label:"Time zone",value:item.Time_Zone__c||item.Work_Calendar__r?.Time_Zone__c||unavailable},{label:"Manager",value:item.Manager__r?.Preferred_Name__c||unavailable},{label:"Organization",value:item.Org_Unit_ID__c||unavailable},{label:"Work email",value:item.Work_Email__c||unavailable},{label:"Source freshness",value:item.Source_Last_Sync__c||unavailable}]; }
     get profileClaimRows() { return (this.data.skillClaims||[]).filter((row)=>row.Resource__c===this.profileResourceId).map((row)=>({...row,type:row.Capability__r?.Type__c,capability:row.Capability__r?.Name,reviewer:row.Reviewer__r?.Name,source:"Practitioner claim + manager decision"})); }
@@ -304,7 +361,11 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get profileEvidenceRows() { return (this.data.projectEvidence||[]).filter((row)=>row.Resource__c===this.profileResourceId).map((row)=>({...row,engagement:row.Engagement__r?.Name,capability:row.Capability__r?.Name,verifier:row.Verified_By__r?.Name})); }
     get hasProfileEvidence() { return this.profileEvidenceRows.length>0; }
     get profileEvidenceColumns() { return [{label:"Capability",fieldName:"capability"},{label:"Engagement",fieldName:"engagement"},{label:"Role",fieldName:"Role__c"},{label:"From",fieldName:"Start_Date__c",type:"date"},{label:"To",fieldName:"End_Date__c",type:"date"},{label:"State",fieldName:"State__c"},{label:"Verified by",fieldName:"verifier"},{label:"Verified",fieldName:"Verified_At__c",type:"date"},{label:"Evidence summary",fieldName:"Summary__c",wrapText:true}]; }
-    get talentColumns() { return [{ label: "Candidate", fieldName: "name" }, { label: "Role", fieldName: "role" }, { label: "Tower", fieldName: "tower" }, { label: "Location", fieldName: "location" }, { label: "Level", fieldName: "approvedLevel", type: "number" }, { label: "Availability", fieldName: "availabilityFraction", type: "percent", typeAttributes: { minimumFractionDigits: 0 } }, { label: "Fit score", fieldName: "score", type: "number" }, { label: "Explanation", fieldName: "explanation", wrapText: true }]; }
+    get talentColumns() { return [{ label: "Candidate", fieldName: "name" }, { label: "Eligibility", fieldName: "availabilityStatus" }, { label: "Role", fieldName: "role" }, { label: "Tower", fieldName: "tower" }, { label: "Location", fieldName: "location" }, { label: "Level", fieldName: "approvedLevel", type: "number" }, { label: "Availability", fieldName: "availabilityFraction", type: "percent", typeAttributes: { minimumFractionDigits: 0 } }, { label: "Gap reasons", fieldName: "gapSummary", wrapText: true }, { label: "Fit score", fieldName: "score", type: "number" }, { label: "Explanation", fieldName: "explanation", wrapText: true }]; }
+    get notificationLifecycleRows() { return (this.data.notifications || []).map((item)=>({...item,ownerName:item.Accountable_Owner__r?.Name || "Unassigned",closedByName:item.Closed_By__r?.Name || "—",rowActions:item.Resolution_Status__c==="Closed"?[]:[{label:"Close with evidence",name:"closeAlert"}]})); }
+    get hasNotificationLifecycleRows() { return this.notificationLifecycleRows.length > 0; }
+    get notificationLifecycleColumns() { return [{label:"Alert",fieldName:"Title__c"},{label:"Severity",fieldName:"Severity__c"},{label:"Resolution",fieldName:"Resolution_Status__c"},{label:"Owner",fieldName:"ownerName"},{label:"First seen",fieldName:"First_Seen_At__c",type:"date"},{label:"Closed",fieldName:"Closed_At__c",type:"date"},{label:"Closed by",fieldName:"closedByName"},{label:"Closure evidence",fieldName:"Closure_Note__c",wrapText:true},{type:"action",typeAttributes:{rowActions:{fieldName:"rowActions"}}}]; }
+    get hasScenarioResult() { return Boolean(this.scenarioResult); }
     get showDecisionPanel() { return Boolean(this.decisionDraft); }
     get decisionRequiresLevel() { return this.decisionDraft?.actionName === "approveClaim"; }
     get decisionNoteRequired() { return ["decline", "rejectClaim", "rejectBudget", "rejectTimesheet", "correctTimesheet"].includes(this.decisionDraft?.actionName); }
@@ -372,12 +433,16 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     handleAllocationInput(event) { this.allocationDraft = { ...this.allocationDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; if (event.target.dataset.field === "allocationId") this.selectAllocation((this.data.allocations || []).find((item) => item.Id === event.detail.value)); }
     handleBudgetInput(event) { this.budgetDraft = { ...this.budgetDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; if (event.target.dataset.field === "budgetId") this.selectBudget((this.data.budgets || []).find((item) => item.Id === event.detail.value)); }
     handleBudgetLineInput(event) { const value = event.target.type === "checkbox" ? event.target.checked : event.detail?.value ?? event.target.value; this.budgetLineDraft = { ...this.budgetLineDraft, [event.target.dataset.field]: value }; }
+    handleBudgetImportInput(event) { this.budgetImportDraft = { ...this.budgetImportDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleBulkInput(event) { this.bulkDraft = { ...this.bulkDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleConfigurationInput(event) { const value=event.target.type==="checkbox"?event.target.checked:event.detail?.value??event.target.value;this.configurationDraft={...this.configurationDraft,[event.target.dataset.field]:value}; }
+    handleConfigurationReleaseInput(event) { const field=event.target.dataset.field;const value=event.detail?.value??event.target.value;if(field==="releaseKey")this.configurationReleaseKey=value;else this.configurationReleaseSettingId=value;this.configurationReleasePreview=undefined; }
     handleProfileInput(event) { this.profileResourceId = event.detail.value; }
     handleSkillInput(event) { this.skillDraft = { ...this.skillDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleCredentialInput(event) { this.credentialDraft = { ...this.credentialDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleTalentInput(event) { this.talentDraft = { ...this.talentDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
+    handleScenarioInput(event) { this.scenarioDraft = { ...this.scenarioDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
+    handleAlertClosureNote(event) { this.alertClosureNote = event.detail?.value ?? event.target.value; }
     handleTimeInput(event) { this.timeDraft = { ...this.timeDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleTimesheetInput(event) { this.timesheetDraft = { ...this.timesheetDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleDecisionInput(event) { this.decisionDraft = { ...this.decisionDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
@@ -407,12 +472,21 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     async handleSplitAllocation() { const draft=this.allocationDraft;await this.execute("Split allocation",()=>splitAllocation({ allocationId:draft.allocationId,splitDate:draft.splitDate,firstDailyHours:Number(draft.firstDailyHours),secondDailyHours:Number(draft.secondDailyHours),reason:draft.reason })); }
     async handleDeallocate() { const draft=this.allocationDraft;await this.execute("Deallocate resource",()=>deallocate({ allocationId:draft.allocationId,effectiveEndDate:draft.effectiveEndDate,reason:draft.reason })); }
     async handleSaveBudget() { const draft=this.budgetDraft;await this.execute("Save budget assumptions",()=>saveBudgetDraft({ budgetId:draft.budgetId,revenue:Number(draft.revenue),upliftPercent:Number(draft.upliftPercent),effortContingencyPercent:Number(draft.effortContingencyPercent),expenseContingencyPercent:Number(draft.expenseContingencyPercent),travelRate:Number(draft.travelRate),onsiteMonths:Number(draft.onsiteMonths) })); }
-    async handleSaveBudgetLine() { const draft=this.budgetLineDraft;await this.execute("Save WBS line",()=>saveBudgetLine({ budgetId:this.budgetDraft.budgetId,lineId:draft.lineId||null,periodStart:draft.periodStart,phase:draft.phase,workUnit:draft.workUnit,roleName:draft.roleName,location:draft.location,plannedHours:Number(draft.plannedHours),costRate:Number(draft.costRate),allocationPercent:Number(draft.allocationPercent),onsite:Boolean(draft.onsite) })); }
+    async handleSaveBudgetLine() { const draft=this.budgetLineDraft;const command=draft.resourceId||draft.roleStart||draft.roleEnd?()=>saveBudgetRosterLine({ budgetId:this.budgetDraft.budgetId,lineId:draft.lineId||null,resourceId:draft.resourceId||null,periodStart:draft.periodStart,phase:draft.phase,workUnit:draft.workUnit,roleName:draft.roleName,location:draft.location,plannedHours:Number(draft.plannedHours),costRate:Number(draft.costRate),allocationPercent:Number(draft.allocationPercent),onsite:Boolean(draft.onsite),roleStart:draft.roleStart||null,roleEnd:draft.roleEnd||null }):()=>saveBudgetLine({ budgetId:this.budgetDraft.budgetId,lineId:draft.lineId||null,periodStart:draft.periodStart,phase:draft.phase,workUnit:draft.workUnit,roleName:draft.roleName,location:draft.location,plannedHours:Number(draft.plannedHours),costRate:Number(draft.costRate),allocationPercent:Number(draft.allocationPercent),onsite:Boolean(draft.onsite) });await this.execute("Save monthly roster line",command); }
+    async handlePreviewBudgetImport() { const draft=this.budgetImportDraft;this.loading=true;try{this.budgetImportPreview=await previewBudgetRoster({budgetId:this.budgetDraft.budgetId,jsonRows:draft.jsonRows});}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Budget roster pre-validation",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
+    async handleCommitBudgetImport() { const draft=this.budgetImportDraft;await this.execute("Commit monthly budget roster",()=>commitBudgetRoster({budgetId:this.budgetDraft.budgetId,jsonRows:draft.jsonRows,sourceFileName:draft.sourceFileName}));this.budgetImportPreview=undefined; }
+    async handleBudgetAssurance() { this.loading=true;try{this.budgetAssuranceResult=JSON.parse(await budgetAssurance({budgetId:this.budgetDraft.budgetId,asOfDate:this.isoDate(new Date())}));}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Budget assurance",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
     async handlePreviewBulk() { const draft=this.bulkDraft;this.loading=true;try{this.bulkPreview=await previewBulk({entityType:draft.entityType,jsonRows:draft.jsonRows});}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Bulk pre-validation",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
     async handleCommitBulk() { const draft=this.bulkDraft;await this.execute("Commit controlled batch",()=>commitBulk({entityType:draft.entityType,jsonRows:draft.jsonRows,sourceFileName:draft.sourceFileName,commitMode:draft.commitMode})); }
     async handlePreviewConfiguration() { const draft=this.configurationDraft;this.loading=true;try{this.configurationPreview=await previewConfiguration({domain:draft.domain,code:draft.code,displayLabel:draft.displayLabel,valueType:draft.valueType,numericValue:draft.numericValue===undefined||draft.numericValue===""?null:Number(draft.numericValue),textValue:draft.textValue||null,booleanValue:Boolean(draft.booleanValue),attributesJson:draft.attributesJson||null,unit:draft.unit||null,effectiveFrom:draft.effectiveFrom,effectiveTo:draft.effectiveTo||null,reason:draft.reason});}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Configuration preview",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
     async handleSaveConfiguration() { const draft=this.configurationDraft;await this.execute("Save configuration draft",()=>saveConfigurationDraft({settingId:draft.settingId||null,domain:draft.domain,code:draft.code,displayLabel:draft.displayLabel,valueType:draft.valueType,numericValue:draft.numericValue===undefined||draft.numericValue===""?null:Number(draft.numericValue),textValue:draft.textValue||null,booleanValue:Boolean(draft.booleanValue),attributesJson:draft.attributesJson||null,unit:draft.unit||null,effectiveFrom:draft.effectiveFrom,effectiveTo:draft.effectiveTo||null,reason:draft.reason}));this.configurationPreview=undefined; }
     async handleRescheduleOperations() { await this.execute("Apply operations schedule",()=>rescheduleOperations()); }
+    async handleAssignConfigurationRelease() { const settingId=this.configurationReleaseSettingId;this.configurationReleaseSettingId=undefined;await this.execute("Assign configuration release",()=>assignConfigurationRelease({settingId,releaseKey:this.configurationReleaseKey}));this.configurationReleasePreview=undefined; }
+    async handlePreviewConfigurationRelease() { this.loading=true;try{this.configurationReleasePreview=await previewConfigurationRelease({releaseKey:this.configurationReleaseKey});}catch(error){this.dispatchEvent(new ShowToastEvent({title:"Atomic release preview",message:this.messageFor(error),variant:"error",mode:"sticky"}));}finally{this.loading=false;} }
+    async handleSubmitConfigurationRelease() { await this.execute("Submit atomic configuration release",()=>submitConfigurationRelease({releaseKey:this.configurationReleaseKey}));this.configurationReleasePreview=undefined; }
+    async handleApproveConfigurationRelease() { await this.execute("Activate atomic configuration release",()=>decideConfigurationRelease({releaseKey:this.configurationReleaseKey,approve:true,note:"Independent release assurance completed."}));this.configurationReleasePreview=undefined; }
+    async handleRejectConfigurationRelease() { await this.execute("Reject atomic configuration release",()=>decideConfigurationRelease({releaseKey:this.configurationReleaseKey,approve:false,note:"Release requires correction before activation."}));this.configurationReleasePreview=undefined; }
+    async handleRunRetention() { await this.execute("Run retention assurance",()=>runMockRetention({reason:"Authorized non-destructive EXL mock dry run from ADMUI-07."})); }
     async handleConfigurationAction(event) { const {action,row}=event.detail;if(action.name==="override"||action.name==="edit"){const numberValue=row.valueType==="Number"?Number(row.value):undefined;this.configurationDraft={settingId:action.name==="edit"?row.id:null,domain:row.domain,code:row.code,displayLabel:row.label,valueType:row.valueType,numericValue:numberValue,textValue:row.valueType==="Text"?row.value:undefined,booleanValue:row.valueType==="Boolean"&&row.value==="true",attributesJson:row.valueType==="JSON"?row.value:undefined,unit:row.unit,effectiveFrom:action.name==="edit"&&row.effectiveFrom?row.effectiveFrom:this.isoDate(new Date()),effectiveTo:action.name==="edit"?row.effectiveTo:undefined,reason:`${action.name==="edit"?"Edit":"Override"} ${row.key} with reviewed EXL control evidence.`};this.configurationPreview=undefined;return;}if(action.name==="submit")return this.execute("Submit configuration",()=>submitConfiguration({settingId:row.id}));if(action.name==="approve")return this.execute("Activate configuration",()=>decideConfiguration({settingId:row.id,approve:true,note:this.configurationDraft.reason||"Validated configuration activation."}));if(action.name==="reject")return this.execute("Reject configuration",()=>decideConfiguration({settingId:row.id,approve:false,note:this.configurationDraft.reason||"Configuration requires correction."}));if(action.name==="rollback")return this.execute("Restore configuration",()=>rollbackConfiguration({priorSettingId:row.id,reason:this.configurationDraft.reason||"Controlled rollback from administration console."})); }
 
     async handleSubmitClaim() {
@@ -433,7 +507,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         this.loading = true;
         try {
             const rows = await searchCandidates({ capabilityId: draft.capabilityId || null, minimumLevel: Number(draft.minimumLevel), requestedRole: draft.requestedRole || null, startDate: draft.startDate, endDate: draft.endDate, dailyHours: Number(draft.dailyHours), tower: draft.tower || null, location: draft.location || null, requestedLimit: Number(draft.limitSize) });
-            this.talentResults = rows.map((row) => ({ ...row, availabilityFraction: (row.availablePercent || 0) / 100 }));
+            this.talentResults = rows.map((row) => ({ ...row, availabilityFraction: (row.availablePercent || 0) / 100, gapSummary: (row.gapReasons || []).join(" · ") || "No material availability gap" }));
         } catch (error) {
             this.dispatchEvent(new ShowToastEvent({ title: "Talent search", message: this.messageFor(error), variant: "error", mode: "sticky" }));
         } finally { this.loading = false; }
@@ -446,6 +520,21 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     async handleSaveTimeEntry() {
         const draft = this.timeDraft;
         await this.execute("Save time entry", () => saveTimeEntry({ timesheetId: draft.timesheetId, allocationId: draft.allocationId, workDate: draft.workDate, hours: Number(draft.hours), workUnitId: null, comment: draft.comment }));
+    }
+
+    async handleRunScenario() {
+        this.loading = true;
+        try {
+            const draft=this.scenarioDraft;
+            this.scenarioResult=JSON.parse(await runWhatIf({scenarioJson:JSON.stringify({name:draft.name,startDate:draft.startDate,endDate:draft.endDate,headcountDelta:Number(draft.headcountDelta),billableAllocationPercent:Number(draft.billableAllocationPercent)})}));
+        } catch (error) {
+            this.dispatchEvent(new ShowToastEvent({ title: "What-if scenario", message: this.messageFor(error), variant: "error", mode: "sticky" }));
+        } finally { this.loading = false; }
+    }
+
+    async handleNotificationLifecycleAction(event) {
+        const { action, row } = event.detail;
+        if (action.name === "closeAlert") await this.execute("Close accountable alert",()=>closeAlert({notificationId:row.Id,closureNote:this.alertClosureNote}));
     }
 
     async handleRowAction(event) {
@@ -491,7 +580,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     }
 
     selectAllocation(item) { if (!item) return; const splitDate=this.addDays(item.Start_Date__c,1);this.allocationDraft = { ...this.allocationDraft, allocationId:item.Id,startDate:item.Start_Date__c,endDate:item.End_Date__c,effectiveEndDate:item.End_Date__c,splitDate:splitDate<=item.End_Date__c?splitDate:item.Start_Date__c,dailyHours:item.Daily_Hours__c,firstDailyHours:item.Daily_Hours__c,secondDailyHours:item.Daily_Hours__c,roleName:item.Role__c,classification:item.Classification__c,responsibleOwnerId:item.Responsible_Owner__c,reviewDate:item.Review_Date__c }; this.planningDraft = { ...this.planningDraft, resourceId:item.Resource__c,startDate:item.Start_Date__c,endDate:item.End_Date__c,effort:item.Daily_Hours__c,excludedAllocationId:item.Id }; }
-    selectBudget(item) { if (!item) return; this.budgetDraft = { ...this.budgetDraft,budgetId:item.Id,revenue:item.Revenue__c||0,upliftPercent:item.Uplift_Percent__c||0,effortContingencyPercent:item.Effort_Contingency_Percent__c||0,expenseContingencyPercent:item.Expense_Contingency_Percent__c||0,travelRate:item.Travel_Rate__c||0,onsiteMonths:item.Onsite_Months__c||0 }; }
+    selectBudget(item) { if (!item) return; this.budgetDraft = { ...this.budgetDraft,budgetId:item.Id,revenue:item.Revenue__c||0,upliftPercent:item.Uplift_Percent__c||0,effortContingencyPercent:item.Effort_Contingency_Percent__c||0,expenseContingencyPercent:item.Expense_Contingency_Percent__c||0,travelRate:item.Travel_Rate__c||0,onsiteMonths:item.Onsite_Months__c||0 };this.budgetLineDraft={...this.budgetLineDraft,roleStart:item.Engagement__r?.Start_Date__c,roleEnd:item.Engagement__r?.End_Date__c};this.budgetImportPreview=undefined;this.budgetAssuranceResult=undefined; }
 
     navigateToRecord(recordId) {
         this[NavigationMixin.Navigate]({ type: "standard__recordPage", attributes: { recordId, actionName: "view" } });

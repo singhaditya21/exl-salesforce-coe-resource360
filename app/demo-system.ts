@@ -34,16 +34,20 @@ export type DemoTimesheet = {
   hours: number[]; state: TimeState; note?: string;
 };
 
-export type DemoNotification = { id: string; title: string; detail: string; time: string; read: boolean; severity: "Normal" | "High" };
+export type DemoNotification = { id: string; title: string; detail: string; time: string; read: boolean; severity: "Normal" | "High"; resolution: "Open" | "Closed"; owner?: string; firstSeen: string; closureNote?: string };
 export type DemoAuditEvent = { id: string; action: string; entity: string; actor: string; role: DemoRole; time: string; detail: string };
 export type ConfigurationState = "Draft" | "Pending approval" | "Active" | "Rejected" | "Retired";
 export type DemoConfiguration = {
   id: string; domain: string; code: string; label: string; value: string; unit?: string;
-  version: number; effectiveFrom: string; state: ConfigurationState; reason: string;
+  version: number; effectiveFrom: string; state: ConfigurationState; reason: string; releaseKey?: string;
 };
 
+export type DemoBudgetRosterLine = { id: string; budgetId: string; employeeId: string; employee: string; role: string; month: string; allocation: number; plannedHours: number; costRate: number; roleStart: string; roleEnd: string };
+export type MockSourceContract = { id: string; source: string; entity: string; identity: string; cadenceHours: number; state: "Fresh" | "Stale" | "Partial" | "Not run"; completeness: number; inserted: number; updated: number; collisions: number; cutoff: string; contractVersion: "R360-MOCK-1.2" };
+export type DemoScenario = { id: string; name: string; startDate: string; endDate: string; headcountDelta: number; billableAllocation: number; capacityHours: number; billableHours: number; savedAt: string };
+
 export type DemoState = {
-  version: 3;
+  version: 4;
   signedIn: boolean;
   activeRole: DemoRole;
   budgets: DemoBudget[];
@@ -54,9 +58,12 @@ export type DemoState = {
   notifications: DemoNotification[];
   audit: DemoAuditEvent[];
   configurations: DemoConfiguration[];
+  budgetRoster: DemoBudgetRosterLine[];
+  sourceContracts: MockSourceContract[];
+  scenarios: DemoScenario[];
 };
 
-const STORAGE_KEY = "exl-resource360-demo-v3";
+const STORAGE_KEY = "exl-resource360-demo-v4";
 const roleNames = ["Beginner", "Intermediate", "Advanced", "SME"];
 
 function now() {
@@ -87,7 +94,7 @@ export function fitForPerson(person: DemoPerson, capability: string, requiredLev
 }
 
 export const initialDemoState: DemoState = {
-  version: 3,
+  version: 4,
   signedIn: true,
   activeRole: "COE Staffer",
   budgets: [
@@ -112,9 +119,9 @@ export const initialDemoState: DemoState = {
     { id: "TS-3401", employee: "Riya Sen", allocationId: "AL-1201", engagement: "Claims Modernization", week: "17–23 Aug 2026", hours: [8, 8, 8, 8, 8, 0, 0], state: "Submitted" },
   ],
   notifications: [
-    { id: "NTF-1", title: "Staffing decision due", detail: "SR-1842 reaches SLA in six hours", time: "18 minutes ago", read: false, severity: "High" },
-    { id: "NTF-2", title: "Budget approval required", detail: "Claims Modernization · Budget v3", time: "1 hour ago", read: false, severity: "High" },
-    { id: "NTF-3", title: "Capability claim awaiting review", detail: "Kabir Rao · API-led Connectivity", time: "3 hours ago", read: false, severity: "Normal" },
+    { id: "NTF-1", title: "Staffing decision due", detail: "SR-1842 reaches SLA in six hours", time: "18 minutes ago", read: false, severity: "High", resolution: "Open", owner: "COE Staffing Pool", firstSeen: "24 Aug 2026, 10:02 am" },
+    { id: "NTF-2", title: "Budget approval required", detail: "Claims Modernization · Budget v3", time: "1 hour ago", read: false, severity: "High", resolution: "Open", owner: "Portfolio Finance", firstSeen: "24 Aug 2026, 9:20 am" },
+    { id: "NTF-3", title: "Capability claim awaiting review", detail: "Kabir Rao · API-led Connectivity", time: "3 hours ago", read: false, severity: "Normal", resolution: "Open", owner: "Reporting Manager", firstSeen: "24 Aug 2026, 7:41 am" },
   ],
   audit: [
     { id: "AUD-1", action: "BUDGET_SUBMITTED", entity: "BUD-1003", actor: "Arjun Shah", role: "Project Manager", time: "21 Aug 2026, 4:42 pm", detail: "Budget v3 routed for approval" },
@@ -127,7 +134,24 @@ export const initialDemoState: DemoState = {
     { id: "CFG-104", domain: "Escalation", code: "Escalation_WAR_Tiers", label: "WAR escalation tiers", value: "28d Delivery Head · 42d Account Owner · 56d Operations", version: 2, effectiveFrom: "2026-04-01", state: "Active", reason: "Delivery Operations escalation matrix" },
     { id: "CFG-105", domain: "KPI", code: "KPI_Billed_Target_Percent", label: "Billed utilization target", value: "75", unit: "percent", version: 1, effectiveFrom: "2026-08-24", state: "Active", reason: "Assumed EXL demo target" },
     { id: "CFG-106", domain: "Approval", code: "Timesheet_Correction_Dual_Control", label: "Correction dual control", value: "true", version: 1, effectiveFrom: "2026-08-24", state: "Active", reason: "Independent corrected-time approval" },
+    { id: "CFG-107", domain: "Policy", code: "Source_Completeness_Threshold_Percent", label: "Source completeness threshold", value: "95", unit: "percent", version: 2, effectiveFrom: "2026-09-01", state: "Draft", reason: "Mock contract completeness release", releaseKey: "EXL-MOCK-2026-09-R1" },
+    { id: "CFG-108", domain: "Policy", code: "Scenario_Max_Days", label: "Scenario maximum horizon", value: "730", unit: "days", version: 2, effectiveFrom: "2026-09-01", state: "Draft", reason: "Mock scenario guardrail release", releaseKey: "EXL-MOCK-2026-09-R1" },
   ],
+  budgetRoster: [
+    { id: "BR-1001", budgetId: "BUD-1004", employeeId: "EXL-DEMO-1001", employee: "Aarav Mehta", role: "Data Cloud Architect", month: "2026-09", allocation: 50, plannedHours: 80, costRate: 4200, roleStart: "2026-09-02", roleEnd: "2027-03-31" },
+    { id: "BR-1002", budgetId: "BUD-1004", employeeId: "EXL-DEMO-1002", employee: "Kabir Rao", role: "MuleSoft Developer", month: "2026-09", allocation: 40, plannedHours: 64, costRate: 2750, roleStart: "2026-09-02", roleEnd: "2027-03-31" },
+    { id: "BR-1003", budgetId: "BUD-1004", employeeId: "EXL-DEMO-1003", employee: "Riya Sen", role: "Service Cloud Lead", month: "2026-10", allocation: 35, plannedHours: 56, costRate: 3500, roleStart: "2026-10-01", roleEnd: "2027-02-28" },
+  ],
+  sourceContracts: [
+    { id: "SRC-PEOPLE", source: "People Master", entity: "Employee", identity: "Employee ID", cadenceHours: 24, state: "Fresh", completeness: 99.7, inserted: 4, updated: 1858, collisions: 0, cutoff: "24 Aug 2026, 9:48 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "SRC-ENG", source: "Engagement Master", entity: "Engagement", identity: "Engagement ID", cadenceHours: 4, state: "Fresh", completeness: 100, inserted: 1, updated: 37, collisions: 0, cutoff: "24 Aug 2026, 10:03 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "SRC-LEARN", source: "Learning Hub", entity: "LearningAchievement", identity: "Achievement ID", cadenceHours: 168, state: "Partial", completeness: 96.4, inserted: 82, updated: 214, collisions: 3, cutoff: "23 Aug 2026, 7:00 pm", contractVersion: "R360-MOCK-1.2" },
+    { id: "SRC-CRED", source: "Credential Gateway", entity: "Credential", identity: "Credential ID", cadenceHours: 168, state: "Fresh", completeness: 99.2, inserted: 11, updated: 1273, collisions: 0, cutoff: "24 Aug 2026, 8:00 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "SRC-COM", source: "Commercial Master", entity: "CommercialReference", identity: "External reference ID", cadenceHours: 24, state: "Fresh", completeness: 100, inserted: 0, updated: 38, collisions: 0, cutoff: "24 Aug 2026, 9:30 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "SRC-ORG", source: "Org Hierarchy", entity: "OrgUnit", identity: "Org unit ID", cadenceHours: 24, state: "Fresh", completeness: 98.9, inserted: 2, updated: 47, collisions: 0, cutoff: "24 Aug 2026, 9:45 am", contractVersion: "R360-MOCK-1.2" },
+    { id: "SRC-PORT", source: "Portfolio Master", entity: "Portfolio", identity: "Portfolio ID", cadenceHours: 24, state: "Fresh", completeness: 100, inserted: 0, updated: 8, collisions: 0, cutoff: "24 Aug 2026, 9:45 am", contractVersion: "R360-MOCK-1.2" },
+  ],
+  scenarios: [],
 };
 
 function readState() {
@@ -146,18 +170,19 @@ export function useDemoSystem() {
   const [state, setState] = useState<DemoState>(readState);
   useEffect(() => window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)), [state]);
 
-  function transact(action: string, entity: string, detail: string, mutate: (current: DemoState) => DemoState, notification?: Omit<DemoNotification, "id" | "time" | "read">) {
+  function transact(action: string, entity: string, detail: string, mutate: (current: DemoState) => DemoState, notification?: Omit<DemoNotification, "id" | "time" | "read" | "resolution" | "firstSeen">) {
     setState((current) => {
       const next = mutate(current);
       const time = now();
       const audit: DemoAuditEvent = { id: `AUD-${Date.now()}`, action, entity, actor: "Maya Patel", role: current.activeRole, time, detail };
-      return { ...next, audit: [audit, ...next.audit], notifications: notification ? [{ ...notification, id: `NTF-${Date.now()}`, time: "Just now", read: false }, ...next.notifications] : next.notifications };
+      return { ...next, audit: [audit, ...next.audit], notifications: notification ? [{ ...notification, id: `NTF-${Date.now()}`, time: "Just now", read: false, resolution: "Open", firstSeen: time }, ...next.notifications] : next.notifications };
     });
   }
 
   function setRole(role: DemoRole) { setState((current) => ({ ...current, activeRole: role })); }
   function setSignedIn(signedIn: boolean) { setState((current) => ({ ...current, signedIn })); }
   function markNotificationsRead() { setState((current) => ({ ...current, notifications: current.notifications.map((item) => ({ ...item, read: true })) })); }
+  function closeNotification(id: string, closureNote: string) { transact("ALERT_CLOSED", id, closureNote, (current) => ({ ...current, notifications: current.notifications.map((item) => item.id === id ? { ...item, resolution: "Closed", owner: item.owner ?? "Maya Patel", closureNote, read: true } : item) })); }
 
   function updateBudget(id: string, patch: Partial<Pick<DemoBudget, "revenue" | "baseLabour" | "uplift" | "effortContingency" | "expenseContingency" | "travelRate" | "onsiteMonths" | "plannedHours">>) {
     transact("BUDGET_SAVED", id, "Draft assumptions recalculated", (current) => ({ ...current, budgets: current.budgets.map((item) => item.id === id ? { ...item, ...patch, state: "Draft", version: item.state === "Approved" ? item.version + 1 : item.version } : item) }));
@@ -168,6 +193,7 @@ export function useDemoSystem() {
   function decideBudget(id: string, decision: "Approved" | "Rejected", note: string) {
     transact(`BUDGET_${decision.toUpperCase()}`, id, note || `${decision} in demo workflow`, (current) => ({ ...current, budgets: current.budgets.map((item) => item.id === id ? { ...item, state: decision, decisionNote: note || `${decision} by Maya Patel` } : item) }), { title: `Budget ${decision.toLowerCase()}`, detail: `${id} · ${note || "Decision recorded"}`, severity: decision === "Rejected" ? "High" : "Normal" });
   }
+  function importBudgetRoster(budgetId: string, rows: Omit<DemoBudgetRosterLine, "id" | "budgetId">[]) { transact("BUDGET_ROSTER_IMPORTED", budgetId, `${rows.length} monthly roster rows committed atomically`, (current) => ({ ...current, budgetRoster: [...rows.map((row, index) => ({ ...row, budgetId, id: `BR-${Date.now()}-${index + 1}` })), ...current.budgetRoster] }), { title: "Budget roster imported", detail: `${budgetId} · ${rows.length} validated rows`, severity: "Normal" }); }
 
   function submitClaim(personId: string, capability: string, requestedLevel: 1 | 2 | 3 | 4, evidence: string) {
     const id = `CLM-${Date.now().toString().slice(-6)}`;
@@ -214,9 +240,16 @@ export function useDemoSystem() {
     transact("CONFIG_ROLLED_BACK", restored.id, `${prior.code} restored as v${nextVersion}`, (current) => ({ ...current, configurations: [restored, ...current.configurations.map((item) => item.code === prior.code && item.state === "Active" ? { ...item, state: "Retired" as ConfigurationState } : item)] }));
   }
 
+  function assignConfigurationRelease(id: string, releaseKey: string) { transact("CONFIG_RELEASE_ASSIGNED", id, `${id} assigned to ${releaseKey}`, (current) => ({ ...current, configurations: current.configurations.map((item) => item.id === id ? { ...item, releaseKey } : item) })); }
+  function submitConfigurationRelease(releaseKey: string) { transact("CONFIG_RELEASE_SUBMITTED", releaseKey, "Atomic release submitted for independent approval", (current) => ({ ...current, configurations: current.configurations.map((item) => item.releaseKey === releaseKey && ["Draft", "Rejected"].includes(item.state) ? { ...item, state: "Pending approval" } : item) })); }
+  function decideConfigurationRelease(releaseKey: string, approve: boolean, note: string) { transact(approve ? "CONFIG_RELEASE_ACTIVATED" : "CONFIG_RELEASE_REJECTED", releaseKey, note, (current) => ({ ...current, configurations: current.configurations.map((item) => item.releaseKey === releaseKey && item.state === "Pending approval" ? { ...item, state: approve ? "Active" : "Rejected" } : approve && current.configurations.some((target) => target.releaseKey === releaseKey && target.code === item.code) && item.state === "Active" ? { ...item, state: "Retired" } : item) })); }
+  function runMockReconciliation(sourceId: string) { transact("MOCK_SOURCE_RECONCILED", sourceId, "R360-MOCK-1.2 deterministic completeness and collision checks passed", (current) => ({ ...current, sourceContracts: current.sourceContracts.map((item) => item.id === sourceId ? { ...item, state: "Fresh", completeness: 100, collisions: 0, cutoff: now(), updated: item.updated + 1 } : item) }), { title: "Mock source reconciled", detail: `${sourceId} is fresh and 100% complete`, severity: "Normal" }); }
+  function runRetentionDryRun() { transact("RETENTION_DRY_RUN", "R360-MOCK-RETENTION", "No records deleted; 2,555-day mock assumptions evaluated", (current) => current, { title: "Retention dry run complete", detail: "No data deleted · legal hold false · production approval still required", severity: "Normal" }); }
+  function saveScenario(input: Omit<DemoScenario, "id" | "savedAt">) { const scenario = { ...input, id: `SCN-${Date.now().toString().slice(-6)}`, savedAt: now() }; transact("WHAT_IF_SCENARIO_SAVED", scenario.id, `${scenario.headcountDelta} HC · ${scenario.billableAllocation}% billable`, (current) => ({ ...current, scenarios: [scenario, ...current.scenarios] })); return scenario.id; }
+
   function reset() { setState(initialDemoState); }
   const unread = useMemo(() => state.notifications.filter((item) => !item.read).length, [state.notifications]);
-  return { state, unread, setRole, setSignedIn, markNotificationsRead, updateBudget, submitBudget, decideBudget, submitClaim, decideClaim, commitAllocation, updateTimesheet, submitTimesheet, decideTimesheet, saveConfiguration, submitConfiguration, decideConfiguration, restoreConfiguration, reset };
+  return { state, unread, setRole, setSignedIn, markNotificationsRead, closeNotification, updateBudget, submitBudget, decideBudget, importBudgetRoster, submitClaim, decideClaim, commitAllocation, updateTimesheet, submitTimesheet, decideTimesheet, saveConfiguration, submitConfiguration, decideConfiguration, restoreConfiguration, assignConfigurationRelease, submitConfigurationRelease, decideConfigurationRelease, runMockReconciliation, runRetentionDryRun, saveScenario, reset };
 }
 
 export type DemoSystem = ReturnType<typeof useDemoSystem>;

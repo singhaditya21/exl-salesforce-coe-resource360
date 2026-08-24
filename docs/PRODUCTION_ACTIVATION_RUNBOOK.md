@@ -4,6 +4,8 @@
 
 This runbook converts the tested `Resource360Hub` Developer Edition demo into an EXL-operated Salesforce release. The repository contains the Salesforce application, governed metadata, deterministic demo data and deployment automation. It intentionally contains no EXL credentials, personal production data or guessed endpoint URLs.
 
+The complete sanitized assumption boundary is in `MOCK_CONTRACT_REGISTER.md`. Production activation must replace—not silently inherit—each mock source, identity, volume, owner, policy and approval assumption.
+
 GitHub Pages is the sanitized 103-screen design/demo companion. Salesforce Lightning is the transactional application runtime. GitHub Pages never stores or processes production staffing, employee, budget, skill, credential or timesheet data.
 
 ## Assumed EXL source façades
@@ -26,9 +28,11 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 3. Create Named Credentials and External Credentials in the target org for each approved façade. Store secrets only in Salesforce/GitHub encrypted secret stores; never commit authentication URLs or tokens.
 4. Add the encrypted GitHub Actions secret `RESOURCE360_SFDX_AUTH_URL` for the non-production CI validation org. Use a least-privilege integration user and rotate it under EXL policy.
 5. Run `pnpm sf:generate`, `pnpm lint`, `pnpm test`, and a Salesforce dry-run with `Resource360ServiceTest`. Generated-file drift, any test failure, component failure or coverage warning blocks promotion.
-6. Deploy through the approved EXL release pipeline; assign the smallest applicable Resource360 permission-set group, not the Administrator set by default.
-7. Schedule the operations and sharing jobs with dedicated monitoring ownership. Verify job execution, outbox retries/dead letters, notification routing and integration-run evidence.
-8. Assign configuration operators and independent configuration approvers. Review the deployed catalog, create any EXL-specific runtime versions, preview them, retain approvals and explicitly apply the governed scheduler cron.
+6. Before an Apex deployment to an already scheduled org, run `scripts/apex/pauseResource360Schedule.apex` and verify that no Resource360 asynchronous job is queued or processing. This avoids Salesforce’s scheduled-class deployment lock.
+7. Deploy through the approved EXL release pipeline; assign the smallest applicable Resource360 permission-set group, not the Administrator set by default.
+8. Restore `scripts/apex/scheduleResource360.apex` only after a successful deploy/seed. Verify exactly one waiting cron, job execution, outbox retries/dead letters, notification routing and integration-run evidence.
+9. Assign configuration operators and independent configuration approvers. Review the deployed catalog, group coordinated settings under a release key, preview the atomic release, retain an independent approval and explicitly apply the governed scheduler cron.
+10. Run retention in preview/dry-run mode only until Legal, Privacy and Records Management approve deletion scope, legal-hold behavior and recovery evidence. The delivered baseline never deletes records.
 
 ## Data, security and control gates
 
@@ -50,4 +54,4 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 
 ## Go/no-go evidence
 
-Production go-live is permitted only when all 25 UAT scenarios pass or have approved exceptions, there are no open Sev-1/Sev-2 defects, reconciliation is signed, security/privacy approvals are recorded, recovery is demonstrated, and operational ownership is accepted. Until then the repository and `Resource360Hub` remain a production-shaped demo baseline.
+Production go-live is permitted only when all 25 UAT scenarios pass or have approved exceptions, the four activation requirements in `REQUIREMENTS_TRACEABILITY.md` are signed, there are no open Sev-1/Sev-2 defects, reconciliation is signed, security/privacy approvals are recorded, recovery is demonstrated, and operational ownership is accepted. Until then the repository and `Resource360Hub` remain a production-shaped sanitized mock baseline.

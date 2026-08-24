@@ -18,6 +18,8 @@ flowchart LR
     A --> N["Superseded or retired"]
     N --> B["Rollback as a new version"]
     B --> A
+    W --> K["Atomic release key"]
+    K --> P
 ```
 
 | Actor | Salesforce control | Allowed activity |
@@ -49,8 +51,11 @@ The object guard rejects direct activation, illegal state transitions, post-subm
 | Unbilled escalation | JSON tiers of strictly increasing `days`, accountable `role` and `Normal/High/Critical` severity for WAR, IFB/Blocked, Shadow Lateral and fallback | Idempotent owner/role notifications from the operations scheduler |
 | Notifications | Approved channel list | Salesforce in-app route now; Email and Teams become usable only after their environment-owned adapters are activated |
 | KPI | Billed target, WAR maximum, IFB maximum, approved-actuals lookback and staffing lifecycle lookback | Command Center actual-versus-target metrics, populations and definitions |
+| Assurance and retention | Standard monthly budget hours, source completeness, alert closure note, scenario horizon, audit/business retention days and legal-hold switch | Roster variance checks, source health, accountable alerts, bounded scenarios and non-destructive retention preview |
 
-The repository currently contains 67 policy defaults, 20 effective delivery-role defaults and 16 classification defaults. Runtime overrides are records, so the catalog can grow without recompiling consumers when the domain contract already supports the new code or value.
+The repository currently contains 74 policy defaults, 20 effective delivery-role defaults and 16 classification defaults. Runtime overrides are records, so the catalog can grow without recompiling consumers when the domain contract already supports the new code or value.
+
+Two or more draft settings may share a release key. Release preview enforces one version per configuration key, one effective date and cross-setting budget threshold order. Submission moves the entire bundle to pending approval; an independent approver activates or rejects every member atomically. The release identity becomes immutable after submission.
 
 ## Validation and impact preview
 
@@ -93,4 +98,4 @@ The demo control plane is complete for the business surfaces above. Production s
 6. migration, volume/concurrency/performance, accessibility and persona-based UAT evidence;
 7. production release/cutover/rollback approval.
 
-One optional product-hardening enhancement remains: an atomic multi-setting “configuration release” that approves and activates a coordinated bundle under one release key. Current versions are independently governed and effective-dated; related values are cross-validated, but they are activated record by record. Use a shared future effective date and change ticket until that bundle capability is prioritized.
+No identified business-configuration surface remains as hidden code-only backlog in the sanitized mock baseline. New business concepts can still require a versioned schema/service release; that is normal product evolution, not unrestricted runtime configurability.
