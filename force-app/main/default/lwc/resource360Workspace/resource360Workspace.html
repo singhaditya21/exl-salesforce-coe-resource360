@@ -14,7 +14,8 @@
         </header>
 
         <div class="status-strip">
-            <span class="status-pill status-pill_good">Salesforce system of record</span>
+            <span class="status-pill status-pill_good">Salesforce demo system of record</span>
+            <span>EXL identities, sources and business volumes are sanitized mock contracts</span>
             <span>{screenCountLabel}</span>
             <span>Last refreshed {generatedLabel}</span>
         </div>
@@ -182,7 +183,10 @@
                         <div class="panel-heading"><div><p class="eyebrow">Work breakdown</p><h3>Add budget phase and resource line</h3></div><span>Planned hours and base labour recalculate server-side</span></div>
                         <div class="form-grid">
                             <lightning-combobox class="form-span" label="Current budget" value={budgetDraft.budgetId} options={budgetOptions} data-field="budgetId" onchange={handleBudgetInput} required></lightning-combobox>
+                            <lightning-combobox class="form-span" label="Practitioner (optional role placeholder when blank)" value={budgetLineDraft.resourceId} options={resourceOptions} data-field="resourceId" onchange={handleBudgetLineInput} disabled={budgetFieldsDisabled}></lightning-combobox>
                             <lightning-input type="date" label="Period start" value={budgetLineDraft.periodStart} data-field="periodStart" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="date" label="Role start" value={budgetLineDraft.roleStart} data-field="roleStart" onchange={handleBudgetLineInput} disabled={budgetFieldsDisabled}></lightning-input>
+                            <lightning-input type="date" label="Role end" value={budgetLineDraft.roleEnd} data-field="roleEnd" onchange={handleBudgetLineInput} disabled={budgetFieldsDisabled}></lightning-input>
                             <lightning-combobox label="Phase" value={budgetLineDraft.phase} options={budgetPhaseOptions} data-field="phase" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
                             <lightning-combobox label="Work unit" value={budgetLineDraft.workUnit} options={workUnitOptions} data-field="workUnit" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
                             <lightning-combobox label="Salesforce role" value={budgetLineDraft.roleName} options={deliveryRoleOptions} data-field="roleName" onchange={handleBudgetLineInput} required disabled={budgetFieldsDisabled}></lightning-combobox>
@@ -202,6 +206,32 @@
                         <template lwc:if={hasBudgetLines}><lightning-datatable key-field="Id" data={budgetLineRows} columns={budgetLineColumns} hide-checkbox-column></lightning-datatable></template>
                         <template lwc:else><div class="empty-state"><p>No WBS lines exist for the selected budget version.</p></div></template>
                     </section>
+                </template>
+
+                <template lwc:if={showBudgetImport}>
+                    <section class="action-panel action-panel_purple">
+                        <div class="panel-heading"><div><p class="eyebrow">BUDUI-11 · governed mock operation</p><h3>Atomic monthly resource roster import</h3></div><span>Every row is validated against the current editable budget, engagement dates, active resources and configured Salesforce roles before any row is committed</span></div>
+                        <div class="form-grid">
+                            <lightning-combobox class="form-span" label="Current budget" value={budgetDraft.budgetId} options={budgetOptions} data-field="budgetId" onchange={handleBudgetInput} required></lightning-combobox>
+                            <lightning-input class="form-span" label="Sanitized source file name" value={budgetImportDraft.sourceFileName} data-field="sourceFileName" onchange={handleBudgetImportInput} required></lightning-input>
+                            <lightning-textarea class="form-full" label="Controlled monthly roster JSON" value={budgetImportDraft.jsonRows} data-field="jsonRows" onchange={handleBudgetImportInput} required></lightning-textarea>
+                        </div>
+                        <div class="panel-footer panel-footer_split"><span>Atomic means all rows succeed or none are inserted. Formula-like content, duplicate identities, invalid dates and unknown practitioners are blocked.</span><div><lightning-button label="Pre-validate roster" icon-name="utility:check" onclick={handlePreviewBudgetImport}></lightning-button><lightning-button class="button-gap" variant="brand" label="Commit atomic roster" icon-name="utility:upload" onclick={handleCommitBudgetImport} disabled={budgetFieldsDisabled}></lightning-button><lightning-button class="button-gap" label="Run as-of assurance" icon-name="utility:chart" onclick={handleBudgetAssurance}></lightning-button></div></div>
+                        <template lwc:if={hasBudgetImportPreview}>
+                            <div class="preview-summary preview-summary_four" role="status"><div><span>Decision</span><strong>{budgetImportPreview.valid}</strong></div><div><span>Total</span><strong>{budgetImportPreview.totalRows}</strong></div><div><span>Valid</span><strong>{budgetImportPreview.validRows}</strong></div><div><span>Invalid</span><strong>{budgetImportPreview.invalidRows}</strong></div></div>
+                            <lightning-datatable key-field="rowNumber" data={budgetImportRows} columns={budgetImportColumns} hide-checkbox-column></lightning-datatable>
+                            <template lwc:if={hasBudgetImportErrors}><div class="download-row"><a class="slds-button slds-button_neutral" href={budgetImportErrorUrl} download="resource360-budget-roster-errors.csv">Download exact row errors (CSV)</a></div></template>
+                        </template>
+                    </section>
+                    <template lwc:if={hasBudgetAssurance}>
+                        <section class="records-panel records-panel_compact">
+                            <div class="panel-heading"><div><p class="eyebrow">Version-bound assurance</p><h3>Monthly plan, actual, EAC and 160-hour roster checks</h3></div><span>{budgetAssuranceResult.assumption}</span></div>
+                            <div class="preview-summary preview-summary_four"><div><span>As of</span><strong>{budgetAssuranceResult.asOfDate}</strong></div><div><span>Actual hours</span><strong>{budgetAssuranceResult.actualHours}</strong></div><div><span>Estimate at completion</span><strong>{budgetAssuranceResult.estimateAtCompletion}</strong></div><div><span>Forecast margin %</span><strong>{budgetAssuranceResult.forecastMarginPercent}</strong></div></div>
+                            <lightning-datatable key-field="id" data={budgetAssuranceMonthlyRows} columns={budgetAssuranceMonthlyColumns} hide-checkbox-column></lightning-datatable>
+                            <h4 class="subtable-heading">Resource-month assurance</h4>
+                            <lightning-datatable key-field="lineId" data={budgetAssuranceRosterRows} columns={budgetAssuranceRosterColumns} hide-checkbox-column></lightning-datatable>
+                        </section>
+                    </template>
                 </template>
 
                 <template lwc:if={showConfigurationConsole}>
@@ -234,6 +264,20 @@
                             <template lwc:if={hasConfigurationWarnings}><div class="configuration-messages configuration-messages_warning"><strong>Review before submission</strong><p>{configurationPreviewWarnings}</p></div></template>
                         </template>
                     </section></template>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">Atomic change bundle</p><h3>Assign, validate, submit and decide one configuration release</h3></div><span>All settings share one release identity and effective date; activation is all-or-nothing and the submitter cannot approve their own release</span></div>
+                        <div class="form-grid">
+                            <lightning-input class="form-span" label="Release key" value={configurationReleaseKey} data-field="releaseKey" onchange={handleConfigurationReleaseInput} required></lightning-input>
+                            <template lwc:if={hasConfigurationReleaseCandidates}><lightning-combobox class="form-span" label="Draft or rejected setting to assign" value={configurationReleaseSettingId} options={configurationReleaseSettingOptions} data-field="settingId" onchange={handleConfigurationReleaseInput}></lightning-combobox></template>
+                        </div>
+                        <div class="panel-footer panel-footer_split"><span>The EXL demo permits mock data, but Salesforce still enforces real permission sets, validation, audit and separation of duties.</span><div><template lwc:if={canManageConfiguration}><lightning-button label="Assign setting" onclick={handleAssignConfigurationRelease} disabled={configurationReleaseAssignmentDisabled}></lightning-button><lightning-button class="button-gap" label="Validate release" onclick={handlePreviewConfigurationRelease}></lightning-button><lightning-button class="button-gap" variant="brand" label="Submit release" onclick={handleSubmitConfigurationRelease}></lightning-button></template><template lwc:if={canApproveConfiguration}><lightning-button class="button-gap" label="Approve atomically" onclick={handleApproveConfigurationRelease}></lightning-button><lightning-button class="button-gap" variant="destructive-text" label="Reject atomically" onclick={handleRejectConfigurationRelease}></lightning-button></template></div></div>
+                        <template lwc:if={hasConfigurationReleasePreview}>
+                            <div class="preview-summary preview-summary_four"><div><span>Release</span><strong>{configurationReleasePreview.releaseKey}</strong></div><div><span>Valid</span><strong>{configurationReleasePreview.valid}</strong></div><div><span>Items</span><strong>{configurationReleasePreview.itemCount}</strong></div><div><span>Effective</span><strong>{configurationReleasePreview.effectiveFrom}</strong></div></div>
+                            <template lwc:if={hasConfigurationReleaseErrors}><div class="configuration-messages configuration-messages_error"><strong>Blocking validation</strong><p>{configurationReleaseErrors}</p></div></template>
+                            <template lwc:if={hasConfigurationReleaseWarnings}><div class="configuration-messages configuration-messages_warning"><strong>Review before submission</strong><p>{configurationReleaseWarnings}</p></div></template>
+                            <lightning-datatable key-field="key" data={configurationReleaseItems} columns={configurationReleaseColumns} hide-checkbox-column></lightning-datatable>
+                        </template>
+                    </section>
                     <section class="records-panel records-panel_compact">
                         <div class="panel-heading"><div><p class="eyebrow">Version register</p><h3>Defaults, runtime overrides and decision history</h3></div><span>Use row actions to create an override, submit, approve, reject or restore a prior value</span></div>
                         <template lwc:if={hasConfigurationRows}><lightning-datatable key-field="key" data={configurationRows} columns={configurationColumns} onrowaction={handleConfigurationAction} hide-checkbox-column></lightning-datatable></template>
@@ -267,6 +311,30 @@
                         <template lwc:if={hasBulkRuns}><lightning-datatable key-field="Id" data={bulkRunRows} columns={bulkRunColumns} hide-checkbox-column></lightning-datatable></template>
                         <template lwc:if={hasBulkErrors}><h4 class="subtable-heading">Recent row errors</h4><lightning-datatable key-field="Id" data={bulkErrorRows} columns={bulkErrorColumns} hide-checkbox-column></lightning-datatable></template>
                         <template lwc:if={hasDownloadableBulkErrors}><div class="download-row"><a class="slds-button slds-button_neutral" href={bulkErrorDownloadUrl} download="resource360-row-errors.csv">Download exact row errors (CSV)</a></div></template>
+                    </section>
+                </template>
+
+                <template lwc:if={showSourceAssurance}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">R360-MOCK-1.2</p><h3>Explicit EXL source contracts and reconciliation evidence</h3></div><span>{data.assurance.notice}</span></div>
+                        <template lwc:if={hasSourceContracts}><lightning-datatable key-field="id" data={sourceContractRows} columns={sourceContractColumns} hide-checkbox-column></lightning-datatable></template>
+                        <div class="panel-footer panel-footer_split"><span>These are deterministic sanitized source assumptions—not connected EXL production integrations. Production endpoints and credentials remain activation dependencies.</span><lightning-button label="Run non-destructive retention dry run" icon-name="utility:shield" onclick={handleRunRetention}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showTimeExceptions}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">TIMEUI-08</p><h3>Timesheet compliance exceptions</h3></div><span>Late submission, late decision, correction and dual-control routes are computed from Salesforce records and governed policy</span></div>
+                        <template lwc:if={hasTimeExceptions}><lightning-datatable key-field="timesheetId" data={timeExceptionRows} columns={timeExceptionColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No current timesheet exception meets a governed rule.</p></div></template>
+                    </section>
+                </template>
+
+                <template lwc:if={showKpiHierarchy}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">Versioned KPI hierarchy</p><h3>Portfolio to Salesforce tower allocation facts</h3></div><span>Daily capacity, billed mix and WAR use current accepted allocation snapshots; demo thresholds are configurable policy metadata</span></div>
+                        <template lwc:if={hasHierarchyRows}><lightning-datatable key-field="id" data={hierarchyRows} columns={hierarchyColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No active accepted allocation falls in today’s effective window.</p></div></template>
                     </section>
                 </template>
 
@@ -370,6 +438,29 @@
                             <lightning-textarea class="form-span" label="Work comment" value={timeDraft.comment} data-field="comment" onchange={handleTimeInput}></lightning-textarea>
                         </div>
                         <div class="panel-footer"><lightning-button variant="brand" label="Save time entry" onclick={handleSaveTimeEntry}></lightning-button></div>
+                    </section>
+                </template>
+
+                <template lwc:if={showScenarioPlanner}>
+                    <section class="action-panel action-panel_blue">
+                        <div class="panel-heading"><div><p class="eyebrow">AIUI-03 · deterministic planning mock</p><h3>Isolated Salesforce COE what-if scenario</h3></div><span>The calculation is non-persistent and never changes staffing, budgets or allocations</span></div>
+                        <div class="form-grid">
+                            <lightning-input class="form-span" label="Scenario name" value={scenarioDraft.name} data-field="name" onchange={handleScenarioInput} required></lightning-input>
+                            <lightning-input type="date" label="Start date" value={scenarioDraft.startDate} data-field="startDate" onchange={handleScenarioInput} required></lightning-input>
+                            <lightning-input type="date" label="End date" value={scenarioDraft.endDate} data-field="endDate" onchange={handleScenarioInput} required></lightning-input>
+                            <lightning-input type="number" label="Headcount delta" value={scenarioDraft.headcountDelta} step="1" data-field="headcountDelta" onchange={handleScenarioInput}></lightning-input>
+                            <lightning-input type="number" label="Billable allocation %" value={scenarioDraft.billableAllocationPercent} min="0" max="100" step="1" data-field="billableAllocationPercent" onchange={handleScenarioInput}></lightning-input>
+                        </div>
+                        <div class="panel-footer"><lightning-button variant="brand" label="Run isolated scenario" icon-name="utility:flow" onclick={handleRunScenario}></lightning-button></div>
+                        <template lwc:if={hasScenarioResult}><div class="preview-summary preview-summary_four"><div><span>Business days</span><strong>{scenarioResult.businessDays}</strong></div><div><span>Incremental capacity</span><strong>{scenarioResult.incrementalCapacityHours}</strong></div><div><span>Incremental billable</span><strong>{scenarioResult.incrementalBillableHours}</strong></div><div><span>Billable allocation %</span><strong>{scenarioResult.billableAllocationPercent}</strong></div></div><p class="preview-message">{scenarioResult.notice}</p></template>
+                    </section>
+                </template>
+
+                <template lwc:if={showAlertLifecycle}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">Accountable lifecycle</p><h3>Preserve trigger, owner, first seen and closure evidence</h3></div><span>Closing an alert never deletes or rewrites the original trigger</span></div>
+                        <lightning-textarea label="Closure evidence applied to the selected open alert" value={alertClosureNote} onchange={handleAlertClosureNote} required></lightning-textarea>
+                        <template lwc:if={hasNotificationLifecycleRows}><lightning-datatable key-field="Id" data={notificationLifecycleRows} columns={notificationLifecycleColumns} onrowaction={handleNotificationLifecycleAction} hide-checkbox-column></lightning-datatable></template>
                     </section>
                 </template>
 

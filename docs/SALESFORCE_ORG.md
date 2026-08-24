@@ -11,6 +11,8 @@
 
 The Lightning application developer name is `Resource360`; the native tab is `Resource360_Workspace`. This Developer Edition remains aligned with the repository for demo/integration validation. Disposable scratch orgs may be used for isolated changes but do not replace it.
 
+All EXL-facing records and connectors in this org are sanitized mock assumptions under `R360-MOCK-1.2`; `docs/MOCK_CONTRACT_REGISTER.md` is the binding demo boundary. Salesforce platform controls are real, but this org must never receive EXL production data or credentials.
+
 ## Setup or recovery
 
 ```bash

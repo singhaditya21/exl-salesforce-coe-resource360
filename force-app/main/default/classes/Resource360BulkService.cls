@@ -13,6 +13,7 @@ public inherited sharing class Resource360BulkService {
         @AuraEnabled public Integer invalidRows;
         @AuraEnabled public String fileHash;
         @AuraEnabled public String message;
+        @AuraEnabled public String errorCsv;
         @AuraEnabled public List<RowResult> rows;
     }
 
@@ -50,7 +51,7 @@ public inherited sharing class Resource360BulkService {
             }
             rowResult.valid=errors.isEmpty();rowResult.message=rowResult.valid?'Ready for governed commit.':String.join(errors,' ');if(rowResult.valid)result.validRows++;else result.invalidRows++;result.rows.add(rowResult);
         }
-        result.valid=result.invalidRows==0&&result.totalRows>0;result.message=result.totalRows==0?'Add at least one row.':result.valid?'All '+result.totalRows+' rows passed pre-validation.':result.invalidRows+' of '+result.totalRows+' rows require correction.';return result;
+        result.valid=result.invalidRows==0&&result.totalRows>0;result.message=result.totalRows==0?'Add at least one row.':result.valid?'All '+result.totalRows+' rows passed pre-validation.':result.invalidRows+' of '+result.totalRows+' rows require correction.';result.errorCsv=errorCsv(result.rows);return result;
     }
 
     @AuraEnabled
@@ -82,6 +83,8 @@ public inherited sharing class Resource360BulkService {
     private static void validatePicklist(Map<String,Object> row,String key,Schema.SObjectField field,List<String> errors){if(!row.containsKey(key)||row.get(key)==null||String.isBlank(String.valueOf(row.get(key))))return;Set<String>allowed=new Set<String>();for(Schema.PicklistEntry entry:field.getDescribe().getPicklistValues())if(entry.isActive())allowed.add(entry.getValue());if(!allowed.contains(String.valueOf(row.get(key))))errors.add(key+' is not an active governed value.');}
     private static void validateRange(Map<String,Object>row,String key,Decimal minimum,Decimal maximum,Boolean minimumInclusive,List<String>errors){if(!row.containsKey(key)||row.get(key)==null)return;try{Decimal value=Decimal.valueOf(String.valueOf(row.get(key)));if((minimumInclusive?value<minimum:value<=minimum)||value>maximum)errors.add(key+' must be '+(minimumInclusive?'at least ':'greater than ')+minimum+' and no more than '+maximum+'.');}catch(Exception failure){errors.add(key+' must be numeric.');}}
     private static Boolean isFormulaLike(String value){String trimmed=value.trim();return trimmed.startsWith('=')||trimmed.startsWith('+')||trimmed.startsWith('@');}
+    private static String errorCsv(List<RowResult> rows){List<String>lines=new List<String>{'row_number,external_id,status,message'};for(RowResult row:rows)if(!row.valid)lines.add(String.valueOf(row.rowNumber)+','+csv(row.externalId)+',INVALID,'+csv(row.message));return lines.size()==1?'':String.join(lines,'\n');}
+    private static String csv(String value){String safe=value==null?'':value.replace('"','""');return '"'+safe+'"';}
     private static String sanitizeFileName(String value){String result=String.isBlank(value)?'controlled-import.json':value.replace('\r',' ').replace('\n',' ').trim();return result.length()>255?result.substring(0,255):result;}
     private static String hash(String value){return EncodingUtil.convertToHex(Crypto.generateDigest('SHA-256',Blob.valueOf(value==null?'':value)));}
     private static void fail(String message){throw new AuraHandledException(message);}

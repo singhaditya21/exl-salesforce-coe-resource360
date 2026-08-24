@@ -4,8 +4,8 @@
 
 | Document field | Value |
 |---|---|
-| Status | Implemented Salesforce-native demo baseline; production activation requires the external gates in Section 19 |
-| Version | 1.3 |
+| Status | Mock-complete Salesforce-native demo baseline; production activation requires only the external gates in Section 19 |
+| Version | 1.4 |
 | Date | 24 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
 | Product scope | Engagement 360, Resource Management, Salesforce Skills & Credentials, Budgeting/WBS, Timesheet and COE Command Center |
@@ -18,7 +18,7 @@
 | Requirement scope | 109 functional/admin requirements plus 25 UAT scenarios (134 traced items), 16 resolved product decisions and the build-readiness controls in Section 17 |
 | Traceability register | `docs/REQUIREMENTS_TRACEABILITY.md`, generated from this PRD and the governed screen catalogue; covers all 134 requirement/UAT items and all 103 screens |
 | Intended reviewers | EXL Salesforce COE leadership, COE Staffing, Delivery, Product, Engineering, Finance, HR/L&D, PMO, Information Security, Brand/Marketing and Operations |
-| Assumption policy | Named logical EXL systems, technologies, policies, volumes, service levels and ownership in this version are binding planning assumptions, not claims about EXL's current estate. A later approved change replaces an assumption through versioned change control; it does not block estimation or solution design. |
+| Assumption policy | Every EXL identity, source, policy, volume, approval and integration in this version is a sanitized deterministic mock contract, not a claim about EXL's current estate. `docs/MOCK_CONTRACT_REGISTER.md` is the delivery register. A later approved change replaces an assumption through versioned change control. |
 
 | Version | Date | Change |
 |---|---|---|
@@ -27,6 +27,7 @@
 | 1.1 | 22 August 2026 | Re-baselined the production runtime as Salesforce Lightning, Apex and Salesforce data; retained GitHub Pages solely as a sanitized design companion; made EXL production-org activation, identity, integration, migration, monitoring, security and UAT explicit release gates |
 | 1.2 | 23 August 2026 | Aligned the PRD to the implemented demo: effective classifications and billability snapshots, ranked/strict talent matching, KPI definitions, timesheet escalation and exception-free auto-approval, native report types/history, generated permission and traceability controls, and an explicit production-activation runbook |
 | 1.3 | 24 August 2026 | Added the governed effective-dated configuration control plane, independent activation/rollback, configurable source-freshness gates, two-stage corrected-time control, machine-readable unbilled escalation tiers and KPI actual-versus-target presentation; separated business configuration from environment/security activation |
+| 1.4 | 24 August 2026 | Closed the mock-baseline backlog: monthly roster and atomic import assurance, deterministic source collision/completeness/freshness evidence, explicit talent gaps, ownership transfer, time exceptions, KPI hierarchy, accountable alert closure, session/retention assurance, isolated what-if planning and atomic multi-setting configuration releases; made every EXL dependency an explicit sanitized mock contract |
 
 ---
 
@@ -45,6 +46,14 @@ The target product has five operating components:
 3. **Salesforce Skills & Credentials** owns the COE capability taxonomy, verified profiles, Salesforce certifications and skill-based talent search.
 4. **Timesheet** captures actual effort only against accepted allocations and returns actuals for variance and profitability reporting.
 5. **COE Command Center** gives Delivery, Staffing and leadership utilization, skills, demand, budget-versus-actual and exception views with drill-down and action ownership.
+
+### Mock-complete delivery boundary
+
+Version 1.4 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed only by browser-local mock state.
+
+The implemented mock baseline now includes the decision-critical items previously classified as partial or later-phase: resource-month budgeting and 160-hour assurance; atomic import/error export; three-mode capacity planning; deterministic source duplicate/collision reconciliation; candidate eligibility/gap reasons; staffing owner transfer; timesheet exceptions; KPI hierarchy/definitions; accountable alert closure; isolated what-if scenarios; retention dry run; and atomic configuration release control. The generated traceability register therefore has only two statuses: 105 requirements implemented in the sanitized mock baseline and four mock-contract requirements that require EXL production activation.
+
+This status does not waive production evidence. The four open activation requirements cover actual identity, canonical source certification/lineage and environment connector ownership. All 25 UAT scenarios are usable as mock paths but must be executed by named EXL owners before go-live.
 
 The approved near-term baseline is a controlled integration release, not an autonomous AI release. It establishes EXL identity and master-data contracts, implements the Staffing approval gate, enforces allocation and budget rules server-side, connects accepted allocations to timesheets, represents Salesforce roles/clouds/certifications correctly, and publishes trusted operational dashboards. Predictive and agentic capabilities remain a later phase after the underlying data and workflow are reliable.
 
@@ -1093,7 +1102,7 @@ Secrets, endpoints, certificates, Named/External Credentials, schema, Apex/LWC, 
 
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.3 target architecture.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.4 target architecture.
 
 ```mermaid
 flowchart LR
@@ -1505,7 +1514,7 @@ Source files containing personal, customer or commercial data were used to under
 
 ## 19. Definition of done and implementation readiness
 
-Version 1.3 is implemented as a production-shaped Salesforce demo and is ready for EXL validation because it contains the complete screen inventory, resolved planning decisions, MVP cut, logical source contracts, target architecture, canonical data model, governed configuration control plane, security/operations policy, migration approach, generated traceability and accountable roles. The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
+Version 1.4 is implemented as a mock-complete, production-shaped Salesforce demo and is ready for EXL validation because it contains the complete screen inventory, resolved planning decisions, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, generated traceability and accountable roles. The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
 
 1. The named EXL accountable roles in Section 17.13 are assigned to people and the Product Owner records approval of DEC-01 through DEC-16.
 2. Each P0 requirement is accepted, explicitly changed or deferred with documented consequence and target release.

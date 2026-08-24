@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
 import { useDemoSystem, type DemoSystem } from "./demo-system";
-import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo } from "./operational-screens";
+import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, ScenarioDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo } from "./operational-screens";
 import {
   StaffingDecisionForm,
   StaffingQueue,
@@ -293,6 +293,7 @@ function ScreenCanvas({
   if (screen.id === "CMD-09") return <AdminDemo screen={screen} system={system} onToast={onToast} />;
   if (screen.module === "command") return <CommandDemo screen={screen} system={system} onSelect={onSelect} />;
   if (screen.module === "admin") return <AdminDemo screen={screen} system={system} onToast={onToast} />;
+  if (screen.id === "AIUI-03") return <ScenarioDemo system={system} onToast={onToast} />;
   if (screen.kind === "home") return <HomeCanvas module={screen.module} />;
   if (screen.kind === "list") return <ListCanvas screen={screen} />;
   if (screen.kind === "detail") return <DetailCanvas screen={screen} />;

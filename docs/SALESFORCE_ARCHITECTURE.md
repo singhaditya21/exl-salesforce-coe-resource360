@@ -5,10 +5,10 @@
 | Layer | Implementation | Responsibility |
 |---|---|---|
 | Experience | Lightning app `Resource360`; LWC `resource360Workspace` | Role-aware EXL shell, 103-screen routes/contracts, commands and record drill-down |
-| Domain services | 28 Apex application classes, including `Resource360Service`, `Resource360ConfigurationService`, `Resource360FreshnessService`, `Resource360PlanningService` and `Resource360BulkService` | User-mode access, locking, business gates, capacity/freshness planning, governed runtime configuration, decisions, analytics, integration, notifications and audit |
+| Domain services | 30 Apex application classes, including `Resource360Service`, `Resource360AssuranceService`, `Resource360BudgetImportService`, `Resource360ConfigurationService`, `Resource360FreshnessService`, `Resource360PlanningService` and `Resource360BulkService` | User-mode access, locking, business gates, roster/capacity/freshness planning, governed runtime configuration, decisions, analytics, integration, notifications and audit |
 | Demo bootstrap | `Resource360DemoData` Apex | Idempotent fictional records for the Developer Edition demo |
 | Data | 27 custom record objects, three custom-metadata types and one platform event | Engagement, economics, staffing, capability, allocation, time, runtime configuration, operations and evidence |
-| Policy | 103 governed defaults plus effective-dated runtime overrides, validation/formulas, guard triggers and role permission groups | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation and access |
+| Policy | 110 governed defaults plus effective-dated runtime overrides and atomic release bundles, validation/formulas, guard triggers and role permission groups | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, assurance, retention preview and access |
 | Analytics | `Resource360AnalyticsService` and five custom report types | Scoped KPI populations/definitions/cutoffs and Salesforce report-builder access |
 | Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
 
@@ -40,12 +40,15 @@ Relationships preserve decision lineage: accepted staffing creates a versioned c
 10. Interactive bulk ingestion is permission-gated, pre-validates up to 200 JSON rows, supports declared atomic/partial commit, prevents content replay with SHA-256 identity and exposes downloadable exact row errors without retaining raw payloads.
 11. People and Engagement freshness fail staffing closed, Commercial freshness fails budget submission closed, and all thresholds are effective-dated governed configuration.
 12. Unbilled allocations follow configurable machine-readable escalation tiers; notifications are idempotent by allocation and threshold.
+13. Monthly budget roster rows bind an optional practitioner, role window and resource-month; atomic imports reject every row if any schema, identity, role, date or numeric rule fails and expose exact CSV errors.
+14. Source assurance exposes insert/update/deactivation/collision/completeness/freshness evidence under `R360-MOCK-1.2`; duplicate survivor selection is independent of inbound row order.
+15. Accountable alert closure preserves trigger evidence; configuration releases activate all-or-nothing; scenario planning and retention execution are explicitly non-persistent/non-destructive mock controls.
 
 ## Source-system contract
 
 `Resource360InboundApi` exposes versioned idempotent REST ingestion for employee/resource, engagement, capability, credential, learning achievement, commercial reference, org unit and portfolio data. Runs retain cutoff/count/status and payload hashes, not raw sensitive payloads. Partial failures create retryable redacted error records.
 
-For the demo, EXL People Master, engagement/commercial, learning, credential, calendar and finance sources are assumed. Production endpoints, identities and credentials remain EXL-owned activation inputs. Outbound allocation/time/domain events publish through the platform event/outbox boundary for approved middleware subscribers.
+For the demo, EXL People Master, engagement/commercial, learning, credential, calendar and finance sources are logical assumptions documented in `MOCK_CONTRACT_REGISTER.md`. Production endpoints, identities and credentials remain EXL-owned activation inputs. Outbound allocation/time/domain events publish through the platform event/outbox boundary for approved middleware subscribers.
 
 ## Security and operations
 

@@ -45,12 +45,15 @@ describe("explainable candidate fit", () => {
 
 describe("sanitized fixture integrity", () => {
   it("ships every connected demo aggregate with a versioned state", () => {
-    expect(initialDemoState.version).toBe(3);
+    expect(initialDemoState.version).toBe(4);
     expect(initialDemoState.budgets.length).toBeGreaterThan(0);
     expect(initialDemoState.people.length).toBeGreaterThan(0);
     expect(initialDemoState.configurations.some((item) => item.code === "People_Freshness_Block_Hours" && item.state === "Active")).toBe(true);
     expect(initialDemoState.allocations.length).toBeGreaterThan(0);
     expect(initialDemoState.timesheets.length).toBeGreaterThan(0);
     expect(initialDemoState.audit.length).toBeGreaterThan(0);
+    expect(initialDemoState.sourceContracts).toHaveLength(7);
+    expect(initialDemoState.sourceContracts.every((item) => item.contractVersion === "R360-MOCK-1.2")).toBe(true);
+    expect(initialDemoState.budgetRoster.length).toBeGreaterThan(0);
   });
 });
