@@ -18,6 +18,19 @@ test("publishes the complete governed screen directory", async ({ page }) => {
   await expect(directory.locator(".screen-card-grid > button")).toHaveCount(103);
 });
 
+test("publishes five playable validated product recordings", async ({ page }) => {
+  await page.goto("/?screen=GLB-06");
+  await expect(page.getByRole("heading", { name: "Validated product walkthroughs" })).toBeVisible();
+  await expect(page.locator(".video-library video")).toHaveCount(5);
+  await expect(page.getByText("5 recordings verified", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Download MP4" })).toHaveCount(5);
+  for (const video of await page.locator(".video-library video").all()) {
+    await expect(video).toHaveAttribute("poster", /demo-videos\/.+\.jpg$/);
+    await expect(video.locator("source")).toHaveAttribute("src", /demo-videos\/.+\.mp4$/);
+    await expect(video.locator("track")).toHaveAttribute("src", /demo-videos\/.+\.vtt$/);
+  }
+});
+
 test("renders every one of the 103 PRD routes", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === "mobile-chromium", "Full catalogue is exercised once in desktop Chromium.");
   test.slow();
@@ -115,7 +128,7 @@ test("enforces positive and negative screen contracts for every governed persona
 
 test("has no serious or critical automated accessibility findings on control surfaces", async ({ page }) => {
   await switchRole(page, "Administrator");
-  for (const id of ["GLB-02", "STFUI-23", "BUDUI-08", "TIMEUI-01", "ADMUI-01", "ADMUI-03", "ADMUI-07"]) {
+  for (const id of ["GLB-02", "GLB-06", "STFUI-23", "BUDUI-08", "TIMEUI-01", "ADMUI-01", "ADMUI-03", "ADMUI-07"]) {
     await page.goto(`/?screen=${id}`);
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
     const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact || ""));

@@ -1,0 +1,65 @@
+{
+  "recordedAt": "2026-08-24",
+  "source": "https://singhaditya21.github.io/exl-salesforce-coe-resource360/",
+  "boundary": "Sanitized demo only",
+  "format": {
+    "container": "MP4",
+    "videoCodec": "H.264",
+    "width": 1280,
+    "height": 720,
+    "framesPerSecond": 24,
+    "audio": false
+  },
+  "recordings": [
+    {
+      "file": "01-product-overview.mp4",
+      "poster": "01-product-overview.jpg",
+      "captions": "01-product-overview.vtt",
+      "title": "Product overview",
+      "durationSeconds": 15.875,
+      "sizeBytes": 458865,
+      "sha256": "0faedf62416295fb5052b17cba5569a901c72946a693d1fa92ddd53290c45a5c",
+      "validatedOutcome": "103-screen directory and executive command center rendered"
+    },
+    {
+      "file": "02-skills-and-talent.mp4",
+      "poster": "02-skills-and-talent.jpg",
+      "captions": "02-skills-and-talent.vtt",
+      "title": "Skills and talent",
+      "durationSeconds": 19.75,
+      "sizeBytes": 606329,
+      "sha256": "1ebf3704906a64bdebc27b8c0f69991694dfb5e2958dec0baeb6e428f586140b",
+      "validatedOutcome": "Five candidates ranked and capability claim form rendered"
+    },
+    {
+      "file": "03-staffing-decision.mp4",
+      "poster": "03-staffing-decision.jpg",
+      "captions": "03-staffing-decision.vtt",
+      "title": "Staffing decision",
+      "durationSeconds": 21.625,
+      "sizeBytes": 649943,
+      "sha256": "444dd804436cc81d7e1b6e4b73b16fe1f8f17e3fedbe4cf3fb7a7d1556643f2a",
+      "validatedOutcome": "SR-1842 accepted after explicit human confirmation"
+    },
+    {
+      "file": "04-budget-and-actuals.mp4",
+      "poster": "04-budget-and-actuals.jpg",
+      "captions": "04-budget-and-actuals.vtt",
+      "title": "Budget and actuals",
+      "durationSeconds": 45.5,
+      "sizeBytes": 1072312,
+      "sha256": "c7b36a2183919ac607fe94af61f8d8416d184b0a869b164a00fa5d79232b4f0a",
+      "validatedOutcome": "Budget approved and 40-hour timesheet submitted and approved"
+    },
+    {
+      "file": "05-demo-activation.mp4",
+      "poster": "05-demo-activation.jpg",
+      "captions": "05-demo-activation.vtt",
+      "title": "Demo activation",
+      "durationSeconds": 25.875,
+      "sizeBytes": 1051271,
+      "sha256": "950ce74cce97e811f9cd9f80efa933152672cf8d7043f705d55d3d1a803ee02a",
+      "validatedOutcome": "13 source contracts, six approvals and 5/5 activation rendered"
+    }
+  ]
+}

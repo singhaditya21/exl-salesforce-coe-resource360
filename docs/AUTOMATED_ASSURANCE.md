@@ -7,6 +7,7 @@
 | Generated governance | `pnpm sf:generate` | Drift in policy, classification, source, persona, retention, permission or traceability artifacts |
 | Static quality | `pnpm lint` | ESLint error |
 | Unit and contract tests | `pnpm test` | Any Vitest, TypeScript/build, Node contract or static-host test failure |
+| Recorded evidence | `pnpm test:videos` | Any of five MP4s or posters is missing, malformed, truncated or differs from its integrity manifest |
 | Browser behavior | `pnpm test:e2e` | Desktop/mobile transaction, persona, deep-link, narrow-layout or axe accessibility failure |
 | Salesforce metadata | `pnpm sf:validate` | Component compilation or any local Apex test failure |
 | Protected-org CI | GitHub `ci.yml` with `RESOURCE360_SFDX_AUTH_URL` | Secret-enabled dry run does not pass `RunLocalTests` |
@@ -23,6 +24,7 @@
 - corrected-time dual control, compliance exceptions and immutable approved actuals;
 - eight legal-hold-eligible retention categories with non-destructive preview only;
 - all five demo activation domains in one attributable 5/5 dry run with zero external calls and zero destructive actions;
+- five published walkthroughs covering discovery, skills, staffing, budget/time and activation at 1280×720 H.264;
 - all 103 screen contracts, desktop/mobile routing, 200% zoom and automated axe scans.
 
 Automation is engineering evidence, not EXL production acceptance. Production still requires representative volume/concurrency, SSO, security/privacy, recovery, source reconciliation and named-persona UAT evidence.

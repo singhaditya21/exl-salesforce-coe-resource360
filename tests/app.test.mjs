@@ -51,6 +51,17 @@ test("connects the full static-demo transaction chain", async () => {
   assert.match(system, /TIME_SUBMITTED/);
 });
 
+test("the help screen publishes the validated recording library", async () => {
+  const [page, operations] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/operational-screens.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(operations, /export function VideoLibrary/);
+  assert.match(operations, /5 recordings verified/);
+  for (const name of ["01-product-overview", "02-skills-and-talent", "03-staffing-decision", "04-budget-and-actuals", "05-demo-activation"]) assert.match(operations, new RegExp(name));
+  assert.match(page, /screen\.id === "GLB-06"/);
+});
+
 test("includes static-host resilience and repository security controls", async () => {
   const [html, serviceWorker, manifest, security, codeql] = await Promise.all([
     readFile(new URL("../index.html", import.meta.url), "utf8"),

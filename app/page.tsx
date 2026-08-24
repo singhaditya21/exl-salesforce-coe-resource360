@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { canAccessScreen, defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
 import { useDemoSystem, type DemoSystem } from "./demo-system";
-import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, ScenarioDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo } from "./operational-screens";
+import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, ScenarioDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo, VideoLibrary } from "./operational-screens";
 import {
   StaffingDecisionForm,
   StaffingQueue,
@@ -283,6 +283,7 @@ function ScreenCanvas({
   if (screen.id === "GLB-02") return <DemoHome system={system} onSelect={onSelect} />;
   if (screen.id === "GLB-03") return <NotificationDemo system={system} onSelect={onSelect} />;
   if (screen.id === "GLB-05") return <RoleDemo system={system} onSelect={onSelect} onToast={onToast} />;
+  if (screen.id === "GLB-06") return <VideoLibrary />;
   if (screen.module === "engagement") return <EngagementDemo screen={screen} system={system} onSelect={onSelect} />;
   if (screen.module === "budget") return <BudgetDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
   if (screen.module === "skills") return <SkillsDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;

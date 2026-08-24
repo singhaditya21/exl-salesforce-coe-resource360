@@ -20,6 +20,8 @@ The governed chain is:
 
 Requirements are in the [consolidated PRD](docs/EXL_Salesforce_COE_Resource360_PRD_v1.0.md); delivery truth is in [requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md). The [mock contract register](docs/MOCK_CONTRACT_REGISTER.md) states every EXL assumption and production boundary. See also the [demo activation runbook](docs/DEMO_ACTIVATION_RUNBOOK.md), [persona/access matrix](docs/PERSONA_ACCESS_MATRIX.md), [analytics/operations contract](docs/ANALYTICS_AND_OPERATIONS.md), [automated assurance](docs/AUTOMATED_ASSURANCE.md), [completion audit](docs/COMPLETION_AUDIT.md), [configuration control matrix](docs/CONFIGURATION_CONTROL_MATRIX.md), [Salesforce architecture](docs/SALESFORCE_ARCHITECTURE.md), [org contract](docs/SALESFORCE_ORG.md), [production activation runbook](docs/PRODUCTION_ACTIVATION_RUNBOOK.md) and [ADR-001](docs/ADR-001-SALESFORCE-NATIVE.md).
 
+Five validated product walkthroughs are published from `GLB-06 · User preferences and help` and under `public/demo-videos/`. The [video validation catalog](docs/DEMO_VIDEO_VALIDATION.md) maps each recording to its executed workflow, outcome and demo boundary; CI verifies every MP4 against the checked-in integrity manifest.
+
 ## Deploy to Salesforce
 
 Requirements: Salesforce CLI, Node.js 20.19+, pnpm and an authenticated org. The permanent development org uses local alias `Resource360Hub`.
