@@ -4,7 +4,7 @@
 
 | Area | Completion evidence |
 |---|---|
-| Product definition | PRD v1.5; 109/109 functional/admin requirements implemented within the stated mock boundary; 25 UAT paths traced |
+| Product definition | PRD v1.6; 109/109 functional/admin requirements implemented within the stated mock boundary; 25 UAT paths traced |
 | Experiences | 103 governed screens across nine modules in Lightning and the GitHub Pages companion |
 | Personas | 18 metadata-governed personas with permission-set groups, scope/delegation controls, positive/negative routed authorization and all-persona active/expired scope tests |
 | Salesforce core | Transactional engagement, budget/WBS, staffing/allocation, skills/credentials, time, command-center and administration services |
@@ -12,7 +12,8 @@
 | Governance | Effective-dated classifications, roles and policies; maker/checker configuration releases; audit/outbox; role-scope sharing |
 | Retention | Eight legal-hold-eligible rules and a non-destructive preview; deletion disabled in the demo |
 | Analytics/operations | Five report types, KPI definitions/drill-down, source/control health, scheduler overlap protection and recovery controls |
-| Quality | Unit, static contract, 14-test desktop/mobile browser suite, axe, 38 Salesforce Apex tests, CodeQL and Pages release gates |
+| Demo activation | Five-pillar interactive rehearsal for SSO, integrations, production-like fictional data, six explicit legal/risk/business decisions and operational controls; 5/5 evidence, zero external calls and zero destructive actions |
+| Quality | Unit, static contract, 16-pass desktop/mobile browser suite, axe, 38 Salesforce Apex tests, CodeQL and Pages release gates |
 | Credential hygiene | Previously exposed classic PAT revoked on 24 August 2026; repository access verified through SSH and GitHub CLI OAuth; tracked/untracked credential-pattern scan clean |
 
 ## Not a software backlog

@@ -21,4 +21,6 @@ Every displayed KPI must expose its definition, target, source population, cutof
 
 The hourly `Resource360 Operational Controls` Apex schedule expires staffing demand, updates credential state, escalates/auto-approves eligible time, maintains unbilled alerts, publishes outbox events, dispatches notifications and records an integration run. Overlap protection prevents a second active scheduler run inside the governed window. Recovery is through retry/dead-letter state and audited commands, not direct database edits.
 
+`ADMUI-01` also provides a self-contained operational rehearsal for the demo. It validates the mock scheduler/monitoring/alert/retry/dead-letter/backup/restore/DR contract alongside identity, integration, data and approval simulations, then records a 5/5 dry-run result and correlation evidence. It performs no callout, external notification, backup mutation, restore or failover.
+
 Production activation must select the enterprise monitoring destination, incident route, backup/restore service, Event Monitoring/SIEM design and CRM Analytics or Tableau license. Those environment choices are deliberately not encoded as fictional product completion.

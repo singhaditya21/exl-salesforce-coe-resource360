@@ -20,6 +20,7 @@ import commitBudgetRoster from "@salesforce/apex/Resource360BudgetImportService.
 import budgetAssurance from "@salesforce/apex/Resource360AssuranceService.budgetAssurance";
 import runWhatIf from "@salesforce/apex/Resource360AssuranceService.whatIf";
 import runMockRetention from "@salesforce/apex/Resource360AssuranceService.runMockRetention";
+import runDemoActivation from "@salesforce/apex/Resource360AssuranceService.runDemoActivation";
 import closeAlert from "@salesforce/apex/Resource360Service.closeAlert";
 import previewBulk from "@salesforce/apex/Resource360BulkService.preview";
 import commitBulk from "@salesforce/apex/Resource360BulkService.executeBatch";
@@ -263,7 +264,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showBudgetLines() { return ["BUDUI-03", "BUDUI-04", "BUDUI-05", "BUDUI-06", "BUDUI-07"].includes(this.selectedScreenId); }
     get showBudgetImport() { return this.selectedScreenId === "BUDUI-11"; }
     get showBulkOperations() { return this.selectedScreenId === "ADMUI-08"; }
-    get showConfigurationConsole() { return ["ADMUI-01","ADMUI-04","ADMUI-06","ADMUI-07"].includes(this.selectedScreenId); }
+    get showConfigurationConsole() { return ["ADMUI-04","ADMUI-06","ADMUI-07"].includes(this.selectedScreenId); }
     get showPractitionerProfile() { return ["SKLUI-01","SKLUI-05","SKLUI-06","SKLUI-07","SKLUI-08","SKLUI-09"].includes(this.selectedScreenId); }
     get showTalentSearch() { return ["STFUI-02", "STFUI-03", "STFUI-06", "STFUI-07", "SKLUI-16", "SKLUI-17"].includes(this.selectedScreenId); }
     get showSkillsForm() { return this.selectedScreenId === "SKLUI-10"; }
@@ -274,6 +275,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showPersonaAssurance() { return ["ADMUI-02", "ADMUI-03"].includes(this.selectedScreenId); }
     get showSourceAssurance() { return ["ADMUI-07", "CMD-08"].includes(this.selectedScreenId); }
     get showRetentionAssurance() { return this.selectedScreenId === "ADMUI-07"; }
+    get showDemoActivation() { return this.selectedScreenId === "ADMUI-01"; }
     get showKpiHierarchy() { return ["CMD-01", "CMD-02", "CMD-04", "CMD-07"].includes(this.selectedScreenId); }
     get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
     get showAlertLifecycle() { return this.selectedScreenId === "GLB-03"; }
@@ -315,6 +317,13 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get retentionRows() { return (this.data.assurance?.retention?.rules || []).map((row,index)=>({...row,id:row.id||`retention-${index}`,legalHoldLabel:row.legalHoldEligible?"Eligible":"Not applicable"})); }
     get hasRetentionRules() { return this.retentionRows.length > 0; }
     get retentionColumns() { return [{label:"Record category",fieldName:"category"},{label:"Retention days",fieldName:"retentionDays",type:"number"},{label:"Disposition contract",fieldName:"dispositionAction",wrapText:true},{label:"Recovery days",fieldName:"recoveryWindowDays",type:"number"},{label:"Legal hold",fieldName:"legalHoldLabel"},{label:"Control owner",fieldName:"controlOwner"},{label:"Status",fieldName:"approvalStatus"},{label:"Evidence",fieldName:"evidenceReference",wrapText:true}]; }
+    get activationRows() { return (this.data.assurance?.activation?.pillars || []).map((row,index)=>({...row,id:row.id||`activation-${index}`})); }
+    get hasActivationRows() { return this.activationRows.length > 0; }
+    get activationColumns() { return [{label:"Simulation",fieldName:"label"},{label:"Mock owner",fieldName:"owner"},{label:"Control exercised",fieldName:"simulation",wrapText:true},{label:"Evidence",fieldName:"evidence",wrapText:true},{label:"State",fieldName:"state"}]; }
+    get activationApprovalRows() { return this.data.assurance?.activation?.approvalEvidence || []; }
+    get hasActivationApprovalRows() { return this.activationApprovalRows.length > 0; }
+    get activationApprovalColumns() { return [{label:"Decision",fieldName:"decision"},{label:"Mock owner",fieldName:"owner"},{label:"Evidence reference",fieldName:"evidenceReference"},{label:"Decision date",fieldName:"decidedOn"},{label:"Status",fieldName:"status"}]; }
+    get demoActivationDisabled() { return !this.data.assuranceCapabilities?.operate; }
     get timeExceptionRows() { return (this.data.assurance?.timeExceptions || []).map((row)=>({...row,reasonsText:(row.reasons || []).join(" · ")})); }
     get hasTimeExceptions() { return this.timeExceptionRows.length > 0; }
     get timeExceptionColumns() { return [{label:"Timesheet",fieldName:"timesheet"},{label:"Practitioner",fieldName:"resource"},{label:"Week",fieldName:"weekStart",type:"date"},{label:"Status",fieldName:"status"},{label:"Exception and accountable route",fieldName:"reasonsText",wrapText:true}]; }
@@ -509,6 +518,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     async handleApproveConfigurationRelease() { await this.execute("Activate atomic configuration release",()=>decideConfigurationRelease({releaseKey:this.configurationReleaseKey,approve:true,note:"Independent release assurance completed."}));this.configurationReleasePreview=undefined; }
     async handleRejectConfigurationRelease() { await this.execute("Reject atomic configuration release",()=>decideConfigurationRelease({releaseKey:this.configurationReleaseKey,approve:false,note:"Release requires correction before activation."}));this.configurationReleasePreview=undefined; }
     async handleRunRetention() { await this.execute("Run retention assurance",()=>runMockRetention({reason:"Authorized non-destructive EXL mock dry run from ADMUI-07."})); }
+    async handleRunDemoActivation() { await this.execute("Run complete demo activation",()=>runDemoActivation({reason:"Authorized five-pillar sanitized activation rehearsal from ADMUI-01."})); }
     async handleConfigurationAction(event) { const {action,row}=event.detail;if(action.name==="override"||action.name==="edit"){const numberValue=row.valueType==="Number"?Number(row.value):undefined;this.configurationDraft={settingId:action.name==="edit"?row.id:null,domain:row.domain,code:row.code,displayLabel:row.label,valueType:row.valueType,numericValue:numberValue,textValue:row.valueType==="Text"?row.value:undefined,booleanValue:row.valueType==="Boolean"&&row.value==="true",attributesJson:row.valueType==="JSON"?row.value:undefined,unit:row.unit,effectiveFrom:action.name==="edit"&&row.effectiveFrom?row.effectiveFrom:this.isoDate(new Date()),effectiveTo:action.name==="edit"?row.effectiveTo:undefined,reason:`${action.name==="edit"?"Edit":"Override"} ${row.key} with reviewed EXL control evidence.`};this.configurationPreview=undefined;return;}if(action.name==="submit")return this.execute("Submit configuration",()=>submitConfiguration({settingId:row.id}));if(action.name==="approve")return this.execute("Activate configuration",()=>decideConfiguration({settingId:row.id,approve:true,note:this.configurationDraft.reason||"Validated configuration activation."}));if(action.name==="reject")return this.execute("Reject configuration",()=>decideConfiguration({settingId:row.id,approve:false,note:this.configurationDraft.reason||"Configuration requires correction."}));if(action.name==="rollback")return this.execute("Restore configuration",()=>rollbackConfiguration({priorSettingId:row.id,reason:this.configurationDraft.reason||"Controlled rollback from administration console."})); }
 
     async handleSubmitClaim() {

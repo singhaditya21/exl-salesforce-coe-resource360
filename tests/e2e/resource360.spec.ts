@@ -56,6 +56,23 @@ test("shows all approved persona, lineage and retention contracts", async ({ pag
   await expect(page.locator(".data-surface .responsive-table tbody tr")).toHaveCount(8);
 });
 
+test("runs all five external domains as safe demo activation simulations", async ({ page }) => {
+  await switchRole(page, "Administrator");
+  await page.goto("/?screen=ADMUI-01");
+  await expect(page.getByRole("heading", { name: "Demo Activation Center" })).toBeVisible();
+  await expect(page.locator(".activation-grid > article")).toHaveCount(5);
+  await expect(page.getByText("Identity and SSO", { exact: true })).toBeVisible();
+  await expect(page.getByText("EXL integrations", { exact: true })).toBeVisible();
+  await expect(page.getByText("Production-like data", { exact: true })).toBeVisible();
+  await expect(page.getByText("Legal and business approvals", { exact: true })).toBeVisible();
+  await expect(page.getByText("Operational controls", { exact: true })).toBeVisible();
+  await expect(page.locator(".activation-approvals tbody tr")).toHaveCount(6);
+  await page.getByRole("button", { name: "Run complete demo activation" }).click();
+  await expect(page.getByText("5/5 passed", { exact: true })).toBeVisible();
+  await expect(page.getByText(/passed all five sanitized activation simulations/)).toBeVisible();
+  await expect(page.getByText("Sanitized demo only", { exact: true })).toBeVisible();
+});
+
 test("applies positive and negative persona navigation contracts", async ({ page }) => {
   await switchRole(page, "Executive Viewer");
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: /Command center/ })).toBeVisible();
@@ -98,7 +115,7 @@ test("enforces positive and negative screen contracts for every governed persona
 
 test("has no serious or critical automated accessibility findings on control surfaces", async ({ page }) => {
   await switchRole(page, "Administrator");
-  for (const id of ["GLB-02", "STFUI-23", "BUDUI-08", "TIMEUI-01", "ADMUI-03", "ADMUI-07"]) {
+  for (const id of ["GLB-02", "STFUI-23", "BUDUI-08", "TIMEUI-01", "ADMUI-01", "ADMUI-03", "ADMUI-07"]) {
     await page.goto(`/?screen=${id}`);
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
     const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact || ""));
