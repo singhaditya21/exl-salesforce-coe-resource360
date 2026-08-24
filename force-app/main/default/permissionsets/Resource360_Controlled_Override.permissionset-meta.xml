@@ -30,16 +30,20 @@
     <fieldPermissions><editable>false</editable><field>Allocation__c.Parent_Allocation__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Approver__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Auto_Approved__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Correction_Parent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Correction_Requested_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Decision_Due_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Dual_Control_Required__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Due_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Escalated_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Exception_Code__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Timesheet__c.Required_Approval_Role__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Timesheet__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Time_Entry__c.Comment__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Time_Entry__c.Correction_Parent__c</field><readable>true</readable></fieldPermissions>

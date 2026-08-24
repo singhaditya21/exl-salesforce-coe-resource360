@@ -5,8 +5,8 @@
 | Document field | Value |
 |---|---|
 | Status | Implemented Salesforce-native demo baseline; production activation requires the external gates in Section 19 |
-| Version | 1.2 |
-| Date | 23 August 2026 |
+| Version | 1.3 |
+| Date | 24 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
 | Product scope | Engagement 360, Resource Management, Salesforce Skills & Credentials, Budgeting/WBS, Timesheet and COE Command Center |
 | Target organization | EXL Salesforce Center of Excellence (COE) |
@@ -26,6 +26,7 @@
 | 1.0 | 21 August 2026 | Resolved all 16 decisions; established MVP/release scope, assumed EXL logical sources, architecture, canonical model/contracts, UX inheritance, security/retention, SLOs, notifications, classification policy, migration, traceability, RACI, AI gates and business case |
 | 1.1 | 22 August 2026 | Re-baselined the production runtime as Salesforce Lightning, Apex and Salesforce data; retained GitHub Pages solely as a sanitized design companion; made EXL production-org activation, identity, integration, migration, monitoring, security and UAT explicit release gates |
 | 1.2 | 23 August 2026 | Aligned the PRD to the implemented demo: effective classifications and billability snapshots, ranked/strict talent matching, KPI definitions, timesheet escalation and exception-free auto-approval, native report types/history, generated permission and traceability controls, and an explicit production-activation runbook |
+| 1.3 | 24 August 2026 | Added the governed effective-dated configuration control plane, independent activation/rollback, configurable source-freshness gates, two-stage corrected-time control, machine-readable unbilled escalation tiers and KPI actual-versus-target presentation; separated business configuration from environment/security activation |
 
 ---
 
@@ -1040,7 +1041,7 @@ The former open decisions are closed for solution design and estimation. Each is
 | DEC-12 | AI enters production only after the quantitative gates in Section 17.14 pass for eight consecutive weeks. | AI Governance Owner |
 | DEC-13 | Resource360 uses the logical EXL systems and contracts in Sections 9 and 17.2; underlying vendor products are hidden behind façades. | Enterprise Architecture |
 | DEC-14 | Salesforce credentials use the Resource360 Credential Gateway. Authorized verification is preferred; governed evidence approved by a Capability Administrator and re-verified every 90 days is the fallback. `UNKNOWN` without current approved evidence fails a mandatory credential gate. | Salesforce Capability Lead |
-| DEC-15 | Ranked search uses the Resource360 v1 weights in SMS-010; mandatory capability, credential, availability and employment conditions remain hard gates. | Product Owner and Head of COE Staffing |
+| DEC-15 | Ranked search starts with the SMS-010 weights under `R360-POLICY-2.0`; active non-zero weights are proportionally normalized to 100, and mandatory capability, credential, availability and employment conditions remain hard gates. | Product Owner and Head of COE Staffing |
 | DEC-16 | The product text name is **EXL Salesforce COE Resource360**. It uses only the EXL master logo; no Salesforce logo or new product logo appears in v1. | EXL Brand Owner |
 
 No item in this table is a delivery blocker unless the accountable owner submits an approved change request. The assumptions register is reviewed at each release gate to prevent an unapproved environmental difference from being mistaken for a defect.
@@ -1082,9 +1083,17 @@ The system names below are logical EXL contracts and are deliberately independen
 | Microsoft Graph + in-product inbox | Event-driven; retry at 1, 5 and 30 minutes, then dead-letter | Email and application notifications | Business transaction is not rolled back by notification failure; Operations receives dead-letter alert | Product Operations |
 | Resource360 Analytics read model | Streaming domain events plus nightly reconciliation | Command Center and certified exports | Dashboards show cutoff; critical finance KPIs are certified only after reconciliation | Data Product Owner |
 
+#### 17.2.1 Governed business configuration
+
+Resource360 uses deployed Salesforce custom-metadata defaults plus effective-dated `R360_Configuration__c` runtime versions. An authorized configuration operator can preview, draft and submit a change; a separately permissioned configuration approver activates, rejects or restores a prior value as a new version. The object guard prevents direct activation, illegal transitions, post-submission mutation and deletion. Every material action records actor, role, reason, timestamp, version, before/after state and correlation evidence.
+
+The configurable surface includes delivery roles, classifications/billability/control attributes, controlled form values, capacity/planning limits, staffing SLA, budget thresholds and approver roles, skill/talent limits and weights, timesheet deadlines and dual-control roles, source-freshness thresholds, batch/retry/schedule controls, escalation tiers, approved notification channels and KPI targets. Runtime services consume the active effective version and fall back to a deterministic deployed default. Cross-field preview validates margin ordering, freshness warning/block ordering, escalation tier structure, numeric bounds, JSON, required taxonomy attributes, duplicate codes and prohibited secret material.
+
+Secrets, endpoints, certificates, Named/External Credentials, schema, Apex/LWC, CRUD/FLS, sharing, permission sets, retention/legal hold and production identity are deliberately release- or environment-controlled. They are not made editable business data. The authoritative control inventory, separation of duties and remaining activation boundary are in `docs/CONFIGURATION_CONTROL_MATRIX.md`.
+
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.2 target architecture.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.3 target architecture.
 
 ```mermaid
 flowchart LR
@@ -1496,7 +1505,7 @@ Source files containing personal, customer or commercial data were used to under
 
 ## 19. Definition of done and implementation readiness
 
-Version 1.2 is implemented as a production-shaped Salesforce demo and is ready for EXL validation because it contains the complete screen inventory, resolved planning decisions, MVP cut, logical source contracts, target architecture, canonical data model, security/operations policy, migration approach, generated traceability and accountable roles. The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
+Version 1.3 is implemented as a production-shaped Salesforce demo and is ready for EXL validation because it contains the complete screen inventory, resolved planning decisions, MVP cut, logical source contracts, target architecture, canonical data model, governed configuration control plane, security/operations policy, migration approach, generated traceability and accountable roles. The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
 
 1. The named EXL accountable roles in Section 17.13 are assigned to people and the Product Owner records approval of DEC-01 through DEC-16.
 2. Each P0 requirement is accepted, explicitly changed or deferred with documented consequence and target release.

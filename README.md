@@ -9,14 +9,14 @@ The governed chain is:
 ## Salesforce implementation
 
 - EXL-themed Lightning app/LWC with nine modules and all 103 routed screen contracts.
-- 30 Salesforce data/config/event types, 352 fields/formulas, 20 validation rules, six guard triggers and native field history on material controls.
-- 25 Apex application classes for economics, capacity planning, governed delivery roles, staffing, explainable talent matching, practitioner evidence, time, bulk/master-data ingestion, scope sharing, durable events, KPI snapshots and immutable audit, plus the deployment test suite.
+- 31 Salesforce data/config/event types, 380 fields/formulas, 21 validation rules, seven guard triggers and native field history on material controls.
+- 28 Apex application classes for economics, capacity/freshness controls, governed configuration, delivery roles, staffing, explainable talent matching, practitioner evidence, time, bulk/master-data ingestion, scope sharing, durable events, KPI snapshots and immutable audit, including the deployment test suite.
 - Approved-budget signatures, sequential separation of duties, atomic capacity, effective classification snapshots, allocation lineage, self-approval, eligible time, controlled corrections and five-/seven-day timesheet controls.
-- Eleven least-privilege permission sets composed into eight business-role groups, 14 custom permissions, effective organizational/portfolio scopes and Apex-managed sharing.
-- Five standard Salesforce report types, 44 effective policy/classification/delivery-role records and idempotent fictional demo seeding.
+- Twelve least-privilege permission sets composed into nine business-role groups, 15 custom permissions, effective organizational/portfolio scopes and Apex-managed sharing.
+- Five standard Salesforce report types, 103 governed policy/classification/delivery-role defaults, effective-dated runtime overrides and idempotent fictional demo seeding.
 - A clean Salesforce deployment gate with all Resource360 service tests passing and no component coverage warnings.
 
-Requirements are in the [consolidated PRD](docs/EXL_Salesforce_COE_Resource360_PRD_v1.0.md); delivery truth is in [requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md). See [Salesforce architecture](docs/SALESFORCE_ARCHITECTURE.md), [org contract](docs/SALESFORCE_ORG.md), [production activation runbook](docs/PRODUCTION_ACTIVATION_RUNBOOK.md) and [ADR-001](docs/ADR-001-SALESFORCE-NATIVE.md).
+Requirements are in the [consolidated PRD](docs/EXL_Salesforce_COE_Resource360_PRD_v1.0.md); delivery truth is in [requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md). See the [configuration control matrix](docs/CONFIGURATION_CONTROL_MATRIX.md), [Salesforce architecture](docs/SALESFORCE_ARCHITECTURE.md), [org contract](docs/SALESFORCE_ORG.md), [production activation runbook](docs/PRODUCTION_ACTIVATION_RUNBOOK.md) and [ADR-001](docs/ADR-001-SALESFORCE-NATIVE.md).
 
 ## Deploy to Salesforce
 

@@ -13,7 +13,7 @@
     "test": "pnpm run test:unit && pnpm run build && node --test tests/app.test.mjs",
     "test:unit": "vitest run",
     "lint": "eslint . --ignore-pattern dist",
-    "sf:generate": "node scripts/generate-classification-metadata.mjs && node scripts/generate-salesforce-permissions.mjs && node scripts/generate-traceability.mjs",
+    "sf:generate": "node scripts/generate-classification-metadata.mjs && node scripts/generate-policy-metadata.mjs && node scripts/generate-salesforce-permissions.mjs && node scripts/generate-traceability.mjs",
     "sf:validate": "sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30",
     "sf:test": "sf apex run test --target-org Resource360Hub --tests Resource360ServiceTest --code-coverage --result-format human --wait 30",
     "sf:deploy": "sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunSpecifiedTests --tests Resource360ServiceTest --wait 30",

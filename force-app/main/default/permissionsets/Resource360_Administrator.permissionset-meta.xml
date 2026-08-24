@@ -10,8 +10,10 @@
     <classAccesses><apexClass>Resource360BulkService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360CalendarService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Classification</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360ConfigurationService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360DemoData</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360EventService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360FreshnessService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360InboundApi</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360NotificationDispatcher</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360NotificationJob</apexClass><enabled>true</enabled></classAccesses>
@@ -30,6 +32,7 @@
     <classAccesses><apexClass>Resource360TalentService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360TimeService</apexClass><enabled>true</enabled></classAccesses>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Budgets</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Approve_Configuration</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Timesheets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Budgets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Bulk_Operations</name></customPermissions>
@@ -81,6 +84,7 @@
     <fieldPermissions><editable>true</editable><field>Capability__c.Level_4_Descriptor__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Capability__c.Tower__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Commercial_Reference__c.Signature__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Commercial_Reference__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Evidence_URL__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Expiry_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Issue_Date__c</field><readable>true</readable></fieldPermissions>
@@ -109,6 +113,20 @@
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Entity_Version__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Payload_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Reason_Code__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Approved_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Approved_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Attributes_JSON__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Boolean_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Change_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Current__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Display_Label__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Numeric_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Text_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Validation_Summary__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Error_Message__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.External_Record_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Integration_Error__c.Next_Retry_At__c</field><readable>true</readable></fieldPermissions>
@@ -195,16 +213,20 @@
     <fieldPermissions><editable>true</editable><field>Time_Entry__c.Correction_Parent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Time_Entry__c.Correction_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Time_Entry__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Approver__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Auto_Approved__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Correction_Parent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Correction_Requested_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Decision_Due_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Dual_Control_Required__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Due_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Escalated_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Exception_Code__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Timesheet__c.Required_Approval_Role__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Timesheet__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>Allocation__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>Budget__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
@@ -216,6 +238,7 @@
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Approval_Decision__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Audit_Event__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Calendar_Exception__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Integration_Error__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Integration_Run__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Learning_Achievement__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>

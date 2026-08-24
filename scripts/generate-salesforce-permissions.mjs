@@ -23,7 +23,7 @@ const fieldsFor = (objectName) => {
   });
 };
 
-const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
+const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Configuration__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
 const permissions = (read, create = false, edit = false, remove = false, viewAll = false, modifyAll = false) => ({ read, create, edit, remove, viewAll, modifyAll });
 const readOnly = Object.fromEntries(businessObjects.map((name) => [name, permissions(true)]));
 
@@ -38,7 +38,7 @@ const roleConfigs = [
     editable: {
       Skill_Claim__c: ["Resource__c","Capability__c","Requested_Level__c","Years_Experience__c","Last_Used__c","Evidence__c","State__c","Submitted_At__c","Idempotency_Key__c","Request_Fingerprint__c"],
       Credential__c: ["Resource__c","Credential_ID__c","Credential_Name__c","Issuer__c","Issue_Date__c","Expiry_Date__c","Evidence_URL__c","State__c"],
-      Timesheet__c: ["Resource__c","Week_Start__c","Week_Key__c","Status__c","Due_At__c","Version__c","Current__c","Correction_Parent__c","Decision_Note__c"],
+      Timesheet__c: ["Resource__c","Week_Start__c","Week_Key__c","Status__c","Due_At__c","Version__c","Current__c","Correction_Parent__c","Correction_Requested_By__c","Dual_Control_Required__c","Approval_Step__c","Required_Approval_Role__c","Decision_Note__c"],
       Time_Entry__c: ["Timesheet__c","Allocation__c","Engagement__c","Work_Unit__c","Work_Date__c","Hours__c","Role__c","State__c","Comment__c","Entry_Key__c","Version__c","Correction_Parent__c","Correction_Reason__c"]
     }
   },
@@ -49,8 +49,8 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Manager_Actions", label: "Resource 360 Manager Actions", description: "Review skill claims and timesheets only within manager/delegated scope.",
-    objects: { Skill_Claim__c: permissions(true, false, true), Timesheet__c: permissions(true, false, true), Time_Entry__c: permissions(true, false, true), R360_Role_Scope__c: permissions(true), R360_Approval_Decision__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService"], customPermissions: ["Resource360_Review_Skills","Resource360_Approve_Timesheets"],
-    editable: { Skill_Claim__c: ["State__c","Approved_Level__c","Reviewer__c","Decision_At__c","Decision_Note__c"], Timesheet__c: ["Status__c","Approver__c","Decision_At__c","Decision_Note__c"], Time_Entry__c: ["State__c"] }
+    objects: { Skill_Claim__c: permissions(true, false, true), Timesheet__c: permissions(true, false, true), Time_Entry__c: permissions(true, false, true), R360_Role_Scope__c: permissions(true), R360_Approval_Decision__c: permissions(true, true, true) }, classes: ["Resource360Service", "Resource360TalentService"], customPermissions: ["Resource360_Review_Skills","Resource360_Approve_Timesheets"],
+    editable: { Skill_Claim__c: ["State__c","Approved_Level__c","Reviewer__c","Decision_At__c","Decision_Note__c"], Timesheet__c: ["Status__c","Approver__c","Decision_At__c","Decision_Note__c","Approval_Step__c","Required_Approval_Role__c"], Time_Entry__c: ["State__c"], R360_Approval_Decision__c: ["Decision_ID__c","Entity_Type__c","Entity_ID__c","Entity_Version__c","Step_Number__c","Required_Role__c","State__c","Approver__c","Decided_At__c","Decision_Note__c","Correlation_ID__c"] }
   },
   {
     name: "Resource360_Staffer_Actions", label: "Resource 360 Staffer Actions", description: "Decide staffing and maintain effective-dated allocations within authorized scope.",
@@ -74,13 +74,18 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Operations", label: "Resource 360 Operations", description: "Operate integrations, reconciliation, schedules, outbox recovery and configuration without business approval authority.",
-    objects: { R360_Integration_Run__c: permissions(true, true, true), R360_Integration_Error__c: permissions(true, true, true), R360_Outbox_Event__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true, true, false), R360_Role_Scope__c: permissions(true, true, true), R360_Work_Calendar__c: permissions(true, true, true), R360_Calendar_Exception__c: permissions(true, true, true), R360_Org_Unit__c: permissions(true, true, true), R360_Portfolio__c: permissions(true, true, true) },
-    classes: ["Resource360Service","Resource360BulkService","Resource360InboundApi","Resource360OperationsScheduler","Resource360OutboxPublisher","Resource360NotificationDispatcher"], customPermissions: ["Resource360_View_Operations","Resource360_Manage_Configuration","Resource360_Manage_Integrations","Resource360_Manage_Bulk_Operations","Resource360_View_Audit","Resource360_Run_Reconciliation"],
-    editable: { R360_Integration_Run__c: "ALL", R360_Integration_Error__c: "ALL", R360_Outbox_Event__c: "ALL", R360_Role_Scope__c: "ALL", R360_Work_Calendar__c: "ALL", R360_Calendar_Exception__c: "ALL", R360_Org_Unit__c: "ALL", R360_Portfolio__c: "ALL" }
+    objects: { R360_Configuration__c: permissions(true, true, true), R360_Integration_Run__c: permissions(true, true, true), R360_Integration_Error__c: permissions(true, true, true), R360_Outbox_Event__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true, true, false), R360_Role_Scope__c: permissions(true, true, true), R360_Work_Calendar__c: permissions(true, true, true), R360_Calendar_Exception__c: permissions(true, true, true), R360_Org_Unit__c: permissions(true, true, true), R360_Portfolio__c: permissions(true, true, true) },
+    classes: ["Resource360Service","Resource360BulkService","Resource360ConfigurationService","Resource360InboundApi","Resource360OperationsScheduler","Resource360OutboxPublisher","Resource360NotificationDispatcher"], customPermissions: ["Resource360_View_Operations","Resource360_Manage_Configuration","Resource360_Manage_Integrations","Resource360_Manage_Bulk_Operations","Resource360_View_Audit","Resource360_Run_Reconciliation"],
+    editable: { R360_Configuration__c: "ALL", R360_Integration_Run__c: "ALL", R360_Integration_Error__c: "ALL", R360_Outbox_Event__c: "ALL", R360_Role_Scope__c: "ALL", R360_Work_Calendar__c: "ALL", R360_Calendar_Exception__c: "ALL", R360_Org_Unit__c: "ALL", R360_Portfolio__c: "ALL" }
+  },
+  {
+    name: "Resource360_Configuration_Approver", label: "Resource 360 Configuration Approver", description: "Review, activate, schedule and roll back validated configuration versions without integration-operation authority.",
+    objects: { R360_Configuration__c: permissions(true, false, true), R360_Audit_Event__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
+    classes: ["Resource360Service","Resource360ConfigurationService"], customPermissions: ["Resource360_Approve_Configuration","Resource360_View_Audit"], editable: { R360_Configuration__c: ["State__c","Current__c","Effective_To__c","Approved_By__c","Approved_At__c","Change_Reason__c"] }
   },
   {
     name: "Resource360_Auditor", label: "Resource 360 Auditor", description: "Read-only audit, decision, policy and integration evidence.",
-    objects: { R360_Audit_Event__c: permissions(true), R360_Approval_Decision__c: permissions(true), R360_Integration_Run__c: permissions(true), R360_Integration_Error__c: permissions(true), R360_Outbox_Event__c: permissions(true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service"], customPermissions: ["Resource360_View_Audit","Resource360_View_Operations"], editable: {}
+    objects: { R360_Audit_Event__c: permissions(true), R360_Approval_Decision__c: permissions(true), R360_Configuration__c: permissions(true), R360_Integration_Run__c: permissions(true), R360_Integration_Error__c: permissions(true), R360_Outbox_Event__c: permissions(true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service","Resource360ConfigurationService"], customPermissions: ["Resource360_View_Audit","Resource360_View_Operations"], editable: {}
   }
 ];
 
@@ -121,7 +126,8 @@ const groups = {
   Resource360_Budget_Approver: ["Resource360_Base_User","Resource360_Budget_Approver_Actions"],
   Resource360_Capability_Administrator: ["Resource360_Base_User","Resource360_Capability_Admin_Actions"],
   Resource360_Operations_User: ["Resource360_Base_User","Resource360_Operations"],
-  Resource360_Audit_User: ["Resource360_Base_User","Resource360_Auditor"]
+  Resource360_Audit_User: ["Resource360_Base_User","Resource360_Auditor"],
+  Resource360_Configuration_Control: ["Resource360_Base_User","Resource360_Configuration_Approver"]
 };
 for (const [name, sets] of Object.entries(groups)) {
   const label = name.replaceAll("_", " ");

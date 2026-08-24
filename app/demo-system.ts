@@ -36,9 +36,14 @@ export type DemoTimesheet = {
 
 export type DemoNotification = { id: string; title: string; detail: string; time: string; read: boolean; severity: "Normal" | "High" };
 export type DemoAuditEvent = { id: string; action: string; entity: string; actor: string; role: DemoRole; time: string; detail: string };
+export type ConfigurationState = "Draft" | "Pending approval" | "Active" | "Rejected" | "Retired";
+export type DemoConfiguration = {
+  id: string; domain: string; code: string; label: string; value: string; unit?: string;
+  version: number; effectiveFrom: string; state: ConfigurationState; reason: string;
+};
 
 export type DemoState = {
-  version: 2;
+  version: 3;
   signedIn: boolean;
   activeRole: DemoRole;
   budgets: DemoBudget[];
@@ -48,9 +53,10 @@ export type DemoState = {
   timesheets: DemoTimesheet[];
   notifications: DemoNotification[];
   audit: DemoAuditEvent[];
+  configurations: DemoConfiguration[];
 };
 
-const STORAGE_KEY = "exl-resource360-demo-v2";
+const STORAGE_KEY = "exl-resource360-demo-v3";
 const roleNames = ["Beginner", "Intermediate", "Advanced", "SME"];
 
 function now() {
@@ -81,7 +87,7 @@ export function fitForPerson(person: DemoPerson, capability: string, requiredLev
 }
 
 export const initialDemoState: DemoState = {
-  version: 2,
+  version: 3,
   signedIn: true,
   activeRole: "COE Staffer",
   budgets: [
@@ -113,6 +119,14 @@ export const initialDemoState: DemoState = {
   audit: [
     { id: "AUD-1", action: "BUDGET_SUBMITTED", entity: "BUD-1003", actor: "Arjun Shah", role: "Project Manager", time: "21 Aug 2026, 4:42 pm", detail: "Budget v3 routed for approval" },
     { id: "AUD-2", action: "SKILL_CLAIM_SUBMITTED", entity: "CLM-2201", actor: "Kabir Rao", role: "Practitioner", time: "21 Aug 2026, 2:05 pm", detail: "Requested SME proficiency" },
+  ],
+  configurations: [
+    { id: "CFG-101", domain: "Policy", code: "Staffing_Expiry_Hours", label: "Staffing request SLA", value: "72", unit: "hours", version: 2, effectiveFrom: "2026-04-01", state: "Active", reason: "Initial COE staffing control" },
+    { id: "CFG-102", domain: "Approval", code: "Budget_Auto_Approve_Margin", label: "Budget auto-approval margin", value: "30", unit: "percent", version: 3, effectiveFrom: "2026-04-01", state: "Active", reason: "Finance-approved margin route" },
+    { id: "CFG-103", domain: "Policy", code: "People_Freshness_Block_Hours", label: "People freshness block", value: "24", unit: "hours", version: 1, effectiveFrom: "2026-08-24", state: "Active", reason: "Fail-closed staffing threshold" },
+    { id: "CFG-104", domain: "Escalation", code: "Escalation_WAR_Tiers", label: "WAR escalation tiers", value: "28d Delivery Head · 42d Account Owner · 56d Operations", version: 2, effectiveFrom: "2026-04-01", state: "Active", reason: "Delivery Operations escalation matrix" },
+    { id: "CFG-105", domain: "KPI", code: "KPI_Billed_Target_Percent", label: "Billed utilization target", value: "75", unit: "percent", version: 1, effectiveFrom: "2026-08-24", state: "Active", reason: "Assumed EXL demo target" },
+    { id: "CFG-106", domain: "Approval", code: "Timesheet_Correction_Dual_Control", label: "Correction dual control", value: "true", version: 1, effectiveFrom: "2026-08-24", state: "Active", reason: "Independent corrected-time approval" },
   ],
 };
 
@@ -178,9 +192,31 @@ export function useDemoSystem() {
   function submitTimesheet(id: string) { transact("TIME_SUBMITTED", id, "Weekly time submitted", (current) => ({ ...current, timesheets: current.timesheets.map((item) => item.id === id ? { ...item, state: "Submitted" } : item) }), { title: "Timesheet submitted", detail: `${id} is ready for manager review`, severity: "Normal" }); }
   function decideTimesheet(id: string, decision: "Approved" | "Rejected", note = "") { transact(`TIME_${decision.toUpperCase()}`, id, note || decision, (current) => ({ ...current, timesheets: current.timesheets.map((item) => item.id === id ? { ...item, state: decision, note } : item) }), { title: `Timesheet ${decision.toLowerCase()}`, detail: `${id} · ${note || "Decision recorded"}`, severity: decision === "Rejected" ? "High" : "Normal" }); }
 
+  function saveConfiguration(input: Pick<DemoConfiguration, "domain" | "code" | "label" | "value" | "unit" | "effectiveFrom" | "reason">) {
+    const nextVersion = Math.max(0, ...state.configurations.filter((item) => item.code === input.code).map((item) => item.version)) + 1;
+    const id = `CFG-${Date.now().toString().slice(-6)}`;
+    const draft: DemoConfiguration = { ...input, id, version: nextVersion, state: "Draft" };
+    transact("CONFIG_DRAFT_SAVED", id, `${input.code} v${nextVersion} validated`, (current) => ({ ...current, configurations: [draft, ...current.configurations] }));
+    return id;
+  }
+  function submitConfiguration(id: string) { transact("CONFIG_SUBMITTED", id, "Configuration submitted for independent approval", (current) => ({ ...current, configurations: current.configurations.map((item) => item.id === id ? { ...item, state: "Pending approval" } : item) })); }
+  function decideConfiguration(id: string, approve: boolean, note: string) {
+    transact(approve ? "CONFIG_ACTIVATED" : "CONFIG_REJECTED", id, note, (current) => {
+      const target = current.configurations.find((item) => item.id === id);
+      if (!target) return current;
+      return { ...current, configurations: current.configurations.map((item) => item.id === id ? { ...item, state: approve ? "Active" : "Rejected" } : approve && item.code === target.code && item.state === "Active" ? { ...item, state: "Retired" } : item) };
+    }, { title: approve ? "Configuration activated" : "Configuration rejected", detail: `${id} · ${note}`, severity: approve ? "Normal" : "High" });
+  }
+  function restoreConfiguration(id: string) {
+    const prior = state.configurations.find((item) => item.id === id); if (!prior) return;
+    const nextVersion = Math.max(...state.configurations.filter((item) => item.code === prior.code).map((item) => item.version)) + 1;
+    const restored = { ...prior, id: `CFG-${Date.now().toString().slice(-6)}`, version: nextVersion, state: "Active" as ConfigurationState, effectiveFrom: new Date().toISOString().slice(0, 10), reason: `Rollback to ${prior.id}` };
+    transact("CONFIG_ROLLED_BACK", restored.id, `${prior.code} restored as v${nextVersion}`, (current) => ({ ...current, configurations: [restored, ...current.configurations.map((item) => item.code === prior.code && item.state === "Active" ? { ...item, state: "Retired" as ConfigurationState } : item)] }));
+  }
+
   function reset() { setState(initialDemoState); }
   const unread = useMemo(() => state.notifications.filter((item) => !item.read).length, [state.notifications]);
-  return { state, unread, setRole, setSignedIn, markNotificationsRead, updateBudget, submitBudget, decideBudget, submitClaim, decideClaim, commitAllocation, updateTimesheet, submitTimesheet, decideTimesheet, reset };
+  return { state, unread, setRole, setSignedIn, markNotificationsRead, updateBudget, submitBudget, decideBudget, submitClaim, decideClaim, commitAllocation, updateTimesheet, submitTimesheet, decideTimesheet, saveConfiguration, submitConfiguration, decideConfiguration, restoreConfiguration, reset };
 }
 
 export type DemoSystem = ReturnType<typeof useDemoSystem>;

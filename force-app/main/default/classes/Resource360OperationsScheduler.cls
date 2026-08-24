@@ -1,4 +1,5 @@
 global without sharing class Resource360OperationsScheduler implements Schedulable {
+    private class EscalationTier { public Integer days;public String role;public String severity; }
     global void execute(SchedulableContext context) {
         String correlation = EncodingUtil.convertToHex(Crypto.generateAesKey(128));
         R360_Integration_Run__c run = new R360_Integration_Run__c(
@@ -15,13 +16,14 @@ global without sharing class Resource360OperationsScheduler implements Schedulab
         try {
             processed += expireStaffing(correlation);
             processed += maintainCredentials(correlation);
+            processed += maintainUnbilledEscalations(correlation);
             processed += autoApproveEligibleTimesheets(correlation);
             processed += alertOverdueTimesheets(correlation);
             run.State__c = 'Succeeded';
             run.Success_Count__c = processed;
             run.Processed_Count__c = processed;
             run.Completed_At__c = System.now();
-            run.Detail__c = 'Staffing SLA, credential and timesheet controls evaluated.';
+            run.Detail__c = 'Staffing SLA, credential, unbilled escalation and timesheet controls evaluated.';
         } catch (Exception failure) {
             run.State__c = 'Failed';
             run.Failure_Count__c = 1;
@@ -79,6 +81,11 @@ global without sharing class Resource360OperationsScheduler implements Schedulab
     }
 
     @TestVisible
+    private static Integer maintainUnbilledEscalations(String correlation){Map<String,List<EscalationTier>>tiersByClass=new Map<String,List<EscalationTier>>{'WAR'=>tiers('Escalation_WAR_Tiers','[{"days":28,"role":"Delivery Head","severity":"High"},{"days":42,"role":"Account Owner","severity":"High"},{"days":56,"role":"Operations","severity":"Critical"}]'),'IFB/PO Awaited'=>tiers('Escalation_IFB_Blocked_Tiers','[{"days":14,"role":"Delivery Head","severity":"High"},{"days":28,"role":"Account Owner","severity":"High"},{"days":42,"role":"Operations","severity":"Critical"}]'),'Blocked'=>tiers('Escalation_IFB_Blocked_Tiers','[{"days":14,"role":"Delivery Head","severity":"High"},{"days":28,"role":"Account Owner","severity":"High"},{"days":42,"role":"Operations","severity":"Critical"}]'),'Shadow Lateral'=>tiers('Escalation_Shadow_Lateral_Tiers','[{"days":28,"role":"Delivery Head","severity":"High"},{"days":42,"role":"Operations","severity":"Critical"}]')};List<EscalationTier>defaultTiers=tiers('Escalation_Default_Tiers','[{"days":30,"role":"Responsible Owner","severity":"High"}]');Set<String>roles=new Set<String>();for(List<EscalationTier>configured:tiersByClass.values())for(EscalationTier tier:configured)if(tier.role!='Responsible Owner')roles.add(tier.role);for(EscalationTier tier:defaultTiers)if(tier.role!='Responsible Owner')roles.add(tier.role);Map<String,Set<Id>>usersByRole=new Map<String,Set<Id>>();Date today=Date.today();if(!roles.isEmpty())for(R360_Role_Scope__c scope:[SELECT User__c,Business_Role__c FROM R360_Role_Scope__c WHERE User__c!=null AND Active__c=true AND Business_Role__c IN:roles AND Valid_From__c<=:today AND(Valid_To__c=null OR Valid_To__c>=:today)]){if(!usersByRole.containsKey(scope.Business_Role__c))usersByRole.put(scope.Business_Role__c,new Set<Id>());usersByRole.get(scope.Business_Role__c).add(scope.User__c);}List<Resource360EventService.NotificationRequest>notifications=new List<Resource360EventService.NotificationRequest>();for(Allocation__c allocation:[SELECT Id,Name,Classification__c,Start_Date__c,End_Date__c,Responsible_Owner__c,Resource__r.Preferred_Name__c,Engagement__r.Name FROM Allocation__c WHERE Current__c=true AND State__c='Accepted' AND Billable_Snapshot__c=false AND Start_Date__c<=:today AND End_Date__c>=:today LIMIT 200]){Integer ageDays=allocation.Start_Date__c.daysBetween(today);List<EscalationTier>configured=tiersByClass.containsKey(allocation.Classification__c)?tiersByClass.get(allocation.Classification__c):defaultTiers;for(EscalationTier tier:configured){if(tier.days==null||tier.days<1||ageDays<tier.days||String.isBlank(tier.role))continue;Set<Id>recipients=tier.role=='Responsible Owner'?new Set<Id>{allocation.Responsible_Owner__c}:usersByRole.get(tier.role);if(recipients==null||recipients.isEmpty())recipients=new Set<Id>{allocation.Responsible_Owner__c};for(Id recipient:recipients)if(recipient!=null){String key='UNBILLED-'+allocation.Id+'-'+tier.days;String title=allocation.Classification__c+' allocation escalation';String message=allocation.Resource__r.Preferred_Name__c+' on '+allocation.Engagement__r.Name+' has remained '+allocation.Classification__c+' for '+ageDays+' days. Configured tier: '+tier.role+' at day '+tier.days+'.';notifications.add(new Resource360EventService.NotificationRequest(key,recipient,title,message,String.isBlank(tier.severity)?'High':tier.severity,'/lightning/r/Allocation__c/'+allocation.Id+'/view'));}}}return Resource360EventService.enqueueNotifications(notifications);}
+
+    private static List<EscalationTier>tiers(String policyKey,String fallback){try{List<EscalationTier>result=(List<EscalationTier>)JSON.deserialize(Resource360Policy.jsonValue(policyKey,fallback),List<EscalationTier>.class);return result==null?new List<EscalationTier>():result;}catch(Exception failure){return (List<EscalationTier>)JSON.deserialize(fallback,List<EscalationTier>.class);}}
+
+    @TestVisible
     private static Integer alertOverdueTimesheets(String correlation) {
         List<Timesheet__c> overdue = [
             SELECT Id, Resource__r.Manager__r.Salesforce_User__c, Week_Start__c, Escalated_At__c FROM Timesheet__c
@@ -98,7 +105,7 @@ global without sharing class Resource360OperationsScheduler implements Schedulab
     private static Integer autoApproveEligibleTimesheets(String correlation){
         Integer autoDays=Integer.valueOf(Resource360Policy.numberValue('Timesheet_Auto_Approve_Days',7));
         DateTime cutoff=System.now().addDays(-autoDays);
-        List<Timesheet__c> candidates=[SELECT Id,Resource__c,Resource__r.Salesforce_User__c,Status__c,Version__c,Submitted_At__c,Escalated_At__c FROM Timesheet__c WHERE Status__c='Submitted' AND Submitted_At__c<=:cutoff LIMIT 100 FOR UPDATE];
+        List<Timesheet__c> candidates=[SELECT Id,Resource__c,Resource__r.Salesforce_User__c,Status__c,Version__c,Submitted_At__c,Escalated_At__c,Dual_Control_Required__c FROM Timesheet__c WHERE Status__c='Submitted' AND Submitted_At__c<=:cutoff LIMIT 100 FOR UPDATE];
         if(candidates.isEmpty())return 0;
         Set<Id>timesheetIds=new Map<Id,Timesheet__c>(candidates).keySet();
         Map<Id,List<Time_Entry__c>>entriesBySheet=new Map<Id,List<Time_Entry__c>>();
@@ -107,10 +114,10 @@ global without sharing class Resource360OperationsScheduler implements Schedulab
         Set<Id>financiallyValid=new Set<Id>();for(Budget__c budget:[SELECT Engagement__c FROM Budget__c WHERE Engagement__c IN:engagementIds AND State__c='Approved' AND Current__c=true AND Economic_Signature__c!=null])financiallyValid.add(budget.Engagement__c);
         List<Timesheet__c>updates=new List<Timesheet__c>();List<Time_Entry__c>entryUpdates=new List<Time_Entry__c>();Integer approved=0;
         for(Timesheet__c timesheet:candidates){
-            List<String>exceptions=new List<String>();List<Time_Entry__c>entries=entriesBySheet.get(timesheet.Id);
+            List<String>exceptions=new List<String>();if(timesheet.Dual_Control_Required__c==true)exceptions.add('DUAL_CONTROL_PENDING');List<Time_Entry__c>entries=entriesBySheet.get(timesheet.Id);
             if(entries==null||entries.isEmpty())exceptions.add('NO_TIME_ENTRIES');
             else for(Time_Entry__c entry:entries){if(entry.State__c!='Submitted')exceptions.add('ENTRY_STATE_INVALID');if(entry.Allocation__c==null||entry.Work_Date__c<entry.Allocation__r.Start_Date__c||entry.Work_Date__c>entry.Allocation__r.End_Date__c||!new Set<String>{'Accepted','Superseded','Ended'}.contains(entry.Allocation__r.State__c))exceptions.add('ALLOCATION_EXCEPTION');if(!financiallyValid.contains(entry.Engagement__c))exceptions.add('FINANCIAL_EXCEPTION');}
-            if(exceptions.isEmpty()){timesheet.Status__c='Approved';timesheet.Auto_Approved__c=true;timesheet.Decision_At__c=System.now();timesheet.Decision_Note__c='Auto-approved after '+autoDays+' calendar days under Resource 360 policy; no allocation, compliance or financial exception was found.';timesheet.Exception_Code__c=null;for(Time_Entry__c entry:entries){entry.State__c='Approved';entryUpdates.add(entry);}approved++;Resource360AuditService.record(correlation+'-'+timesheet.Id,'Resource 360 System','TIME_AUTO_APPROVED','Timesheet__c',timesheet.Id,timesheet.Version__c,'POLICY_AUTO_APPROVAL',timesheet.Decision_Note__c,Resource360AuditService.state('Submitted',null),Resource360AuditService.state('Approved','Auto-approved'));if(timesheet.Resource__r.Salesforce_User__c!=null)Resource360EventService.enqueueNotification(correlation+'-'+timesheet.Id,timesheet.Resource__r.Salesforce_User__c,'Timesheet auto-approved','Your exception-free timesheet was auto-approved under the active seven-day policy.','Normal','/lightning/r/Timesheet__c/'+timesheet.Id+'/view');}
+            if(exceptions.isEmpty()){timesheet.Status__c='Approved';timesheet.Auto_Approved__c=true;timesheet.Decision_At__c=System.now();timesheet.Decision_Note__c='Auto-approved after '+autoDays+' calendar days under Resource 360 policy; no allocation, compliance or financial exception was found.';timesheet.Exception_Code__c=null;for(Time_Entry__c entry:entries){entry.State__c='Approved';entryUpdates.add(entry);}approved++;Resource360AuditService.record(correlation+'-'+timesheet.Id,'Resource 360 System','TIME_AUTO_APPROVED','Timesheet__c',timesheet.Id,timesheet.Version__c,'POLICY_AUTO_APPROVAL',timesheet.Decision_Note__c,Resource360AuditService.state('Submitted',null),Resource360AuditService.state('Approved','Auto-approved'));if(timesheet.Resource__r.Salesforce_User__c!=null)Resource360EventService.enqueueNotification(correlation+'-'+timesheet.Id,timesheet.Resource__r.Salesforce_User__c,'Timesheet auto-approved','Your exception-free timesheet was auto-approved under the active '+autoDays+'-day policy.','Normal','/lightning/r/Timesheet__c/'+timesheet.Id+'/view');}
             else{Set<String>deduplicated=new Set<String>(exceptions);timesheet.Exception_Code__c=String.join(new List<String>(deduplicated),';');timesheet.Escalated_At__c=timesheet.Escalated_At__c==null?System.now():timesheet.Escalated_At__c;}
             updates.add(timesheet);
         }

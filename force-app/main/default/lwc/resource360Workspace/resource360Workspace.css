@@ -41,6 +41,7 @@
 .action-panel { border-top:4px solid var(--exl-teal); }
 .action-panel_purple { border-top-color:#6558a6; }
 .action-panel_blue { border-top-color:#1877b8; }
+.configuration-panel { border-top-color:#7a4e9d; }
 .contract-panel { background:#f8fafb; border:1px solid #dbe4e9; border-radius:.75rem; margin-bottom:1rem; padding:1rem; }
 .contract-grid { display:grid; gap:.85rem; grid-template-columns:repeat(3,minmax(0,1fr)); }
 .contract-grid>div { background:#fff; border:1px solid #e2e8ec; border-radius:.55rem; min-height:5.4rem; padding:.7rem; }
@@ -69,6 +70,12 @@
 .preview-summary span { color:#6d7d87; display:block; font-size:.62rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
 .preview-summary strong { color:var(--exl-navy); display:block; font-size:.88rem; margin-top:.18rem; }
 .preview-message { color:#536b78; font-size:.74rem; margin:.35rem 0 .75rem; }
+.configuration-preview_valid { border-color:#8bc6a5; background:#eef9f2; }
+.configuration-preview_invalid { border-color:#df9286; background:#fff4f2; }
+.configuration-messages { border-radius:.5rem; font-size:.72rem; margin:.5rem 0; padding:.65rem .75rem; }
+.configuration-messages p { margin:.2rem 0 0; }
+.configuration-messages_error { background:#fff0ef; border:1px solid #e3a198; color:#842f25; }
+.configuration-messages_warning { background:#fff8e8; border:1px solid #dfc077; color:#684e0b; }
 .records-panel_compact { border-left:4px solid #6558a6; }
 .subtable-heading { color:var(--exl-navy); font-size:.78rem; margin:1rem 0 .45rem; }
 .download-row { display:flex; justify-content:flex-end; margin-top:.75rem; }
