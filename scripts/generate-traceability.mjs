@@ -20,9 +20,9 @@ const evidence = {
   GOV: "Effective classification and escalation metadata, configurable KPI targets/actuals, role scope sharing, idempotent alerts, audit/outbox and Command Center screens",
   ADM: "Resource360ConfigurationService governed control plane, controlled LOV overlays, bulk permission/preview/commit, hashed file identity, generated RBAC, immutable audit and release controls"
 };
-const partial = new Set(["BUD-002","BUD-004","BUD-008","BUD-013","BUD-014","BUD-015","RAS-001","RAS-002","RAS-003","RAS-005","RAS-006","RAS-020","STF-008","SMS-015","SMS-016","SMS-017","SMS-018","SFCOE-002","SFCOE-006","TS-009","TS-010","GOV-005","GOV-006","GOV-007","GOV-009","ADM-002","ADM-005","ADM-006"]);
+const partial = new Set(["BUD-002","BUD-004","BUD-008","BUD-013","BUD-014","BUD-015","RAS-001","RAS-002","RAS-003","RAS-005","RAS-006","RAS-020","STF-008","SMS-015","SMS-016","SMS-017","SMS-018","SFCOE-002","SFCOE-006","TS-009","TS-010","GOV-005","GOV-006","GOV-007","GOV-009","ADM-002","ADM-005"]);
 const activation = new Set(["CORE-001","CORE-002","CORE-003","ADM-003"]);
-const implementedP1 = new Set(["GOV-004","GOV-008"]);
+const implementedP1 = new Set(["GOV-004","GOV-008","ADM-006"]);
 const statusFor = ({ id, priority }) => activation.has(id) ? "Assumed contract; EXL activation" : partial.has(id) ? "Partial / activation backlog" : implementedP1.has(id) ? "Implemented in demo baseline" : priority === "P2" ? "Later-phase screen contract" : priority === "P1" ? "Screen contract + implemented foundation" : "Implemented in demo baseline";
 const escape = (value) => value.replaceAll("|", "\\|").replaceAll("\n", " ");
 const counts = requirements.reduce((map, item) => { const status = statusFor(item); map[status] = (map[status] || 0) + 1; return map; }, {});
