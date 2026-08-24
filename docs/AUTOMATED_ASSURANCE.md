@@ -22,6 +22,7 @@
 - outbox retry/dead-letter recovery and exactly one governed operations schedule;
 - corrected-time dual control, compliance exceptions and immutable approved actuals;
 - eight legal-hold-eligible retention categories with non-destructive preview only;
+- all five demo activation domains in one attributable 5/5 dry run with zero external calls and zero destructive actions;
 - all 103 screen contracts, desktop/mobile routing, 200% zoom and automated axe scans.
 
 Automation is engineering evidence, not EXL production acceptance. Production still requires representative volume/concurrency, SSO, security/privacy, recovery, source reconciliation and named-persona UAT evidence.

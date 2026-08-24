@@ -962,8 +962,8 @@ export const SCREENS = [
     "title": "Administration landing",
     "module": "admin",
     "kind": "admin",
-    "description": "Role-aware entry to access, taxonomy, policy, integration and operational controls.",
-    "primary": "Open operations",
+    "description": "Run the five-pillar demo activation for SSO, integrations, fictional data, approvals and operations.",
+    "primary": "Run demo activation",
     "release": "R0",
     "eyebrow": "Administration"
   },

@@ -46,7 +46,7 @@ describe("explainable candidate fit", () => {
 
 describe("sanitized fixture integrity", () => {
   it("ships every connected demo aggregate with a versioned state", () => {
-    expect(initialDemoState.version).toBe(5);
+    expect(initialDemoState.version).toBe(6);
     expect(initialDemoState.budgets.length).toBeGreaterThan(0);
     expect(initialDemoState.people.length).toBeGreaterThan(0);
     expect(initialDemoState.configurations.some((item) => item.code === "People_Freshness_Block_Hours" && item.state === "Active")).toBe(true);
@@ -59,6 +59,11 @@ describe("sanitized fixture integrity", () => {
     expect(initialDemoState.personas.every((item) => item.approvalStatus === "Approved mock assumption")).toBe(true);
     expect(initialDemoState.retentionRules).toHaveLength(8);
     expect(initialDemoState.retentionRules.every((item) => item.legalHoldEligible)).toBe(true);
+    expect(initialDemoState.activationPillars).toHaveLength(5);
+    expect(initialDemoState.activationPillars.every((item) => item.state === "Ready")).toBe(true);
+    expect(initialDemoState.approvalEvidence).toHaveLength(6);
+    expect(initialDemoState.approvalEvidence.every((item) => item.status === "Approved mock")).toBe(true);
+    expect(initialDemoState.activationRun).toBeNull();
     expect(initialDemoState.budgetRoster.length).toBeGreaterThan(0);
   });
 

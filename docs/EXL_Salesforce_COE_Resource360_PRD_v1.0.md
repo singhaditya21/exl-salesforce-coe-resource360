@@ -4,7 +4,7 @@
 
 | Document field | Value |
 |---|---|
-| Status | Mock-complete Salesforce-native demo baseline; production activation requires only the external gates in Section 19 |
+| Status | Demo-complete Salesforce-native baseline including safe simulations of every external activation domain; real production activation still requires the EXL-owned evidence in Section 19 |
 | Version | 1.5 |
 | Date | 24 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
@@ -29,6 +29,7 @@
 | 1.3 | 24 August 2026 | Added the governed effective-dated configuration control plane, independent activation/rollback, configurable source-freshness gates, two-stage corrected-time control, machine-readable unbilled escalation tiers and KPI actual-versus-target presentation; separated business configuration from environment/security activation |
 | 1.4 | 24 August 2026 | Closed the mock-baseline backlog: monthly roster and atomic import assurance, deterministic source collision/completeness/freshness evidence, explicit talent gaps, ownership transfer, time exceptions, KPI hierarchy, accountable alert closure, session/retention assurance, isolated what-if planning and atomic multi-setting configuration releases; made every EXL dependency an explicit sanitized mock contract |
 | 1.5 | 24 August 2026 | Closed the approved sanitized-mock implementation baseline: 13 versioned source/lineage contracts, machine-readable common project and ingestion schemas, 18 governed personas with positive/negative screen authorization, eight legal-hold-eligible retention rules, automated browser/accessibility/deployment assurance and explicit non-destructive production gates. |
+| 1.6 | 24 August 2026 | Added the interactive five-pillar Demo Activation Center in GitHub Pages and Salesforce: mock Entra SSO, all source integrations, production-like fictional data, legal/business approval evidence and operational controls now execute as one attributable 5/5 rehearsal with zero external calls and zero destructive actions. |
 
 ---
 
@@ -498,7 +499,7 @@ Every authenticated screen shall provide:
 
 | Screen | Users | Required content and actions | Required states |
 |---|---|---|---|
-| ADMUI-01 Administration landing | Authorized admins | Tiles for access, taxonomy, LOVs, calendars, approval policies, classification/escalation, integrations and audit | Only authorized tiles render; degraded dependency badge. |
+| ADMUI-01 Administration landing | Authorized admins/Operations | Five-pillar Demo Activation Center for SSO, integrations, production-like fictional data, legal/business approvals and operational controls; run ID, 5/5 result, evidence links and safety boundary | Ready, passed, unauthorized and failed-check states; zero external calls; zero destructive actions; every run attributable. |
 | ADMUI-02 People and access | Access admin | Identity status, roles, scope, delegation, bulk import and audit | Duplicate/missing identity, inactive user and least-privilege warning. |
 | ADMUI-03 Role-permission matrix | Access admin | Resource/action/scope matrix, baseline floor and save preview | Invalid grant, separation-of-duty conflict, rollback. |
 | ADMUI-04 Field values/LOVs | Business admin | Role, classification, tower/team, geography, work unit and other values with codes/effective dates | In-use value, deactivation impact, duplicate code. |
@@ -1105,7 +1106,7 @@ Secrets, endpoints, certificates, Named/External Credentials, schema, Apex/LWC, 
 
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.5 target architecture.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.6 target architecture.
 
 ```mermaid
 flowchart LR
@@ -1517,7 +1518,9 @@ Source files containing personal, customer or commercial data were used to under
 
 ## 19. Definition of done and implementation readiness
 
-Version 1.5 is implemented as a mock-complete, production-shaped Salesforce demo and is ready for EXL validation because it contains the complete screen inventory, resolved planning decisions, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, generated traceability and accountable roles. The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
+Version 1.6 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, resolved planning decisions, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, generated traceability and accountable roles. `ADMUI-01` now executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md`.
+
+The demo is not an EXL production go-live claim. It becomes the approved production delivery baseline only when the following governance actions are recorded; a reviewer may approve an assumption and later replace it through change control without reopening the whole PRD:
 
 1. The named EXL accountable roles in Section 17.13 are assigned to people and the Product Owner records approval of DEC-01 through DEC-16.
 2. Each P0 requirement is accepted, explicitly changed or deferred with documented consequence and target release.

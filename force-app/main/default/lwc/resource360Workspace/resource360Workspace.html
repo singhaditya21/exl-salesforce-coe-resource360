@@ -314,6 +314,22 @@
                     </section>
                 </template>
 
+                <template lwc:if={showDemoActivation}>
+                    <section class="records-panel records-panel_compact">
+                        <div class="panel-heading"><div><p class="eyebrow">R360-MOCK-ACTIVATION-2026-08-24</p><h3>Demo Activation Center</h3></div><span>{data.assurance.activation.notice}</span></div>
+                        <template lwc:if={hasActivationRows}><lightning-datatable key-field="id" data={activationRows} columns={activationColumns} hide-checkbox-column></lightning-datatable></template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No demo activation control is available.</p></div></template>
+                        <template lwc:if={hasActivationApprovalRows}><h4 class="subtable-heading">Fictional legal, risk and business decision register</h4><lightning-datatable key-field="id" data={activationApprovalRows} columns={activationApprovalColumns} hide-checkbox-column></lightning-datatable></template>
+                        <div class="preview-summary preview-summary_four" role="status">
+                            <div><span>Overall state</span><strong>{data.assurance.activation.state}</strong></div>
+                            <div><span>Checks passed</span><strong>{data.assurance.activation.checksPassed} / {data.assurance.activation.checksTotal}</strong></div>
+                            <div><span>External calls</span><strong>{data.assurance.activation.externalCalls}</strong></div>
+                            <div><span>Destructive actions</span><strong>{data.assurance.activation.destructiveActions}</strong></div>
+                        </div>
+                        <div class="panel-footer panel-footer_split"><span>SSO, EXL integrations, production-like fictional data, approvals and operations are fully exercised as safe simulations.</span><lightning-button variant="brand" label="Run complete demo activation" icon-name="utility:play" onclick={handleRunDemoActivation} disabled={demoActivationDisabled}></lightning-button></div>
+                    </section>
+                </template>
+
                 <template lwc:if={showPersonaAssurance}>
                     <section class="records-panel records-panel_compact">
                         <div class="panel-heading"><div><p class="eyebrow">R360-MOCK-ACTIVATION-2026-08-24</p><h3>Persona, scope, Entra and decision-authority matrix</h3></div><span>Every active business role resolves to an approved mock Salesforce assignment and segregation class</span></div>

@@ -13,7 +13,7 @@ const MODULE_CONTRACTS = {
 };
 
 const SCREEN_OVERRIDES = {
-  "GLB-01": { source: "Salesforce My Domain and EXL Entra federation", api: "Salesforce SAML/OIDC SSO", validations: "EXL identity, login policy, MFA and tenant assignment" },
+  "GLB-01": { source: "Mock Entra assertion in the sanitized demo; Salesforce My Domain and EXL federation only after production activation", api: "Resource360AssuranceService.startMockSession; Salesforce SAML/OIDC in production", validations: "No credential collection; fictional identity, MFA, lifecycle, group alias and active scope" },
   "STFUI-01": { delivery: "Operational command", fields: "Engagement, candidate, role, classification, dates, daily hours, owner/review controls" },
   "STFUI-02": { delivery: "Operational search", fields: "Capability, minimum level, role, tower, location, dates and daily hours" },
   "STFUI-15": { delivery: "Operational command", api: "Resource360StaffingService.modifyAllocation", fields: "Current allocation, effective dates, role, classification, daily hours and reason" },
@@ -29,7 +29,7 @@ const SCREEN_OVERRIDES = {
   "TIMEUI-01": { delivery: "Operational command", api: "Resource360TimeService.createTimesheet", fields: "Employee and Monday week start" },
   "TIMEUI-02": { delivery: "Operational command", api: "Resource360TimeService.saveEntry", fields: "Timesheet, allocation, work date, work unit, hours and comment" },
   "TIMEUI-07": { delivery: "Operational command", api: "Resource360TimeService.createCorrection", fields: "Approved current timesheet and correction reason" },
-  "ADMUI-01": { delivery: "Governed configuration control", api: "Resource360ConfigurationService.catalog/preview/saveDraft/submit/decide/rollback", fields: "Configuration domain, stable code, typed value, attributes, effective dates, reason, validation, state and version" },
+  "ADMUI-01": { delivery: "Five-pillar demo activation rehearsal", api: "Resource360AssuranceService.mockAssuranceSnapshot/runDemoActivation", fields: "Identity/SSO, integrations, fictional data, legal/business approvals, operations, run evidence and non-production boundary" },
   "ADMUI-04": { delivery: "Governed configuration control", api: "Resource360ConfigurationService plus role/classification/LOV runtime catalogs", fields: "Delivery role, classification and LOV code, label, enabled state, effective dates and typed attributes" },
   "ADMUI-06": { delivery: "Governed configuration control", api: "Resource360ConfigurationService plus Resource360Policy", fields: "SLA, approval, escalation, KPI and notification controls with preview, approval, activation and rollback" },
   "ADMUI-07": { delivery: "Governed configuration and operational control", api: "Resource360ConfigurationService; Resource360InboundApi v1.1", fields: "Non-secret integration policy, schedule, logical source, run ID, entity contract, cutoff, status and record-level errors" },

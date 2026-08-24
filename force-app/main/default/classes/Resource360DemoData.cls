@@ -100,7 +100,7 @@ public with sharing class Resource360DemoData {
         List<R360_Notification__c>alerts=[SELECT Id,Occurred_At__c,Resolution_Status__c,Accountable_Owner__c,First_Seen_At__c FROM R360_Notification__c WHERE Event_ID__c LIKE 'DEMO-NTF-%'];for(R360_Notification__c alert:alerts){alert.Resolution_Status__c=String.isBlank(alert.Resolution_Status__c)?'Open':alert.Resolution_Status__c;alert.Accountable_Owner__c=alert.Accountable_Owner__c==null?UserInfo.getUserId():alert.Accountable_Owner__c;alert.First_Seen_At__c=alert.First_Seen_At__c==null?alert.Occurred_At__c:alert.First_Seen_At__c;}if(!alerts.isEmpty())update alerts;
         ensureRoleScopes(today);
         ensureMockSourceRuns();
-        return new Resource360Service.ServiceResult(true,'Sanitized demo data upgraded to the governed v1.5 mock-complete model.',anchorResourceId,runKey);
+        return new Resource360Service.ServiceResult(true,'Sanitized demo data upgraded to the governed v1.6 demo-complete model.',anchorResourceId,runKey);
     }
 
     private static void ensureMockSourceRuns(){

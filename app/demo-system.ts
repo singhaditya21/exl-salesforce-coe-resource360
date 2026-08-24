@@ -48,9 +48,16 @@ export type MockSourceContract = { id: string; source: string; entity: string; i
 export type DemoPersona = { id: string; role: DemoRole; permissionSetGroup: string; entraGroupAlias: string; scope: string; authority: string; segregation: string; delegationAllowed: boolean; owner: string; approvalStatus: "Approved mock assumption" };
 export type DemoRetentionRule = { id: string; category: string; retentionDays: number; legalHoldEligible: boolean; action: string; recoveryDays: number; owner: string; approvalStatus: "Approved mock assumption" };
 export type DemoScenario = { id: string; name: string; startDate: string; endDate: string; headcountDelta: number; billableAllocation: number; capacityHours: number; billableHours: number; savedAt: string };
+export type DemoActivationPillar = {
+  id: "IDENTITY_SSO" | "INTEGRATIONS" | "FICTIONAL_DATA" | "LEGAL_APPROVALS" | "OPERATIONS";
+  label: string; owner: string; simulation: string; evidence: string;
+  state: "Ready" | "Passed"; lastEvidence?: string;
+};
+export type DemoActivationRun = { id: string; state: "Passed"; completedAt: string; checksPassed: number; checksTotal: number; boundary: "Sanitized demo only" };
+export type DemoApprovalEvidence = { id: string; decision: string; owner: string; status: "Approved mock"; evidenceReference: string; decidedOn: "24 Aug 2026" };
 
 export type DemoState = {
-  version: 5;
+  version: 6;
   signedIn: boolean;
   activeRole: DemoRole;
   budgets: DemoBudget[];
@@ -65,10 +72,13 @@ export type DemoState = {
   sourceContracts: MockSourceContract[];
   personas: DemoPersona[];
   retentionRules: DemoRetentionRule[];
+  activationPillars: DemoActivationPillar[];
+  approvalEvidence: DemoApprovalEvidence[];
+  activationRun: DemoActivationRun | null;
   scenarios: DemoScenario[];
 };
 
-const STORAGE_KEY = "exl-resource360-demo-v5";
+const STORAGE_KEY = "exl-resource360-demo-v6";
 const roleNames = ["Beginner", "Intermediate", "Advanced", "SME"];
 
 function now() {
@@ -99,7 +109,7 @@ export function fitForPerson(person: DemoPerson, capability: string, requiredLev
 }
 
 export const initialDemoState: DemoState = {
-  version: 5,
+  version: 6,
   signedIn: true,
   activeRole: "COE Staffer",
   budgets: [
@@ -192,6 +202,22 @@ export const initialDemoState: DemoState = {
     ["RET-07","Notifications and closure evidence",365,"Dispose after recovery window","Product Operations"],
     ["RET-08","Outbox and dead-letter evidence",90,"Dispose after recovery window","Product Operations"],
   ].map(([id,category,retentionDays,action,owner])=>({id:String(id),category:String(category),retentionDays:Number(retentionDays),legalHoldEligible:true,action:String(action),recoveryDays:30,owner:String(owner),approvalStatus:"Approved mock assumption" as const})),
+  activationPillars: [
+    { id: "IDENTITY_SSO", label: "Identity and SSO", owner: "Identity and Access Management", simulation: "Entra SSO assertion, MFA, lifecycle, group-to-permission mapping and active role scope", evidence: "18 governed personas · effective-dated scope · no password or token collected", state: "Ready" },
+    { id: "INTEGRATIONS", label: "EXL integrations", owner: "Product Operations", simulation: "Contract-version, schema, freshness, completeness, collision and retry checks for every source", evidence: "13 R360-MOCK-1.2 source contracts · deterministic payload fixtures", state: "Ready" },
+    { id: "FICTIONAL_DATA", label: "Production-like data", owner: "Data Governance", simulation: "Fictional volume profile across people, engagements, budgets, staffing, skills and time", evidence: "1,862-person source run · 38 engagements · .invalid identities only", state: "Ready" },
+    { id: "LEGAL_APPROVALS", label: "Legal and business approvals", owner: "Risk, Legal, Privacy and Control Owners", simulation: "Mock privacy, retention, legal-hold, security, accessibility and UAT evidence decisions", evidence: "8 retention rules · non-destructive disposition · named fictional control owners", state: "Ready" },
+    { id: "OPERATIONS", label: "Operational controls", owner: "Product Operations", simulation: "Scheduler, monitoring, alert, retry/dead-letter, backup, restore and DR rehearsal", evidence: "Hourly control contract · attributable recovery · no external notification sent", state: "Ready" },
+  ],
+  approvalEvidence: [
+    { id: "APR-PRIVACY", decision: "Privacy impact rehearsal", owner: "Privacy Office", status: "Approved mock", evidenceReference: "MOCK-PIA-2026-08", decidedOn: "24 Aug 2026" },
+    { id: "APR-SECURITY", decision: "Threat model and access review", owner: "Information Security", status: "Approved mock", evidenceReference: "MOCK-SEC-2026-08", decidedOn: "24 Aug 2026" },
+    { id: "APR-RETENTION", decision: "Retention, recovery and legal hold", owner: "Legal / Records Management", status: "Approved mock", evidenceReference: "MOCK-RET-2026-08", decidedOn: "24 Aug 2026" },
+    { id: "APR-A11Y", decision: "Accessibility conformance review", owner: "Accessibility Lead", status: "Approved mock", evidenceReference: "MOCK-A11Y-2026-08", decidedOn: "24 Aug 2026" },
+    { id: "APR-UAT", decision: "25-scenario business UAT rehearsal", owner: "Salesforce COE Product Owner", status: "Approved mock", evidenceReference: "MOCK-UAT-25-OF-25", decidedOn: "24 Aug 2026" },
+    { id: "APR-CUTOVER", decision: "Cutover, rollback and recovery rehearsal", owner: "Release Management", status: "Approved mock", evidenceReference: "MOCK-CUTOVER-2026-08", decidedOn: "24 Aug 2026" },
+  ],
+  activationRun: null,
   scenarios: [],
 };
 
@@ -286,11 +312,22 @@ export function useDemoSystem() {
   function decideConfigurationRelease(releaseKey: string, approve: boolean, note: string) { transact(approve ? "CONFIG_RELEASE_ACTIVATED" : "CONFIG_RELEASE_REJECTED", releaseKey, note, (current) => ({ ...current, configurations: current.configurations.map((item) => item.releaseKey === releaseKey && item.state === "Pending approval" ? { ...item, state: approve ? "Active" : "Rejected" } : approve && current.configurations.some((target) => target.releaseKey === releaseKey && target.code === item.code) && item.state === "Active" ? { ...item, state: "Retired" } : item) })); }
   function runMockReconciliation(sourceId: string) { transact("MOCK_SOURCE_RECONCILED", sourceId, "R360-MOCK-1.2 deterministic completeness and collision checks passed", (current) => ({ ...current, sourceContracts: current.sourceContracts.map((item) => item.id === sourceId ? { ...item, state: "Fresh", completeness: 100, collisions: 0, cutoff: now(), updated: item.updated + 1 } : item) }), { title: "Mock source reconciled", detail: `${sourceId} is fresh and 100% complete`, severity: "Normal" }); }
   function runRetentionDryRun() { transact("RETENTION_DRY_RUN", "R360-MOCK-ACTIVATION-2026-08-24", `${state.retentionRules.length} approved mock retention rules evaluated; no records deleted`, (current) => current, { title: "Retention dry run complete", detail: "Approved mock schedule · no data deleted · legal hold false", severity: "Normal" }); }
+  function runDemoActivation() {
+    const completedAt = now();
+    const run: DemoActivationRun = { id: `ACT-${Date.now().toString().slice(-8)}`, state: "Passed", completedAt, checksPassed: 5, checksTotal: 5, boundary: "Sanitized demo only" };
+    transact("DEMO_ACTIVATION_PASSED", run.id, "SSO, integrations, fictional data, approvals and operational-control simulations passed without external calls or destructive actions", (current) => ({
+      ...current,
+      activationRun: run,
+      activationPillars: current.activationPillars.map((item) => ({ ...item, state: "Passed", lastEvidence: completedAt })),
+      sourceContracts: current.sourceContracts.map((item) => item.direction === "Native" ? item : { ...item, state: "Fresh", completeness: 100, collisions: 0, cutoff: completedAt, updated: item.updated + 1 }),
+    }), { title: "Demo activation assurance passed", detail: "5/5 sanitized simulations passed · no EXL system contacted", severity: "Normal" });
+    return run.id;
+  }
   function saveScenario(input: Omit<DemoScenario, "id" | "savedAt">) { const scenario = { ...input, id: `SCN-${Date.now().toString().slice(-6)}`, savedAt: now() }; transact("WHAT_IF_SCENARIO_SAVED", scenario.id, `${scenario.headcountDelta} HC · ${scenario.billableAllocation}% billable`, (current) => ({ ...current, scenarios: [scenario, ...current.scenarios] })); return scenario.id; }
 
   function reset() { setState(initialDemoState); }
   const unread = useMemo(() => state.notifications.filter((item) => !item.read).length, [state.notifications]);
-  return { state, unread, setRole, setSignedIn, markNotificationsRead, closeNotification, updateBudget, submitBudget, decideBudget, importBudgetRoster, submitClaim, decideClaim, commitAllocation, updateTimesheet, submitTimesheet, decideTimesheet, saveConfiguration, submitConfiguration, decideConfiguration, restoreConfiguration, assignConfigurationRelease, submitConfigurationRelease, decideConfigurationRelease, runMockReconciliation, runRetentionDryRun, saveScenario, reset };
+  return { state, unread, setRole, setSignedIn, markNotificationsRead, closeNotification, updateBudget, submitBudget, decideBudget, importBudgetRoster, submitClaim, decideClaim, commitAllocation, updateTimesheet, submitTimesheet, decideTimesheet, saveConfiguration, submitConfiguration, decideConfiguration, restoreConfiguration, assignConfigurationRelease, submitConfigurationRelease, decideConfigurationRelease, runMockReconciliation, runRetentionDryRun, runDemoActivation, saveScenario, reset };
 }
 
 export type DemoSystem = ReturnType<typeof useDemoSystem>;

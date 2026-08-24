@@ -65,6 +65,7 @@ The demo retains genuine control behavior:
 
 ## Mock-complete functional surfaces
 
+- one interactive five-pillar Demo Activation Center covering SSO, integrations, production-like fictional data, legal/business approvals and operational controls with an attributable 5/5 dry run;
 - 103 governed screen routes with role, source, API, validation, state and acceptance contracts;
 - monthly budget/resource roster grid, atomic JSON import, downloadable row errors and as-of EAC assurance;
 - daily-hours, allocation-percent and total-hours planning with conflict context;
@@ -78,6 +79,8 @@ The demo retains genuine control behavior:
 - effective-dated configuration plus atomic multi-setting release preview, submission, independent decision and rollback;
 - 18 positive/negative role navigation contracts shared by Lightning and GitHub Pages;
 - machine-readable project/ingestion schemas and a 13-source governance register.
+
+The five activation simulations are defined in `contracts/resource360-governance-register.json` and operated through `ADMUI-01`. They close the demonstration gap without changing the production boundary: every outcome remains fictional, local or Salesforce Developer Edition evidence.
 
 ## Production activation dependencies
 

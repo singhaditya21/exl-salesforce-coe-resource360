@@ -611,5 +611,113 @@
       "controlOwner": "Product Operations",
       "approvalStatus": "Approved mock assumption"
     }
+  ],
+  "demoActivationPillars": [
+    {
+      "id": "IDENTITY_SSO",
+      "label": "Identity and SSO",
+      "controlOwner": "Identity and Access Management",
+      "simulation": "Mock Entra SSO assertion, MFA, lifecycle, group-to-permission mapping and effective role scope",
+      "evidence": "18 governed personas; no credential collection or external authentication call",
+      "state": "Ready",
+      "mode": "Sanitized deterministic simulation",
+      "nonProductionBoundary": "No EXL credential, endpoint, identity, approval or production record is used."
+    },
+    {
+      "id": "INTEGRATIONS",
+      "label": "EXL integrations",
+      "controlOwner": "Product Operations",
+      "simulation": "Schema, version, freshness, completeness, collision, idempotency and retry rehearsal",
+      "evidence": "13 R360-MOCK-1.2 source contracts with deterministic payload fixtures",
+      "state": "Ready",
+      "mode": "Sanitized deterministic simulation",
+      "nonProductionBoundary": "No EXL credential, endpoint, identity, approval or production record is used."
+    },
+    {
+      "id": "FICTIONAL_DATA",
+      "label": "Production-like data",
+      "controlOwner": "Data Governance",
+      "simulation": "Fictional volume and reconciliation profile across people, engagements, budgets, staffing, skills and time",
+      "evidence": "Sanitized seeded records and .invalid identities only",
+      "state": "Ready",
+      "mode": "Sanitized deterministic simulation",
+      "nonProductionBoundary": "No EXL credential, endpoint, identity, approval or production record is used."
+    },
+    {
+      "id": "LEGAL_APPROVALS",
+      "label": "Legal and business approvals",
+      "controlOwner": "Risk, Legal, Privacy and Control Owners",
+      "simulation": "Mock privacy, retention, legal-hold, security, accessibility and UAT decisions",
+      "evidence": "Eight legal-hold-eligible rules; non-destructive disposition; fictional owners",
+      "state": "Ready",
+      "mode": "Sanitized deterministic simulation",
+      "nonProductionBoundary": "No EXL credential, endpoint, identity, approval or production record is used."
+    },
+    {
+      "id": "OPERATIONS",
+      "label": "Operational controls",
+      "controlOwner": "Product Operations",
+      "simulation": "Scheduler, monitoring, alerting, retry/dead-letter, backup, restore and disaster-recovery rehearsal",
+      "evidence": "Attributable dry run with zero external notification or destructive action",
+      "state": "Ready",
+      "mode": "Sanitized deterministic simulation",
+      "nonProductionBoundary": "No EXL credential, endpoint, identity, approval or production record is used."
+    }
+  ],
+  "demoApprovalEvidence": [
+    {
+      "id": "APR-PRIVACY",
+      "decision": "Privacy impact rehearsal",
+      "mockOwner": "Privacy Office",
+      "evidenceReference": "MOCK-PIA-2026-08",
+      "decisionDate": "2026-08-24",
+      "status": "Approved mock assumption",
+      "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."
+    },
+    {
+      "id": "APR-SECURITY",
+      "decision": "Threat model and access review",
+      "mockOwner": "Information Security",
+      "evidenceReference": "MOCK-SEC-2026-08",
+      "decisionDate": "2026-08-24",
+      "status": "Approved mock assumption",
+      "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."
+    },
+    {
+      "id": "APR-RETENTION",
+      "decision": "Retention, recovery and legal hold",
+      "mockOwner": "Legal / Records Management",
+      "evidenceReference": "MOCK-RET-2026-08",
+      "decisionDate": "2026-08-24",
+      "status": "Approved mock assumption",
+      "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."
+    },
+    {
+      "id": "APR-A11Y",
+      "decision": "Accessibility conformance review",
+      "mockOwner": "Accessibility Lead",
+      "evidenceReference": "MOCK-A11Y-2026-08",
+      "decisionDate": "2026-08-24",
+      "status": "Approved mock assumption",
+      "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."
+    },
+    {
+      "id": "APR-UAT",
+      "decision": "25-scenario business UAT rehearsal",
+      "mockOwner": "Salesforce COE Product Owner",
+      "evidenceReference": "MOCK-UAT-25-OF-25",
+      "decisionDate": "2026-08-24",
+      "status": "Approved mock assumption",
+      "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."
+    },
+    {
+      "id": "APR-CUTOVER",
+      "decision": "Cutover, rollback and recovery rehearsal",
+      "mockOwner": "Release Management",
+      "evidenceReference": "MOCK-CUTOVER-2026-08",
+      "decisionDate": "2026-08-24",
+      "status": "Approved mock assumption",
+      "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."
+    }
   ]
 }

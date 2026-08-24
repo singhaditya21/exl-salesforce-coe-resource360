@@ -89,6 +89,10 @@ test("publishes complete, version-aligned governance and integration contracts",
   assert.equal(register.sourceContracts.length, 13);
   assert.equal(register.personas.length, 18);
   assert.equal(register.retentionRules.length, 8);
+  assert.equal(register.demoActivationPillars.length, 5);
+  assert.ok(register.demoActivationPillars.every((item) => item.mode === "Sanitized deterministic simulation"));
+  assert.equal(register.demoApprovalEvidence.length, 6);
+  assert.ok(register.demoApprovalEvidence.every((item) => item.status === "Approved mock assumption"));
   assert.equal(new Set(register.personas.map((item) => item.businessRole)).size, 18);
   assert.ok(register.personas.every((item) => item.permissionSetGroup && item.entraGroupAlias));
   assert.ok(register.retentionRules.every((item) => item.legalHoldEligible));

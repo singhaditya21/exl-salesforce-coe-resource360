@@ -150,7 +150,7 @@ export const screens: ScreenSpec[] = [
   s("CMD-08", "Data quality and sync operations", "command", "dashboard", "Monitor freshness, volume, duplicates, unmatched joins and failed integration events.", "Open runbook", "R0", "Operations center"),
   s("CMD-09", "Audit and override explorer", "command", "list", "Search attributable decisions, changes, overrides and correlated technical events.", "Export audit", "R0", "Control center"),
 
-  s("ADMUI-01", "Administration landing", "admin", "admin", "Role-aware entry to access, taxonomy, policy, integration and operational controls.", "Open operations", "R0", "Administration"),
+  s("ADMUI-01", "Administration landing", "admin", "admin", "Run the five-pillar demo activation for SSO, integrations, fictional data, approvals and operations.", "Run demo activation", "R0", "Administration"),
   s("ADMUI-02", "People and access", "admin", "list", "Manage identity state, roles, scope, delegation and access exceptions.", "Add assignment", "R0", "Access"),
   s("ADMUI-03", "Role-permission matrix", "admin", "admin", "Control resource-action-scope permissions with separation-of-duty checks.", "Preview changes", "R0", "Access"),
   s("ADMUI-04", "Field values and LOVs", "admin", "list", "Maintain effective-dated business values, codes and deactivation impact.", "Add value", "R0", "Configuration"),

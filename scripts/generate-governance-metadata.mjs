@@ -131,6 +131,22 @@ for (const rule of retentionRules) writeRecord("R360_Retention_Rule", rule[0], r
   Active__c: ["boolean", true], Record_Category__c: ["text", rule[1]], Retention_Days__c: ["number", rule[2]], Legal_Hold_Eligible__c: ["boolean", rule[3]], Disposition_Action__c: ["text", rule[4]], Recovery_Window_Days__c: ["number", rule[5]], Control_Owner__c: ["text", rule[6]], Approval_Status__c: ["text", "Approved mock assumption"], Approved_On__c: ["date", "2026-08-24"], Evidence_Reference__c: ["text", "R360-MOCK-ACTIVATION-2026-08-24; execution remains non-destructive in the demo"],
 });
 
+const demoActivationPillars = [
+  ["IDENTITY_SSO", "Identity and SSO", "Identity and Access Management", "Mock Entra SSO assertion, MFA, lifecycle, group-to-permission mapping and effective role scope", "18 governed personas; no credential collection or external authentication call"],
+  ["INTEGRATIONS", "EXL integrations", "Product Operations", "Schema, version, freshness, completeness, collision, idempotency and retry rehearsal", "13 R360-MOCK-1.2 source contracts with deterministic payload fixtures"],
+  ["FICTIONAL_DATA", "Production-like data", "Data Governance", "Fictional volume and reconciliation profile across people, engagements, budgets, staffing, skills and time", "Sanitized seeded records and .invalid identities only"],
+  ["LEGAL_APPROVALS", "Legal and business approvals", "Risk, Legal, Privacy and Control Owners", "Mock privacy, retention, legal-hold, security, accessibility and UAT decisions", "Eight legal-hold-eligible rules; non-destructive disposition; fictional owners"],
+  ["OPERATIONS", "Operational controls", "Product Operations", "Scheduler, monitoring, alerting, retry/dead-letter, backup, restore and disaster-recovery rehearsal", "Attributable dry run with zero external notification or destructive action"],
+];
+const demoApprovalEvidence = [
+  ["APR-PRIVACY", "Privacy impact rehearsal", "Privacy Office", "MOCK-PIA-2026-08"],
+  ["APR-SECURITY", "Threat model and access review", "Information Security", "MOCK-SEC-2026-08"],
+  ["APR-RETENTION", "Retention, recovery and legal hold", "Legal / Records Management", "MOCK-RET-2026-08"],
+  ["APR-A11Y", "Accessibility conformance review", "Accessibility Lead", "MOCK-A11Y-2026-08"],
+  ["APR-UAT", "25-scenario business UAT rehearsal", "Salesforce COE Product Owner", "MOCK-UAT-25-OF-25"],
+  ["APR-CUTOVER", "Cutover, rollback and recovery rehearsal", "Release Management", "MOCK-CUTOVER-2026-08"],
+];
+
 fs.mkdirSync(contractRoot, { recursive: true });
 fs.writeFileSync(path.join(contractRoot, "resource360-governance-register.json"), `${JSON.stringify({
   schemaVersion: "1.0",
@@ -154,6 +170,16 @@ fs.writeFileSync(path.join(contractRoot, "resource360-governance-register.json")
     dispositionAction: rule[4], recoveryWindowDays: rule[5], controlOwner: rule[6],
     approvalStatus: "Approved mock assumption",
   })),
+  demoActivationPillars: demoActivationPillars.map((pillar) => ({
+    id: pillar[0], label: pillar[1], controlOwner: pillar[2], simulation: pillar[3],
+    evidence: pillar[4], state: "Ready", mode: "Sanitized deterministic simulation",
+    nonProductionBoundary: "No EXL credential, endpoint, identity, approval or production record is used.",
+  })),
+  demoApprovalEvidence: demoApprovalEvidence.map((approval) => ({
+    id: approval[0], decision: approval[1], mockOwner: approval[2], evidenceReference: approval[3],
+    decisionDate: "2026-08-24", status: "Approved mock assumption",
+    nonProductionBoundary: "Fictional demonstration evidence; not an EXL approval.",
+  })),
 }, null, 2)}\n`);
 
-console.log(`Generated ${sources.length} source contracts, ${personas.length} persona mappings and ${retentionRules.length} retention rules.`);
+console.log(`Generated ${sources.length} source contracts, ${personas.length} persona mappings, ${retentionRules.length} retention rules, ${demoActivationPillars.length} demo activation pillars and ${demoApprovalEvidence.length} mock approval decisions.`);

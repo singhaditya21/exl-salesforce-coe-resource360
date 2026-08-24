@@ -246,7 +246,7 @@ function AssistantCanvas() {
 }
 
 function SsoCanvas({ onContinue }: { onContinue: () => void }) {
-  return <section className="sso-stage"><div className="sso-art"><span className="brand-mark giant">exl</span><span>Salesforce COE</span><h2>One governed view of<br />skills, staffing and delivery.</h2><p>Resource360 connects approved economics to verified capability, committed capacity and actual effort.</p><div className="sso-metrics"><span><strong>Sanitized</strong>Demo fixtures</span><span><strong>103</strong>Screen inventory</span><span><strong>5</strong>Connected demo steps</span></div></div><div className="sso-card"><div><span className="brand-mark">exl</span><strong>Resource360</strong></div><h3>Demo access</h3><p>This GitHub Pages build simulates EXL Entra SSO. No password, token or production identity is collected.</p><button className="sso-button" onClick={onContinue}><i>▦</i> Enter sanitized demo</button><span className="secure-note">⌾ Production requires Microsoft Entra ID</span><div className="sso-links"><button>Privacy</button><button>Accessibility</button><button>Get help</button></div></div></section>;
+  return <section className="sso-stage"><div className="sso-art"><span className="brand-mark giant">exl</span><span>Salesforce COE</span><h2>One governed view of<br />skills, staffing and delivery.</h2><p>Resource360 connects approved economics to verified capability, committed capacity and actual effort.</p><div className="sso-metrics"><span><strong>Sanitized</strong>Demo fixtures</span><span><strong>103</strong>Screen inventory</span><span><strong>5</strong>Activation simulations</span></div></div><div className="sso-card"><div><span className="brand-mark">exl</span><strong>Resource360</strong></div><h3>Mock Entra SSO assertion</h3><p>This GitHub Pages build validates a fictional identity claim locally. No password, token, device ID or production identity is collected.</p><div className="sso-claim-preview"><span><i>✓</i><b>Identity</b><small>maya.patel@demo.invalid</small></span><span><i>✓</i><b>MFA</b><small>Simulated satisfied claim</small></span><span><i>✓</i><b>Group mapping</b><small>EXL-R360-COE-Staffer</small></span><span><i>✓</i><b>Scope</b><small>Salesforce COE · India</small></span></div><button className="sso-button" onClick={onContinue}><i>▦</i> Validate claim and enter demo</button><span className="secure-note">⌾ Sanitized simulation · no external authentication call</span><div className="sso-links"><button>Privacy</button><button>Accessibility</button><button>Get help</button></div></div></section>;
 }
 
 function ScreenCanvas({
@@ -291,9 +291,9 @@ function ScreenCanvas({
   if (screen.id === "STFUI-23") return <StaffingDecisionForm request={selectedStaffingRequest} onBack={onBackToStaffingRequest} onSubmit={onSubmitStaffingDecision} />;
   if (screen.module === "staffing") return <StaffingPlanningDemo screen={screen} system={system} onSelect={onSelect} onCreate={onCreateStaffingRequest} onToast={onToast} />;
   if (screen.module === "timesheet") return <TimesheetDemo screen={screen} system={system} onToast={onToast} />;
-  if (screen.id === "CMD-09") return <AdminDemo screen={screen} system={system} onToast={onToast} />;
+  if (screen.id === "CMD-09") return <AdminDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
   if (screen.module === "command") return <CommandDemo screen={screen} system={system} onSelect={onSelect} />;
-  if (screen.module === "admin") return <AdminDemo screen={screen} system={system} onToast={onToast} />;
+  if (screen.module === "admin") return <AdminDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
   if (screen.id === "AIUI-03") return <ScenarioDemo system={system} onToast={onToast} />;
   if (screen.kind === "home") return <HomeCanvas module={screen.module} />;
   if (screen.kind === "list") return <ListCanvas screen={screen} />;
@@ -378,6 +378,15 @@ export default function Home() {
     window.setTimeout(() => setToast(""), 2600);
   }
 
+  function runPrimaryAction() {
+    if (active.id === "ADMUI-01") {
+      const id = demoSystem.runDemoActivation();
+      showAction(`${id} passed all five sanitized activation simulations`);
+      return;
+    }
+    showAction(`${active.primary} is available in the browser demo`);
+  }
+
   function openStaffingRequest(id: string) {
     setSelectedStaffingRequestId(id);
     selectScreen("STFUI-22");
@@ -416,7 +425,7 @@ export default function Home() {
       <div className="workbench">
         <aside className="screen-rail"><div className="rail-title"><span className="rail-icon">{activeModule.icon}</span><div><small>{activeModule.label}</small><strong>{authorizedScreens.filter((screen) => screen.module === active.module).length} authorized screens</strong></div></div><label className="rail-search"><span>⌕</span><input value={screenFilter} onChange={(event) => setScreenFilter(event.target.value)} placeholder="Filter screens..." /></label><div className="screen-links">{moduleScreens.map((screen) => <button className={screen.id === active.id ? "active" : ""} key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><b>{screen.release}</b></button>)}</div><button className="rail-all" onClick={() => setShowDirectory(true)}>Browse all 103 screens <span>→</span></button></aside>
 
-        <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Demo states include seeded, changed and empty paths")}>View states <span>⌄</span></button><button className="primary-button" onClick={() => showAction(`${active.primary} is available in the browser demo`)}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} onCreateStaffingRequest={createStaffingRequest} system={demoSystem} onSelect={selectScreen} onToast={showAction} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · sanitized GitHub Pages demo</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
+        <section className="canvas"><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Demo states include seeded, changed and empty paths")}>View states <span>⌄</span></button><button className="primary-button" onClick={runPrimaryAction}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} onCreateStaffingRequest={createStaffingRequest} system={demoSystem} onSelect={selectScreen} onToast={showAction} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · sanitized GitHub Pages demo</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
       </div>
     </section>
     {showDirectory && <ScreenDirectory onClose={() => setShowDirectory(false)} onSelect={selectScreen} />}
