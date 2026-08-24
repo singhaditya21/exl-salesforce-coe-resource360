@@ -48,7 +48,7 @@ pnpm test:e2e
 pnpm sf:validate
 ```
 
-The deployment must pass all six local Resource 360 Apex test classes (32 methods at this baseline) with no component failure. The generated register must contain 109 functional/admin requirements, 25 UAT scenarios (134 total items), 103 unique governed screen IDs, 13 source contracts, 18 persona mappings and eight retention rules. Generated governance files must be committed and no org authentication artifact may be tracked.
+The deployment must pass all six local Resource 360 Apex test classes (38 methods at this baseline) with no component failure. The generated register must contain 109 functional/admin requirements, 25 UAT scenarios (134 total items), 103 unique governed screen IDs, 13 source contracts, 18 persona mappings and eight retention rules. Generated governance files must be committed and no org authentication artifact may be tracked.
 
 ## CI secret
 
