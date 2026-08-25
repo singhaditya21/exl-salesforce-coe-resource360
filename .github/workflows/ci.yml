@@ -76,7 +76,7 @@ jobs:
           pnpm exec playwright install --with-deps chromium
       - name: Authenticate validation org from encrypted secret
         if: env.RESOURCE360_SFDX_AUTH_URL != ''
-        run: printenv RESOURCE360_SFDX_AUTH_URL | sf org login sfdx-url --sfdx-url-stdin --alias Resource360CI
+        run: printenv RESOURCE360_SFDX_AUTH_URL | sf org login sfdx-url --alias=Resource360CI --sfdx-url-stdin=-
       - name: Validate pull-request metadata and Resource 360 controls
         if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name == 'pull_request'
         run: sf project deploy start --target-org Resource360CI --dry-run --test-level RunLocalTests --wait 120
