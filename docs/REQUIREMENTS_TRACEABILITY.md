@@ -1,6 +1,6 @@
 # Resource 360 requirements traceability
 
-Generated from PRD v1.6 and the repository screen catalogue. This is the engineering truth register for the EXL sanitized mock baseline. “Implemented” means demonstrable in GitHub Pages and/or deployable in the Salesforce Developer Edition with fictional records; it does not mean an EXL production identity, source, volume, policy or approval has been certified.
+Generated from PRD v1.7 and the repository screen catalogue. This is the engineering truth register for the EXL sanitized mock baseline. “Implemented” means demonstrable in GitHub Pages and/or deployable in the Salesforce Developer Edition with fictional records; it does not mean an EXL production identity, source, volume, policy or approval has been certified.
 
 ## Coverage summary
 

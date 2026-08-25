@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Engagement_Completion_Range</fullName><active>true</active><errorConditionFormula>OR(Completion_Percent__c &lt; 0, Completion_Percent__c &gt; 100)</errorConditionFormula><errorMessage>Completion percent must be between 0 and 100.</errorMessage></ValidationRule>

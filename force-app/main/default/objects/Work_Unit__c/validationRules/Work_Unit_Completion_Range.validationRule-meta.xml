@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Work_Unit_Completion_Range</fullName><active>true</active><errorConditionFormula>OR(Percent_Complete__c &lt; 0, Percent_Complete__c &gt; 100)</errorConditionFormula><errorMessage>Work-unit completion must be between 0 and 100.</errorMessage></ValidationRule>

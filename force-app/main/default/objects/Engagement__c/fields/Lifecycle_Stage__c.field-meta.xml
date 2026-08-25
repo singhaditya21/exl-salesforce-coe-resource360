@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lifecycle_Stage__c</fullName>
+    <label>Lifecycle Stage</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted>
+        <value><fullName>Intake</fullName><default>true</default><label>Intake</label></value>
+        <value><fullName>Contracted</fullName><default>false</default><label>Contracted</label></value>
+        <value><fullName>Budgeted</fullName><default>false</default><label>Budgeted</label></value>
+        <value><fullName>Staffing</fullName><default>false</default><label>Staffing</label></value>
+        <value><fullName>Delivery</fullName><default>false</default><label>Delivery</label></value>
+        <value><fullName>Closeout</fullName><default>false</default><label>Closeout</label></value>
+        <value><fullName>Complete</fullName><default>false</default><label>Complete</label></value>
+        <value><fullName>Cancelled</fullName><default>false</default><label>Cancelled</label></value>
+    </valueSetDefinition></valueSet>
+</CustomField>

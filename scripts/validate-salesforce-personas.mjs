@@ -185,6 +185,33 @@ try {
             );
             assert.deepEqual(consoleErrors, [], `${persona.alias} Lightning emitted application errors: ${consoleErrors.join(" | ")}`);
 
+            let projectWorkbench;
+            if (persona.alias === "r360pmgr") {
+                await page.goto(`${currentOrigin}/lightning/n/Resource360_Project_Workbench`, {
+                    waitUntil: "domcontentloaded",
+                    timeout: 60_000
+                });
+                await page.getByRole("heading", { name: "Project delivery workbench", exact: true })
+                    .waitFor({ state: "visible", timeout: 60_000 });
+                await page.getByText("3 governed version(s)", { exact: true })
+                    .waitFor({ state: "visible", timeout: 30_000 });
+                assert.equal(await page.locator(".gantt-row").count(), 7, "Project Manager must see the seven governed WBS items.");
+                assert.equal(await page.getByText("WBS-DC-01", { exact: true }).count(), 0, "The retired legacy work item must not appear in the Gantt.");
+                assert.equal(await page.getByText("8h actual", { exact: false }).count() >= 2, true, "Project Manager must see shared approved delivery actuals.");
+
+                await page.locator(".task-label").filter({ hasText: "WBS-SF-03" }).first().click();
+                await page.getByRole("button", { name: "Update progress", exact: true }).click();
+                await page.getByText("Work-unit progress updated.", { exact: true })
+                    .waitFor({ state: "visible", timeout: 30_000 });
+                projectWorkbench = {
+                    governedTasks: 7,
+                    contractVersions: 3,
+                    approvedActualsVisible: true,
+                    progressWrite: true
+                };
+                assert.deepEqual(consoleErrors, [], `${persona.alias} Project Workbench emitted application errors: ${consoleErrors.join(" | ")}`);
+            }
+
             results.push({
                 alias: persona.alias,
                 federationIdentifier: user.FederationIdentifier,
@@ -195,6 +222,7 @@ try {
                 positiveScreen: persona.screen,
                 visibleRecords,
                 negativeModule: unavailableModule.label,
+                projectWorkbench,
                 consoleErrors: 0
             });
         } catch (error) {

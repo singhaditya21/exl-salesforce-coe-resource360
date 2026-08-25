@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Owner_User__c</fullName><deleteConstraint>SetNull</deleteConstraint><label>Accountable Owner</label><referenceTo>User</referenceTo><relationshipLabel>Owned Project Risks</relationshipLabel><relationshipName>Owned_Project_Risks</relationshipName><type>Lookup</type></CustomField>

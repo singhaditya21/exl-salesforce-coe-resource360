@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Work_Unit_Baseline_Order</fullName><active>true</active><errorConditionFormula>AND(NOT(ISBLANK(Baseline_Start_Date__c)), NOT(ISBLANK(Baseline_End_Date__c)), Baseline_End_Date__c &lt; Baseline_Start_Date__c)</errorConditionFormula><errorMessage>Baseline end date cannot precede baseline start date.</errorMessage></ValidationRule>

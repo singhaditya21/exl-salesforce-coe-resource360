@@ -221,6 +221,17 @@ for (const user of users.records) {
 
 const practitioner = users.records.find((user) => user.Alias === "r360prac");
 assert(practitioner, "The fictional practitioner identity is required.");
+const projectManager = users.records.find((user) => user.Alias === "r360pmgr");
+assert(projectManager, "The fictional project-manager identity is required.");
+const deliveryTimesheetCount = query(
+    "SELECT Timesheet__c FROM Time_Entry__c WHERE Timesheet__c!=null GROUP BY Timesheet__c"
+).totalSize;
+shareMatrix[projectManager.Alias].deliveryTimesheets = assertShareCount(
+    "Timesheet__c",
+    projectManager.Id,
+    deliveryTimesheetCount,
+    projectManager.FederationIdentifier
+);
 for (const [objectName, matrixKey] of [
     ["Skill_Claim__c", "skillClaims"],
     ["Credential__c", "credentials"],
@@ -261,6 +272,38 @@ assertMinimums(timesheets, {
     "Correction Pending": 1
 }, "Timesheet queue");
 
+const goldenProject = query("SELECT Id FROM Engagement__c WHERE Engagement_ID__c='ENG-1001' LIMIT 1").records[0];
+assert(goldenProject, "The ENG-1001 golden-path project is required.");
+const goldenProjectId = goldenProject.Id;
+const goldenPath = {
+    contractVersions: query(`SELECT COUNT() FROM Commercial_Reference__c WHERE Engagement__c='${goldenProjectId}' AND Approval_Status__c='Approved'`).totalSize,
+    commercialLines: query(`SELECT COUNT() FROM Commercial_Line__c WHERE Commercial_Reference__r.Engagement__c='${goldenProjectId}' AND External_ID__c LIKE 'GOLD-CL-%'`).totalSize,
+    workUnits: query(`SELECT COUNT() FROM Work_Unit__c WHERE Engagement__c='${goldenProjectId}' AND Work_Unit_Code__c LIKE 'WBS-SF-%'`).totalSize,
+    dependencies: query(`SELECT COUNT() FROM Work_Dependency__c WHERE Engagement__c='${goldenProjectId}' AND External_ID__c LIKE 'GOLD-DEP-%'`).totalSize,
+    skillRequirements: query(`SELECT COUNT() FROM Engagement_Skill_Requirement__c WHERE Engagement__c='${goldenProjectId}' AND Requirement_Key__c LIKE 'GOLD-REQ-%'`).totalSize,
+    eligibleSkillMatches: query("SELECT COUNT() FROM Staffing_Skill_Match__c WHERE Match_Key__c LIKE 'GOLD-MATCH-%' AND Eligible__c=true").totalSize,
+    acceptedStaffing: query(`SELECT COUNT() FROM Staffing_Request__c WHERE Engagement__c='${goldenProjectId}' AND Idempotency_Key__c LIKE 'GOLD-SR-%' AND State__c='Accepted'`).totalSize,
+    currentAllocations: query(`SELECT COUNT() FROM Allocation__c WHERE Engagement__c='${goldenProjectId}' AND Originating_Request__r.Idempotency_Key__c LIKE 'GOLD-SR-%' AND Current__c=true`).totalSize,
+    risks: query(`SELECT COUNT() FROM Project_Risk__c WHERE Engagement__c='${goldenProjectId}' AND External_ID__c LIKE 'GOLD-RISK-%'`).totalSize,
+    closeouts: query(`SELECT COUNT() FROM Project_Closeout__c WHERE Engagement__c='${goldenProjectId}' AND Closeout_ID__c='GOLD-CLOSEOUT-ENG-1001'`).totalSize,
+    approvedActuals: query(`SELECT COUNT() FROM Time_Entry__c WHERE Engagement__c='${goldenProjectId}' AND Entry_Key__c LIKE 'GOLD-TE-%' AND State__c='Approved'`).totalSize,
+    retiredLegacyTasks: query(`SELECT COUNT() FROM Work_Unit__c WHERE Engagement__c='${goldenProjectId}' AND Work_Unit_Code__c='WBS-DC-01' AND Status__c='Cancelled'`).totalSize
+};
+assert.deepEqual(goldenPath, {
+    contractVersions: 3,
+    commercialLines: 6,
+    workUnits: 7,
+    dependencies: 7,
+    skillRequirements: 11,
+    eligibleSkillMatches: 11,
+    acceptedStaffing: 4,
+    currentAllocations: 4,
+    risks: 2,
+    closeouts: 1,
+    approvedActuals: 2,
+    retiredLegacyTasks: 1
+}, "The governed ENG-1001 lifecycle must be complete and internally traceable.");
+
 const configurations = groupedCounts(
     "R360_Configuration__c", "State__c", "WHERE Version_Key__c LIKE 'DEMO-CONFIG-%'"
 );
@@ -293,9 +336,10 @@ assert(
 
 const reports = query(
     "SELECT Id, DeveloperName FROM Report WHERE DeveloperName IN " +
-    "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals')"
+    "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals'," +
+    "'Project_Lifecycle','Workplan_Delivery','Contract_Changes','Skill_Demand_Match','Project_Risk_Control','Closeout_Readiness')"
 );
-assert.equal(reports.totalSize, 5, "Five native Salesforce reports are required.");
+assert.equal(reports.totalSize, 11, "Eleven native Salesforce reports are required.");
 const reportRows = {};
 for (const report of reports.records) {
     const result = apiRequest(`/services/data/v67.0/analytics/reports/${report.Id}?includeDetails=false`);
@@ -316,11 +360,11 @@ const statusUrl = refreshRequest.statusUrl ?? `/services/data/v67.0/analytics/da
 await waitFor("Command Center dashboard refresh", async () => {
     const result = apiRequest(statusUrl);
     const statuses = result.componentStatus ?? [];
-    const terminal = statuses.length === 5 && statuses.every((status) => status.refreshStatus === "IDLE");
+    const terminal = statuses.length === 11 && statuses.every((status) => status.refreshStatus === "IDLE");
     return { ready: terminal, value: statuses };
 });
 const dashboard = apiRequest(`/services/data/v67.0/analytics/dashboards/${dashboardId}`);
-assert.equal(dashboard.componentData.length, 5, "The Command Center must have five dashboard components.");
+assert.equal(dashboard.componentData.length, 11, "The Command Center must have eleven dashboard components.");
 assert(
     dashboard.componentData.every((component) => component.status.componentDataStatus === "DATA"),
     "Every Command Center component must contain refreshed data."
@@ -350,6 +394,7 @@ process.stdout.write(`${JSON.stringify({
     allocations,
     timesheets,
     configurations,
+    goldenPath,
     walkthroughs: walkthroughs.totalSize,
     reportRows,
     dashboardComponents: dashboard.componentData.length,

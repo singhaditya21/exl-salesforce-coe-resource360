@@ -38,6 +38,10 @@ public without sharing class Resource360ScopeSharingService {
 
     public static void rebuildUsers(Set<Id> userIds) {
         if (userIds == null || userIds.isEmpty()) return;
+        if (userIds.size() > 2 && !Test.isRunningTest()) {
+            System.enqueueJob(new Resource360ScopeSharingJob(userIds));
+            return;
+        }
         clearSharesForUsers(userIds);
         for (Id userId : userIds) rebuildUserInternal(userId);
     }
@@ -105,9 +109,10 @@ public without sharing class Resource360ScopeSharingService {
         } else {
             for (Engagement__c engagement : [SELECT Id FROM Engagement__c WHERE Project_Manager__c=:userId OR Portfolio_ID__c IN :portfolios LIMIT 9000]) engagementIds.add(engagement.Id);
         }
+        Boolean canManageProject = roles.contains('Project Manager') || roles.contains('Portfolio Manager') || roles.contains('HOD') || roles.contains('GM/COO Delegate');
         if (!engagementIds.isEmpty()) {
             add(idsByObject, 'Engagement__c', engagementIds);
-            accessByObject.put('Engagement__c', roles.contains('Project Manager') ? 'Edit' : 'Read');
+            accessByObject.put('Engagement__c', canManageProject ? 'Edit' : 'Read');
         }
 
         if (roles.contains('COE Staffer')) {
@@ -123,6 +128,12 @@ public without sharing class Resource360ScopeSharingService {
             accessByObject.put('Budget__c', 'Read');
             accessByObject.put('Staffing_Request__c', 'Read');
             accessByObject.put('Allocation__c', 'Read');
+        }
+        if (canManageProject && !engagementIds.isEmpty()) {
+            Set<Id> deliveryTimesheetIds = new Set<Id>();
+            for (Time_Entry__c entry : [SELECT Timesheet__c FROM Time_Entry__c WHERE Engagement__c IN :engagementIds AND Timesheet__c!=null LIMIT 9000]) deliveryTimesheetIds.add(entry.Timesheet__c);
+            add(idsByObject, 'Timesheet__c', deliveryTimesheetIds);
+            accessByObject.put('Timesheet__c', roles.contains('Project Manager') ? 'Read' : 'Read');
         }
         if (roles.contains('Portfolio Manager') || roles.contains('HOD') || roles.contains('GM/COO Delegate') || roles.contains('Budget Approver') || roles.contains('Finance/PMO')) {
             mapByLookup(idsByObject, 'Budget__c', 'Engagement__c', engagementIds);

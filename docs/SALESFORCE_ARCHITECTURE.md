@@ -4,45 +4,42 @@
 
 | Layer | Implementation | Responsibility |
 |---|---|---|
-| Experience | Lightning app `Resource360`; LWC `resource360Workspace` | Role-aware EXL shell, 103-screen routes/contracts, commands and record drill-down |
-| Domain services | 37 Apex classes, including six focused test classes and services such as `Resource360Service`, `Resource360AssuranceService`, `Resource360BudgetImportService`, `Resource360GovernanceService`, `Resource360RoleScopeService` and `Resource360PlanningService` | Scoped access, locking, business gates, roster/capacity/freshness planning, governed runtime configuration, decisions, analytics, integration, notifications and audit |
-| Demo bootstrap | `Resource360DemoData` Apex | Idempotent fictional records for the Developer Edition demo |
-| Data | 27 custom record objects, six custom-metadata types and one platform event | Engagement, economics, staffing, capability, allocation, time, runtime configuration, operations and evidence |
+| Experience | Lightning app `Resource360`; LWCs `resource360Workspace` and `resource360ProjectWorkbench`; app Home and Engagement record FlexiPages | Role-aware EXL shell, 103-screen routes/contracts, dynamic PM Gantt, commands, related lists and record drill-down |
+| Domain services | 35 production Apex classes and 11 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, capacity/freshness planning, decisions, analytics, integration, notifications and audit |
+| Demo bootstrap | `Resource360DemoData`, `Resource360DemoScenarioData` and `Resource360GoldenPathData` Apex | Idempotent fictional portfolio plus fully linked project-delivery golden path |
+| Data | 33 custom record objects, six custom-metadata types and one platform event | Engagement, contracts, work/dependencies, skills demand/match, economics, staffing, allocation, time, risk, closeout, configuration, operations and evidence |
 | Policy | 150 governed policy/classification/delivery-role/source/persona/retention records plus effective-dated runtime overrides and atomic release bundles | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, assurance, lineage, retention preview and access |
-| Analytics | `Resource360AnalyticsService` and five custom report types | Scoped KPI populations/definitions/cutoffs and Salesforce report-builder access |
+| Analytics | `Resource360AnalyticsService`, eleven custom report types/reports and an eleven-component dashboard | Scoped KPI populations/definitions/cutoffs, delivery lifecycle and Salesforce report-builder access |
 | Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
 
 ## Domain model
 
 | Domain | Salesforce objects |
 |---|---|
-| Engagement and commercials | `Engagement__c`, `Commercial_Reference__c`, `Work_Unit__c`, `R360_Portfolio__c` |
+| Engagement, commercials and delivery | `Engagement__c`, `Commercial_Reference__c`, `Commercial_Line__c`, `Work_Unit__c`, `Work_Dependency__c`, `Project_Risk__c`, `Project_Closeout__c`, `R360_Portfolio__c` |
 | Budget and WBS | `Budget__c`, `Budget_Line__c`, `R360_Approval_Decision__c` |
-| People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c` |
-| Staffing and allocation | `Staffing_Request__c`, `Allocation__c` |
+| People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c`, `Engagement_Skill_Requirement__c` |
+| Staffing and allocation | `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c` |
 | Time | `Timesheet__c`, `Time_Entry__c` |
 | Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt`, `R360_Persona__mdt`, `R360_Source_Contract__mdt`, `R360_Retention_Rule__mdt` |
 | Operations and evidence | `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
 
-Relationships preserve decision lineage: accepted staffing creates a versioned current allocation; only eligible accepted allocation periods receive time; budgets and approval decisions remain versioned; capability/credential/project evidence remains attributable to source and reviewer.
+Relationships preserve decision lineage: approved contract lines map to WBS items; structured industry/functional/technical requirements produce persisted match evidence; accepted staffing creates a versioned current allocation; allocations map resources to project work; only eligible accepted allocation periods receive time; delivery acceptance, risk and closeout retain accountable decisions.
 
 ## Governed transaction chain
 
-1. Staffing requires an active engagement, current approved signed budget, active classification and per-business-day capacity.
-2. A Staffer decision locks/revalidates the request and creates allocation only on acceptance.
-3. Newly impossible competing requests close with `CAPACITY_CONSUMED`, audit and notification; feasible demand stays pending.
-4. Budget economics reconcile to WBS and route at ≥30%, 25%, 20% and below-20% thresholds through immutable sequential decisions with separation of duties.
-5. Talent filter/rank starts with governed weights 35/20/15/10/10/10 under `R360-POLICY-2.0`; active non-zero weights are normalized to 100, while mandatory capability, credential, employment, scope and availability gates cannot be compensated.
-6. Skill and credential evidence follows ownership/reviewer/verification controls and blocks self-approval.
-7. Time uses accepted allocation/date/role and aggregate calendar capacity; approved rows are immutable and corrections create new lineage.
-8. Submitted time escalates after five days and auto-approves after seven only when no allocation, compliance or financial exception exists.
-9. Every material transition writes minimized immutable audit evidence and a durable post-commit outbox event.
-10. Interactive bulk ingestion is permission-gated, pre-validates up to 200 JSON rows, supports declared atomic/partial commit, prevents content replay with SHA-256 identity and exposes downloadable exact row errors without retaining raw payloads.
-11. People and Engagement freshness fail staffing closed, Commercial freshness fails budget submission closed, and all thresholds are effective-dated governed configuration.
-12. Unbilled allocations follow configurable machine-readable escalation tiers; notifications are idempotent by allocation and threshold.
-13. Monthly budget roster rows bind an optional practitioner, role window and resource-month; atomic imports reject every row if any schema, identity, role, date or numeric rule fails and expose exact CSV errors.
-14. Source assurance exposes insert/update/deactivation/collision/completeness/freshness evidence under `R360-MOCK-1.2`; duplicate survivor selection is independent of inbound row order.
-15. Accountable alert closure preserves trigger evidence; configuration releases activate all-or-nothing; scenario planning and retention execution are explicitly non-persistent/non-destructive mock controls.
+1. Governed intake creates an Engagement, initial SOW and commercial line under one correlation ID.
+2. Approved SOW, amendments and change orders retain parent/version/value lineage and map commercial deliverables to WBS work.
+3. A PM baselines work, dependencies and milestones; rescheduling validates project bounds, accepted allocation coverage and dependency dates, then cascades successors when requested.
+4. Industry, functional and technical requirements are scored against approved practitioner evidence; mandatory gaps block acceptance.
+5. Staffing requires an active engagement, current approved signed budget, active classification and per-business-day capacity.
+6. A Staffer decision locks/revalidates the request and creates allocation only on acceptance; impossible competing requests close with attributable evidence.
+7. Budget economics reconcile to WBS and route through immutable sequential decisions with separation of duties.
+8. Talent filter/rank normalizes active weights while mandatory capability, credential, employment, scope and availability gates cannot be compensated.
+9. Time uses accepted allocation/date/role and aggregate calendar capacity; approved rows are immutable and corrections create new lineage.
+10. Completion fails closed until active work, required acceptance, high risks, time, commercial approval and budget gates pass; independent approval completes the project and releases allocations.
+11. Every material transition writes minimized immutable audit evidence and a durable post-commit outbox event.
+12. Source, bulk, configuration, scheduler, notification, retention and recovery controls remain as defined in the consolidated PRD.
 
 ## Source-system contract
 
@@ -52,7 +49,7 @@ For the demo, EXL People Master, engagement/commercial, learning, credential, ca
 
 ## Security and operations
 
-- `with/inherited sharing`, user-mode business-data queries, exact-user system-mode entitlement lookup, field sanitization, 17 permission sets, 17 role groups, 15 custom permissions, effective role scopes, Apex-managed shares, validation and immutable decisions form the control baseline.
+- `with/inherited sharing`, user-mode business-data queries, exact-user system-mode entitlement lookup, field sanitization, 18 permission sets, 17 role groups, 19 custom permissions, effective role scopes, chunked Apex-managed shares, validation and immutable decisions form the control baseline.
 - Eighteen governed personas cover self service, project/staffing, leadership/finance, capability, time, configuration, operations, audit and executive viewing. The administrator is technical break-glass and not implicit business authority.
 - Material object changes have native field history; immutable audit records add correlation, actor, active role, before/after summaries and hashes.
 - Hourly operations process staffing expiry, credential state, timesheet escalation/auto-approval, outbox publication and notification delivery.

@@ -2,7 +2,7 @@
 
 ## Native analytics baseline
 
-The deployable baseline uses `Resource360AnalyticsService`, five Salesforce custom report types and the Lightning Command Center. This avoids inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
+The deployable baseline uses `Resource360AnalyticsService`, eleven Salesforce custom report types/reports and the eleven-component Lightning Command Center. The reporting set covers project lifecycle, contract changes, WBS delivery, skill demand/match, staffing performance, allocations, capability supply, budgets, approved actuals, project risks and closeout readiness. This avoids inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
 
 | Metric/control | Authoritative population | Cutoff and drill path |
 |---|---|---|

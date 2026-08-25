@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Predecessor__c</fullName><deleteConstraint>Restrict</deleteConstraint><label>Predecessor</label><referenceTo>Work_Unit__c</referenceTo><relationshipLabel>Outgoing Dependencies</relationshipLabel><relationshipName>Outgoing_Dependencies</relationshipName><required>true</required><type>Lookup</type></CustomField>
