@@ -25,10 +25,14 @@ private class Resource360AccessControlTest {
                 scope(user.Id, 'EXPIRED-STAFFER', 'COE Staffer', userToday.addDays(-30), userToday.addDays(-1), true),
                 scope(user.Id, 'FUTURE-FINANCE', 'Finance/PMO', userToday.addDays(1), userToday.addDays(30), true)
             };
+            Resource360ScopeSharingService.rebuildUser(user.Id);
         }
         System.runAs(user) {
             Set<String> active = Resource360Security.activeRoles();
             System.assertEquals(new Set<String>{'Project Manager','Reporting Manager'}, active);
+            Map<String,Object> workspace = (Map<String,Object>)JSON.deserializeUntyped(Resource360Service.getWorkspaceData());
+            System.assertNotEquals(null, workspace.get('configuration'), 'Base personas must receive the curated runtime configuration snapshot.');
+            System.assertEquals(2, ((List<Object>)workspace.get('engagements')).size(), 'The live portfolio scope must expose both seeded engagements in user mode.');
             Boolean bulkBlocked = false;
             try { Resource360BulkService.preview('Employee', '[]'); }
             catch (AuraHandledException expected) { bulkBlocked = true; }
@@ -98,10 +102,44 @@ private class Resource360AccessControlTest {
         }
     }
 
+    @IsTest
+    static void scopeSharingIncludesCommercialEvidenceAndRemovesStaleAccess() {
+        Profile standardProfile = [SELECT Id FROM Profile WHERE Name='Standard User' LIMIT 1];
+        User staffer = testUser(standardProfile.Id, 'shares');
+        insert staffer;
+        R360_Role_Scope__c stafferScope = scope(
+            staffer.Id,
+            'SHARING-STAFFER',
+            'COE Staffer',
+            Date.today().addDays(-1),
+            Date.today().addDays(30),
+            true
+        );
+        stafferScope.Portfolio_ID__c = 'PORT-SFCOE-DEMO';
+        insert stafferScope;
+
+        Resource360ScopeSharingService.rebuildUser(staffer.Id);
+        System.assertEquals([SELECT COUNT() FROM Engagement__c], shareCount('Engagement__c', staffer.Id));
+        System.assertEquals([SELECT COUNT() FROM Commercial_Reference__c], shareCount('Commercial_Reference__c', staffer.Id));
+        System.assertEquals([SELECT COUNT() FROM Staffing_Request__c], shareCount('Staffing_Request__c', staffer.Id));
+
+        Resource360RoleScopeService.suppressSharingRebuild = true;
+        try {
+            stafferScope.Portfolio_ID__c = 'PORT-NO-LONGER-AUTHORIZED';
+            update stafferScope;
+        } finally {
+            Resource360RoleScopeService.suppressSharingRebuild = false;
+        }
+        Resource360ScopeSharingService.rebuildUser(staffer.Id);
+        System.assertEquals(0, shareCount('Engagement__c', staffer.Id), 'A changed scope must remove stale engagement shares.');
+        System.assertEquals(0, shareCount('Commercial_Reference__c', staffer.Id), 'A changed scope must remove stale commercial shares.');
+        System.assertEquals(0, shareCount('Staffing_Request__c', staffer.Id), 'A changed scope must remove stale staffing shares.');
+    }
+
     private static R360_Role_Scope__c scope(Id userId, String key, String role, Date fromDate, Date toDate, Boolean active) {
         return new R360_Role_Scope__c(
             Scope_Key__c=key, User__c=userId, Business_Role__c=role,
-            Org_Unit_ID__c='ORG-SFCOE', Portfolio_ID__c='PORT-SF',
+            Org_Unit_ID__c='ORG-SFCOE', Portfolio_ID__c='PORT-SFCOE-DEMO',
             Valid_From__c=fromDate, Valid_To__c=toDate, Active__c=active,
             Assignment_Source__c='Manual approved mock', Approval_Reference__c='R360-ACCESS-TEST'
         );
@@ -112,5 +150,12 @@ private class Resource360AccessControlTest {
         String alias = 'r' + suffix;
         if (alias.length() > 8) alias = alias.substring(0, 8);
         return new User(Alias=alias, Email='r360.'+unique+'@example.invalid', EmailEncodingKey='UTF-8', LastName='Resource360 '+suffix, LanguageLocaleKey='en_US', LocaleSidKey='en_US', ProfileId=profileId, TimeZoneSidKey='Asia/Kolkata', Username='r360.'+unique+'@example.invalid');
+    }
+
+    private static Integer shareCount(String objectName, Id userId) {
+        return Database.countQuery(
+            'SELECT COUNT() FROM '+objectName.replace('__c', '__Share')+
+            ' WHERE UserOrGroupId=\''+String.escapeSingleQuotes(String.valueOf(userId))+'\' AND RowCause=\'Resource360_Scope__c\''
+        );
     }
 }

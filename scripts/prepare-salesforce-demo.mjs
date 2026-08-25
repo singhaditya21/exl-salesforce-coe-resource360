@@ -62,6 +62,30 @@ const assertMinimums = (actual, expected, label) => {
     }
 };
 
+let demoUserIds = [];
+const shareCountCache = new Map();
+const shareCount = (objectName, userId) => {
+    if (!shareCountCache.has(objectName)) {
+        assert(demoUserIds.length > 0, "Demo users must be loaded before scope shares are counted.");
+        const userFilter = demoUserIds.map((id) => `'${id}'`).join(",");
+        const result = query(
+            `SELECT UserOrGroupId, COUNT(Id) total FROM ${objectName.replace("__c", "__Share")} ` +
+            `WHERE UserOrGroupId IN (${userFilter}) AND RowCause='Resource360_Scope__c' GROUP BY UserOrGroupId`
+        );
+        shareCountCache.set(
+            objectName,
+            new Map(result.records.map((record) => [record.UserOrGroupId, record.total]))
+        );
+    }
+    return shareCountCache.get(objectName).get(userId) ?? 0;
+};
+
+const assertShareCount = (objectName, userId, expected, label) => {
+    const actual = shareCount(objectName, userId);
+    assert.equal(actual, expected, `${label} requires ${expected} ${objectName} scope share(s); found ${actual}.`);
+    return actual;
+};
+
 const permissionGroups = await waitFor("Permission-set group recalculation", async () => {
     const result = query(
         "SELECT DeveloperName, Status FROM PermissionSetGroup WHERE DeveloperName LIKE 'Resource360_%'"
@@ -73,6 +97,15 @@ const permissionGroups = await waitFor("Permission-set group recalculation", asy
     };
 });
 assert.equal(permissionGroups.total, 17);
+const basePermission = query(
+    "SELECT PermissionsLightningExperienceUser FROM PermissionSet WHERE Name='Resource360_Base_User' LIMIT 1"
+);
+assert.equal(basePermission.totalSize, 1, "The Resource 360 base permission set is missing.");
+assert.equal(
+    basePermission.records[0].PermissionsLightningExperienceUser,
+    true,
+    "Every persona permission-set group must enable Lightning Experience through the base permission set."
+);
 
 const seedResult = sfJson([
     "apex", "run", "--target-org", targetOrg,
@@ -104,10 +137,16 @@ assert.equal(scopeJob.Status, "Completed", `Persona scope job did not complete: 
 assert.equal(scopeJob.NumberOfErrors, 0, "Persona scope job reported errors.");
 
 const users = query(
-    "SELECT FederationIdentifier, IsActive FROM User WHERE FederationIdentifier LIKE 'R360-DEMO-%'"
+    "SELECT Id, Alias, FederationIdentifier, IsActive, UserPreferencesLightningExperiencePreferred " +
+    "FROM User WHERE FederationIdentifier LIKE 'R360-DEMO-%'"
 );
 assert.equal(users.totalSize, 8, "Exactly eight fictional demo identities are required.");
 assert.equal(users.records.filter((user) => user.IsActive).length, 8, "Every fictional demo identity must be active.");
+assert(
+    users.records.every((user) => user.UserPreferencesLightningExperiencePreferred),
+    "Every fictional demo identity must prefer Lightning Experience."
+);
+demoUserIds = users.records.map((user) => user.Id);
 
 const assignments = query(
     "SELECT Assignee.FederationIdentifier, PermissionSetGroup.DeveloperName " +
@@ -118,11 +157,15 @@ assert.equal(assignments.totalSize, 17, "Every non-administrator persona must ha
 assert.equal(new Set(assignments.records.map((record) => record.PermissionSetGroup.DeveloperName)).size, 17);
 
 const scopes = query(
-    "SELECT Business_Role__c, User__r.FederationIdentifier FROM R360_Role_Scope__c " +
+    "SELECT Business_Role__c, Portfolio_ID__c, User__r.FederationIdentifier FROM R360_Role_Scope__c " +
     "WHERE Active__c=true AND User__r.FederationIdentifier LIKE 'R360-DEMO-%'"
 );
 assert.equal(scopes.totalSize, 17, "Every non-administrator persona must have one certified active scope.");
 assert.equal(new Set(scopes.records.map((record) => record.Business_Role__c)).size, 17);
+assert(
+    scopes.records.every((scope) => scope.Portfolio_ID__c === "PORT-SFCOE-DEMO"),
+    "Every fictional persona must be scoped to the seeded PORT-SFCOE-DEMO portfolio."
+);
 
 const administratorBusinessScopes = query(
     "SELECT COUNT() FROM R360_Role_Scope__c WHERE Active__c=true " +
@@ -141,6 +184,71 @@ assert.equal(appMenu.records[0].IsAccessible, true, "The Resource 360 Lightning 
 
 assert(query("SELECT COUNT() FROM Resource__c").totalSize >= 12, "The demo requires at least 12 resources.");
 assert(query("SELECT COUNT() FROM Engagement__c").totalSize >= 4, "The demo requires at least four engagements.");
+
+const coreRecordCounts = Object.fromEntries([
+    "Engagement__c",
+    "Staffing_Request__c",
+    "Allocation__c",
+    "Budget__c",
+    "Commercial_Reference__c",
+    "R360_Approval_Decision__c"
+].map((objectName) => [objectName, query(`SELECT COUNT() FROM ${objectName}`).totalSize]));
+const shareMatrix = {};
+for (const user of users.records) {
+    shareMatrix[user.Alias] = {
+        engagements: assertShareCount("Engagement__c", user.Id, coreRecordCounts.Engagement__c, user.FederationIdentifier)
+    };
+}
+
+const staffingAliases = new Set(["r360pmgr", "r360staf", "r360prac"]);
+const budgetAliases = new Set(["r360pmgr", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
+const commercialAliases = new Set(["r360pmgr", "r360staf", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
+const approvalAliases = new Set(["r360staf", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
+for (const user of users.records) {
+    const staffingExpected = staffingAliases.has(user.Alias) ? coreRecordCounts.Staffing_Request__c : 0;
+    const allocationExpected = staffingAliases.has(user.Alias) ? coreRecordCounts.Allocation__c : 0;
+    const budgetExpected = budgetAliases.has(user.Alias) ? coreRecordCounts.Budget__c : 0;
+    const commercialExpected = commercialAliases.has(user.Alias) ? coreRecordCounts.Commercial_Reference__c : 0;
+    const approvalExpected = approvalAliases.has(user.Alias) ? coreRecordCounts.R360_Approval_Decision__c : 0;
+    Object.assign(shareMatrix[user.Alias], {
+        staffingRequests: assertShareCount("Staffing_Request__c", user.Id, staffingExpected, user.FederationIdentifier),
+        allocations: assertShareCount("Allocation__c", user.Id, allocationExpected, user.FederationIdentifier),
+        budgets: assertShareCount("Budget__c", user.Id, budgetExpected, user.FederationIdentifier),
+        commercialReferences: assertShareCount("Commercial_Reference__c", user.Id, commercialExpected, user.FederationIdentifier),
+        approvalDecisions: assertShareCount("R360_Approval_Decision__c", user.Id, approvalExpected, user.FederationIdentifier)
+    });
+}
+
+const practitioner = users.records.find((user) => user.Alias === "r360prac");
+assert(practitioner, "The fictional practitioner identity is required.");
+const projectManager = users.records.find((user) => user.Alias === "r360pmgr");
+assert(projectManager, "The fictional project-manager identity is required.");
+const deliveryTimesheetCount = query(
+    "SELECT Timesheet__c FROM Time_Entry__c WHERE Timesheet__c!=null GROUP BY Timesheet__c"
+).totalSize;
+shareMatrix[projectManager.Alias].deliveryTimesheets = assertShareCount(
+    "Timesheet__c",
+    projectManager.Id,
+    deliveryTimesheetCount,
+    projectManager.FederationIdentifier
+);
+for (const [objectName, matrixKey] of [
+    ["Skill_Claim__c", "skillClaims"],
+    ["Credential__c", "credentials"],
+    ["R360_Project_Evidence__c", "projectEvidence"],
+    ["R360_Learning_Achievement__c", "learningAchievements"],
+    ["Timesheet__c", "timesheets"]
+]) {
+    const selfCount = query(
+        `SELECT COUNT() FROM ${objectName} WHERE Resource__r.Salesforce_User__c='${practitioner.Id}'`
+    ).totalSize;
+    shareMatrix[practitioner.Alias][matrixKey] = assertShareCount(
+        objectName,
+        practitioner.Id,
+        selfCount,
+        practitioner.FederationIdentifier
+    );
+}
 
 const staffing = groupedCounts("Staffing_Request__c", "State__c");
 assertMinimums(staffing, {
@@ -163,6 +271,38 @@ assertMinimums(timesheets, {
     Rejected: 1,
     "Correction Pending": 1
 }, "Timesheet queue");
+
+const goldenProject = query("SELECT Id FROM Engagement__c WHERE Engagement_ID__c='ENG-1001' LIMIT 1").records[0];
+assert(goldenProject, "The ENG-1001 golden-path project is required.");
+const goldenProjectId = goldenProject.Id;
+const goldenPath = {
+    contractVersions: query(`SELECT COUNT() FROM Commercial_Reference__c WHERE Engagement__c='${goldenProjectId}' AND Approval_Status__c='Approved'`).totalSize,
+    commercialLines: query(`SELECT COUNT() FROM Commercial_Line__c WHERE Commercial_Reference__r.Engagement__c='${goldenProjectId}' AND External_ID__c LIKE 'GOLD-CL-%'`).totalSize,
+    workUnits: query(`SELECT COUNT() FROM Work_Unit__c WHERE Engagement__c='${goldenProjectId}' AND Work_Unit_Code__c LIKE 'WBS-SF-%'`).totalSize,
+    dependencies: query(`SELECT COUNT() FROM Work_Dependency__c WHERE Engagement__c='${goldenProjectId}' AND External_ID__c LIKE 'GOLD-DEP-%'`).totalSize,
+    skillRequirements: query(`SELECT COUNT() FROM Engagement_Skill_Requirement__c WHERE Engagement__c='${goldenProjectId}' AND Requirement_Key__c LIKE 'GOLD-REQ-%'`).totalSize,
+    eligibleSkillMatches: query("SELECT COUNT() FROM Staffing_Skill_Match__c WHERE Match_Key__c LIKE 'GOLD-MATCH-%' AND Eligible__c=true").totalSize,
+    acceptedStaffing: query(`SELECT COUNT() FROM Staffing_Request__c WHERE Engagement__c='${goldenProjectId}' AND Idempotency_Key__c LIKE 'GOLD-SR-%' AND State__c='Accepted'`).totalSize,
+    currentAllocations: query(`SELECT COUNT() FROM Allocation__c WHERE Engagement__c='${goldenProjectId}' AND Originating_Request__r.Idempotency_Key__c LIKE 'GOLD-SR-%' AND Current__c=true`).totalSize,
+    risks: query(`SELECT COUNT() FROM Project_Risk__c WHERE Engagement__c='${goldenProjectId}' AND External_ID__c LIKE 'GOLD-RISK-%'`).totalSize,
+    closeouts: query(`SELECT COUNT() FROM Project_Closeout__c WHERE Engagement__c='${goldenProjectId}' AND Closeout_ID__c='GOLD-CLOSEOUT-ENG-1001'`).totalSize,
+    approvedActuals: query(`SELECT COUNT() FROM Time_Entry__c WHERE Engagement__c='${goldenProjectId}' AND Entry_Key__c LIKE 'GOLD-TE-%' AND State__c='Approved'`).totalSize,
+    retiredLegacyTasks: query(`SELECT COUNT() FROM Work_Unit__c WHERE Engagement__c='${goldenProjectId}' AND Work_Unit_Code__c='WBS-DC-01' AND Status__c='Cancelled'`).totalSize
+};
+assert.deepEqual(goldenPath, {
+    contractVersions: 3,
+    commercialLines: 6,
+    workUnits: 7,
+    dependencies: 7,
+    skillRequirements: 11,
+    eligibleSkillMatches: 11,
+    acceptedStaffing: 4,
+    currentAllocations: 4,
+    risks: 2,
+    closeouts: 1,
+    approvedActuals: 2,
+    retiredLegacyTasks: 1
+}, "The governed ENG-1001 lifecycle must be complete and internally traceable.");
 
 const configurations = groupedCounts(
     "R360_Configuration__c", "State__c", "WHERE Version_Key__c LIKE 'DEMO-CONFIG-%'"
@@ -196,9 +336,10 @@ assert(
 
 const reports = query(
     "SELECT Id, DeveloperName FROM Report WHERE DeveloperName IN " +
-    "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals')"
+    "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals'," +
+    "'Project_Lifecycle','Workplan_Delivery','Contract_Changes','Skill_Demand_Match','Project_Risk_Control','Closeout_Readiness')"
 );
-assert.equal(reports.totalSize, 5, "Five native Salesforce reports are required.");
+assert.equal(reports.totalSize, 11, "Eleven native Salesforce reports are required.");
 const reportRows = {};
 for (const report of reports.records) {
     const result = apiRequest(`/services/data/v67.0/analytics/reports/${report.Id}?includeDetails=false`);
@@ -219,11 +360,11 @@ const statusUrl = refreshRequest.statusUrl ?? `/services/data/v67.0/analytics/da
 await waitFor("Command Center dashboard refresh", async () => {
     const result = apiRequest(statusUrl);
     const statuses = result.componentStatus ?? [];
-    const terminal = statuses.length === 5 && statuses.every((status) => status.refreshStatus === "IDLE");
+    const terminal = statuses.length === 11 && statuses.every((status) => status.refreshStatus === "IDLE");
     return { ready: terminal, value: statuses };
 });
 const dashboard = apiRequest(`/services/data/v67.0/analytics/dashboards/${dashboardId}`);
-assert.equal(dashboard.componentData.length, 5, "The Command Center must have five dashboard components.");
+assert.equal(dashboard.componentData.length, 11, "The Command Center must have eleven dashboard components.");
 assert(
     dashboard.componentData.every((component) => component.status.componentDataStatus === "DATA"),
     "Every Command Center component must contain refreshed data."
@@ -245,12 +386,15 @@ process.stdout.write(`${JSON.stringify({
     fictionalUsers: 8,
     personaAssignments: assignments.totalSize,
     certifiedScopes: scopes.totalSize,
+    portfolioScope: "PORT-SFCOE-DEMO",
+    shareMatrix,
     resources: query("SELECT COUNT() FROM Resource__c").totalSize,
     engagements: query("SELECT COUNT() FROM Engagement__c").totalSize,
     staffing,
     allocations,
     timesheets,
     configurations,
+    goldenPath,
     walkthroughs: walkthroughs.totalSize,
     reportRows,
     dashboardComponents: dashboard.componentData.length,

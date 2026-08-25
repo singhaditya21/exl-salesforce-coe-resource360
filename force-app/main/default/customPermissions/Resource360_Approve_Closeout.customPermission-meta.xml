@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Independently approve or reject a governed project closeout after all completion gates pass.</description>
+    <isLicensed>false</isLicensed>
+    <label>Approve Resource 360 Closeout</label>
+</CustomPermission>

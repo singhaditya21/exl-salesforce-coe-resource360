@@ -76,6 +76,7 @@ public without sharing class Resource360DemoScenarioData {
                 Name='Consumer Loyalty Transformation', Engagement_ID__c='DEMO-ENG-1003', Account__c=portfolio.Account__c,
                 Portfolio_ID__c='PORT-SFCOE-DEMO', Portfolio__c=portfolio.Id, Project_Manager__c=projectUserId,
                 Start_Date__c=today.addMonths(-3), End_Date__c=today.addMonths(9), Status__c='Active',
+                Lifecycle_Stage__c='Delivery', Completion_Percent__c=25,
                 Revenue_Type__c='Time and Materials', Currency_Code__c='INR', PO_Value__c=52000000,
                 Salesforce_Tower__c='Experience Cloud', Industry__c='Consumer', Confidentiality__c='EXL Internal', Source_Last_Sync__c=System.now()
             ),
@@ -83,6 +84,7 @@ public without sharing class Resource360DemoScenarioData {
                 Name='Banking Service Modernization', Engagement_ID__c='DEMO-ENG-1004', Account__c=portfolio.Account__c,
                 Portfolio_ID__c='PORT-SFCOE-DEMO', Portfolio__c=portfolio.Id, Project_Manager__c=projectUserId,
                 Start_Date__c=today.addMonths(-1), End_Date__c=today.addMonths(11), Status__c='Active',
+                Lifecycle_Stage__c='Delivery', Completion_Percent__c=15,
                 Revenue_Type__c='Fixed Price', Currency_Code__c='INR', PO_Value__c=61000000,
                 Salesforce_Tower__c='Service Cloud', Industry__c='Banking', Confidentiality__c='EXL Internal', Source_Last_Sync__c=System.now()
             )

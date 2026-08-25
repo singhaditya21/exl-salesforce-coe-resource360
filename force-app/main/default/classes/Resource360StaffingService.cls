@@ -41,6 +41,7 @@ public inherited sharing class Resource360StaffingService {
         );
         request = (Staffing_Request__c)Resource360Security.createable(new List<SObject>{request})[0];
         insert request;
+        evaluateSkillMatches(request.Id, engagementId, resourceId, requestedRole);
         request = [SELECT Id, Name, Request_Version__c, Requester__c FROM Staffing_Request__c WHERE Id = :request.Id WITH USER_MODE];
         recordEvent(correlation, 'STAFFING_REQUEST_CREATED', request.Id, request.Request_Version__c, pastDateOverride?'PAST_DATE_OVERRIDE':'REQUEST_SUBMITTED', pastDateOverride?'Pending staffing soft demand created with an authorized past-date override: '+controlReason:'Pending staffing soft demand created.', 'Draft', 'Pending');
         Resource360EventService.enqueueNotification(correlation + '-request', request.Requester__c, 'Staffing request submitted', request.Name + ' is awaiting a Staffer decision.', 'Normal', '/lightning/r/Staffing_Request__c/' + request.Id + '/view');
@@ -67,6 +68,8 @@ public inherited sharing class Resource360StaffingService {
         if (budget.Economic_Signature__c != request.Budget_Signature__c) fail('The approved budget changed after request submission; resubmit the staffing request.');
         Resource360CalendarService.CapacityCheck check = Resource360CalendarService.checkCapacity(request.Resource__c, request.Start_Date__c, request.End_Date__c, request.Daily_Hours__c, null);
         if (!check.allowed) fail('Capacity changed after submission. ' + check.message);
+        evaluateSkillMatches(request.Id, request.Engagement__c, request.Resource__c, request.Requested_Role__c);
+        if ([SELECT COUNT() FROM Staffing_Skill_Match__c WHERE Staffing_Request__c=:request.Id AND Requirement__r.Mandatory__c=true AND Eligible__c=false WITH USER_MODE] > 0) fail('The candidate no longer meets every mandatory industry, functional and technical skill requirement. Re-source or update governed skill evidence.');
         Allocation__c allocation = new Allocation__c(Originating_Request__c=request.Id, Resource__c=request.Resource__c, Engagement__c=request.Engagement__c, Role__c=request.Requested_Role__c, Classification__c=request.Classification__c, Billable_Snapshot__c=Resource360Classification.isBillable(request.Classification__c), Start_Date__c=request.Start_Date__c, End_Date__c=request.End_Date__c, Daily_Hours__c=request.Daily_Hours__c, State__c='Accepted', Version__c=1, Current__c=true, Responsible_Owner__c=request.Responsible_Owner__c, Review_Date__c=request.Review_Date__c, Control_Reason__c=request.Control_Reason__c);
         insert allocation;
         request.State__c='Accepted'; request.Decision_Reason__c=String.isBlank(note) ? 'Capacity, budget and scope revalidated.' : note.trim(); request.Decision_By__c=UserInfo.getUserId(); request.Decision_Role__c=role; request.Decision_At__c=System.now(); request.Decision_Correlation_ID__c=correlation;
@@ -137,6 +140,22 @@ public inherited sharing class Resource360StaffingService {
             recordEvent(correlation + '-' + candidate.Id, 'STAFFING_REQUEST_AUTO_DECLINED', candidate.Id, candidate.Request_Version__c, 'CAPACITY_CONSUMED', 'Accepted allocation consumed the remaining capacity.', 'Pending', 'Declined');
             if (candidate.Requester__c != null) Resource360EventService.enqueueNotification(correlation + '-' + candidate.Id, candidate.Requester__c, 'Competing request declined', candidate.Name + ' can no longer be accepted because capacity was committed elsewhere.', 'High', '/lightning/r/Staffing_Request__c/' + candidate.Id + '/view');
         }
+    }
+
+    private static void evaluateSkillMatches(Id requestId,Id engagementId,Id resourceId,String requestedRole){
+        List<Engagement_Skill_Requirement__c> requirements=[SELECT Id,Capability__c,Capability__r.Name,Dimension__c,Required_Level__c,Weight_Percent__c,Mandatory__c FROM Engagement_Skill_Requirement__c WHERE Engagement__c=:engagementId AND Requested_Role__c=:requestedRole WITH USER_MODE];
+        if(requirements.isEmpty())return;
+        Set<Id>capabilityIds=new Set<Id>();for(Engagement_Skill_Requirement__c requirement:requirements)capabilityIds.add(requirement.Capability__c);
+        Map<Id,Skill_Claim__c>bestClaims=new Map<Id,Skill_Claim__c>();
+        for(Skill_Claim__c claim:[SELECT Capability__c,Approved_Level__c,Years_Experience__c,Last_Used__c,Decision_Note__c FROM Skill_Claim__c WHERE Resource__c=:resourceId AND Capability__c IN:capabilityIds AND State__c='Approved' WITH USER_MODE])if(!bestClaims.containsKey(claim.Capability__c)||claim.Approved_Level__c>bestClaims.get(claim.Capability__c).Approved_Level__c)bestClaims.put(claim.Capability__c,claim);
+        List<Staffing_Skill_Match__c>matches=new List<Staffing_Skill_Match__c>();Decimal totalScore=0;
+        for(Engagement_Skill_Requirement__c requirement:requirements){
+            Skill_Claim__c claim=bestClaims.get(requirement.Capability__c);Decimal level=claim==null||claim.Approved_Level__c==null?0:claim.Approved_Level__c;Decimal ratio=requirement.Required_Level__c==0?1:Math.min(level/requirement.Required_Level__c,1);Decimal score=ratio*requirement.Weight_Percent__c;Boolean eligible=requirement.Mandatory__c!=true||level>=requirement.Required_Level__c;totalScore+=score;
+            String evidence=claim==null?'No approved claim found.':'Approved L'+level+'; '+(claim.Years_Experience__c==null?0:claim.Years_Experience__c)+' years; last used '+claim.Last_Used__c+'.';
+            matches.add(new Staffing_Skill_Match__c(Staffing_Request__c=requestId,Match_Key__c=String.valueOf(requestId)+'-'+String.valueOf(requirement.Id),Requirement__c=requirement.Id,Resource__c=resourceId,Capability__c=requirement.Capability__c,Candidate_Level__c=level,Score__c=score,Eligible__c=eligible,Evidence_Summary__c=evidence,Gap_Reason__c=eligible?null:requirement.Dimension__c+' requirement '+requirement.Capability__r.Name+' needs L'+requirement.Required_Level__c+'; candidate has L'+level+'.',Evaluated_At__c=System.now(),Policy_Version__c=Resource360Policy.textValue('Policy_Version','R360-POLICY-2.0')));
+        }
+        matches=(List<Staffing_Skill_Match__c>)Resource360Security.createable(matches);upsert matches Match_Key__c;
+        Staffing_Request__c scoreUpdate=new Staffing_Request__c(Id=requestId,Fit_Score__c=totalScore.setScale(1));update scoreUpdate;
     }
 
     private static void requireSow(Id engagementId, Date startDate, Date endDate) { if ([SELECT COUNT() FROM Commercial_Reference__c WHERE Engagement__c=:engagementId AND Reference_Type__c='SOW' AND Status__c='Active' AND Valid_From__c<=:startDate AND (Valid_To__c=null OR Valid_To__c>=:endDate)] == 0) fail('Contractual Shadow requires a current SOW covering the complete range.'); }

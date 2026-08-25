@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Active_Delivery_Work</fullName><columns>NAME</columns><columns>Work_Unit_Code__c</columns><columns>Engagement__c</columns><columns>Phase__c</columns><columns>Status__c</columns><columns>Percent_Complete__c</columns><columns>Assigned_Resource__c</columns><columns>End_Date__c</columns><filterScope>Everything</filterScope><filters><field>Status__c</field><operation>notEqual</operation><value>Cancelled</value></filters><label>Active Delivery Work</label></ListView>

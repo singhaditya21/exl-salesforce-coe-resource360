@@ -5,8 +5,8 @@
 | Document field | Value |
 |---|---|
 | Status | Demo-complete Salesforce-native baseline including safe simulations of every external activation domain; real production activation still requires the EXL-owned evidence in Section 19 |
-| Version | 1.5 |
-| Date | 24 August 2026 |
+| Version | 1.7 |
+| Date | 25 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
 | Product scope | Engagement 360, Resource Management, Salesforce Skills & Credentials, Budgeting/WBS, Timesheet and COE Command Center |
 | Target organization | EXL Salesforce Center of Excellence (COE) |
@@ -30,6 +30,7 @@
 | 1.4 | 24 August 2026 | Closed the mock-baseline backlog: monthly roster and atomic import assurance, deterministic source collision/completeness/freshness evidence, explicit talent gaps, ownership transfer, time exceptions, KPI hierarchy, accountable alert closure, session/retention assurance, isolated what-if planning and atomic multi-setting configuration releases; made every EXL dependency an explicit sanitized mock contract |
 | 1.5 | 24 August 2026 | Closed the approved sanitized-mock implementation baseline: 13 versioned source/lineage contracts, machine-readable common project and ingestion schemas, 18 governed personas with positive/negative screen authorization, eight legal-hold-eligible retention rules, automated browser/accessibility/deployment assurance and explicit non-destructive production gates. |
 | 1.6 | 24 August 2026 | Added the interactive five-pillar Demo Activation Center in GitHub Pages and Salesforce: mock Entra SSO, all source integrations, production-like fictional data, legal/business approval evidence and operational controls now execute as one attributable 5/5 rehearsal with zero external calls and zero destructive actions. |
+| 1.7 | 25 August 2026 | Implemented the end-to-end Salesforce project-delivery golden path: governed intake, contract versions/lines, structured industry-functional-technical skill demand and match evidence, staffing-to-allocation-to-WBS traceability, dynamic PM Gantt, risks, acceptance, closeout, app pages, related lists and eleven native reports/dashboard components. |
 
 ---
 
@@ -37,7 +38,7 @@
 
 EXL Salesforce COE Resource360 should become the COE's unified delivery-control backbone. It should connect Salesforce engagement economics, skills and credentials, staffing decisions, resource allocations, approved work, timesheet actuals and leadership reporting in one governed flow:
 
-**Engagement and SOW/PO setup → approved WBS/budget → resource request → Salesforce capability-based candidate discovery → Staffer approval → committed allocation → timesheet actuals → profitability and utilization control.**
+**Governed engagement intake → approved SOW/amendment/change order → budget and baselined WBS → industry/functional/technical skill demand → evidence-backed staffing decision → committed allocation → PM-controlled dynamic Gantt → approved actuals and deliverable acceptance → risk closure → independent project closeout.**
 
 The ZIP provides a mature functional reference rather than an EXL-ready product. It contains a live Resource Allocation System (RAS) baseline, an MVP 1.5 enhancement program, static end-to-end prototypes, a substantial deployable Skills Management System (SMS), budgeting specifications, timesheet requirements, operating-governance material, business test cases, leadership dashboard designs and 33 unique videos. It also contains BusinessNext-specific branding, identifiers, source systems and conflicting historical rules. This PRD retains the proven interaction and business-rule evidence, re-frames the product for the EXL Salesforce COE, and does not treat a legacy prototype or archive decision as automatically approved for EXL.
 
@@ -51,7 +52,7 @@ The target product has five operating components:
 
 ### Mock-complete delivery boundary
 
-Version 1.5 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed only by browser-local mock state.
+Version 1.7 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed only by browser-local mock state.
 
 The implemented mock baseline now includes the decision-critical items previously classified as partial or later-phase: resource-month budgeting and 160-hour assurance; atomic import/error export; three-mode capacity planning; deterministic source duplicate/collision reconciliation; candidate eligibility/gap reasons; staffing owner transfer; timesheet exceptions; KPI hierarchy/definitions; accountable alert closure; isolated what-if scenarios; retention dry run; atomic configuration release control; and persona-level screen authorization. All 109 functional/admin requirements are implemented within the approved sanitized-mock boundary. Four retain an EXL production certification gate.
 
@@ -1106,7 +1107,7 @@ Secrets, endpoints, certificates, Named/External Credentials, schema, Apex/LWC, 
 
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.6 target architecture.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.7 target architecture.
 
 ```mermaid
 flowchart LR
@@ -1516,9 +1517,27 @@ Source files containing personal, customer or commercial data were used to under
 
 ---
 
+### 18.1 Salesforce project-delivery implementation baseline
+
+The demo must prove one coherent project path in Salesforce, not a collection of disconnected screens. The seeded `ENG-1001 · Global Retail Cloud` scenario therefore meets these additional acceptance conditions:
+
+1. A governed intake transaction creates or updates the project, initial SOW and commercial line with a common correlation ID.
+2. SOW, amendment and change-order versions preserve parent lineage, approval state, signed date, validity, authorized value and change rationale; delivery lines map to WBS items and acceptance.
+3. The work plan retains baseline and forecast dates, sequence, dependencies, planned effort, allocation coverage, milestones, deliverables, acceptance and critical-path status.
+4. The Project Manager can view Week, Month, Quarter and Year scales; drag a task with controlled successor cascade; add work/dependencies; update progress; record acceptance; manage risks; and prepare closeout.
+5. Engagement skill requirements explicitly distinguish Industry, Functional and Technical dimensions. Candidate decisions persist requirement, approved capability evidence, candidate level, weighted score, eligibility, policy version and any gap reason.
+6. A staffing acceptance cannot bypass an ineligible mandatory requirement. Accepted requests map to work units and produce current allocations that cover the planned resource/date/effort window.
+7. Approved time maps to the project and WBS, is visible to the Project Manager through governed parent sharing, and cannot be edited or deleted in place.
+8. Closeout fails closed while active work, required acceptance, high/critical risks, unreconciled time, approved commercial evidence or current approved budget gates fail. Submission releases allocations; an independent approver decides completion.
+9. The Resource 360 app activates a role-aware Home page and an Engagement record page containing dynamic highlights, the delivery workbench and contract/work/skill/staffing/allocation/risk/closeout related lists.
+10. Native analytics include eleven report types/reports and an eleven-component command center spanning lifecycle, contracts, WBS, skill match, staffing, allocations, capability supply, budget, actuals, risks and closeout.
+11. The deterministic seed and preparation gate assert exact golden-path counts; the controlled Project Manager Login As test must execute an audited work-progress command in Lightning.
+
+The implementation and seeded counts are maintained in `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
+
 ## 19. Definition of done and implementation readiness
 
-Version 1.6 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, resolved planning decisions, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, generated traceability and accountable roles. `ADMUI-01` now executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md`.
+Version 1.7 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, the governed project-delivery golden path, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, native pages/analytics, generated traceability and accountable roles. `ADMUI-01` executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md` and `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
 
 The implemented product is also evidenced by five silent 1280×720 H.264 walkthroughs published on `GLB-06 · User preferences and help`. They record the actual deployed GitHub Pages UI and demonstrate the 103-screen directory, skills/talent discovery, a completed staffing acceptance, calculated budget and timesheet approvals, and the five-pillar demo activation. File hashes, durations, personas and observed outcomes are maintained in `public/demo-videos/manifest.json` and `docs/DEMO_VIDEO_VALIDATION.md`; these recordings remain sanitized demo evidence and do not imply a live EXL connection.
 

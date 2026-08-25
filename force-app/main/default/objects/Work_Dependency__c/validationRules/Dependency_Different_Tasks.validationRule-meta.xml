@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Dependency_Different_Tasks</fullName><active>true</active><errorConditionFormula>Predecessor__c = Successor__c</errorConditionFormula><errorMessage>A work unit cannot depend on itself.</errorMessage></ValidationRule>

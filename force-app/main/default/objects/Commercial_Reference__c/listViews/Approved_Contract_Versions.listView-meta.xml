@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Approved_Contract_Versions</fullName><columns>NAME</columns><columns>External_ID__c</columns><columns>Engagement__c</columns><columns>Reference_Type__c</columns><columns>Version__c</columns><columns>Value__c</columns><columns>Signed_Date__c</columns><filterScope>Everything</filterScope><filters><field>Approval_Status__c</field><operation>equals</operation><value>Approved</value></filters><label>Approved Contract Versions</label></ListView>

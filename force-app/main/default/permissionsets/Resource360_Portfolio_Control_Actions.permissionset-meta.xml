@@ -27,8 +27,12 @@
     <fieldPermissions><editable>false</editable><field>Budget_Line__c.Resource__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget_Line__c.Role_End__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget_Line__c.Role_Start__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Change_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Parent_Reference__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Signature__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Signed_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Version__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Budget_Signature__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
@@ -44,6 +48,7 @@
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Source_Criteria__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
@@ -52,6 +57,7 @@
     <fieldPermissions><editable>false</editable><field>Allocation__c.Parent_Allocation__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Accountable_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Closed_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Notification__c.Closed_By__c</field><readable>true</readable></fieldPermissions>

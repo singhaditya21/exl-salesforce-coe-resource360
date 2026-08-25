@@ -9,7 +9,9 @@ public without sharing class Resource360ScopeSharingJob implements Queueable {
         if (userIds.isEmpty()) return;
         List<Id> orderedUserIds = new List<Id>(userIds);
         orderedUserIds.sort();
-        Integer chunkSize = Math.min(3, orderedUserIds.size());
+        // Two identities keep explicit-share cleanup and rebuild below the
+        // synchronous SOQL/DML limits while preserving deterministic order.
+        Integer chunkSize = Math.min(2, orderedUserIds.size());
         for (Integer index = 0; index < chunkSize; index++) {
             Id currentUserId = orderedUserIds[index];
             userIds.remove(currentUserId);

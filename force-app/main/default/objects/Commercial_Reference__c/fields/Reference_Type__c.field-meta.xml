@@ -25,6 +25,16 @@
                 <default>false</default>
                 <label>Internal Budget</label>
             </value>
+            <value>
+                <fullName>Amendment</fullName>
+                <default>false</default>
+                <label>Amendment</label>
+            </value>
+            <value>
+                <fullName>Change Order</fullName>
+                <default>false</default>
+                <label>Change Order</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

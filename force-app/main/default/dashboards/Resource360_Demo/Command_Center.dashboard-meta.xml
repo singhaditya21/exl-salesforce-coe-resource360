@@ -96,6 +96,36 @@
             <rowIndex>6</rowIndex>
             <rowSpan>6</rowSpan>
         </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>0</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Project Lifecycle</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Project_Lifecycle</report><showPicturesOnTables>false</showPicturesOnTables><title>Lifecycle and earned completion</title></dashboardComponent>
+            <rowIndex>12</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>4</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Workplan Delivery</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Workplan_Delivery</report><showPicturesOnTables>false</showPicturesOnTables><title>Gantt progress and acceptance</title></dashboardComponent>
+            <rowIndex>12</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>8</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Skill Demand Match</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Skill_Demand_Match</report><showPicturesOnTables>false</showPicturesOnTables><title>Industry, functional and technical fit</title></dashboardComponent>
+            <rowIndex>12</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>0</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Contract Changes</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Contract_Changes</report><showPicturesOnTables>false</showPicturesOnTables><title>SOW, amendment and change-order value</title></dashboardComponent>
+            <rowIndex>18</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>4</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Project Risks</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Project_Risk_Control</report><showPicturesOnTables>false</showPicturesOnTables><title>Severity, ownership and mitigation</title></dashboardComponent>
+            <rowIndex>18</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>8</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Closeout Readiness</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Closeout_Readiness</report><showPicturesOnTables>false</showPicturesOnTables><title>Completion gates and final evidence</title></dashboardComponent>
+            <rowIndex>18</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
         <numberOfColumns>12</numberOfColumns>
         <rowHeight>36</rowHeight>
     </dashboardGridLayout>

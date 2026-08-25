@@ -29,8 +29,12 @@
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Resource__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_End__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_Start__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Change_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Parent_Reference__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Signature__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Signed_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Version__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Approver__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Decided_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>

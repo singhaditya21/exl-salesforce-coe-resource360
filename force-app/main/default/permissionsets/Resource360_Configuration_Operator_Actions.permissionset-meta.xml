@@ -30,8 +30,13 @@
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Entity_Version__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Payload_Hash__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Audit_Event__c.Reason_Code__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Approval_Decision__c.Approver__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Approval_Decision__c.Decided_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Approval_Decision__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Approval_Decision__c.Economic_Signature__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Work_Calendar__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Work_Calendar__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Approval_Decision__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Audit_Event__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Calendar_Exception__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>

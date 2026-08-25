@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Current_Project_Allocations</fullName><columns>NAME</columns><columns>Engagement__c</columns><columns>Work_Unit__c</columns><columns>Resource__c</columns><columns>Role__c</columns><columns>Daily_Hours__c</columns><columns>Start_Date__c</columns><columns>End_Date__c</columns><filterScope>Everything</filterScope><filters><field>Current__c</field><operation>equals</operation><value>1</value></filters><label>Current Project Allocations</label></ListView>

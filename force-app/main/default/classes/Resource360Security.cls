@@ -71,6 +71,13 @@ public without sharing class Resource360Security {
 
     @TestVisible
     private static Boolean hasModifyAllData() {
+        // Governed app identities are recognized without querying the Profile
+        // setup object, which is intentionally unavailable to minimum-access
+        // Salesforce licenses. Explicit app administrators fail open only through
+        // their dedicated custom permission; tests and bootstrap administrators
+        // without Resource 360 assignments retain the native-profile fallback.
+        if (FeatureManagement.checkPermission('Resource360_Administer')) return true;
+        if (FeatureManagement.checkPermission('Resource360_Access')) return false;
         Id profileId = UserInfo.getProfileId();
         if (!modifyAllDataByProfile.containsKey(profileId)) {
             modifyAllDataByProfile.put(profileId, [SELECT PermissionsModifyAllData FROM Profile WHERE Id=:profileId].PermissionsModifyAllData);

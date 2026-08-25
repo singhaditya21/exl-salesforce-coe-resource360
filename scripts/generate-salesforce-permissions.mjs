@@ -23,14 +23,18 @@ const fieldsFor = (objectName) => {
   });
 };
 
-const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Configuration__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
+// Runtime configuration drives every workspace payload. Base users need object
+// and field describe/read access so the system-mode policy resolver can safely
+// expose its curated public snapshot. Private OWD and the absence of explicit
+// configuration shares still prevent direct access to governed version records.
+const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
 const permissions = (read, create = false, edit = false, remove = false, viewAll = false, modifyAll = false) => ({ read, create, edit, remove, viewAll, modifyAll });
 const readOnly = Object.fromEntries(businessObjects.map((name) => [name, permissions(true)]));
 
 const roleConfigs = [
   {
     name: "Resource360_Base_User", label: "Resource 360 Base User", description: "Least-privilege read access to Resource 360 operational business data and the Lightning workspace.",
-    objects: readOnly, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360AssuranceService", "Resource360GovernanceService", "Resource360RoleScopeService"], customPermissions: [], editable: {}
+    objects: readOnly, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360ProjectService", "Resource360AssuranceService", "Resource360GovernanceService", "Resource360RoleScopeService"], customPermissions: ["Resource360_Access"], editable: {}
   },
   {
     name: "Resource360_Practitioner_Actions", label: "Resource 360 Practitioner Actions", description: "Self-service capability, credential and weekly-time commands; record scope remains server enforced.",
@@ -44,8 +48,8 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Project_Manager_Actions", label: "Resource 360 Project Manager Actions", description: "Create governed staffing demand and manage engagement working records within sharing scope.",
-    objects: { Staffing_Request__c: permissions(true, true, false), Budget__c: permissions(true, true, true), Budget_Line__c: permissions(true, true, true), Engagement__c: permissions(true), Allocation__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360BudgetImportService"], customPermissions: ["Resource360_Manage_Budgets"],
-    editable: { Staffing_Request__c: ["Engagement__c","Resource__c","Requested_Role__c","Classification__c","Start_Date__c","End_Date__c","Daily_Hours__c","Priority__c","State__c","Requester__c","SLA_Due__c","Requirement_Summary__c","Request_Version__c","Idempotency_Key__c","Request_Fingerprint__c","Responsible_Owner__c","Review_Date__c","Control_Reason__c","Source_Criteria__c","Budget_Signature__c"], Budget__c: "ALL", Budget_Line__c: "ALL" }
+    objects: { Staffing_Request__c: permissions(true, true, false), Staffing_Skill_Match__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true, true, true), Budget__c: permissions(true, true, true), Budget_Line__c: permissions(true, true, true), Engagement__c: permissions(true, true, true), Commercial_Reference__c: permissions(true, true, true), Commercial_Line__c: permissions(true, true, true), Work_Unit__c: permissions(true, true, true), Work_Dependency__c: permissions(true, true, true, true), Project_Risk__c: permissions(true, true, true), Project_Closeout__c: permissions(true, true, true), Allocation__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360ProjectService", "Resource360BudgetImportService"], customPermissions: ["Resource360_Manage_Budgets","Resource360_Manage_Projects"],
+    editable: { Staffing_Request__c: ["Engagement__c","Resource__c","Work_Unit__c","Requested_Role__c","Classification__c","Start_Date__c","End_Date__c","Daily_Hours__c","Priority__c","State__c","Requester__c","SLA_Due__c","Requirement_Summary__c","Request_Version__c","Idempotency_Key__c","Request_Fingerprint__c","Responsible_Owner__c","Review_Date__c","Control_Reason__c","Source_Criteria__c","Budget_Signature__c","Fit_Score__c"], Staffing_Skill_Match__c: "ALL", Engagement_Skill_Requirement__c: "ALL", Budget__c: "ALL", Budget_Line__c: "ALL", Engagement__c: "ALL", Commercial_Reference__c: "ALL", Commercial_Line__c: "ALL", Work_Unit__c: "ALL", Work_Dependency__c: "ALL", Project_Risk__c: "ALL", Project_Closeout__c: "ALL" }
   },
   {
     name: "Resource360_Manager_Actions", label: "Resource 360 Manager Actions", description: "Review skill claims and timesheets only within manager/delegated scope.",
@@ -59,8 +63,8 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Staffer_Actions", label: "Resource 360 Staffer Actions", description: "Decide staffing and maintain effective-dated allocations within authorized scope.",
-    objects: { Staffing_Request__c: permissions(true, true, true), Allocation__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true), Budget__c: permissions(true), Commercial_Reference__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService"], customPermissions: ["Resource360_Manage_Staffing"],
-    editable: { Staffing_Request__c: "ALL", Allocation__c: "ALL" }
+    objects: { Engagement__c: permissions(true), Staffing_Request__c: permissions(true, true, true), Staffing_Skill_Match__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true), Allocation__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true), Budget__c: permissions(true), Commercial_Reference__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService"], customPermissions: ["Resource360_Manage_Staffing"],
+    editable: { Staffing_Request__c: "ALL", Staffing_Skill_Match__c: "ALL", Allocation__c: "ALL" }
   },
   {
     name: "Resource360_Controlled_Override", label: "Resource 360 Controlled Override", description: "Separately assigned authority for attributable past-date allocation and post-deadline time operations; never included in a default business-role group.",
@@ -71,6 +75,12 @@ const roleConfigs = [
     name: "Resource360_Budget_Approver_Actions", label: "Resource 360 Budget Approver Actions", description: "Create budget versions and decide current signed approval steps within role scope.",
     objects: { Budget__c: permissions(true, true, true), Budget_Line__c: permissions(true, true, true), Commercial_Reference__c: permissions(true), R360_Approval_Decision__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service","Resource360BudgetImportService"], customPermissions: ["Resource360_Approve_Budgets","Resource360_Manage_Budgets"],
     editable: { Budget__c: "ALL", Budget_Line__c: "ALL", R360_Approval_Decision__c: ["Decision_ID__c","Entity_Type__c","Entity_ID__c","Entity_Version__c","Step_Number__c","Required_Role__c","State__c","Approver__c","Decided_At__c","Decision_Note__c","Economic_Signature__c","Correlation_ID__c"] }
+  },
+  {
+    name: "Resource360_Closeout_Approver_Actions", label: "Resource 360 Closeout Approver Actions", description: "Independently approve governed project completion after work, acceptance, risk, time, commercial and financial gates pass.",
+    objects: { Engagement__c: permissions(true, false, true), Commercial_Reference__c: permissions(true), Commercial_Line__c: permissions(true), Work_Unit__c: permissions(true), Work_Dependency__c: permissions(true), Project_Risk__c: permissions(true), Project_Closeout__c: permissions(true, false, true), Allocation__c: permissions(true), Timesheet__c: permissions(true), Time_Entry__c: permissions(true), Budget__c: permissions(true), R360_Approval_Decision__c: permissions(true, true, true) },
+    classes: ["Resource360Service","Resource360ProjectService"], customPermissions: ["Resource360_Approve_Closeout"],
+    editable: { Engagement__c: ["Status__c","Lifecycle_Stage__c","Completion_Percent__c","Actual_End_Date__c"], Project_Closeout__c: ["State__c","Approver__c","Decision_At__c","Decision_Note__c"], R360_Approval_Decision__c: ["Decision_ID__c","Entity_Type__c","Entity_ID__c","Entity_Version__c","Step_Number__c","Required_Role__c","State__c","Approver__c","Decided_At__c","Decision_Note__c","Correlation_ID__c"] }
   },
   {
     name: "Resource360_Finance_PMO_Actions", label: "Resource 360 Finance PMO Actions", description: "Review economics, reconcile commercial context and execute only assigned budget decisions within effective scope.",
@@ -84,23 +94,23 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Capability_Admin_Actions", label: "Resource 360 Capability Administrator", description: "Govern capability taxonomy, evidence, learning and credential verification.",
-    objects: { Capability__c: permissions(true, true, true), Skill_Claim__c: permissions(true, false, true), Credential__c: permissions(true, true, true), R360_Project_Evidence__c: permissions(true, true, true), R360_Learning_Achievement__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService"], customPermissions: ["Resource360_Review_Skills","Resource360_Manage_Credentials"],
+    objects: { Engagement__c: permissions(true), Staffing_Request__c: permissions(true), Capability__c: permissions(true, true, true), Skill_Claim__c: permissions(true, false, true), Credential__c: permissions(true, true, true), R360_Project_Evidence__c: permissions(true, true, true), R360_Learning_Achievement__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true), Staffing_Skill_Match__c: permissions(true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService"], customPermissions: ["Resource360_Review_Skills","Resource360_Manage_Credentials"],
     editable: { Capability__c: "ALL", Skill_Claim__c: "ALL", Credential__c: "ALL", R360_Project_Evidence__c: "ALL", R360_Learning_Achievement__c: "ALL" }
   },
   {
     name: "Resource360_Configuration_Operator_Actions", label: "Resource 360 Configuration Operator", description: "Draft, preview and submit configuration without integration-operation or approval authority.",
-    objects: { R360_Configuration__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
+    objects: { R360_Configuration__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true), R360_Approval_Decision__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
     classes: ["Resource360Service","Resource360ConfigurationService","Resource360GovernanceService"], customPermissions: ["Resource360_Manage_Configuration","Resource360_View_Audit"], editable: { R360_Configuration__c: "ALL" }
   },
   {
     name: "Resource360_Operations", label: "Resource 360 Operations", description: "Operate integrations, reconciliation, schedules and outbox recovery without business or configuration approval authority.",
-    objects: { R360_Configuration__c: permissions(true), R360_Integration_Run__c: permissions(true, true, true), R360_Integration_Error__c: permissions(true, true, true), R360_Outbox_Event__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true, true, false), R360_Role_Scope__c: permissions(true, true, true), R360_Work_Calendar__c: permissions(true, true, true), R360_Calendar_Exception__c: permissions(true, true, true), R360_Org_Unit__c: permissions(true, true, true), R360_Portfolio__c: permissions(true, true, true), R360_Notification__c: permissions(true, false, true) },
+    objects: { R360_Configuration__c: permissions(true), R360_Integration_Run__c: permissions(true, true, true), R360_Integration_Error__c: permissions(true, true, true), R360_Outbox_Event__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true, true, false), R360_Approval_Decision__c: permissions(true), R360_Role_Scope__c: permissions(true, true, true), R360_Work_Calendar__c: permissions(true, true, true), R360_Calendar_Exception__c: permissions(true, true, true), R360_Org_Unit__c: permissions(true, true, true), R360_Portfolio__c: permissions(true, true, true), R360_Notification__c: permissions(true, false, true) },
     classes: ["Resource360Service","Resource360AssuranceService","Resource360BulkService","Resource360GovernanceService","Resource360RoleScopeService","Resource360InboundApi","Resource360OperationsScheduler","Resource360OutboxPublisher","Resource360NotificationDispatcher"], customPermissions: ["Resource360_View_Operations","Resource360_Manage_Integrations","Resource360_Manage_Bulk_Operations","Resource360_View_Audit","Resource360_Run_Reconciliation"],
     editable: { R360_Integration_Run__c: "ALL", R360_Integration_Error__c: "ALL", R360_Outbox_Event__c: "ALL", R360_Role_Scope__c: "ALL", R360_Work_Calendar__c: "ALL", R360_Calendar_Exception__c: "ALL", R360_Org_Unit__c: "ALL", R360_Portfolio__c: "ALL", R360_Notification__c: ["Resolution_Status__c","Accountable_Owner__c","First_Seen_At__c","Closed_At__c","Closed_By__c","Closure_Note__c"] }
   },
   {
     name: "Resource360_Configuration_Approver_Actions", label: "Resource 360 Configuration Approver", description: "Review, activate, schedule and roll back validated configuration versions without integration-operation authority.",
-    objects: { R360_Configuration__c: permissions(true, false, true), R360_Audit_Event__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
+    objects: { R360_Configuration__c: permissions(true, false, true), R360_Audit_Event__c: permissions(true), R360_Approval_Decision__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
     classes: ["Resource360Service","Resource360ConfigurationService"], customPermissions: ["Resource360_Approve_Configuration","Resource360_View_Audit"], editable: { R360_Configuration__c: ["State__c","Current__c","Effective_To__c","Approved_By__c","Approved_At__c","Change_Reason__c"] }
   },
   {
@@ -131,8 +141,8 @@ const writePermissionSet = (config) => {
   const lines = ['<?xml version="1.0" encoding="UTF-8"?>','<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">',`    <description>${config.description}</description>`,'    <hasActivationRequired>false</hasActivationRequired>',`    <label>${config.label}</label>`];
   if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
     lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
-    lines.push('    <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>');
-    for (const permission of ["RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
+    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","Work_Unit__c","Commercial_Reference__c","Staffing_Request__c","Allocation__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
+    for (const permission of ["LightningExperienceUser", "RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
       lines.push(`    <userPermissions><enabled>true</enabled><name>${permission}</name></userPermissions>`);
     }
   }
@@ -162,10 +172,10 @@ const groups = {
   Resource360_Audit_User: ["Resource360_Base_User","Resource360_Auditor"],
   Resource360_Configuration_Operator: ["Resource360_Base_User","Resource360_Configuration_Operator_Actions"],
   Resource360_Configuration_Approver: ["Resource360_Base_User","Resource360_Configuration_Approver_Actions"],
-  Resource360_Portfolio_Lead: ["Resource360_Base_User","Resource360_Budget_Approver_Actions"],
+  Resource360_Portfolio_Lead: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions"],
   Resource360_Account_Owner: ["Resource360_Base_User","Resource360_Portfolio_Control_Actions"],
-  Resource360_Head_of_Delivery: ["Resource360_Base_User","Resource360_Budget_Approver_Actions"],
-  Resource360_GM_COO_Delegate: ["Resource360_Base_User","Resource360_Budget_Approver_Actions"],
+  Resource360_Head_of_Delivery: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions"],
+  Resource360_GM_COO_Delegate: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions"],
   Resource360_Finance_PMO: ["Resource360_Base_User","Resource360_Finance_PMO_Actions"],
   Resource360_Timesheet_Approver: ["Resource360_Base_User","Resource360_Timesheet_Approver_Actions"],
   Resource360_Executive_Viewer: ["Resource360_Base_User","Resource360_Executive_Viewer_Actions"]
