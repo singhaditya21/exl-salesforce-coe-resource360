@@ -1,12 +1,18 @@
 name: Resource360 quality gate
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: resource360-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   quality:
@@ -45,21 +51,50 @@ jobs:
       RESOURCE360_SFDX_AUTH_URL: ${{ secrets.RESOURCE360_SFDX_AUTH_URL }}
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.19.0
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - name: Explain optional protected-org gate
-        if: env.RESOURCE360_SFDX_AUTH_URL == ''
-        run: echo "RESOURCE360_SFDX_AUTH_URL is not available; protected Salesforce validation is intentionally skipped."
+          cache: pnpm
+      - name: Permit untrusted fork validation without protected credentials
+        if: env.RESOURCE360_SFDX_AUTH_URL == '' && github.event_name == 'pull_request'
+        run: echo "Protected Salesforce validation is unavailable to this untrusted pull request."
+      - name: Require protected-org authentication for trusted validation
+        if: env.RESOURCE360_SFDX_AUTH_URL == '' && github.event_name != 'pull_request'
+        run: |
+          echo "RESOURCE360_SFDX_AUTH_URL is required for trusted Resource 360 validation."
+          exit 1
       - name: Install Salesforce CLI
         if: env.RESOURCE360_SFDX_AUTH_URL != ''
         run: npm install --global @salesforce/cli
+      - name: Install authenticated Lightning test dependencies
+        if: env.RESOURCE360_SFDX_AUTH_URL != ''
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm exec playwright install --with-deps chromium
       - name: Authenticate validation org from encrypted secret
         if: env.RESOURCE360_SFDX_AUTH_URL != ''
-        run: printenv RESOURCE360_SFDX_AUTH_URL | sf org login sfdx-url --sfdx-url-stdin --alias Resource360CI
-      - name: Compile metadata and run Resource 360 controls
+        run: printf '%s' "$RESOURCE360_SFDX_AUTH_URL" | sf org login sfdx-url --alias=Resource360CI --sfdx-url-stdin=-
+      - name: Pause operational scheduler before Salesforce validation
         if: env.RESOURCE360_SFDX_AUTH_URL != ''
+        run: sf apex run --target-org Resource360CI --file scripts/apex/pauseResource360Schedule.apex
+      - name: Validate pull-request metadata and Resource 360 controls
+        if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name == 'pull_request'
         run: sf project deploy start --target-org Resource360CI --dry-run --test-level RunLocalTests --wait 120
+      - name: Deploy trusted main to the permanent Resource 360 demo org
+        if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name != 'pull_request'
+        run: sf project deploy start --target-org Resource360CI --test-level RunLocalTests --wait 120
+      - name: Restore operational scheduler
+        if: always() && env.RESOURCE360_SFDX_AUTH_URL != ''
+        run: sf apex run --target-org Resource360CI --file scripts/apex/scheduleResource360.apex
+      - name: Prepare and verify the permanent fictional demo state
+        if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name != 'pull_request'
+        run: node scripts/prepare-salesforce-demo.mjs --target-org Resource360CI
+      - name: Sweep all authenticated Resource 360 Lightning routes
+        if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name != 'pull_request'
+        run: node scripts/validate-salesforce-ui.mjs --target-org Resource360CI
 
   dependency-review:
     name: Dependency review

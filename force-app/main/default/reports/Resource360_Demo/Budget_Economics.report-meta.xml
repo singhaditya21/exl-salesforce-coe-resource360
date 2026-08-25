@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns><field>Budget__c$Name</field></columns>
+    <columns><field>Budget__c$Engagement__c</field></columns>
+    <columns><field>Budget__c$Version__c</field></columns>
+    <columns><field>Budget__c$Revenue__c</field></columns>
+    <columns><field>Budget__c$Total_Cost__c</field></columns>
+    <columns><field>Budget__c$Margin_Percent__c</field></columns>
+    <description>Versioned budget revenue, cost, margin and approval state for the Resource 360 demo.</description>
+    <format>Summary</format>
+    <groupingsDown>
+        <field>Budget__c$State__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Budget Economics</name>
+    <reportType>Resource360_Budget_Economics__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

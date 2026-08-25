@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns><field>Skill_Claim__c$Name</field></columns>
+    <columns><field>Skill_Claim__c$Resource__c</field></columns>
+    <columns><field>Skill_Claim__c$Capability__c</field></columns>
+    <columns><field>Skill_Claim__c$Approved_Level__c</field></columns>
+    <columns><field>Skill_Claim__c$Years_Experience__c</field></columns>
+    <description>Approved and pending Salesforce capability supply for the Resource 360 demo.</description>
+    <format>Summary</format>
+    <groupingsDown>
+        <field>Skill_Claim__c$State__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Capability Supply</name>
+    <reportType>Resource360_Capability_Supply__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

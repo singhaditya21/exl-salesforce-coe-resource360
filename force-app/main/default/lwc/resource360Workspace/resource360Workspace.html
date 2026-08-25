@@ -496,6 +496,72 @@
                     </section>
                 </template>
 
+                <template lwc:if={showHelpCenter}>
+                    <section class="help-center" aria-label="Resource 360 Salesforce help center">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">Salesforce-native enablement</p><h3>Demo walkthrough library</h3></div>
+                            <span>Private static resources · H.264 · captions included · sanitized fictional data only</span>
+                        </div>
+                        <div class="help-actions">
+                            <lightning-button variant="brand-outline" icon-name="standard:report" label="Open Salesforce reports" onclick={handleOpenReports}></lightning-button>
+                            <lightning-button variant="brand-outline" icon-name="standard:dashboard" label="Open command-center dashboard" onclick={handleOpenDashboards}></lightning-button>
+                        </div>
+                        <div class="video-grid">
+                            <template for:each={helpVideos} for:item="video">
+                                <article key={video.id} class="video-card">
+                                    <video controls preload="metadata" poster={video.posterUrl} aria-label={video.title}>
+                                        <source src={video.videoUrl} type="video/mp4" />
+                                        <track kind="captions" label="English" srclang="en" src={video.captionUrl} default />
+                                    </video>
+                                    <div class="video-copy">
+                                        <div><h4>{video.title}</h4><span>{video.duration}</span></div>
+                                        <p>{video.personas}</p>
+                                        <strong>{video.outcome}</strong>
+                                    </div>
+                                </article>
+                            </template>
+                        </div>
+                        <p class="help-boundary">Demo boundary: EXL identities, source-system payloads, SSO and operational approvals are deterministic simulations. The workflows, security enforcement, data model, Apex services, reports and audit evidence run natively in Salesforce.</p>
+                    </section>
+                </template>
+
+                <template lwc:if={showRouteWorkbench}>
+                    <section class={routeExperience.panelClass} aria-label="Route-specific Salesforce workbench">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">{routeExperience.eyebrow}</p><h3>{routeExperience.heading}</h3></div>
+                            <span>{routeExperience.evidence}</span>
+                        </div>
+                        <div class="route-steps" aria-label="Governed workflow">
+                            <template for:each={routeSteps} for:item="step">
+                                <article key={step.id}><span>{step.number}</span><div><strong>{step.label}</strong><p>{step.detail}</p></div></article>
+                            </template>
+                        </div>
+                        <div class="route-facts" aria-label="Route facts">
+                            <template for:each={routeFacts} for:item="fact">
+                                <article key={fact.id}><span>{fact.label}</span><strong>{fact.value}</strong><p>{fact.detail}</p></article>
+                            </template>
+                        </div>
+                        <template lwc:if={showAssistantControls}>
+                            <div class="assistant-console">
+                                <lightning-textarea label="Ask about authorized Resource 360 facts" value={assistantQuestion} onchange={handleAssistantInput}></lightning-textarea>
+                                <p>Deterministic Salesforce demo assistant · no external model call · no autonomous write</p>
+                                <template lwc:if={hasAssistantResponse}><div class="assistant-answer" role="status"><strong>Evidence-grounded answer</strong><p>{assistantResponse}</p></div></template>
+                            </div>
+                        </template>
+                        <template lwc:if={showAgentControls}>
+                            <div class="agent-control" role="status"><lightning-icon icon-name="utility:einstein" size="small"></lightning-icon><div><span>Resource assistant state</span><strong>{agentStateLabel}</strong><p>All recommendations remain read-only until a person confirms them in a governed workflow.</p></div></div>
+                        </template>
+                        <template lwc:if={hasRouteRows}>
+                            <lightning-datatable key-field="id" data={routeRows} columns={routeColumns} hide-checkbox-column></lightning-datatable>
+                        </template>
+                        <template lwc:else><div class="empty-state empty-state_compact"><p>No record matches this route’s current Salesforce scope and filter.</p></div></template>
+                        <div class="panel-footer">
+                            <template lwc:if={routePrimaryIsButton}><lightning-button variant="brand" label={routeExperience.primaryLabel} onclick={handleRoutePrimary} disabled={routePrimaryDisabled}></lightning-button></template>
+                            <template lwc:if={routePrimaryIsExport}><a class="slds-button slds-button_brand" href={routeExportUrl} download={routeExportName}>{routeExperience.primaryLabel}</a></template>
+                        </div>
+                    </section>
+                </template>
+
                 <template lwc:if={showAlertLifecycle}>
                     <section class="records-panel records-panel_compact">
                         <div class="panel-heading"><div><p class="eyebrow">Accountable lifecycle</p><h3>Preserve trigger, owner, first seen and closure evidence</h3></div><span>Closing an alert never deletes or rewrites the original trigger</span></div>
@@ -513,13 +579,15 @@
                     </section>
                 </template>
 
-                <section class="records-panel">
-                    <div class="panel-heading"><div><p class="eyebrow">Live Salesforce data</p><h3>{selectedScreen.title}</h3></div><span>Open a linked record for the standard Salesforce detail page</span></div>
-                    <template lwc:if={hasRows}>
-                        <lightning-datatable key-field="id" data={tableRows} columns={tableColumns} hide-checkbox-column onrowaction={handleRowAction}></lightning-datatable>
-                    </template>
-                    <template lwc:else><div class="empty-state"><lightning-icon icon-name="utility:inbox" size="medium"></lightning-icon><h3>No records yet</h3><p>Load the compact sanitized dataset or create a governed record.</p></div></template>
-                </section>
+                <template lwc:if={showDefaultRecords}>
+                    <section class="records-panel">
+                        <div class="panel-heading"><div><p class="eyebrow">Live Salesforce data</p><h3>{selectedScreen.title}</h3></div><span>Open a linked record for the standard Salesforce detail page</span></div>
+                        <template lwc:if={hasRows}>
+                            <lightning-datatable key-field="id" data={tableRows} columns={tableColumns} hide-checkbox-column onrowaction={handleRowAction}></lightning-datatable>
+                        </template>
+                        <template lwc:else><div class="empty-state"><lightning-icon icon-name="utility:inbox" size="medium"></lightning-icon><h3>No records yet</h3><p>Load the compact sanitized dataset or create a governed record.</p></div></template>
+                    </section>
+                </template>
                 </template>
                 <template lwc:else>
                     <section class="unauthorized-panel" role="alert"><lightning-icon icon-name="utility:lock" size="small"></lightning-icon><div><h3>Role or scope does not authorize this screen</h3><p>Choose an assigned active role or request a time-bound Resource 360 role scope. The client cannot elevate access.</p></div></section>

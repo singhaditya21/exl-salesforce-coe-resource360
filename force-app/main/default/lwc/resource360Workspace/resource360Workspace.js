@@ -45,8 +45,41 @@ import decideTimesheet from "@salesforce/apex/Resource360Service.decideTimesheet
 import createTimeCorrection from "@salesforce/apex/Resource360Service.createTimeCorrection";
 import { MODULES, SCREENS as RAW_SCREENS } from "./screenCatalog";
 import { governedScreens } from "./screenContracts";
+import { routeExperienceFor } from "./screenExperiences";
+import walkthrough01 from "@salesforce/resourceUrl/Resource360_Walkthrough_01";
+import walkthrough02 from "@salesforce/resourceUrl/Resource360_Walkthrough_02";
+import walkthrough03 from "@salesforce/resourceUrl/Resource360_Walkthrough_03";
+import walkthrough04 from "@salesforce/resourceUrl/Resource360_Walkthrough_04";
+import walkthrough05 from "@salesforce/resourceUrl/Resource360_Walkthrough_05";
 
 const SCREENS = governedScreens(RAW_SCREENS);
+const HELP_VIDEOS = Object.freeze([
+    {
+        id: "walkthrough-01", title: "Product overview", duration: "00:16", personas: "Administrator",
+        outcome: "All 103 governed screen contracts and the executive command center render.",
+        videoUrl: `${walkthrough01}/01-product-overview.mp4`, posterUrl: `${walkthrough01}/01-product-overview.jpg`, captionUrl: `${walkthrough01}/01-product-overview.vtt`
+    },
+    {
+        id: "walkthrough-02", title: "Skills and talent", duration: "00:20", personas: "COE Staffer",
+        outcome: "Five candidates rank and the governed Salesforce capability claim is available.",
+        videoUrl: `${walkthrough02}/02-skills-and-talent.mp4`, posterUrl: `${walkthrough02}/02-skills-and-talent.jpg`, captionUrl: `${walkthrough02}/02-skills-and-talent.vtt`
+    },
+    {
+        id: "walkthrough-03", title: "Staffing decision", duration: "00:22", personas: "COE Staffer",
+        outcome: "The staffing request is accepted with attributable decision evidence.",
+        videoUrl: `${walkthrough03}/03-staffing-decision.mp4`, posterUrl: `${walkthrough03}/03-staffing-decision.jpg`, captionUrl: `${walkthrough03}/03-staffing-decision.vtt`
+    },
+    {
+        id: "walkthrough-04", title: "Budget and actuals", duration: "00:46", personas: "Finance / PMO, approvers, practitioner",
+        outcome: "Budget approval and the 40-hour timesheet submission and approval complete.",
+        videoUrl: `${walkthrough04}/04-budget-and-actuals.mp4`, posterUrl: `${walkthrough04}/04-budget-and-actuals.jpg`, captionUrl: `${walkthrough04}/04-budget-and-actuals.vtt`
+    },
+    {
+        id: "walkthrough-05", title: "Demo activation", duration: "00:26", personas: "Administrator",
+        outcome: "The sanitized 5/5 activation gate completes with zero external calls.",
+        videoUrl: `${walkthrough05}/05-demo-activation.mp4`, posterUrl: `${walkthrough05}/05-demo-activation.jpg`, captionUrl: `${walkthrough05}/05-demo-activation.vtt`
+    }
+]);
 
 const RECORD_ACTION = { type: "action", typeAttributes: { rowActions: { fieldName: "rowActions" } } };
 
@@ -84,6 +117,9 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     configurationPreview;
     configurationReleasePreview;
     decisionDraft;
+    assistantQuestion = "Which available Salesforce practitioner best fits the next priority request?";
+    assistantResponse;
+    agentPaused = false;
 
     @wire(CurrentPageReference)
     setCurrentPageReference(pageReference) {
@@ -279,6 +315,74 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showKpiHierarchy() { return ["CMD-01", "CMD-02", "CMD-04", "CMD-07"].includes(this.selectedScreenId); }
     get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
     get showAlertLifecycle() { return this.selectedScreenId === "GLB-03"; }
+    get showHelpCenter() { return this.selectedScreenId === "GLB-06"; }
+    get helpVideos() { return HELP_VIDEOS; }
+    get routeExperience() {
+        const configured = routeExperienceFor(this.selectedScreenId);
+        if (!configured) return undefined;
+        return {
+            ...configured,
+            eyebrow: `${this.selectedScreenId} · ${configured.visual}`,
+            heading: configured.focus,
+            primaryLabel: this.selectedScreen.primary,
+            panelClass: `route-workbench route-workbench_${configured.visual}`
+        };
+    }
+    get showRouteWorkbench() { return Boolean(this.routeExperience); }
+    get showDefaultRecords() { return !this.showRouteWorkbench; }
+    get routeSteps() {
+        const experience = this.routeExperience;
+        if (!experience) return [];
+        return [
+            { id: `${this.selectedScreenId}-scope`, number: "1", label: "Authorize and scope", detail: this.selectedScreen.validations },
+            { id: `${this.selectedScreenId}-work`, number: "2", label: experience.focus, detail: experience.evidence },
+            { id: `${this.selectedScreenId}-evidence`, number: "3", label: this.selectedScreen.primary, detail: `Complete through ${this.selectedScreen.api}; retain ${this.selectedScreen.events}.` }
+        ];
+    }
+    get routeFacts() {
+        const rows = this.routeRows;
+        const actionable = rows.filter((row) => ["Pending","Pending Approval","Submitted","Open","Stale","Failed","Draft","Rejected"].includes(row.status)).length;
+        return [
+            { id: `${this.selectedScreenId}-records`, label: "Visible records", value: rows.length, detail: "Salesforce user-mode scope" },
+            { id: `${this.selectedScreenId}-actionable`, label: "Actionable now", value: actionable, detail: this.routeExperience?.filter || "all" },
+            { id: `${this.selectedScreenId}-role`, label: "Acting role", value: this.activeRole || "Unassigned", detail: "Effective certified role" },
+            { id: `${this.selectedScreenId}-source`, label: "Evidence mode", value: this.routeExperience?.visual || "view", detail: "Live Salesforce + sanitized mock" }
+        ];
+    }
+    get routeRows() {
+        const experience = this.routeExperience;
+        if (!experience) return [];
+        const records = this.routeRecords(experience.dataset);
+        return this.filterRouteRecords(records, experience.filter).map((item, index) => this.routeRow(experience.dataset, item, index));
+    }
+    get hasRouteRows() { return this.routeRows.length > 0; }
+    get routeColumns() {
+        const dataset = this.routeExperience?.dataset;
+        const first = ["identity","summary","classifications","help"].includes(dataset)
+            ? { label: this.routeFirstColumnLabel, fieldName: "primary" }
+            : this.linkColumn(this.routeFirstColumnLabel, "primary");
+        return [first,{label:"Context",fieldName:"secondary",wrapText:true},{label:"State",fieldName:"status"},{label:"Evidence",fieldName:"detail",wrapText:true},{label:"As of",fieldName:"date",type:"date"}];
+    }
+    get routeFirstColumnLabel() {
+        return {identity:"Persona",summary:"Metric",search:"Result",roleScopes:"User / scope",help:"Walkthrough",engagements:"Engagement",commercialReferences:"Commercial reference",allocations:"Allocation",budgets:"Budget",timesheets:"Timesheet",workUnits:"Work unit",notifications:"Risk / notification",resources:"Practitioner",classifications:"Classification",staffingRequests:"Staffing request",integrationRuns:"Integration run",integrationErrors:"Row error",capabilities:"Capability",skillClaims:"Capability claim",configurationCatalog:"Configuration",timeEntries:"Time entry",approvalDecisions:"Approval decision",auditEvents:"Audit event",calendars:"Calendar / exception",recommendations:"Recommendation",agentOperations:"Agent control"}[this.routeExperience?.dataset] || "Record";
+    }
+    get routePrimaryIsExport() { return this.routeExperience?.operation === "export"; }
+    get routePrimaryIsButton() { return !this.routePrimaryIsExport; }
+    get routePrimaryDisabled() {
+        return ["staffingDecision","skillDecision","budgetSubmit","budgetDecision","timesheetSubmit","timesheetDecision","timesheetCorrection"].includes(this.routeExperience?.operation) && !this.hasRouteRows;
+    }
+    get routeExportUrl() {
+        const header=["Record","Context","State","Evidence","As of"];
+        const rows=this.routeRows.map((row)=>[row.primary,row.secondary,row.status,row.detail,row.date]);
+        const csv=[header,...rows].map((row)=>row.map((value)=>this.csvCell(value)).join(",")).join("\r\n");
+        return `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`;
+    }
+    get routeExportName() { return `${this.selectedScreenId.toLowerCase()}-resource360.csv`; }
+    get showAssistantControls() { return this.routeExperience?.operation === "assistant"; }
+    get showAgentControls() { return this.routeExperience?.operation === "agentToggle"; }
+    get hasAssistantResponse() { return Boolean(this.assistantResponse); }
+    get agentStateLabel() { return this.agentPaused ? "Paused — human review only" : "Active mock — read-only recommendations"; }
+    get agentButtonLabel() { return this.agentPaused ? "Resume mock agent" : "Pause mock agent"; }
     get hasTalentResults() { return this.talentResults.length > 0; }
     get hasPlanningPreview() { return Boolean(this.planningPreview); }
     get planningDays() { return (this.planningPreview?.days || []).map((day) => ({ ...day, id: day.workDate, status: !day.workingDay ? "Non-working" : day.conflict ? "Conflict" : "Available" })); }
@@ -420,6 +524,97 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         return (this.data.notifications || []).map((item) => this.row(item, item.Title__c, null, item.Severity__c, item.Message__c, item.Occurred_At__c));
     }
 
+    routeRecords(dataset) {
+        if (dataset === "identity") return this.data.assurance?.personas || [];
+        if (dataset === "summary") return this.summaryCards;
+        if (dataset === "search") return [
+            ...(this.data.resources || []).map((item)=>({...item,_dataset:"resources"})),
+            ...(this.data.engagements || []).map((item)=>({...item,_dataset:"engagements"})),
+            ...(this.data.staffingRequests || []).map((item)=>({...item,_dataset:"staffingRequests"}))
+        ];
+        if (dataset === "help") return [
+            {id:"help-start",primary:"Start the Salesforce demo",secondary:"App access, persona selection and demo reset",status:"Ready",detail:"DEMO_ACTIVATION_RUNBOOK · Salesforce-native golden path",target:"ADMUI-01"},
+            {id:"help-staffing",primary:"Staffing and allocation walkthrough",secondary:"Request → shortlist → decision → allocation",status:"Ready",detail:"Governed capacity and signed-budget controls",target:"STFUI-01"},
+            {id:"help-budget",primary:"Budget and approval walkthrough",secondary:"Economics → WBS → routing → decision",status:"Ready",detail:"Sequential approval and immutable economic signature",target:"BUDUI-01"},
+            {id:"help-skills",primary:"Skills and talent walkthrough",secondary:"Claim → evidence → review → matching",status:"Ready",detail:"Source-attributed Salesforce capability profile",target:"SKLUI-01"},
+            {id:"help-time",primary:"Timesheet and correction walkthrough",secondary:"Eligible time → approval → controlled correction",status:"Ready",detail:"Allocation authorization and dual control",target:"TIMEUI-01"},
+            {id:"help-operations",primary:"Operations and audit walkthrough",secondary:"Sources → errors → schedules → audit",status:"Ready",detail:"Sanitized mock boundary and immutable evidence",target:"CMD-08"}
+        ];
+        if (dataset === "classifications") return (this.data.classifications || []).map((value)=>({id:value,label:value,state:"Active",detail:value==="Billing"?"Billable snapshot; signed budget required":"Unbilled control owner, review date and reason required"}));
+        if (dataset === "calendars") return [
+            ...(this.data.workCalendars || []).map((item)=>({...item,_dataset:"workCalendars"})),
+            ...(this.data.calendarExceptions || []).map((item)=>({...item,_dataset:"calendarExceptions"}))
+        ];
+        if (dataset === "recommendations") return this.data.resources || [];
+        if (dataset === "agentOperations") return [
+            {id:"agent-policy",primary:"Resource assistant policy",secondary:"Authorized read model only",status:this.agentPaused?"Paused":"Active mock",detail:"No autonomous write; human confirmation is mandatory.",date:this.data.generatedAt},
+            ...(this.data.integrationRuns || []).slice(0,5).map((item)=>({...item,_dataset:"integrationRuns"}))
+        ];
+        return this.data[dataset] || [];
+    }
+
+    filterRouteRecords(records, filter) {
+        if (!filter || filter === "all") return records;
+        return records.filter((item) => {
+            const state = item.State__c || item.Status__c || item.state || item.status || item.approvalStatus || "";
+            if (filter === "active") return item.Active__c !== false && !["Inactive","Retired","Revoked"].includes(state);
+            if (filter === "current") return item.Current__c !== false;
+            if (filter === "recent") return true;
+            if (filter === "open") return item.Resolution_Status__c ? item.Resolution_Status__c === "Open" : !["Closed","Succeeded","Resolved"].includes(state);
+            if (filter === "pending") return ["Pending","Pending Approval","Submitted"].includes(state);
+            if (filter === "submitted") return state === "Submitted";
+            if (filter === "submittedOrApproved") return ["Submitted","Approved","Correction Pending"].includes(state);
+            if (filter === "draftOrPending") return ["Draft","Pending"].includes(state);
+            if (filter === "draftOrRejected") return ["Draft","Rejected"].includes(state);
+            if (filter === "approvedOrCorrection") return ["Approved","Correction Pending"].includes(state);
+            if (filter === "editable") return ["Draft","Rejected","Invalidated"].includes(state);
+            if (filter === "available") return Number(item.Available_Percent__c || 0) > 0 && state !== "Inactive";
+            if (filter === "staffing") return `${item.Entity_Type__c || ""} ${item.Source_File_Name__c || ""}`.toLowerCase().includes("staff");
+            if (filter === "learning") return `${item.Entity_Type__c || ""} ${item.Source_System__c || ""}`.toLowerCase().includes("learning");
+            if (filter === "skills") return /learning|credential|capability|people/i.test(`${item.Entity_Type__c || ""} ${item.Source_System__c || ""}`);
+            if (filter === "capability") return /capability|delivery role|classification/i.test(`${item.domain || ""} ${item.key || ""}`);
+            if (filter === "budget") return /budget|margin|commercial/i.test(`${item.domain || ""} ${item.key || ""} ${item.code || ""}`);
+            return true;
+        });
+    }
+
+    routeRow(dataset, item, index) {
+        if (item._dataset) {
+            const { _dataset: nestedDataset, ...nestedItem } = item;
+            return this.routeRow(nestedDataset, nestedItem, index);
+        }
+        const fallbackId=`${this.selectedScreenId}-${dataset}-${index}`;
+        const mapped={id:item.Id||item.id||fallbackId,record:item,date:item.LastModifiedDate||item.Source_Last_Sync__c||item.Occurred_At__c||item.Started_At__c||item.Submitted_At__c||item.Start_Date__c||item.date||this.data.generatedAt};
+        if(dataset==="identity")return{...mapped,primary:item.businessRole,secondary:item.permissionSetGroup,status:item.approvalStatus,detail:`${item.scopeType} · ${item.decisionAuthority}`,date:item.approvedOn};
+        if(dataset==="summary")return{...mapped,primary:item.label,secondary:item.note,status:"Live",detail:item.value,date:this.data.generatedAt};
+        if(dataset==="help")return{...mapped,url:`/lightning/n/Resource360_Workspace?c__screen=${item.target}`,primary:item.primary,secondary:item.secondary,status:item.status,detail:item.detail};
+        if(dataset==="roleScopes")return{...mapped,url:this.routeRecordUrl("R360_Role_Scope__c",item.Id),primary:item.User__r?.Name||item.Name,secondary:`${item.Business_Role__c} · ${item.Org_Unit_ID__c||"All org"} · ${item.Portfolio_ID__c||"All portfolios"}`,status:item.Active__c?"Active":"Inactive",detail:`${item.Assignment_Source__c||"Unspecified"} · ${item.Approval_Reference__c||"Uncertified"}`,date:item.Last_Certified_At__c||item.Valid_From__c};
+        if(dataset==="engagements")return{...mapped,url:this.routeRecordUrl("Engagement__c",item.Id),primary:item.Name,secondary:`${item.Engagement_ID__c} · ${item.Project_Manager__r?.Name||"Unassigned PM"}`,status:item.Status__c,detail:`${item.Salesforce_Tower__c||"No tower"} · ${item.Industry__c||"No industry"}`,date:item.Start_Date__c};
+        if(dataset==="commercialReferences")return{...mapped,url:this.routeRecordUrl("Commercial_Reference__c",item.Id),primary:item.External_ID__c||item.Name,secondary:item.Engagement__r?.Name,status:item.Status__c,detail:`${item.Reference_Type__c} · ${this.money(item.Value__c)}`,date:item.Valid_From__c};
+        if(dataset==="allocations")return{...mapped,url:this.routeRecordUrl("Allocation__c",item.Id),primary:item.Resource__r?.Preferred_Name__c||item.Name,secondary:`${item.Engagement__r?.Name} · ${item.Role__c}`,status:item.Classification__c,detail:`${item.Daily_Hours__c}h/day · v${item.Version__c||1} · ${item.State__c}`,date:item.Start_Date__c};
+        if(dataset==="budgets")return{...mapped,url:this.routeRecordUrl("Budget__c",item.Id),primary:item.Name,secondary:`${item.Engagement__r?.Name} · v${item.Version__c}`,status:item.State__c,detail:`${this.money(item.Revenue__c)} revenue · ${item.Margin_Percent__c||0}% margin · ${item.Approval_Level__c||"No route"}`,date:item.Engagement__r?.Start_Date__c};
+        if(dataset==="timesheets")return{...mapped,url:this.routeRecordUrl("Timesheet__c",item.Id),primary:item.Name,secondary:`${item.Resource__r?.Preferred_Name__c} · ${item.Week_Start__c}`,status:item.Status__c,detail:item.Required_Approval_Role__c||item.Decision_Note__c||"No active exception",date:item.Submitted_At__c||item.Week_Start__c};
+        if(dataset==="workUnits")return{...mapped,url:this.routeRecordUrl("Work_Unit__c",item.Id),primary:item.Name,secondary:`${item.Engagement__r?.Name} · ${item.Phase__c}`,status:item.Status__c,detail:item.Work_Unit_Code__c,date:item.Start_Date__c};
+        if(dataset==="notifications")return{...mapped,url:this.routeRecordUrl("R360_Notification__c",item.Id),primary:item.Title__c,secondary:item.Accountable_Owner__r?.Name||item.Recipient__r?.Name||"Unassigned",status:item.Resolution_Status__c||item.State__c,detail:`${item.Severity__c} · ${item.Message__c}`,date:item.Occurred_At__c};
+        if(dataset==="resources"||dataset==="recommendations")return{...mapped,url:this.routeRecordUrl("Resource__c",item.Id),primary:item.Preferred_Name__c,secondary:`${item.Primary_Role__c||"Role not sourced"} · ${item.Location__c||"Location not sourced"}`,status:item.Status__c||"Active",detail:`${item.Tower__c||"No tower"} · ${item.Available_Percent__c||0}% available`,date:item.Source_Last_Sync__c};
+        if(dataset==="classifications")return{...mapped,primary:item.label,secondary:"Effective Salesforce classification",status:item.state,detail:item.detail,date:this.data.generatedAt};
+        if(dataset==="staffingRequests")return{...mapped,url:this.routeRecordUrl("Staffing_Request__c",item.Id),primary:item.Name,secondary:`${item.Engagement__r?.Name} · ${item.Resource__r?.Preferred_Name__c}`,status:item.State__c,detail:`${item.Priority__c} · ${item.Requested_Role__c} · ${item.Daily_Hours__c}h/day`,date:item.SLA_Due__c};
+        if(dataset==="integrationRuns")return{...mapped,url:this.routeRecordUrl("R360_Integration_Run__c",item.Id),primary:item.Run_ID__c||item.Name,secondary:`${item.Source_System__c||"Resource 360"} · ${item.Entity_Type__c||"Control"}`,status:item.State__c,detail:`${item.Processed_Count__c||0} processed · ${item.Failure_Count__c||0} failed · ${item.Contract_Version__c||"No contract"}`,date:item.Started_At__c};
+        if(dataset==="integrationErrors")return{...mapped,url:this.routeRecordUrl("R360_Integration_Error__c",item.Id),primary:item.Error_Code__c||item.Name,secondary:`${item.Integration_Run__r?.Run_ID__c||"Run"} · row ${item.Row_Number__c||"—"}`,status:item.State__c,detail:item.Error_Message__c,date:item.Next_Retry_At__c};
+        if(dataset==="capabilities")return{...mapped,url:this.routeRecordUrl("Capability__c",item.Id),primary:item.Name,secondary:`${item.Capability_ID__c} · ${item.Category__c||"Uncategorized"}`,status:item.Active__c?"Active":"Inactive",detail:`${item.Type__c} · ${item.Tower__c}`,date:this.data.generatedAt};
+        if(dataset==="skillClaims")return{...mapped,url:this.routeRecordUrl("Skill_Claim__c",item.Id),primary:item.Capability__r?.Name||item.Name,secondary:`${item.Resource__r?.Preferred_Name__c} · requested L${item.Requested_Level__c}`,status:item.State__c,detail:`Approved L${item.Approved_Level__c||"—"} · ${item.Decision_Note__c||"Awaiting review"}`,date:item.Submitted_At__c};
+        if(dataset==="configurationCatalog")return{...mapped,url:item.id?this.routeRecordUrl("R360_Configuration__c",item.id):null,primary:item.label||item.code,secondary:`${item.domain} · ${item.source}`,status:item.state,detail:`${item.value} · ${item.impact}`,date:item.effectiveFrom};
+        if(dataset==="timeEntries")return{...mapped,url:this.routeRecordUrl("Time_Entry__c",item.Id),primary:item.Name,secondary:`${item.Engagement__r?.Name} · ${item.Role__c}`,status:item.State__c,detail:`${item.Hours__c}h · ${item.Comment__c||"No comment"}`,date:item.Work_Date__c};
+        if(dataset==="approvalDecisions")return{...mapped,url:this.routeRecordUrl("R360_Approval_Decision__c",item.Id),primary:item.Name,secondary:`${item.Entity_Type__c} · step ${item.Step_Number__c}`,status:item.State__c,detail:`${item.Required_Role__c} · ${item.Decision_Note__c||"Pending"}`,date:item.Decided_At__c};
+        if(dataset==="auditEvents")return{...mapped,url:this.routeRecordUrl("R360_Audit_Event__c",item.Id),primary:item.Action__c||item.Name,secondary:`${item.Entity_Type__c} · ${item.Entity_ID__c}`,status:item.Active_Role__c,detail:item.Detail__c,date:item.Occurred_At__c};
+        if(dataset==="workCalendars")return{...mapped,url:this.routeRecordUrl("R360_Work_Calendar__c",item.Id),primary:item.Name,secondary:`${item.Time_Zone__c} · days ${item.Work_Days__c}`,status:item.Current__c?"Current":"Historical",detail:`${item.Daily_Capacity_Hours__c}h daily capacity`,date:item.Effective_From__c};
+        if(dataset==="calendarExceptions")return{...mapped,url:this.routeRecordUrl("R360_Calendar_Exception__c",item.Id),primary:item.Reason__c,secondary:item.Calendar__r?.Name,status:`${item.Capacity_Hours__c}h capacity`,detail:item.Exception_Key__c,date:item.Exception_Date__c};
+        if(dataset==="agentOperations")return{...mapped,primary:item.primary,secondary:item.secondary,status:item.status,detail:item.detail,date:item.date};
+        return{...mapped,primary:item.Name||item.label||"Resource 360 record",secondary:item.secondary||"Salesforce",status:item.State__c||item.Status__c||item.status||"Ready",detail:item.Detail__c||item.detail||this.routeExperience?.evidence};
+    }
+
+    routeRecordUrl(objectApiName, recordId) { return recordId?`/lightning/r/${objectApiName}/${recordId}/view`:null; }
+
     linkColumn(label, fieldName) {
         return { label, fieldName: "url", type: "url", typeAttributes: { label: { fieldName }, target: "_self" } };
     }
@@ -477,7 +672,52 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     handleTimeInput(event) { this.timeDraft = { ...this.timeDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleTimesheetInput(event) { this.timesheetDraft = { ...this.timesheetDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleDecisionInput(event) { this.decisionDraft = { ...this.decisionDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
+    handleAssistantInput(event) { this.assistantQuestion = event.detail?.value ?? event.target.value; }
     handleCancelDecision() { this.decisionDraft = undefined; }
+
+    handleOpenReports() {
+        this[NavigationMixin.Navigate]({ type: "standard__objectPage", attributes: { objectApiName: "Report", actionName: "home" } });
+    }
+
+    handleOpenDashboards() {
+        this[NavigationMixin.Navigate]({ type: "standard__objectPage", attributes: { objectApiName: "Dashboard", actionName: "home" } });
+    }
+
+    async handleRoutePrimary() {
+        const experience=this.routeExperience;
+        if(!experience)return;
+        if(experience.operation==="refresh")return this.loadData();
+        if(experience.operation==="assistant")return this.handleAssistantAsk();
+        if(experience.operation==="agentToggle")return this.handleAgentToggle();
+        const first=this.routeRows[0];
+        const decisionActions={staffingDecision:"accept",skillDecision:"approveClaim",budgetDecision:"approveBudget",timesheetDecision:"approveTimesheet",timesheetCorrection:"correctTimesheet"};
+        if(decisionActions[experience.operation]&&first){this.decisionDraft={actionName:decisionActions[experience.operation],row:{...first.record,id:first.id},title:this.selectedScreen.primary,note:"",approvedLevel:String(first.record?.Requested_Level__c||3)};return;}
+        if(experience.operation==="budgetSubmit"&&first)return this.execute(this.selectedScreen.primary,()=>submitBudget({budgetId:first.id}));
+        if(experience.operation==="timesheetSubmit"&&first)return this.execute(this.selectedScreen.primary,()=>submitTimesheet({timesheetId:first.id}));
+        if(experience.target){this.openScreen(experience.target);return;}
+        if(first?.id)return this.navigateToRecord(first.id);
+        return this.loadData();
+    }
+
+    handleAssistantAsk() {
+        const candidate=[...(this.data.resources||[])].sort((a,b)=>(b.Available_Percent__c||0)-(a.Available_Percent__c||0))[0];
+        const pending=(this.data.staffingRequests||[]).filter((item)=>item.State__c==="Pending").length;
+        this.assistantResponse=candidate
+            ? `${candidate.Preferred_Name__c} currently has the highest visible availability at ${candidate.Available_Percent__c||0}%. Role: ${candidate.Primary_Role__c||"not sourced"}; tower: ${candidate.Tower__c||"not sourced"}; location: ${candidate.Location__c||"not sourced"}. ${pending} pending staffing request(s) remain. Review AIUI-02 and confirm the decision in the governed staffing workflow.`
+            : "No readable practitioner record is available in the current Salesforce scope.";
+    }
+
+    handleAgentToggle() {
+        this.agentPaused=!this.agentPaused;
+        this.dispatchEvent(new ShowToastEvent({title:"Resource assistant operations",message:this.agentStateLabel,variant:this.agentPaused?"warning":"success"}));
+    }
+
+    openScreen(screenId) {
+        const screen=SCREENS.find((item)=>item.id===screenId);
+        if(!screen)return;
+        this.selectedScreenId=screenId;this.selectedModule=screen.module;
+        this[NavigationMixin.Navigate]({type:"standard__navItemPage",attributes:{apiName:"Resource360_Workspace"},state:{c__screen:screenId}});
+    }
 
     async handleSeed() { await this.execute("Load demo data", () => seedDemoData()); }
 

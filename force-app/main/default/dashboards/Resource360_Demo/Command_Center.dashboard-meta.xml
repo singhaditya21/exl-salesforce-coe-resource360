@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dashboard xmlns="http://soap.sforce.com/2006/04/metadata">
+    <backgroundEndColor>#FFFFFF</backgroundEndColor>
+    <backgroundFadeDirection>Diagonal</backgroundFadeDirection>
+    <backgroundStartColor>#FFFFFF</backgroundStartColor>
+    <chartTheme>light</chartTheme>
+    <colorPalette>unity</colorPalette>
+    <dashboardGridLayout>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan>
+            <columnIndex>0</columnIndex>
+            <dashboardComponent>
+                <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+                <componentType>Table</componentType>
+                <drillEnabled>true</drillEnabled>
+                <header>Allocation Control</header>
+                <indicatorHighColor>#2E844A</indicatorHighColor>
+                <indicatorLowColor>#BA0517</indicatorLowColor>
+                <indicatorMiddleColor>#FE9339</indicatorMiddleColor>
+                <report>Resource360_Demo/Allocation_Control</report>
+                <showPicturesOnTables>false</showPicturesOnTables>
+                <title>Allocation mix and billability</title>
+            </dashboardComponent>
+            <rowIndex>0</rowIndex>
+            <rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan>
+            <columnIndex>4</columnIndex>
+            <dashboardComponent>
+                <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+                <componentType>Table</componentType>
+                <drillEnabled>true</drillEnabled>
+                <header>Capability Supply</header>
+                <indicatorHighColor>#2E844A</indicatorHighColor>
+                <indicatorLowColor>#BA0517</indicatorLowColor>
+                <indicatorMiddleColor>#FE9339</indicatorMiddleColor>
+                <report>Resource360_Demo/Capability_Supply</report>
+                <showPicturesOnTables>false</showPicturesOnTables>
+                <title>Capability claims by state</title>
+            </dashboardComponent>
+            <rowIndex>0</rowIndex>
+            <rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan>
+            <columnIndex>8</columnIndex>
+            <dashboardComponent>
+                <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+                <componentType>Table</componentType>
+                <drillEnabled>true</drillEnabled>
+                <header>Staffing Performance</header>
+                <indicatorHighColor>#2E844A</indicatorHighColor>
+                <indicatorLowColor>#BA0517</indicatorLowColor>
+                <indicatorMiddleColor>#FE9339</indicatorMiddleColor>
+                <report>Resource360_Demo/Staffing_Performance</report>
+                <showPicturesOnTables>false</showPicturesOnTables>
+                <title>Staffing decisions and SLA states</title>
+            </dashboardComponent>
+            <rowIndex>0</rowIndex>
+            <rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>6</colSpan>
+            <columnIndex>0</columnIndex>
+            <dashboardComponent>
+                <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+                <componentType>Table</componentType>
+                <drillEnabled>true</drillEnabled>
+                <header>Budget Economics</header>
+                <indicatorHighColor>#2E844A</indicatorHighColor>
+                <indicatorLowColor>#BA0517</indicatorLowColor>
+                <indicatorMiddleColor>#FE9339</indicatorMiddleColor>
+                <report>Resource360_Demo/Budget_Economics</report>
+                <showPicturesOnTables>false</showPicturesOnTables>
+                <title>Economics by approval state</title>
+            </dashboardComponent>
+            <rowIndex>6</rowIndex>
+            <rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>6</colSpan>
+            <columnIndex>6</columnIndex>
+            <dashboardComponent>
+                <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
+                <componentType>Table</componentType>
+                <drillEnabled>true</drillEnabled>
+                <header>Timesheet Actuals</header>
+                <indicatorHighColor>#2E844A</indicatorHighColor>
+                <indicatorLowColor>#BA0517</indicatorLowColor>
+                <indicatorMiddleColor>#FE9339</indicatorMiddleColor>
+                <report>Resource360_Demo/Timesheet_Actuals</report>
+                <showPicturesOnTables>false</showPicturesOnTables>
+                <title>Actual hours by approval state</title>
+            </dashboardComponent>
+            <rowIndex>6</rowIndex>
+            <rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <numberOfColumns>12</numberOfColumns>
+        <rowHeight>36</rowHeight>
+    </dashboardGridLayout>
+    <dashboardType>LoggedInUser</dashboardType>
+    <description>Native Salesforce command center for Resource 360 demo governance and operating outcomes.</description>
+    <isGridLayout>true</isGridLayout>
+    <textColor>#181818</textColor>
+    <title>Resource 360 Command Center</title>
+    <titleColor>#181818</titleColor>
+    <titleSize>14</titleSize>
+</Dashboard>

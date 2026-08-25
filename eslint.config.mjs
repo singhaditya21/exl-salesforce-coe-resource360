@@ -35,6 +35,12 @@ const eslintConfig = defineConfig([
       },
     },
   },
+  {
+    files: ["force-app/**/__tests__/**/*.js"],
+    languageOptions: {
+      globals: globals.jest,
+    },
+  },
 ]);
 
 export default eslintConfig;

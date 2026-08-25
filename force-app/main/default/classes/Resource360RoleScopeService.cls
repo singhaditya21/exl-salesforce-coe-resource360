@@ -1,4 +1,6 @@
 public inherited sharing class Resource360RoleScopeService {
+    @TestVisible public static Boolean suppressSharingRebuild = false;
+
     public static void validate(List<R360_Role_Scope__c> records, Map<Id,R360_Role_Scope__c> oldMap) {
         Map<String,R360_Persona__mdt> personas = new Map<String,R360_Persona__mdt>();
         for (R360_Persona__mdt persona : [SELECT Business_Role__c, Entra_Group_Alias__c, Delegation_Allowed__c FROM R360_Persona__mdt WHERE Active__c=true]) personas.put(persona.Business_Role__c, persona);

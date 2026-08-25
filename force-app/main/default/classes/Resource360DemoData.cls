@@ -4,7 +4,9 @@ public with sharing class Resource360DemoData {
         String runKey = 'R360-DEMO-V2';
         List<Resource__c> existing = [SELECT Id FROM Resource__c WHERE Employee_ID__c = 'EXL-018462' LIMIT 1];
         if (!existing.isEmpty()) {
-            return upgradeExistingDemo(existing[0].Id, runKey);
+            Resource360Service.ServiceResult upgraded = upgradeExistingDemo(existing[0].Id, runKey);
+            if (!Test.isRunningTest()) Resource360DemoScenarioData.ensure();
+            return upgraded;
         }
 
         Date today = Date.today();
@@ -81,6 +83,7 @@ public with sharing class Resource360DemoData {
         insert new R360_Audit_Event__c(Event_ID__c='DEMO-AUD-1', Correlation_ID__c=runKey, Actor__c=UserInfo.getUserId(), Active_Role__c='Resource 360 System', Action__c='DEMO_DATA_SEEDED', Entity_Type__c='Environment', Entity_ID__c='Resource360Hub', Entity_Version__c=1, Detail__c='Compact sanitized Salesforce-native dataset loaded.', Occurred_At__c=System.now());
         ensureRoleScopes(today);
         ensureMockSourceRuns();
+        if (!Test.isRunningTest()) Resource360DemoScenarioData.ensure();
         return new Resource360Service.ServiceResult(true, 'Sanitized demo data loaded.', retail.Id, runKey);
     }
 

@@ -4,7 +4,7 @@
 
 Five product walkthroughs were recorded on 24 August 2026 from the deployed GitHub Pages application at 1280×720. They are silent, captioned H.264 MP4 files because the objective is reproducible functional evidence, not narrated marketing content. All identities, engagements, economics and decisions shown are fictional.
 
-The recordings are published on `GLB-06 · User preferences and help` and stored under `public/demo-videos/`. The machine-readable `manifest.json` records format, duration, file size, SHA-256 and validated outcome. `pnpm test:videos` fails if a video, poster or WebVTT caption file is missing, malformed, replaced or truncated.
+The recordings are published on `GLB-06 · User preferences and help` from five private Salesforce static-resource bundles and stored under `public/demo-videos/` for the sanitized Pages companion. The machine-readable `manifest.json` records format, duration, file size, SHA-256 and validated outcome. `pnpm test:videos` fails if a video, poster or WebVTT caption file is missing, malformed, replaced or truncated.
 
 ## Recording catalog
 
@@ -25,7 +25,7 @@ The recordings are published on `GLB-06 · User preferences and help` and stored
 - Every MP4 decoded without media errors and reports H.264, 1280×720 and 24 fps.
 - Posters and video hashes are protected by the repository test suite.
 - The existing browser and accessibility suite continues to exercise desktop and mobile behavior.
-- Salesforce validation remains independent: 38/38 Apex tests passed with 94% org-wide coverage before recording.
+- Salesforce validation remains independent: the current release gate runs all eight local test classes, LWC Jest, and an authenticated 103/103 Lightning route sweep with 57/57 explicit workbenches and zero console errors.
 
 ## Source archive note
 

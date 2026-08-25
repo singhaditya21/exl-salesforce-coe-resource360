@@ -3,6 +3,11 @@
     <description>Full Resource 360 administration. Audit deletion/update remains blocked by immutable triggers.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Administrator</label>
+    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>
+    <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>
+    <userPermissions><enabled>true</enabled><name>RunReports</name></userPermissions>
+    <userPermissions><enabled>true</enabled><name>ViewPublicDashboards</name></userPermissions>
+    <userPermissions><enabled>true</enabled><name>ViewPublicReports</name></userPermissions>
     <classAccesses><apexClass>Resource360AnalyticsService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360AssuranceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360AuditService</apexClass><enabled>true</enabled></classAccesses>
@@ -14,6 +19,8 @@
     <classAccesses><apexClass>Resource360Classification</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360ConfigurationService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360DemoData</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360DemoProvisioner</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360DemoScenarioData</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360EventService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360FreshnessService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360GovernanceService</apexClass><enabled>true</enabled></classAccesses>
