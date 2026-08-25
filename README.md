@@ -10,17 +10,17 @@ The governed chain is:
 
 - EXL-themed Lightning app/LWC with nine modules and all 103 routed screen contracts.
 - 34 Salesforce data/config/event types (27 record objects, six custom-metadata types and one platform event), 441 fields/formulas, 22 validation rules, seven guard triggers and native field history on material controls.
-- 37 Apex classes, including six focused test classes, for economics, monthly roster assurance/import, capacity/freshness controls, governed atomic configuration releases, delivery roles, staffing, explainable talent matching, practitioner evidence, time, bulk/master-data ingestion, scope sharing, durable events, KPI/exception snapshots, retention dry runs and immutable audit.
+- 33 production Apex classes plus eight focused test classes for economics, monthly roster assurance/import, capacity/freshness controls, governed atomic configuration releases, demo-persona provisioning, deterministic scenario coverage, delivery roles, staffing, explainable talent matching, practitioner evidence, time, bulk/master-data ingestion, scope sharing, durable events, KPI/exception snapshots, retention dry runs and immutable audit.
 - Approved-budget signatures, sequential separation of duties, atomic capacity, effective classification snapshots, allocation lineage, self-approval, eligible time, controlled corrections and five-/seven-day timesheet controls.
 - Seventeen least-privilege permission sets composed into 17 business-role groups for 18 governed personas, 15 custom permissions, effective organizational/portfolio scopes and Apex-managed sharing.
-- Five standard Salesforce report types, 150 governed policy/classification/delivery-role/source/persona/retention records, effective-dated runtime overrides and idempotent fictional demo seeding.
+- Five custom Salesforce report types, five runnable reports and a five-component dynamic command-center dashboard; 150 governed policy/classification/delivery-role/source/persona/retention records; effective-dated runtime overrides; and idempotent fictional demo seeding.
 - Machine-readable governance, common project and master-data envelope contracts under `contracts/`.
-- Release gates covering lint, unit/contract/build, desktop/mobile Playwright and axe accessibility, Salesforce `RunLocalTests`, CodeQL and GitHub Pages.
+- Release gates covering lint, unit/contract/build, LWC Jest, desktop/mobile Playwright and axe accessibility, Salesforce `RunLocalTests`, an authenticated 103-route Lightning sweep, CodeQL and GitHub Pages.
 - One five-pillar Demo Activation Center that rehearses SSO, integrations, production-like fictional data, legal/business approvals and operational controls with attributable evidence, zero external calls and zero destructive actions.
 
 Requirements are in the [consolidated PRD](docs/EXL_Salesforce_COE_Resource360_PRD_v1.0.md); delivery truth is in [requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md). The [mock contract register](docs/MOCK_CONTRACT_REGISTER.md) states every EXL assumption and production boundary. See also the [demo activation runbook](docs/DEMO_ACTIVATION_RUNBOOK.md), [persona/access matrix](docs/PERSONA_ACCESS_MATRIX.md), [analytics/operations contract](docs/ANALYTICS_AND_OPERATIONS.md), [automated assurance](docs/AUTOMATED_ASSURANCE.md), [completion audit](docs/COMPLETION_AUDIT.md), [configuration control matrix](docs/CONFIGURATION_CONTROL_MATRIX.md), [Salesforce architecture](docs/SALESFORCE_ARCHITECTURE.md), [org contract](docs/SALESFORCE_ORG.md), [production activation runbook](docs/PRODUCTION_ACTIVATION_RUNBOOK.md) and [ADR-001](docs/ADR-001-SALESFORCE-NATIVE.md).
 
-Five validated product walkthroughs are published from `GLB-06 · User preferences and help` and under `public/demo-videos/`. The [video validation catalog](docs/DEMO_VIDEO_VALIDATION.md) maps each recording to its executed workflow, outcome and demo boundary; CI verifies every MP4 against the checked-in integrity manifest.
+Five validated product walkthroughs are published from `GLB-06 · User preferences and help` as private Salesforce static resources and under `public/demo-videos/` for the sanitized Pages companion. The [video validation catalog](docs/DEMO_VIDEO_VALIDATION.md) maps each recording to its executed workflow, outcome and demo boundary; CI verifies every MP4 against the checked-in integrity manifest.
 
 ## Deploy to Salesforce
 
@@ -50,10 +50,12 @@ git diff --exit-code -- force-app/main/default/customMetadata force-app/main/def
 pnpm lint
 pnpm test
 pnpm test:e2e
+pnpm sf:prepare-demo
+pnpm sf:test:ui
 sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunLocalTests --wait 120
 ```
 
-GitHub Salesforce validation activates when encrypted repository secret `RESOURCE360_SFDX_AUTH_URL` exists. The value is piped to Salesforce CLI through standard input and is never committed.
+GitHub Salesforce validation is mandatory for pushes to `main` and trusted manual runs. It authenticates with encrypted repository secret `RESOURCE360_SFDX_AUTH_URL`; the value is piped to Salesforce CLI through standard input and is never committed. A trusted `main` build pauses the Resource 360 scheduler, deploys with `RunLocalTests`, reinstates the scheduler, waits for permission-group and scope processing, restores deterministic fictional data and persona assignments, refreshes and verifies the five-component dashboard, and then sweeps all 103 Lightning routes. Untrusted fork pull requests cannot receive repository secrets and therefore run only the credential-free quality gates.
 
 ## GitHub Pages companion
 

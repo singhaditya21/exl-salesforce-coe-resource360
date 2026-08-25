@@ -130,3 +130,22 @@ test("keeps all Salesforce LWC persona routes positive and least-privilege negat
     else assert.ok(governed.some((screen) => !screen.allowedRoles.includes(role)), `${role} requires a negative LWC route`);
   }
 });
+
+test("gives every Salesforce route either a specialized command panel or a distinct declarative workbench", async () => {
+  const [catalogue, experiences] = await Promise.all([
+    import(new URL("../force-app/main/default/lwc/resource360Workspace/screenCatalog.js", import.meta.url)),
+    import(new URL("../force-app/main/default/lwc/resource360Workspace/screenExperiences.js", import.meta.url)),
+  ]);
+  const allIds = catalogue.SCREENS.map((screen) => screen.id);
+  const implemented = [...experiences.SPECIALIZED_SCREEN_IDS, ...experiences.DECLARATIVE_SCREEN_IDS];
+  assert.equal(experiences.SPECIALIZED_SCREEN_IDS.length, 46);
+  assert.equal(experiences.DECLARATIVE_SCREEN_IDS.length, 57);
+  assert.equal(new Set(implemented).size, 103);
+  assert.deepEqual(new Set(implemented), new Set(allIds));
+  for (const id of experiences.DECLARATIVE_SCREEN_IDS) {
+    const route = experiences.routeExperienceFor(id);
+    assert.ok(route.dataset, `${id} requires a live Salesforce dataset`);
+    assert.ok(route.visual && route.focus && route.evidence, `${id} requires a distinct operational experience`);
+    assert.ok(route.target || route.operation, `${id} requires an executable primary action`);
+  }
+});

@@ -129,7 +129,13 @@ const fieldBlocks = (config) => {
 
 const writePermissionSet = (config) => {
   const lines = ['<?xml version="1.0" encoding="UTF-8"?>','<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">',`    <description>${config.description}</description>`,'    <hasActivationRequired>false</hasActivationRequired>',`    <label>${config.label}</label>`];
-  if (config.name === "Resource360_Base_User") lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
+  if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
+    lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
+    lines.push('    <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>');
+    for (const permission of ["RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
+      lines.push(`    <userPermissions><enabled>true</enabled><name>${permission}</name></userPermissions>`);
+    }
+  }
   for (const className of [...new Set(config.classes)].sort()) lines.push(`    <classAccesses><apexClass>${className}</apexClass><enabled>true</enabled></classAccesses>`);
   if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
     for (const metadataType of ["R360_Classification__mdt","R360_Delivery_Role__mdt","R360_Persona__mdt","R360_Policy__mdt","R360_Retention_Rule__mdt","R360_Source_Contract__mdt"]) lines.push(`    <customMetadataTypeAccesses><enabled>true</enabled><name>${metadataType}</name></customMetadataTypeAccesses>`);

@@ -2,6 +2,8 @@
 // exact-user entitlement/ownership predicates; domain services retain their
 // own with/inherited sharing and CRUD/FLS enforcement.
 public without sharing class Resource360Security {
+    private static Map<Id, Boolean> modifyAllDataByProfile = new Map<Id, Boolean>();
+
     public static void requirePermission(String customPermission, String message) {
         if (!FeatureManagement.checkPermission(customPermission) && !hasModifyAllData()) {
             throw new AuraHandledException(message);
@@ -69,6 +71,10 @@ public without sharing class Resource360Security {
 
     @TestVisible
     private static Boolean hasModifyAllData() {
-        return [SELECT PermissionsModifyAllData FROM Profile WHERE Id = :UserInfo.getProfileId()].PermissionsModifyAllData;
+        Id profileId = UserInfo.getProfileId();
+        if (!modifyAllDataByProfile.containsKey(profileId)) {
+            modifyAllDataByProfile.put(profileId, [SELECT PermissionsModifyAllData FROM Profile WHERE Id=:profileId].PermissionsModifyAllData);
+        }
+        return modifyAllDataByProfile.get(profileId);
     }
 }

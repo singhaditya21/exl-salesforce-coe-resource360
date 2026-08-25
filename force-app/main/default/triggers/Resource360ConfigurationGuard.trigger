@@ -1,5 +1,5 @@
 trigger Resource360ConfigurationGuard on R360_Configuration__c (before insert,before update,before delete) {
-    Boolean authorized=FeatureManagement.checkPermission('Resource360_Manage_Configuration')||FeatureManagement.checkPermission('Resource360_Approve_Configuration');
+    Boolean authorized=Resource360Security.hasPermission('Resource360_Manage_Configuration')||Resource360Security.hasPermission('Resource360_Approve_Configuration');
     if(!authorized){for(R360_Configuration__c record:Trigger.isDelete?Trigger.old:Trigger.new)record.addError('A dedicated Resource360 configuration permission is required.');}
     if(Trigger.isDelete){for(R360_Configuration__c record:Trigger.old)if(record.State__c=='Active'||record.State__c=='Retired'||record.State__c=='Pending Approval')record.addError('Submitted and effective configuration evidence cannot be deleted.');}
     if(Trigger.isInsert){for(R360_Configuration__c record:Trigger.new){if(record.State__c!='Draft')record.addError('New configuration must start as Draft.');for(String error:Resource360ConfigurationService.validateRecord(record))record.addError(error);}}

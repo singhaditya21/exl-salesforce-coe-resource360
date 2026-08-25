@@ -4,6 +4,10 @@
     <hasActivationRequired>false</hasActivationRequired>
     <label>Resource 360 Base User</label>
     <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>
+    <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>
+    <userPermissions><enabled>true</enabled><name>RunReports</name></userPermissions>
+    <userPermissions><enabled>true</enabled><name>ViewPublicDashboards</name></userPermissions>
+    <userPermissions><enabled>true</enabled><name>ViewPublicReports</name></userPermissions>
     <classAccesses><apexClass>Resource360AssuranceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360GovernanceService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360PlanningService</apexClass><enabled>true</enabled></classAccesses>

@@ -8,3 +8,4 @@
 **/outputs/**
 **/work/**
 **/.env*
+**/__tests__/**
