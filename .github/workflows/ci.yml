@@ -92,6 +92,9 @@ jobs:
       - name: Prepare and verify the permanent fictional demo state
         if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name != 'pull_request'
         run: node scripts/prepare-salesforce-demo.mjs --target-org Resource360CI
+      - name: Validate every fictional persona through controlled Salesforce Login As
+        if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name != 'pull_request'
+        run: node scripts/validate-salesforce-personas.mjs --target-org Resource360CI
       - name: Sweep all authenticated Resource 360 Lightning routes
         if: env.RESOURCE360_SFDX_AUTH_URL != '' && github.event_name != 'pull_request'
         run: node scripts/validate-salesforce-ui.mjs --target-org Resource360CI

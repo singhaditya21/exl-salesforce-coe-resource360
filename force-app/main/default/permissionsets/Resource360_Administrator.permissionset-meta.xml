@@ -5,6 +5,7 @@
     <label>Resource 360 Administrator</label>
     <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>
     <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>
+    <userPermissions><enabled>true</enabled><name>LightningExperienceUser</name></userPermissions>
     <userPermissions><enabled>true</enabled><name>RunReports</name></userPermissions>
     <userPermissions><enabled>true</enabled><name>ViewPublicDashboards</name></userPermissions>
     <userPermissions><enabled>true</enabled><name>ViewPublicReports</name></userPermissions>
@@ -47,6 +48,8 @@
     <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Policy__mdt</name></customMetadataTypeAccesses>
     <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Retention_Rule__mdt</name></customMetadataTypeAccesses>
     <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Source_Contract__mdt</name></customMetadataTypeAccesses>
+    <customPermissions><enabled>true</enabled><name>Resource360_Access</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Administer</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Budgets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Configuration</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Timesheets</name></customPermissions>

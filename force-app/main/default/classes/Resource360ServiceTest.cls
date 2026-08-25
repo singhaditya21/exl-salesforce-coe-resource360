@@ -278,10 +278,12 @@ private class Resource360ServiceTest {
     static void demoSeedRemainsCompactAndIdempotent() {
         Integer beforeCount=[SELECT COUNT() FROM Resource__c WHERE Employee_ID__c LIKE 'EXL-%'];
         Resource360Service.ServiceResult first=Resource360DemoData.seed();
+        Integer approvalCount=[SELECT COUNT() FROM R360_Approval_Decision__c];
         Resource360Service.ServiceResult second=Resource360DemoData.seed();
         System.assert(first.success);System.assert(second.success);
         System.assertEquals(beforeCount,[SELECT COUNT() FROM Resource__c WHERE Employee_ID__c LIKE 'EXL-%']);
         System.assertEquals(3,beforeCount);System.assertEquals(2,[SELECT COUNT() FROM Engagement__c WHERE Engagement_ID__c LIKE 'ENG-%']);
+        System.assertEquals(approvalCount,[SELECT COUNT() FROM R360_Approval_Decision__c],'Repeated demo preparation must not append duplicate approval decisions.');
     }
 
     @IsTest

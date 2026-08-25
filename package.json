@@ -22,6 +22,7 @@
     "sf:validate": "sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunLocalTests --wait 120",
     "sf:test": "sf apex run test --target-org Resource360Hub --test-level RunLocalTests --code-coverage --result-format human --wait 120",
     "sf:test:ui": "node scripts/validate-salesforce-ui.mjs --target-org Resource360Hub",
+    "sf:test:personas": "node scripts/validate-salesforce-personas.mjs --target-org Resource360Hub",
     "sf:prepare-demo": "node scripts/prepare-salesforce-demo.mjs --target-org Resource360Hub",
     "sf:deploy": "sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunLocalTests --wait 120",
     "sf:seed": "sf apex run --target-org Resource360Hub --file scripts/apex/seedResource360.apex",

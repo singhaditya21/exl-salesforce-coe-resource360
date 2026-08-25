@@ -55,7 +55,7 @@ pnpm sf:test:ui
 sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunLocalTests --wait 120
 ```
 
-GitHub Salesforce validation is mandatory for pushes to `main` and trusted manual runs. It authenticates with encrypted repository secret `RESOURCE360_SFDX_AUTH_URL`; the value is piped to Salesforce CLI through standard input and is never committed. A trusted `main` build pauses the Resource 360 scheduler, deploys with `RunLocalTests`, reinstates the scheduler, waits for permission-group and scope processing, restores deterministic fictional data and persona assignments, refreshes and verifies the five-component dashboard, and then sweeps all 103 Lightning routes. Untrusted fork pull requests cannot receive repository secrets and therefore run only the credential-free quality gates.
+GitHub Salesforce validation is mandatory for pushes to `main` and trusted manual runs. It authenticates with encrypted repository secret `RESOURCE360_SFDX_AUTH_URL`; the value is piped to Salesforce CLI through standard input and is never committed. A trusted `main` build pauses the Resource 360 scheduler, deploys with `RunLocalTests`, reinstates the scheduler, waits for permission-group and scope processing, restores deterministic fictional data and persona assignments, verifies the exact scope-share matrix, refreshes the five-component dashboard, validates all eight fictional users through controlled Salesforce Login As, and then sweeps all 103 Lightning routes as Administrator. Untrusted fork pull requests cannot receive repository secrets and therefore run only the credential-free quality gates.
 
 ## GitHub Pages companion
 

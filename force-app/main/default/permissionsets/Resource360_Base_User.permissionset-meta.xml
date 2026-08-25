@@ -5,6 +5,7 @@
     <label>Resource 360 Base User</label>
     <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>
     <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>
+    <userPermissions><enabled>true</enabled><name>LightningExperienceUser</name></userPermissions>
     <userPermissions><enabled>true</enabled><name>RunReports</name></userPermissions>
     <userPermissions><enabled>true</enabled><name>ViewPublicDashboards</name></userPermissions>
     <userPermissions><enabled>true</enabled><name>ViewPublicReports</name></userPermissions>
@@ -20,6 +21,7 @@
     <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Policy__mdt</name></customMetadataTypeAccesses>
     <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Retention_Rule__mdt</name></customMetadataTypeAccesses>
     <customMetadataTypeAccesses><enabled>true</enabled><name>R360_Source_Contract__mdt</name></customMetadataTypeAccesses>
+    <customPermissions><enabled>true</enabled><name>Resource360_Access</name></customPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
@@ -79,6 +81,21 @@
     <fieldPermissions><editable>false</editable><field>Engagement__c.Revenue_Type__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Salesforce_Tower__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Approved_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Approved_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Attributes_JSON__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Boolean_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Change_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Current__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Display_Label__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Numeric_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Release_Key__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Text_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Validation_Summary__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Learning_Achievement__c.Capability__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Accountable_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Closed_At__c</field><readable>true</readable></fieldPermissions>
@@ -167,6 +184,7 @@
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Credential__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Engagement__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Calendar_Exception__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Learning_Achievement__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Notification__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Org_Unit__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>

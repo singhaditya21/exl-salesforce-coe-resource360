@@ -23,14 +23,18 @@ const fieldsFor = (objectName) => {
   });
 };
 
-const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Configuration__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
+// Runtime configuration drives every workspace payload. Base users need object
+// and field describe/read access so the system-mode policy resolver can safely
+// expose its curated public snapshot. Private OWD and the absence of explicit
+// configuration shares still prevent direct access to governed version records.
+const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
 const permissions = (read, create = false, edit = false, remove = false, viewAll = false, modifyAll = false) => ({ read, create, edit, remove, viewAll, modifyAll });
 const readOnly = Object.fromEntries(businessObjects.map((name) => [name, permissions(true)]));
 
 const roleConfigs = [
   {
     name: "Resource360_Base_User", label: "Resource 360 Base User", description: "Least-privilege read access to Resource 360 operational business data and the Lightning workspace.",
-    objects: readOnly, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360AssuranceService", "Resource360GovernanceService", "Resource360RoleScopeService"], customPermissions: [], editable: {}
+    objects: readOnly, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360AssuranceService", "Resource360GovernanceService", "Resource360RoleScopeService"], customPermissions: ["Resource360_Access"], editable: {}
   },
   {
     name: "Resource360_Practitioner_Actions", label: "Resource 360 Practitioner Actions", description: "Self-service capability, credential and weekly-time commands; record scope remains server enforced.",
@@ -89,18 +93,18 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Configuration_Operator_Actions", label: "Resource 360 Configuration Operator", description: "Draft, preview and submit configuration without integration-operation or approval authority.",
-    objects: { R360_Configuration__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
+    objects: { R360_Configuration__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true), R360_Approval_Decision__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
     classes: ["Resource360Service","Resource360ConfigurationService","Resource360GovernanceService"], customPermissions: ["Resource360_Manage_Configuration","Resource360_View_Audit"], editable: { R360_Configuration__c: "ALL" }
   },
   {
     name: "Resource360_Operations", label: "Resource 360 Operations", description: "Operate integrations, reconciliation, schedules and outbox recovery without business or configuration approval authority.",
-    objects: { R360_Configuration__c: permissions(true), R360_Integration_Run__c: permissions(true, true, true), R360_Integration_Error__c: permissions(true, true, true), R360_Outbox_Event__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true, true, false), R360_Role_Scope__c: permissions(true, true, true), R360_Work_Calendar__c: permissions(true, true, true), R360_Calendar_Exception__c: permissions(true, true, true), R360_Org_Unit__c: permissions(true, true, true), R360_Portfolio__c: permissions(true, true, true), R360_Notification__c: permissions(true, false, true) },
+    objects: { R360_Configuration__c: permissions(true), R360_Integration_Run__c: permissions(true, true, true), R360_Integration_Error__c: permissions(true, true, true), R360_Outbox_Event__c: permissions(true, true, true), R360_Audit_Event__c: permissions(true, true, false), R360_Approval_Decision__c: permissions(true), R360_Role_Scope__c: permissions(true, true, true), R360_Work_Calendar__c: permissions(true, true, true), R360_Calendar_Exception__c: permissions(true, true, true), R360_Org_Unit__c: permissions(true, true, true), R360_Portfolio__c: permissions(true, true, true), R360_Notification__c: permissions(true, false, true) },
     classes: ["Resource360Service","Resource360AssuranceService","Resource360BulkService","Resource360GovernanceService","Resource360RoleScopeService","Resource360InboundApi","Resource360OperationsScheduler","Resource360OutboxPublisher","Resource360NotificationDispatcher"], customPermissions: ["Resource360_View_Operations","Resource360_Manage_Integrations","Resource360_Manage_Bulk_Operations","Resource360_View_Audit","Resource360_Run_Reconciliation"],
     editable: { R360_Integration_Run__c: "ALL", R360_Integration_Error__c: "ALL", R360_Outbox_Event__c: "ALL", R360_Role_Scope__c: "ALL", R360_Work_Calendar__c: "ALL", R360_Calendar_Exception__c: "ALL", R360_Org_Unit__c: "ALL", R360_Portfolio__c: "ALL", R360_Notification__c: ["Resolution_Status__c","Accountable_Owner__c","First_Seen_At__c","Closed_At__c","Closed_By__c","Closure_Note__c"] }
   },
   {
     name: "Resource360_Configuration_Approver_Actions", label: "Resource 360 Configuration Approver", description: "Review, activate, schedule and roll back validated configuration versions without integration-operation authority.",
-    objects: { R360_Configuration__c: permissions(true, false, true), R360_Audit_Event__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
+    objects: { R360_Configuration__c: permissions(true, false, true), R360_Audit_Event__c: permissions(true), R360_Approval_Decision__c: permissions(true), R360_Work_Calendar__c: permissions(true), R360_Calendar_Exception__c: permissions(true) },
     classes: ["Resource360Service","Resource360ConfigurationService"], customPermissions: ["Resource360_Approve_Configuration","Resource360_View_Audit"], editable: { R360_Configuration__c: ["State__c","Current__c","Effective_To__c","Approved_By__c","Approved_At__c","Change_Reason__c"] }
   },
   {
@@ -132,7 +136,7 @@ const writePermissionSet = (config) => {
   if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
     lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
     lines.push('    <tabSettings><tab>Resource360_Workspace</tab><visibility>Visible</visibility></tabSettings>');
-    for (const permission of ["RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
+    for (const permission of ["LightningExperienceUser", "RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
       lines.push(`    <userPermissions><enabled>true</enabled><name>${permission}</name></userPermissions>`);
     }
   }

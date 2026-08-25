@@ -43,6 +43,26 @@ sf apex run --target-org Resource360Hub --file scripts/apex/runDemoActivation.ap
 
 The Apex command writes evidence only. It makes no callout and performs no data disposition.
 
+## Validate the live fictional personas
+
+The permanent Developer Edition demo org uses Salesforce **Login As**, not shared passwords. `Security.settings-meta.xml` enables administrator Login As and returns the administrator to the org without a second credential prompt. This setting is scoped to the fictional demo org; a production org must apply its own access, monitoring and session policy.
+
+1. Rebuild the deterministic data, role scopes and Apex-managed shares:
+
+   ```bash
+   pnpm sf:prepare-demo
+   ```
+
+2. Prove all eight composite users in isolated browser contexts:
+
+   ```bash
+   pnpm sf:test:personas
+   ```
+
+3. Retain the JSON result showing the Login As identity banner, assigned role options, positive workflow route, live user-mode record count, missing unauthorized module and zero browser errors for every identity.
+
+The preparation gate fails unless all 17 scopes use `PORT-SFCOE-DEMO` and the engagement, staffing, allocation, budget, approval, commercial-reference and practitioner self-record share matrices match the seeded data exactly. The `.invalid` email addresses remain deliberately non-deliverable; no persona password is created, stored or distributed. `LastLoginDate` is not used as evidence because controlled administrator impersonation is proven directly in Lightning.
+
 ## Acceptance criteria
 
 - Exactly five activation pillars are present and independently understandable.
@@ -54,6 +74,7 @@ The Apex command writes evidence only. It makes no callout and performs no data 
 - Operational evidence reports zero external calls and zero destructive actions.
 - Reset restores the signed browser baseline.
 - Apex, unit, contract, browser and accessibility tests cover the activation center.
+- Eight fictional Login As sessions prove positive workflow access, negative navigation isolation and live user-mode data without consuming additional Salesforce licences.
 
 ## Production boundary
 

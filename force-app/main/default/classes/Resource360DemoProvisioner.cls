@@ -4,6 +4,8 @@
  * scopes are created in the queued transaction to avoid mixed DML.
  */
 public without sharing class Resource360DemoProvisioner {
+    private static final String DEMO_PORTFOLIO_ID = 'PORT-SFCOE-DEMO';
+
     public class ProvisioningResult {
         @AuraEnabled public Boolean success;
         @AuraEnabled public String message;
@@ -71,7 +73,8 @@ public without sharing class Resource360DemoProvisioner {
 
         Map<String, User> usersByFederationId = new Map<String, User>();
         for (User existing : [
-            SELECT Id, FederationIdentifier, IsActive, ProfileId, LastName, TimeZoneSidKey
+            SELECT Id, FederationIdentifier, IsActive, ProfileId, LastName, TimeZoneSidKey,
+                UserPreferencesLightningExperiencePreferred
             FROM User WHERE FederationIdentifier LIKE 'R360-DEMO-%'
         ]) {
             usersByFederationId.put(existing.FederationIdentifier, existing);
@@ -95,14 +98,16 @@ public without sharing class Resource360DemoProvisioner {
                     LocaleSidKey='en_IN',
                     ProfileId=profileId,
                     TimeZoneSidKey='Asia/Kolkata',
+                    UserPreferencesLightningExperiencePreferred=true,
                     UserPermissionsSFContentUser=false,
                     Username='resource360.'+plan.key+'.'+String.valueOf(orgId).toLowerCase()+'@example.invalid'
                 ));
-            } else if (!existing.IsActive || existing.ProfileId != profileId || existing.LastName != 'R360 '+plan.label || existing.TimeZoneSidKey != 'Asia/Kolkata') {
+            } else if (!existing.IsActive || existing.ProfileId != profileId || existing.LastName != 'R360 '+plan.label || existing.TimeZoneSidKey != 'Asia/Kolkata' || !existing.UserPreferencesLightningExperiencePreferred) {
                 existing.IsActive = true;
                 existing.ProfileId = profileId;
                 existing.LastName = 'R360 '+plan.label;
                 existing.TimeZoneSidKey = 'Asia/Kolkata';
+                existing.UserPreferencesLightningExperiencePreferred = true;
                 usersToUpdate.add(existing);
             }
         }
@@ -202,7 +207,7 @@ public without sharing class Resource360DemoProvisioner {
                         User__c=demoUser.Id,
                         Business_Role__c=role,
                         Org_Unit_ID__c='ORG-SFCOE',
-                        Portfolio_ID__c='PORT-SF',
+                        Portfolio_ID__c=DEMO_PORTFOLIO_ID,
                         Valid_From__c=validFrom,
                         Active__c=true,
                         Assignment_Source__c='Manual approved mock',
