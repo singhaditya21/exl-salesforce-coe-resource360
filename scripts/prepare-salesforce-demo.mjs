@@ -8,11 +8,23 @@ assert(targetOrg, "Pass --target-org or set RESOURCE360_TARGET_ORG.");
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 const sfJson = (args) => {
-    const output = execFileSync("sf", [...args, "--json"], {
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "pipe"],
-        timeout: 180_000
-    });
+    let output;
+    try {
+        output = execFileSync("sf", [...args, "--json"], {
+            encoding: "utf8",
+            stdio: ["ignore", "pipe", "pipe"],
+            timeout: 180_000
+        });
+    } catch (error) {
+        // The Salesforce CLI can leave its update-check worker open after the
+        // command has returned a complete successful JSON response. Accept only
+        // a parseable status-0 response; partial or failed output still throws.
+        const completedOutput = typeof error?.stdout === "string" ? error.stdout.trim() : "";
+        if (!completedOutput) throw error;
+        const completedResponse = JSON.parse(completedOutput);
+        assert.equal(completedResponse.status, 0, `Salesforce CLI command failed: sf ${args.join(" ")}`);
+        return completedResponse.result;
+    }
     const response = JSON.parse(output);
     assert.equal(response.status, 0, `Salesforce CLI command failed: sf ${args.join(" ")}`);
     return response.result;
@@ -191,11 +203,26 @@ const coreRecordCounts = Object.fromEntries([
     "Allocation__c",
     "Budget__c",
     "Commercial_Reference__c",
-    "R360_Approval_Decision__c"
+    "R360_Approval_Decision__c",
+    "R360_Portfolio__c"
 ].map((objectName) => [objectName, query(`SELECT COUNT() FROM ${objectName}`).totalSize]));
+const portfolioShareReadiness = await waitFor("Persona portfolio scope sharing", async () => {
+    const userFilter = demoUserIds.map((id) => `'${id}'`).join(",");
+    const result = query(
+        "SELECT UserOrGroupId, COUNT(Id) total FROM R360_Portfolio__Share " +
+        `WHERE UserOrGroupId IN (${userFilter}) AND RowCause='Resource360_Scope__c' GROUP BY UserOrGroupId`
+    );
+    const counts = new Map(result.records.map((record) => [record.UserOrGroupId, record.total]));
+    return {
+        ready: demoUserIds.every((id) => counts.get(id) === coreRecordCounts.R360_Portfolio__c),
+        value: Object.fromEntries(demoUserIds.map((id) => [id, counts.get(id) ?? 0]))
+    };
+}, 180_000);
+assert.equal(Object.keys(portfolioShareReadiness).length, demoUserIds.length);
 const shareMatrix = {};
 for (const user of users.records) {
     shareMatrix[user.Alias] = {
+        portfolios: assertShareCount("R360_Portfolio__c", user.Id, coreRecordCounts.R360_Portfolio__c, user.FederationIdentifier),
         engagements: assertShareCount("Engagement__c", user.Id, coreRecordCounts.Engagement__c, user.FederationIdentifier)
     };
 }

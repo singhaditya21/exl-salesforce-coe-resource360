@@ -237,6 +237,14 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         return this.data.generatedAt ? new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short" }).format(new Date(this.data.generatedAt)) : "Not loaded";
     }
 
+    get signedInUserName() {
+        return this.data.user?.Name || "Loading identity";
+    }
+
+    get signedInUserId() {
+        return this.data.user?.Id || "";
+    }
+
     get summaryCards() {
         const metrics = this.data.metrics || {};
         const targets = metrics.targets || {};

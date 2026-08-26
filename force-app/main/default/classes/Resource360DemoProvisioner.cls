@@ -170,7 +170,9 @@ public without sharing class Resource360DemoProvisioner {
         }
         if (!assignmentsToInsert.isEmpty()) insert assignmentsToInsert;
 
-        Id scopeJobId = System.enqueueJob(new PersonaScopeJob(rolesByFederationId, UserInfo.getUserId()));
+        AsyncOptions scopeOptions = new AsyncOptions();
+        scopeOptions.MaximumQueueableStackDepth = 12;
+        Id scopeJobId = System.enqueueJob(new PersonaScopeJob(rolesByFederationId, UserInfo.getUserId()), scopeOptions);
         return new ProvisioningResult(
             true,
             'Eight fictional demo identities and all 17 governed business-persona assignments are provisioned; scope certification is queued.',

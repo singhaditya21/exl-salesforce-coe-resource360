@@ -128,7 +128,10 @@ try {
                 timeout: 60_000
             });
             await page.getByText("Salesforce demo system of record", { exact: true }).waitFor({ state: "visible", timeout: 60_000 });
-            await page.getByText(`Logged in as ${user.Name}`, { exact: false }).first().waitFor({ state: "visible", timeout: 60_000 });
+            const signedInIdentity = page.locator(".session-identity").filter({ hasText: user.Name });
+            await signedInIdentity.waitFor({ state: "visible", timeout: 60_000 });
+            assert.equal(await signedInIdentity.getAttribute("data-user-id"), user.Id, `Login As session did not resolve the expected ${user.Name} identity.`);
+            assert((await signedInIdentity.textContent()).includes(user.Name), `Resource 360 did not display the expected signed-in user ${user.Name}.`);
             await page.locator(".role-chip, .error-panel").first().waitFor({ state: "visible", timeout: 60_000 });
             assert.equal(await page.locator(".error-panel").count(), 0, `${persona.alias} workspace raised a data-load error.`);
 
@@ -196,18 +199,39 @@ try {
                 await page.getByText("3 governed version(s)", { exact: true })
                     .waitFor({ state: "visible", timeout: 30_000 });
                 assert.equal(await page.locator(".gantt-row").count(), 7, "Project Manager must see the seven governed WBS items.");
+                assert.equal(await page.locator(".resize-handle").count(), 7, "Every governed Gantt bar must expose a direct duration-resize handle.");
                 assert.equal(await page.getByText("WBS-DC-01", { exact: true }).count(), 0, "The retired legacy work item must not appear in the Gantt.");
                 assert.equal(await page.getByText("8h actual", { exact: false }).count() >= 2, true, "Project Manager must see shared approved delivery actuals.");
+                const intakeSection = page.getByText("Governed project intake · create project and initial SOW", { exact: true });
+                await intakeSection.waitFor({ state: "visible", timeout: 30_000 });
+                await intakeSection.click();
+                const portfolioPicker = page.getByRole("combobox", { name: "Authorized portfolio", exact: true });
+                await portfolioPicker.waitFor({ state: "visible", timeout: 30_000 });
+                await page.getByText("PORT-SFCOE-DEMO · Salesforce COE Demo Portfolio", { exact: true })
+                    .waitFor({ state: "visible", timeout: 30_000 });
 
                 await page.locator(".task-label").filter({ hasText: "WBS-SF-03" }).first().click();
+                await page.getByRole("button", { name: "Save forecast dates", exact: true }).click();
+                await page.getByText("Work unit rescheduled with successors.", { exact: true })
+                    .waitFor({ state: "visible", timeout: 30_000 });
                 await page.getByRole("button", { name: "Update progress", exact: true }).click();
                 await page.getByText("Work-unit progress updated.", { exact: true })
+                    .waitFor({ state: "visible", timeout: 30_000 });
+                await page.getByRole("tab", { name: "Contract & budget", exact: true }).click();
+                await page.getByRole("heading", { name: "Add amendment or change order", exact: true })
+                    .waitFor({ state: "visible", timeout: 30_000 });
+                await page.getByRole("heading", { name: "Add contract line", exact: true })
                     .waitFor({ state: "visible", timeout: 30_000 });
                 projectWorkbench = {
                     governedTasks: 7,
                     contractVersions: 3,
                     approvedActualsVisible: true,
-                    progressWrite: true
+                    projectIntakeVisible: true,
+                    authorizedPortfolioSelected: true,
+                    directResizeHandles: 7,
+                    forecastWrite: true,
+                    progressWrite: true,
+                    contractChangeControls: true
                 };
                 assert.deepEqual(consoleErrors, [], `${persona.alias} Project Workbench emitted application errors: ${consoleErrors.join(" | ")}`);
             }

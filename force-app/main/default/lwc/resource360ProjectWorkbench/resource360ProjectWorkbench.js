@@ -1,7 +1,11 @@
 import { LightningElement, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getProjectOptions from "@salesforce/apex/Resource360ProjectService.getProjectOptions";
+import getPortfolioOptions from "@salesforce/apex/Resource360ProjectService.getPortfolioOptions";
 import getProjectPlan from "@salesforce/apex/Resource360ProjectService.getProjectPlan";
+import createProject from "@salesforce/apex/Resource360ProjectService.createProject";
+import createCommercialChange from "@salesforce/apex/Resource360ProjectService.createCommercialChange";
+import saveCommercialLine from "@salesforce/apex/Resource360ProjectService.saveCommercialLine";
 import saveWorkUnit from "@salesforce/apex/Resource360ProjectService.saveWorkUnit";
 import rescheduleWorkUnit from "@salesforce/apex/Resource360ProjectService.rescheduleWorkUnit";
 import saveDependency from "@salesforce/apex/Resource360ProjectService.saveDependency";
@@ -11,13 +15,18 @@ import saveRisk from "@salesforce/apex/Resource360ProjectService.saveRisk";
 import closeRisk from "@salesforce/apex/Resource360ProjectService.closeRisk";
 import createCloseoutDraft from "@salesforce/apex/Resource360ProjectService.createCloseoutDraft";
 import submitCloseout from "@salesforce/apex/Resource360ProjectService.submitCloseout";
+import decideCloseout from "@salesforce/apex/Resource360ProjectService.decideCloseout";
 
 const DAY = 86400000;
 const emptyTask = () => ({ code: "", name: "", phase: "Build", sequence: 80, startDate: "", endDate: "", plannedHours: 80, dailyHours: 4, assignedResourceId: "", milestone: false, deliverable: true, acceptanceRequired: false });
+const emptyIntake = () => ({ code: "", name: "", portfolioId: "", industry: "", tower: "", startDate: "", endDate: "", revenueType: "Time and Materials", currencyCode: "INR", contractExternalId: "", contractValue: 0, correlationId: "" });
+const emptyCommercial = () => ({ parentReferenceId: "", externalId: "", referenceType: "Amendment", value: 0, validFrom: "", validTo: "", changeReason: "" });
+const emptyCommercialLine = () => ({ referenceId: "", externalId: "", lineType: "Deliverable", description: "", sequence: 10, value: 0, deliveryDate: "", acceptanceRequired: true, workUnitId: "" });
 
 export default class Resource360ProjectWorkbench extends LightningElement {
     @api recordId;
     projects = [];
+    portfolios = [];
     projectId;
     plan;
     taskRows = [];
@@ -26,22 +35,28 @@ export default class Resource360ProjectWorkbench extends LightningElement {
     busy = false;
     error;
     draggedTaskId;
+    dragMode = "move";
     selectedTaskId;
     selectedRiskId;
     timelineDays = 1;
     ganttStyle = "--timeline-width: 900px; min-width: 1160px;";
+    intakeDraft = emptyIntake();
+    commercialDraft = emptyCommercial();
+    commercialLineDraft = emptyCommercialLine();
     edit = { startDate: "", endDate: "", percentComplete: 0, status: "Active", note: "", cascade: true, acceptanceNote: "" };
     taskDraft = emptyTask();
     dependencyDraft = { predecessorId: "", successorId: "", dependencyType: "Finish-to-Start", lagDays: 0 };
     riskDraft = { externalId: "", title: "", description: "", severity: "Medium", dueDate: "", mitigation: "" };
     closeoutDraft = { completionDate: "", lessonsLearned: "", customerAcceptanceNote: "" };
+    closeoutDecisionNote = "All completion gates, final actuals, commercial acceptance and resource release were independently reviewed.";
 
     connectedCallback() { this.initialise(); }
 
     async initialise() {
         this.busy = true;
         try {
-            this.projects = await getProjectOptions();
+            [this.projects, this.portfolios] = await Promise.all([getProjectOptions(), getPortfolioOptions()]);
+            if (!this.intakeDraft.portfolioId && this.portfolios.length) this.intakeDraft = { ...this.intakeDraft, portfolioId: this.portfolios[0].Id };
             this.projectId = this.recordId || this.projects.find((item) => item.Engagement_ID__c === "ENG-1001")?.Id || this.projects[0]?.Id;
             if (this.projectId) await this.loadPlan();
         } catch (error) { this.fail(error); } finally { this.busy = false; }
@@ -55,6 +70,10 @@ export default class Resource360ProjectWorkbench extends LightningElement {
             lessonsLearned: this.plan.closeout?.Lessons_Learned__c || "Preserve early architecture validation and weekly skill-fit reviews.",
             customerAcceptanceNote: this.plan.closeout?.Customer_Acceptance_Note__c || "Final customer acceptance will be attached after the production-readiness gate."
         };
+        const references = this.plan.commercialReferences || [];
+        const latestReference = references[references.length - 1];
+        if (latestReference && !this.commercialDraft.parentReferenceId) this.commercialDraft = { ...this.commercialDraft, parentReferenceId: latestReference.Id, validFrom: this.plan.engagement.Start_Date__c, validTo: this.plan.engagement.End_Date__c };
+        if (latestReference && !this.commercialLineDraft.referenceId) this.commercialLineDraft = { ...this.commercialLineDraft, referenceId: latestReference.Id, deliveryDate: this.plan.engagement.End_Date__c };
         this.buildGantt();
         if (this.selectedTaskId && this.taskRows.some((task) => task.Id === this.selectedTaskId)) this.selectTask(this.selectedTaskId);
     }
@@ -101,6 +120,7 @@ export default class Resource360ProjectWorkbench extends LightningElement {
     }
 
     get projectOptions() { return this.projects.map((item) => ({ label: `${item.Engagement_ID__c} · ${item.Name}`, value: item.Id })); }
+    get portfolioOptions() { return this.portfolios.map((item) => ({ label: `${item.Portfolio_ID__c} · ${item.Name}`, value: item.Id })); }
     get zoomOptions() { return (this.plan?.zoomOptions || ["Week", "Month", "Quarter", "Year"]).map((value) => ({ label: value, value })); }
     get taskOptions() { return this.taskRows.map((item) => ({ label: `${item.Work_Unit_Code__c} · ${item.Name}`, value: item.Id })); }
     get resourceOptions() {
@@ -108,9 +128,13 @@ export default class Resource360ProjectWorkbench extends LightningElement {
         for (const item of this.plan?.allocations || []) if (item.Resource__c && !seen.has(item.Resource__c)) { seen.add(item.Resource__c); options.push({ label: `${item.Resource__r?.Preferred_Name__c} · ${item.Role__c}`, value: item.Resource__c }); }
         return options;
     }
+    get commercialReferenceOptions() { return (this.plan?.commercialReferences || []).map((item) => ({ label: `${item.External_ID__c} · v${item.Version__c}`, value: item.Id })); }
     get statusOptions() { return ["Planned", "Active", "Complete", "Cancelled"].map((value) => ({ label: value, value })); }
     get dependencyTypeOptions() { return ["Finish-to-Start", "Start-to-Start", "Finish-to-Finish", "Start-to-Finish"].map((value) => ({ label: value, value })); }
     get severityOptions() { return ["Low", "Medium", "High", "Critical"].map((value) => ({ label: value, value })); }
+    get revenueTypeOptions() { return ["Time and Materials", "Fixed Price", "Managed Services"].map((value) => ({ label: value, value })); }
+    get commercialChangeTypeOptions() { return ["Amendment", "Change Order"].map((value) => ({ label: value, value })); }
+    get commercialLineTypeOptions() { return ["Deliverable", "Service", "Acceptance Milestone"].map((value) => ({ label: value, value })); }
     get selectedTask() { return this.taskRows.find((item) => item.Id === this.selectedTaskId); }
     get selectedRisk() { return (this.plan?.risks || []).find((item) => item.Id === this.selectedRiskId); }
     get hasTasks() { return this.taskRows.length > 0; }
@@ -125,6 +149,8 @@ export default class Resource360ProjectWorkbench extends LightningElement {
     get gateBlockers() { return this.plan?.closeoutGates?.blockers || []; }
     get closeoutReady() { return this.plan?.closeoutGates?.ready === true; }
     get closeoutStatus() { return this.plan?.closeout?.State__c || "Not started"; }
+    get canManageProjects() { return this.plan?.canManageProjects === true; }
+    get canApproveCloseout() { return this.plan?.canApproveCloseout === true && this.plan?.closeout?.State__c === "Pending Approval"; }
 
     handleProject(event) { this.projectId = event.detail.value; this.selectedTaskId = null; this.run("Load project", () => this.loadPlan(), false); }
     handleZoom(event) { this.zoom = event.detail.value; this.buildGantt(); }
@@ -136,23 +162,45 @@ export default class Resource360ProjectWorkbench extends LightningElement {
         this.buildGantt();
     }
     handleEdit(event) { const field = event.target.dataset.field; this.edit = { ...this.edit, [field]: event.target.type === "checkbox" ? event.target.checked : event.detail?.value ?? event.target.value }; }
+    handleIntakeDraft(event) { const field = event.target.dataset.field; this.intakeDraft = { ...this.intakeDraft, [field]: event.detail?.value ?? event.target.value }; }
+    handleCommercialDraft(event) { const field = event.target.dataset.field; this.commercialDraft = { ...this.commercialDraft, [field]: event.detail?.value ?? event.target.value }; }
+    handleCommercialLineDraft(event) { const field = event.target.dataset.field; this.commercialLineDraft = { ...this.commercialLineDraft, [field]: event.target.type === "checkbox" ? event.target.checked : event.detail?.value ?? event.target.value }; }
+    handleCloseoutDecisionNote(event) { this.closeoutDecisionNote = event.detail?.value ?? event.target.value; }
     handleTaskDraft(event) { const field = event.target.dataset.field; this.taskDraft = { ...this.taskDraft, [field]: event.target.type === "checkbox" ? event.target.checked : event.detail?.value ?? event.target.value }; }
     handleDependencyDraft(event) { this.dependencyDraft = { ...this.dependencyDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleRiskDraft(event) { this.riskDraft = { ...this.riskDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleCloseoutDraft(event) { this.closeoutDraft = { ...this.closeoutDraft, [event.target.dataset.field]: event.detail?.value ?? event.target.value }; }
     handleRiskSelect(event) { this.selectedRiskId = event.currentTarget.dataset.id; }
 
-    handleDragStart(event) { this.draggedTaskId = event.currentTarget.dataset.id; event.dataTransfer.effectAllowed = "move"; event.dataTransfer.setData("text/plain", this.draggedTaskId); }
+    handleDragStart(event) { this.dragMode = "move"; this.draggedTaskId = event.currentTarget.dataset.id; event.dataTransfer.effectAllowed = "move"; event.dataTransfer.setData("text/plain", this.draggedTaskId); }
+    handleResizeStart(event) { event.stopPropagation(); this.dragMode = "resize"; this.draggedTaskId = event.currentTarget.dataset.id; event.dataTransfer.effectAllowed = "move"; event.dataTransfer.setData("text/plain", this.draggedTaskId); }
     allowDrop(event) { event.preventDefault(); event.dataTransfer.dropEffect = "move"; }
     handleDrop(event) {
         event.preventDefault(); const taskId = this.draggedTaskId || event.dataTransfer.getData("text/plain"); const task = this.taskRows.find((item) => item.Id === taskId); if (!task) return;
         const bounds = event.currentTarget.getBoundingClientRect(); const ratio = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
         const rawOffset = Math.round(ratio * (this.timelineDays - 1)); const snap = { Week: 1, Month: 7, Quarter: 14, Year: 30 }[this.zoom]; const offset = Math.round(rawOffset / snap) * snap;
-        const duration = Math.round((this.utc(task.End_Date__c) - this.utc(task.Start_Date__c)) / DAY); const startDate = this.iso(new Date(this.timelineStart.getTime() + offset * DAY)); const endDate = this.iso(new Date(this.timelineStart.getTime() + (offset + duration) * DAY));
-        this.run("Move Gantt task", () => rescheduleWorkUnit({ workUnitId: taskId, startDate, endDate, cascadeSuccessors: true, reason: `Drag reschedule in ${this.zoom} view.` }));
+        const duration = Math.round((this.utc(task.End_Date__c) - this.utc(task.Start_Date__c)) / DAY);
+        let startDate; let endDate; let label; let reason;
+        if (this.dragMode === "resize") {
+            startDate = task.Start_Date__c; const minimumOffset = Math.round((this.utc(task.Start_Date__c) - this.timelineStart.getTime()) / DAY); const endOffset = Math.max(minimumOffset, offset);
+            endDate = this.iso(new Date(this.timelineStart.getTime() + endOffset * DAY)); label = "Resize Gantt task"; reason = `Drag resize in ${this.zoom} view with successor auto-scheduling.`;
+        } else {
+            startDate = this.iso(new Date(this.timelineStart.getTime() + offset * DAY)); endDate = this.iso(new Date(this.timelineStart.getTime() + (offset + duration) * DAY)); label = "Move Gantt task"; reason = `Drag reschedule in ${this.zoom} view.`;
+        }
+        this.dragMode = "move";
+        this.run(label, () => rescheduleWorkUnit({ workUnitId: taskId, startDate, endDate, cascadeSuccessors: true, reason }));
     }
 
     handleReschedule() { this.run("Reschedule task", () => rescheduleWorkUnit({ workUnitId: this.selectedTaskId, startDate: this.edit.startDate, endDate: this.edit.endDate, cascadeSuccessors: this.edit.cascade, reason: this.edit.note })); }
+    handleCreateProject() {
+        const draft = this.intakeDraft;
+        this.run("Create project", async () => {
+            const result = await createProject({ projectCode: draft.code, projectName: draft.name, portfolioId: draft.portfolioId, industry: draft.industry, tower: draft.tower, startDate: draft.startDate, endDate: draft.endDate, revenueType: draft.revenueType, currencyCode: draft.currencyCode, contractExternalId: draft.contractExternalId, contractValue: Number(draft.contractValue), intakeCorrelationId: draft.correlationId || null });
+            this.projects = await getProjectOptions(); this.projectId = result.recordId; return result;
+        }, true, () => { this.intakeDraft = { ...emptyIntake(), portfolioId: this.portfolios[0]?.Id || "" }; });
+    }
+    handleCreateCommercialChange() { const draft = this.commercialDraft; this.run("Record commercial change", () => createCommercialChange({ engagementId: this.projectId, parentReferenceId: draft.parentReferenceId, externalId: draft.externalId, referenceType: draft.referenceType, value: Number(draft.value), validFrom: draft.validFrom, validTo: draft.validTo, changeReason: draft.changeReason }), true, () => { this.commercialDraft = { ...emptyCommercial(), validFrom: this.plan.engagement.Start_Date__c, validTo: this.plan.engagement.End_Date__c }; }); }
+    handleCreateCommercialLine() { const draft = this.commercialLineDraft; this.run("Add contract line", () => saveCommercialLine({ referenceId: draft.referenceId, lineId: null, externalId: draft.externalId, lineType: draft.lineType, description: draft.description, sequence: Number(draft.sequence), value: Number(draft.value), deliveryDate: draft.deliveryDate || null, acceptanceRequired: draft.acceptanceRequired, workUnitId: draft.workUnitId || null }), true, () => { this.commercialLineDraft = { ...emptyCommercialLine(), deliveryDate: this.plan.engagement.End_Date__c }; }); }
     handleProgress() { this.run("Update progress", () => updateProgress({ workUnitId: this.selectedTaskId, percentComplete: Number(this.edit.percentComplete), status: this.edit.status, note: this.edit.note })); }
     handleAcceptance() { this.run("Record acceptance", () => acceptDeliverable({ workUnitId: this.selectedTaskId, acceptanceNote: this.edit.acceptanceNote })); }
     handleCreateTask() {
@@ -164,6 +212,7 @@ export default class Resource360ProjectWorkbench extends LightningElement {
     handleCloseRisk() { this.run("Close risk", () => closeRisk({ riskId: this.selectedRiskId, closureNote: "Mitigation completed and evidence reviewed by the project manager." })); }
     handleSaveCloseout() { const draft = this.closeoutDraft; this.run("Save closeout", () => createCloseoutDraft({ engagementId: this.projectId, completionDate: draft.completionDate, lessonsLearned: draft.lessonsLearned, customerAcceptanceNote: draft.customerAcceptanceNote })); }
     handleSubmitCloseout() { if (!this.plan?.closeout?.Id) { this.toast("Save the closeout draft before submission.", "warning"); return; } this.run("Submit closeout", () => submitCloseout({ closeoutId: this.plan.closeout.Id })); }
+    handleCloseoutDecision(event) { const approve = event.currentTarget.dataset.approve === "true"; this.run(approve ? "Approve closeout" : "Reject closeout", () => decideCloseout({ closeoutId: this.plan.closeout.Id, approve, note: this.closeoutDecisionNote })); }
 
     async run(label, action, notify = true, afterSuccess) {
         this.busy = true; this.error = undefined;

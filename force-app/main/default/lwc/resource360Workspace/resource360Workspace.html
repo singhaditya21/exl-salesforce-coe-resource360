@@ -7,6 +7,10 @@
                 <p class="subtitle">Native Salesforce staffing, skills, budgeting, allocation and delivery governance</p>
             </div>
             <div class="hero-actions">
+                <div class="session-identity" data-user-id={signedInUserId}>
+                    <span>Signed in as</span>
+                    <strong>{signedInUserName}</strong>
+                </div>
                 <lightning-combobox label="Active business role" value={activeRole} options={businessRoleOptions} onchange={handleRole}></lightning-combobox>
                 <lightning-button label="Refresh" icon-name="utility:refresh" onclick={loadData}></lightning-button>
                 <lightning-button variant="brand" label="Load sanitized demo data" icon-name="utility:database" onclick={handleSeed}></lightning-button>

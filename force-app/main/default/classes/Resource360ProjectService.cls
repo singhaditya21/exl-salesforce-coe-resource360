@@ -132,8 +132,8 @@ public inherited sharing class Resource360ProjectService {
         Work_Unit__c root=[SELECT Id,Engagement__c,Engagement__r.Start_Date__c,Engagement__r.End_Date__c,Start_Date__c,End_Date__c,Assigned_Resource__c,Daily_Hours__c,Status__c FROM Work_Unit__c WHERE Id=:workUnitId WITH USER_MODE LIMIT 1 FOR UPDATE];
         if(root.Status__c=='Complete'||root.Status__c=='Cancelled')fail('Completed or cancelled work units cannot be rescheduled.');
         if(startDate<root.Engagement__r.Start_Date__c||endDate>root.Engagement__r.End_Date__c)fail('Rescheduled dates must remain inside the project.');
-        Integer delta=root.Start_Date__c.daysBetween(startDate);root.Start_Date__c=startDate;root.End_Date__c=endDate;validateAllocationCoverage(root.Engagement__c,root.Assigned_Resource__c,startDate,endDate,root.Daily_Hours__c);update root;
-        if(cascadeSuccessors==true&&delta!=0)cascade(root.Engagement__c,root.Id,delta,new Set<Id>{root.Id});
+        Integer startDelta=root.Start_Date__c.daysBetween(startDate);Integer endDelta=root.End_Date__c.daysBetween(endDate);Integer cascadeDelta=Math.abs(endDelta)>=Math.abs(startDelta)?endDelta:startDelta;root.Start_Date__c=startDate;root.End_Date__c=endDate;validateAllocationCoverage(root.Engagement__c,root.Assigned_Resource__c,startDate,endDate,root.Daily_Hours__c);update root;
+        if(cascadeSuccessors==true&&cascadeDelta!=0)cascade(root.Engagement__c,root.Id,cascadeDelta,new Set<Id>{root.Id});
         validateDependencyDates(root.Engagement__c);recalculateCriticalPath(root.Engagement__c);
         String correlation=correlationId();audit(correlation,'WORK_UNIT_RESCHEDULED','Work_Unit__c',root.Id,1,cascadeSuccessors==true?'CASCADE_RESCHEDULE':'DIRECT_RESCHEDULE',reason,null,startDate+'–'+endDate);
         return result(true,'Work unit rescheduled'+(cascadeSuccessors==true?' with successors.':'.'),root.Id,correlation);
@@ -204,6 +204,9 @@ public inherited sharing class Resource360ProjectService {
     @AuraEnabled(cacheable=true)
     public static List<Engagement__c> getProjectOptions(){return [SELECT Id,Name,Engagement_ID__c,Start_Date__c,End_Date__c,Status__c,Lifecycle_Stage__c,Completion_Percent__c FROM Engagement__c WHERE Status__c!='Cancelled' WITH USER_MODE ORDER BY Name LIMIT 200];}
 
+    @AuraEnabled(cacheable=true)
+    public static List<R360_Portfolio__c> getPortfolioOptions(){return [SELECT Id,Name,Portfolio_ID__c,Account__c FROM R360_Portfolio__c WHERE Current__c=true WITH USER_MODE ORDER BY Name LIMIT 200];}
+
     @AuraEnabled
     public static String getProjectPlan(Id engagementId){
         Engagement__c engagement=[SELECT Id,Name,Engagement_ID__c,Start_Date__c,End_Date__c,Status__c,Lifecycle_Stage__c,Completion_Percent__c FROM Engagement__c WHERE Id=:engagementId WITH USER_MODE LIMIT 1];
@@ -217,7 +220,7 @@ public inherited sharing class Resource360ProjectService {
         List<Project_Closeout__c>closeouts=[SELECT Id,Closeout_ID__c,State__c,Completion_Date__c,Lessons_Learned__c,Customer_Acceptance_Note__c,All_Deliverables_Accepted__c,Timesheets_Reconciled__c,Allocations_Released__c,Open_Risk_Count__c,Submitted_At__c,Decision_At__c,Decision_Note__c FROM Project_Closeout__c WHERE Engagement__c=:engagement.Id AND Current__c=true WITH USER_MODE LIMIT 1];
         Map<String,Decimal>actualByWorkUnit=new Map<String,Decimal>();for(AggregateResult row:[SELECT Work_Unit__c unitId,SUM(Hours__c) hours FROM Time_Entry__c WHERE Engagement__c=:engagement.Id AND Work_Unit__c!=null AND State__c='Approved' WITH USER_MODE GROUP BY Work_Unit__c])actualByWorkUnit.put(String.valueOf(row.get('unitId')),(Decimal)row.get('hours'));
         GateSnapshot gates=gateSnapshot(engagement.Id);
-        return JSON.serialize(new Map<String,Object>{'engagement'=>engagement,'tasks'=>units,'dependencies'=>dependencies,'allocations'=>allocations,'commercialReferences'=>commercials,'commercialLines'=>commercialLines,'budget'=>budgets.isEmpty()?null:budgets[0],'risks'=>risks,'closeout'=>closeouts.isEmpty()?null:closeouts[0],'actualHoursByWorkUnit'=>actualByWorkUnit,'closeoutGates'=>gates,'zoomOptions'=>new List<String>{'Week','Month','Quarter','Year'},'generatedAt'=>System.now()});
+        return JSON.serialize(new Map<String,Object>{'engagement'=>engagement,'tasks'=>units,'dependencies'=>dependencies,'allocations'=>allocations,'commercialReferences'=>commercials,'commercialLines'=>commercialLines,'budget'=>budgets.isEmpty()?null:budgets[0],'risks'=>risks,'closeout'=>closeouts.isEmpty()?null:closeouts[0],'actualHoursByWorkUnit'=>actualByWorkUnit,'closeoutGates'=>gates,'canManageProjects'=>Resource360Security.hasPermission('Resource360_Manage_Projects'),'canApproveCloseout'=>Resource360Security.hasPermission('Resource360_Approve_Closeout'),'zoomOptions'=>new List<String>{'Week','Month','Quarter','Year'},'generatedAt'=>System.now()});
     }
 
     @AuraEnabled(cacheable=true)
