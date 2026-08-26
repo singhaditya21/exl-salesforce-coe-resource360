@@ -30,11 +30,11 @@ The operating chain is:
 
 - `Resource360_Executive_Home` is the Resource 360 app Home override and renders the role-aware operating workspace.
 - `Resource360_Engagement_Record` is the app-specific Engagement record page with dynamic highlights, the project workbench and governed related lists.
-- `resource360ProjectWorkbench` provides Week/Month/Quarter/Year zoom, baseline/forecast bars, drag-and-cascade rescheduling, critical path, WBS creation, dependencies, progress, acceptance, contract/budget traceability, risk actions and closeout gates.
+- `resource360ProjectWorkbench` provides governed project/initial-SOW intake, amendment/change-order and contract-line entry, Week/Month/Quarter/Year zoom, baseline/forecast bars, direct drag and duration-resize handles with successor auto-scheduling, critical path, WBS creation, dependencies, progress, acceptance, risk actions, closeout gates and independent approval actions.
 - Nine native list views cover active delivery, closeout, work/acceptance, contracts, staffing, allocations and risk.
 - Eleven report types and reports cover lifecycle, contract changes, WBS delivery, skill demand/match, staffing, allocations, capability supply, budgets, actuals, risk and closeout.
 - `Resource 360 Command Center` contains eleven live components backed by those reports.
 
 ## Acceptance evidence
 
-The automated demo preparation gate asserts the exact golden-path counts, portfolio scopes, explicit share matrix, eleven non-empty reports and eleven refreshed dashboard components. The controlled Login As gate opens every fictional persona, verifies positive and negative route access, and additionally executes an unchanged progress update from the real Project Manager Lightning session. The resulting `WORK_PROGRESS_UPDATED` audit event must identify `R360 Project Manager` as actor.
+The automated demo preparation gate asserts the exact golden-path counts, portfolio scopes, explicit share matrix, eleven non-empty reports and eleven refreshed dashboard components. The controlled Login As gate opens every fictional persona, verifies positive and negative route access, and additionally proves Project Manager intake/contract controls, seven direct Gantt resize handles, a governed forecast-date write and a progress update in the real Lightning session. The resulting reschedule and progress audit evidence must identify `R360 Project Manager` as actor.

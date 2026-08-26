@@ -20,11 +20,12 @@
 - approved budget signature and immutable decision lineage;
 - capacity locking, deterministic competing-request outcome and accepted-allocation-only time;
 - all 18 personas with positive/negative routed access, plus active multi-role and expired-scope Salesforce boundaries, delegation, revocation and separation of duties;
-- eight live composite demo identities with 17 certified `PORT-SFCOE-DEMO` scopes, exact Apex-managed share counts, commercial-evidence access, stale-share revocation and practitioner self-record isolation;
+- eight live composite demo identities with 17 certified `PORT-SFCOE-DEMO` scopes, exact Apex-managed shares for the intake portfolio and private business records, commercial-evidence access, stale-share revocation and practitioner self-record isolation;
 - source schema version, idempotent run identity, deterministic duplicate survivor, completeness/freshness and redacted errors;
 - outbox retry/dead-letter recovery and exactly one governed operations schedule;
 - corrected-time dual control, compliance exceptions and immutable approved actuals;
 - the exact `ENG-1001` golden path: three contract versions, six commercial lines, seven governed WBS items/dependencies, eleven structured requirements/matches, four staffing/allocation links, approved actuals, risks and closeout;
+- the Project Manager workbench: governed project/SOW intake, commercial-change and line controls, seven direct duration-resize handles, a live forecast write and a live progress write;
 - app-activated Home/Engagement pages, governed related lists, nine operating list views, eleven non-empty native reports and eleven refreshed dashboard components;
 - eight legal-hold-eligible retention categories with non-destructive preview only;
 - all five demo activation domains in one attributable 5/5 dry run with zero external calls and zero destructive actions;

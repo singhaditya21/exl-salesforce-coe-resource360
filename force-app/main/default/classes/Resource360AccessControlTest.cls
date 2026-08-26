@@ -33,6 +33,7 @@ private class Resource360AccessControlTest {
             Map<String,Object> workspace = (Map<String,Object>)JSON.deserializeUntyped(Resource360Service.getWorkspaceData());
             System.assertNotEquals(null, workspace.get('configuration'), 'Base personas must receive the curated runtime configuration snapshot.');
             System.assertEquals(2, ((List<Object>)workspace.get('engagements')).size(), 'The live portfolio scope must expose both seeded engagements in user mode.');
+            System.assertEquals(1, Resource360ProjectService.getPortfolioOptions().size(), 'The governed intake must expose the explicitly scoped portfolio in user mode.');
             Boolean bulkBlocked = false;
             try { Resource360BulkService.preview('Employee', '[]'); }
             catch (AuraHandledException expected) { bulkBlocked = true; }
@@ -119,6 +120,7 @@ private class Resource360AccessControlTest {
         insert stafferScope;
 
         Resource360ScopeSharingService.rebuildUser(staffer.Id);
+        System.assertEquals([SELECT COUNT() FROM R360_Portfolio__c WHERE Portfolio_ID__c='PORT-SFCOE-DEMO'], shareCount('R360_Portfolio__c', staffer.Id));
         System.assertEquals([SELECT COUNT() FROM Engagement__c], shareCount('Engagement__c', staffer.Id));
         System.assertEquals([SELECT COUNT() FROM Commercial_Reference__c], shareCount('Commercial_Reference__c', staffer.Id));
         System.assertEquals([SELECT COUNT() FROM Staffing_Request__c], shareCount('Staffing_Request__c', staffer.Id));
@@ -131,6 +133,7 @@ private class Resource360AccessControlTest {
             Resource360RoleScopeService.suppressSharingRebuild = false;
         }
         Resource360ScopeSharingService.rebuildUser(staffer.Id);
+        System.assertEquals(0, shareCount('R360_Portfolio__c', staffer.Id), 'A changed scope must remove the stale portfolio share.');
         System.assertEquals(0, shareCount('Engagement__c', staffer.Id), 'A changed scope must remove stale engagement shares.');
         System.assertEquals(0, shareCount('Commercial_Reference__c', staffer.Id), 'A changed scope must remove stale commercial shares.');
         System.assertEquals(0, shareCount('Staffing_Request__c', staffer.Id), 'A changed scope must remove stale staffing shares.');

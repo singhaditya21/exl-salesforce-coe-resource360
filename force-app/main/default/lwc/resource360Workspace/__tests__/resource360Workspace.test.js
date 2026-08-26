@@ -18,6 +18,7 @@ describe("c-resource360-workspace", () => {
     it("renders the authenticated 103-screen shell and native help videos", async () => {
         getWorkspaceData.mockResolvedValue(JSON.stringify({
             generatedAt: "2026-08-25T05:00:00.000Z",
+            user: { Id: "005000000000001", Name: "Resource 360 Administrator" },
             activeRoles: ["Administrator"],
             metrics: { activeHeadcount: 12, pendingStaffing: 1, approvedRevenue: 84000000, approvedMarginPercent: 32.4, targets: {} },
             configuration: {},
@@ -32,6 +33,10 @@ describe("c-resource360-workspace", () => {
         expect(element.shadowRoot.querySelector("h1").textContent).toBe("Resource 360");
         expect(element.shadowRoot.textContent).toContain("103 governed screens");
         expect(element.shadowRoot.textContent).toContain("Administrator");
+        const identity = element.shadowRoot.querySelector(".session-identity");
+        expect(identity.textContent).toContain("Signed in as");
+        expect(identity.textContent).toContain("Resource 360 Administrator");
+        expect(identity.dataset.userId).toBe("005000000000001");
 
         const helpButton = [...element.shadowRoot.querySelectorAll("button")]
             .find((button) => button.textContent.includes("GLB-06"));

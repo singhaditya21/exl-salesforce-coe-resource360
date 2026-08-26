@@ -61,8 +61,10 @@ private class Resource360DemoProvisionerTest {
         Integer budgetCount = [SELECT COUNT() FROM Budget__c];
         Integer approvalCount = [SELECT COUNT() FROM R360_Approval_Decision__c];
         Integer commercialCount = [SELECT COUNT() FROM Commercial_Reference__c];
+        Integer portfolioCount = [SELECT COUNT() FROM R360_Portfolio__c WHERE Portfolio_ID__c='PORT-SFCOE-DEMO'];
 
         for (Id demoUserId : userIds.values()) {
+            System.assertEquals(portfolioCount, shareCount('R360_Portfolio__c', demoUserId), 'Every demo identity must receive its explicitly scoped portfolio record.');
             System.assertEquals(engagementCount, shareCount('Engagement__c', demoUserId), 'Every demo identity must receive its complete portfolio.');
         }
         for (String federationId : new List<String>{'R360-DEMO-PROJECT','R360-DEMO-STAFFER','R360-DEMO-PRACTITIONER'}) {

@@ -13,6 +13,7 @@ private class Resource360ProjectServiceTest {
         Commercial_Reference__c sow=[SELECT Approval_Status__c,Change_Type__c,Version__c FROM Commercial_Reference__c WHERE Engagement__c=:project.Id LIMIT 1];
         System.assertEquals('Approved',sow.Approval_Status__c);System.assertEquals('Initial',sow.Change_Type__c);System.assertEquals(1,sow.Version__c);
         System.assertEquals(1,[SELECT COUNT() FROM Commercial_Line__c WHERE Commercial_Reference__c=:sow.Id]);
+        System.assert(Resource360ProjectService.getPortfolioOptions().size()>0,'Governed project intake needs an authorized portfolio option.');
     }
 
     @IsTest
@@ -23,7 +24,10 @@ private class Resource360ProjectServiceTest {
         Resource360Service.ServiceResult first=Resource360ProjectService.saveWorkUnit(engagement.Id,null,'TEST-WBS-01','Configured Build','Build',10,taskStart,taskEnd,56,Math.min(allocation.Daily_Hours__c,4),allocation.Resource__c,false,true,true);
         Date milestoneDate=taskEnd.addDays(1);Resource360Service.ServiceResult milestone=Resource360ProjectService.saveWorkUnit(engagement.Id,null,'TEST-WBS-02','Build Acceptance','Test',20,milestoneDate,milestoneDate,0,0,null,true,true,true);
         Resource360Service.ServiceResult dependency=Resource360ProjectService.saveDependency(engagement.Id,first.recordId,milestone.recordId,'Finish-to-Start',0,'TEST-DEP-01');System.assert(dependency.success);
-        String plan=Resource360ProjectService.getProjectPlan(engagement.Id);System.assert(plan.contains('TEST-WBS-01'));System.assert(plan.contains('Finish-to-Start'));System.assert(plan.contains('zoomOptions'));
+        Date originalMilestone=[SELECT Start_Date__c FROM Work_Unit__c WHERE Id=:milestone.recordId].Start_Date__c;
+        Resource360ProjectService.rescheduleWorkUnit(first.recordId,taskStart,taskEnd.addDays(1),true,'Resize the build bar and cascade the acceptance milestone.');
+        System.assertEquals(originalMilestone.addDays(1),[SELECT Start_Date__c FROM Work_Unit__c WHERE Id=:milestone.recordId].Start_Date__c,'A duration resize must auto-schedule successors when cascade is selected.');
+        String plan=Resource360ProjectService.getProjectPlan(engagement.Id);System.assert(plan.contains('TEST-WBS-01'));System.assert(plan.contains('Finish-to-Start'));System.assert(plan.contains('zoomOptions'));System.assert(plan.contains('canApproveCloseout'));
         Resource360ProjectService.acceptDeliverable(first.recordId,'Customer accepted the configured build.');Resource360ProjectService.updateProgress(first.recordId,100,'Complete','Build completion verified.');
         Resource360ProjectService.acceptDeliverable(milestone.recordId,'Acceptance milestone signed.');Resource360ProjectService.updateProgress(milestone.recordId,100,'Complete','Acceptance milestone complete.');
         Resource360Service.ServiceResult risk=Resource360ProjectService.saveRisk(engagement.Id,null,'TEST-RISK-01','Deployment readiness','Release evidence is incomplete.','High',UserInfo.getUserId(),Date.today().addDays(10),'Complete the release checklist.');

@@ -39,11 +39,20 @@ public without sharing class Resource360ScopeSharingService {
     public static void rebuildUsers(Set<Id> userIds) {
         if (userIds == null || userIds.isEmpty()) return;
         if (userIds.size() > 2 && !Test.isRunningTest()) {
-            System.enqueueJob(new Resource360ScopeSharingJob(userIds));
+            enqueueUsers(userIds);
             return;
         }
         clearSharesForUsers(userIds);
         for (Id userId : userIds) rebuildUserInternal(userId);
+    }
+
+    public static Id enqueueUsers(Set<Id> userIds) {
+        if (userIds == null || userIds.isEmpty()) return null;
+        Resource360ScopeSharingJob job = new Resource360ScopeSharingJob(userIds);
+        if (System.isQueueable()) return System.enqueueJob(job);
+        AsyncOptions options = new AsyncOptions();
+        options.MaximumQueueableStackDepth = 12;
+        return System.enqueueJob(job, options);
     }
 
     public static void rebuildUser(Id userId) {
@@ -77,6 +86,16 @@ public without sharing class Resource360ScopeSharingService {
         Map<String, String> accessByObject = new Map<String, String>();
         add(idsByObject, 'R360_Role_Scope__c', new Map<Id, R360_Role_Scope__c>(scopes).keySet());
         accessByObject.put('R360_Role_Scope__c', 'Read');
+
+        Set<Id> portfolioIds = allPortfolio
+            ? queryAllIds('R360_Portfolio__c')
+            : portfolios.isEmpty()
+                ? new Set<Id>()
+                : queryTextIds('R360_Portfolio__c', 'Portfolio_ID__c', portfolios);
+        if (!portfolioIds.isEmpty()) {
+            add(idsByObject, 'R360_Portfolio__c', portfolioIds);
+            accessByObject.put('R360_Portfolio__c', 'Read');
+        }
 
         Set<Id> resourceIds = new Set<Id>();
         Set<Id> selfResourceIds = new Set<Id>();

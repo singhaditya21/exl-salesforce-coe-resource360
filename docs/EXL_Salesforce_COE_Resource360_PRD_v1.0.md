@@ -1521,17 +1521,17 @@ Source files containing personal, customer or commercial data were used to under
 
 The demo must prove one coherent project path in Salesforce, not a collection of disconnected screens. The seeded `ENG-1001 · Global Retail Cloud` scenario therefore meets these additional acceptance conditions:
 
-1. A governed intake transaction creates or updates the project, initial SOW and commercial line with a common correlation ID.
+1. A governed Project Manager intake form creates the project, initial SOW and commercial line atomically with a common correlation ID; approved amendments, change orders and mapped contract lines are also maintainable from the workbench.
 2. SOW, amendment and change-order versions preserve parent lineage, approval state, signed date, validity, authorized value and change rationale; delivery lines map to WBS items and acceptance.
 3. The work plan retains baseline and forecast dates, sequence, dependencies, planned effort, allocation coverage, milestones, deliverables, acceptance and critical-path status.
-4. The Project Manager can view Week, Month, Quarter and Year scales; drag a task with controlled successor cascade; add work/dependencies; update progress; record acceptance; manage risks; and prepare closeout.
+4. The Project Manager can view Week, Month, Quarter and Year scales; drag to move or resize a task with controlled successor auto-scheduling and an accessible date-form alternative; add work/dependencies; update progress; record acceptance; manage risks; and prepare closeout.
 5. Engagement skill requirements explicitly distinguish Industry, Functional and Technical dimensions. Candidate decisions persist requirement, approved capability evidence, candidate level, weighted score, eligibility, policy version and any gap reason.
 6. A staffing acceptance cannot bypass an ineligible mandatory requirement. Accepted requests map to work units and produce current allocations that cover the planned resource/date/effort window.
 7. Approved time maps to the project and WBS, is visible to the Project Manager through governed parent sharing, and cannot be edited or deleted in place.
-8. Closeout fails closed while active work, required acceptance, high/critical risks, unreconciled time, approved commercial evidence or current approved budget gates fail. Submission releases allocations; an independent approver decides completion.
+8. Closeout fails closed while active work, required acceptance, high/critical risks, unreconciled time, approved commercial evidence or current approved budget gates fail. Submission releases allocations; a separately permissioned approver records approval or rejection from the workbench and the submitter cannot self-approve.
 9. The Resource 360 app activates a role-aware Home page and an Engagement record page containing dynamic highlights, the delivery workbench and contract/work/skill/staffing/allocation/risk/closeout related lists.
 10. Native analytics include eleven report types/reports and an eleven-component command center spanning lifecycle, contracts, WBS, skill match, staffing, allocations, capability supply, budget, actuals, risks and closeout.
-11. The deterministic seed and preparation gate assert exact golden-path counts; the controlled Project Manager Login As test must execute an audited work-progress command in Lightning.
+11. The deterministic seed and preparation gate assert exact golden-path and portfolio-share counts; the controlled Project Manager Login As test must prove the scoped intake portfolio, direct resize handles, and attributable forecast/progress commands in Lightning.
 
 The implementation and seeded counts are maintained in `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
 
