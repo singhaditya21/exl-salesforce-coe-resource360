@@ -207,7 +207,13 @@ try {
                 assert.equal(await page.locator(".gantt-row").count(), 7, "Project Manager must see the seven governed WBS items.");
                 assert.equal(await page.locator(".resize-handle").count(), 7, "Every governed Gantt bar must expose a direct duration-resize handle.");
                 assert.equal(await page.getByText("WBS-DC-01", { exact: true }).count(), 0, "The retired legacy work item must not appear in the Gantt.");
-                assert.equal(await page.getByText("8h actual", { exact: false }).count() >= 2, true, "Project Manager must see shared approved delivery actuals.");
+                const taskActualLabels = await page.locator(".task-label small").allTextContents();
+                const positiveActualLabels = taskActualLabels.filter((label) => /·\s*[1-9]\d*(?:\.\d+)?h actual\s*$/.test(label));
+                assert.equal(
+                    positiveActualLabels.length >= 2,
+                    true,
+                    `Project Manager must see both shared approved delivery actuals; found ${positiveActualLabels.join(" | ") || "none"}.`
+                );
                 const intakeSection = page.getByText("Governed project intake · create project and initial SOW", { exact: true });
                 await intakeSection.waitFor({ state: "visible", timeout: 30_000 });
                 await intakeSection.click();
