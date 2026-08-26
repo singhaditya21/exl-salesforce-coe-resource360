@@ -7,6 +7,7 @@ private class Resource360DemoProvisionerTest {
 
     @IsTest
     static void provisionsEveryBusinessPersonaAcrossRealPermissionGroupsAndUsers() {
+        Resource360DemoProvisioner.bypassGroupRecalculationWait = true;
         Test.startTest();
         Resource360DemoProvisioner.ProvisioningResult first = Resource360DemoProvisioner.provision();
         Test.stopTest();
