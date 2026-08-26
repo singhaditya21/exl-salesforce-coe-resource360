@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 export type SnapshotKpi = { code: string; label: string; value: number; target: number; unit: string; status: string; definition: string; ownerRole?: string; date?: string };
 export type CapacitySnapshot = { key: string; label: string; role: string; portfolio: string; subPortfolio: string; workDate: string; standardHours: number; allocatedHours: number; remainingHours: number; overageHours: number; utilizationPercent: number; state: string; allocationCount: number; approvedOverallocation: boolean; pendingApprovalCount: number; reconciledAt: string };
 export type ForecastSnapshot = { week: string; coveragePercent: number; availableHours: number; committedHours: number; demandHours: number; rollOffHours: number; benchHours: number; overallocatedHours: number; status: string };
-export type ProjectSnapshot = { key: string; name: string; account: string; portfolio: string; status: string; lifecycle: string; completionPercent: number; startDate: string; endDate: string; forecastCompletionDate: string; scheduleVarianceDays: number; acceptanceFirstPassPercent: number; csatScore: number; npsScore: number; accountHealthScore: number; releaseCount: number; incidentCount: number; mandatorySkillCoveragePercent: number; roleReadinessPercent: number; riskExposureScore: number; highRiskAgeDays: number; planActualVariancePercent: number; approvedRevenue: number; approvedCost: number; approvedMarginPercent: number; forecastRevenue: number; forecastCost: number; forecastMarginPercent: number; marginErosionPoints: number; estimateToComplete: number; estimateAtCompletion: number; forecastAccuracyPercent: number };
+export type ProjectSnapshot = { key: string; name: string; account: string; portfolio: string; status: string; lifecycle: string; completionPercent: number; startDate: string; endDate: string; forecastCompletionDate: string; scheduleVarianceDays: number; acceptanceFirstPassPercent: number; csatScore: number; npsScore: number; accountHealthScore: number; releaseCount: number; incidentCount: number; mandatorySkillCoveragePercent: number; roleReadinessPercent: number; riskExposureScore: number; highRiskAgeDays: number; planActualVariancePercent: number; approvedRevenue: number; approvedCost: number; approvedMarginPercent: number; forecastRevenue: number; forecastCost: number; forecastMarginPercent: number; marginErosionPoints: number; estimateToComplete: number; estimateAtCompletion: number; forecastAccuracyPercent: number; budgetState: string; contractCount: number; paymentCount: number; moduleCount: number; workUnitCount: number; staffingRequestCount: number; allocationCount: number; riskCount: number };
+export type AccountSnapshot = { key: string; name: string; portfolio: string; projectCount: number; activeProjectCount: number; approvedRevenue: number; forecastRevenue: number; contractCount: number; paymentCount: number; allocationCount: number; accountHealthScore: number; deliveryRiskScore: number };
 
 export type SalesforceSnapshot = {
   schemaVersion: number;
@@ -14,12 +15,13 @@ export type SalesforceSnapshot = {
   kpis: SnapshotKpi[];
   capacity: CapacitySnapshot[];
   forecast: ForecastSnapshot[];
+  accounts: AccountSnapshot[];
   projects: ProjectSnapshot[];
   portfolios: { key: string; name: string; account: string; status: string; projects: number }[];
   staffing: { byState: Record<string, number>; averageTimeToFillDays: number; averageShortlist: number };
   commercial: Record<string, number>;
   delivery: Record<string, number>;
-  unavailability: { key: string; resource: string; type: string; startDate: string; endDate: string; hoursPerDay: number; status: string; source: string }[];
+  unavailability: { key: string; resourceKey: string; resource: string; type: string; startDate: string; endDate: string; hoursPerDay: number; status: string; source: string }[];
   quality: { guardrailBreaches: number; pendingCapacityApprovals: number; forecastWeeks: number; snapshotRecords: number };
 };
 
@@ -36,7 +38,7 @@ function freshnessFor(generatedAt: string) {
 function isSnapshot(value: unknown): value is SalesforceSnapshot {
   if (!value || typeof value !== "object") return false;
   const item = value as Partial<SalesforceSnapshot>;
-  return item.schemaVersion === 2 && item.classification === "SANITIZED_DEMO_ONLY" && Array.isArray(item.capacity) && Array.isArray(item.forecast) && Array.isArray(item.projects) && Boolean(item.source?.dataCutoff);
+  return item.schemaVersion === 2 && item.classification === "SANITIZED_DEMO_ONLY" && Array.isArray(item.accounts) && Array.isArray(item.capacity) && Array.isArray(item.forecast) && Array.isArray(item.projects) && Boolean(item.source?.dataCutoff);
 }
 
 export function useSalesforceSnapshot(): SnapshotState {
