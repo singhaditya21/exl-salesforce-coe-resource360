@@ -158,7 +158,7 @@ public without sharing class Resource360DemoScenarioData {
             allocation.Resource__c=source.Resource__c; allocation.Engagement__c=engagementId; allocation.Role__c=source.Requested_Role__c;
             allocation.Classification__c=source.Classification__c; allocation.Billable_Snapshot__c=source.Classification__c=='Billing';
             allocation.Start_Date__c=source.Start_Date__c; allocation.End_Date__c=source.End_Date__c; allocation.Daily_Hours__c=source.Daily_Hours__c;
-            allocation.State__c='Accepted'; allocation.Version__c=1; allocation.Current__c=true;
+            allocation.State__c='Accepted'; allocation.Version__c=1; allocation.Current__c=true;Resource360CapacityService.stampSeededPublished(allocation,'Deterministic scenario allocation.');
             if (source.Classification__c!='Billing') {
                 allocation.Responsible_Owner__c=stafferId; allocation.Review_Date__c=today.addDays(7);
                 allocation.Control_Reason__c=source.Classification__c+' demo control with accountable review.';

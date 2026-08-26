@@ -27,6 +27,11 @@
                 <label>Accepted</label>
             </value>
             <value>
+                <fullName>Capacity Approval</fullName>
+                <default>false</default>
+                <label>Capacity Approval</label>
+            </value>
+            <value>
                 <fullName>Declined</fullName>
                 <default>false</default>
                 <label>Declined</label>

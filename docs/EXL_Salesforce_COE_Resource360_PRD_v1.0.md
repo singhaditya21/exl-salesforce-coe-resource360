@@ -15,8 +15,8 @@
 | Embedded branch reviewed | `sms-system-build`, local archive snapshot at commit `16cfb4d594930a5902f9aa3c754ec3bc26e38ec7` |
 | Video review | 37 archive videos inventoried; 4 exact duplicate pairs; 33 unique videos (approximately 12.9 hours) reviewed across their duration |
 | Screen scope | 103 routed pages, full-screen steps, drawers and decision-critical modals drafted across the target product |
-| Requirement scope | 109 functional/admin requirements plus 25 UAT scenarios (134 traced items), 16 resolved product decisions and the build-readiness controls in Section 17 |
-| Traceability register | `docs/REQUIREMENTS_TRACEABILITY.md`, generated from this PRD and the governed screen catalogue; covers all 134 requirement/UAT items and all 103 screens |
+| Requirement scope | 117 functional/admin requirements plus 30 UAT scenarios (147 traced items), 16 resolved product decisions and the build-readiness controls in Section 17 |
+| Traceability register | `docs/REQUIREMENTS_TRACEABILITY.md`, generated from this PRD and the governed screen catalogue; covers all 147 requirement/UAT items and all 103 screens |
 | Intended reviewers | EXL Salesforce COE leadership, COE Staffing, Delivery, Product, Engineering, Finance, HR/L&D, PMO, Information Security, Brand/Marketing and Operations |
 | Assumption policy | Every EXL identity, source, policy, volume, approval and integration in this version is a sanitized deterministic mock contract, not a claim about EXL's current estate. `docs/MOCK_CONTRACT_REGISTER.md` is the delivery register. A later approved change replaces an assumption through versioned change control. |
 
@@ -32,6 +32,7 @@
 | 1.6 | 24 August 2026 | Added the interactive five-pillar Demo Activation Center in GitHub Pages and Salesforce: mock Entra SSO, all source integrations, production-like fictional data, legal/business approval evidence and operational controls now execute as one attributable 5/5 rehearsal with zero external calls and zero destructive actions. |
 | 1.7 | 25 August 2026 | Implemented the end-to-end Salesforce project-delivery golden path: governed intake, contract versions/lines, structured industry-functional-technical skill demand and match evidence, staffing-to-allocation-to-WBS traceability, dynamic PM Gantt, risks, acceptance, closeout, app pages, related lists and eleven native reports/dashboard components. |
 | 1.8 | 26 August 2026 | Added the idempotent enterprise demo graph: exactly 10 Accounts, 10 Portfolios, 20 Sub-portfolios, 20 fully related Projects, 60 governed Resources/Memberships and 60 Project Modules; added contract payments, delivery membership lineage, role-aware Project 360 context, four analytics domains and executable graph/share reconciliation. |
+| 1.9 | 26 August 2026 | Replaced the legacy 100% hard block with governed capacity control: eight-hour line maximum, eight-hour standard, independently approved 8–12 hour aggregate exceptions, 12-hour/150% safety ceiling, draft-to-publish planning, compact daily ledger, expiry/audit evidence, eight-hour actual-time cap, role-aware heatmaps/queues and certified capacity KPIs. The deterministic demo now reconciles all 60 resources: 50 at 8 hours and 10 approved examples at 10 hours. |
 
 ---
 
@@ -53,11 +54,11 @@ The target product has five operating components:
 
 ### Mock-complete delivery boundary
 
-Version 1.7 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed only by browser-local mock state.
+Version 1.9 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed only by browser-local mock state.
 
-The implemented mock baseline now includes the decision-critical items previously classified as partial or later-phase: resource-month budgeting and 160-hour assurance; atomic import/error export; three-mode capacity planning; deterministic source duplicate/collision reconciliation; candidate eligibility/gap reasons; staffing owner transfer; timesheet exceptions; KPI hierarchy/definitions; accountable alert closure; isolated what-if scenarios; retention dry run; atomic configuration release control; and persona-level screen authorization. All 109 functional/admin requirements are implemented within the approved sanitized-mock boundary. Four retain an EXL production certification gate.
+The implemented mock baseline now includes the decision-critical items previously classified as partial or later-phase: resource-month budgeting and 160-hour assurance; atomic import/error export; three-mode governed capacity planning; deterministic source duplicate/collision reconciliation; candidate eligibility/gap reasons; staffing owner transfer; timesheet exceptions; KPI hierarchy/definitions; accountable alert closure; isolated what-if scenarios; retention dry run; atomic configuration release control; and persona-level screen authorization. All 117 functional/admin requirements are implemented within the approved sanitized-mock boundary. Four retain an EXL production certification gate.
 
-This status does not waive production evidence. The four open activation requirements cover actual identity, canonical source certification/lineage and environment connector ownership. All 25 UAT scenarios are usable as mock paths but must be executed by named EXL owners before go-live.
+This status does not waive production evidence. The four open activation requirements cover actual identity, canonical source certification/lineage and environment connector ownership. All 30 UAT scenarios are usable as mock paths but must be executed by named EXL owners before go-live.
 
 The approved near-term baseline is a controlled integration release, not an autonomous AI release. It establishes EXL identity and master-data contracts, implements the Staffing approval gate, enforces allocation and budget rules server-side, connects accepted allocations to timesheets, represents Salesforce roles/clouds/certifications correctly, and publishes trusted operational dashboards. Predictive and agentic capabilities remain a later phase after the underlying data and workflow are reliable.
 
@@ -78,7 +79,7 @@ The approved near-term baseline is a controlled integration release, not an auto
 
 Where archive artifacts conflict, this PRD adopts the following target rules:
 
-- **Allocation over 100% is a hard block**, not a warning that may be overridden. Overlapping assignments are permitted only while total applicable capacity remains at or below 100%.
+- **Eight hours is standard daily capacity; 12 hours/150% is the governed aggregate safety ceiling.** A single project-allocation line cannot exceed eight hours. Aggregate allocation below eight is Underallocated, exactly eight is Fully Allocated, and above eight through 12 is permitted only through a reasoned, independently approved, expiring and audited exception. Above 12 is always blocked.
 - **A Project Manager creates a soft, pending allocation request.** Capacity is committed only when a Staffer accepts it. This is the archive's most fully specified staffer model and matches the integrated prototype.
 - **Accepted allocations alone enable timesheet charging.** Pending and declined requests never appear in the employee's timesheet.
 - **Billability is derived from engagement classification.** A separate Billable field is not captured.
@@ -120,7 +121,7 @@ The product should support EXL's official Salesforce positioning across platform
 | G-01 | Reduce time to find qualified candidates | Median candidate shortlist generated in under 5 minutes |
 | G-02 | Make staffing decisions skills-aware | At least 80% of staffed requests use one or more skill/experience filters within 60 days of rollout |
 | G-03 | Establish profile readiness | At least 90% of active delivery employees have a reviewed industry-skill profile by launch cohort deadline |
-| G-04 | Prevent capacity breaches | Zero accepted allocations that make an employee exceed configured capacity |
+| G-04 | Govern capacity exceptions | Zero accepted aggregate allocations above 12 hours/150%; zero accepted aggregate allocations above eight hours without current independent approval evidence |
 | G-05 | Enforce commercial readiness | Zero production allocations to a project without an approved, current budget/WBS unless an audited emergency exception is explicitly configured |
 | G-06 | Improve staffing responsiveness | At least 95% of pending staffing requests decided within 3 calendar days |
 | G-07 | Connect plan to actual | At least 98% of submitted project time maps to an accepted allocation and valid work date |
@@ -403,14 +404,14 @@ Every authenticated screen shall provide:
 | STFUI-02 Search by availability | PM, Staffer | Start/end, operator, asked availability/capacity, unit, team/tower, group/subgroup, grade, geography/time zone and Apply/Search | Mandatory fields, invalid range, no result, filtered empty and upstream stale. Directly reflects the videos' availability search. |
 | STFUI-03 Availability results | PM, Staffer | Multi-select table with practitioner, Salesforce role/title, team/tower, group/subgroup, grade, accepted availability, pending demand and fit entry point | A–Z index/saved filters optional; partial records; pending-soft-demand badge; pagination/virtualization. |
 | STFUI-04 Search by resource | PM, Staffer | Named practitioner, date range and Show schedule | No exact identity, inactive employee, out-of-scope employee, missing calendar. |
-| STFUI-05 Cross-engagement schedule | PM, Staffer, employee read-only | Gantt of accepted and pending assignments by engagement with PM, role, dates, classification, capacity and remaining availability | Week/month/quarter/year; overlap ≤100 visible; >100 proposed state blocked; confidentiality-aware labels. Seen in Search by Resource and Full Project Workload videos. |
+| STFUI-05 Cross-engagement schedule | PM, Staffer, employee read-only | Gantt of accepted, draft and pending assignments by engagement with PM, role, dates, classification, capacity, approval and remaining availability | Week/month/quarter/year; underallocated, exactly-eight, approved 8–12-hour exception and >12-hour blocked states; confidentiality-aware labels. Seen in Search by Resource and Full Project Workload videos. |
 | STFUI-06 Requirement builder | PM, Staffer | Primary/secondary Salesforce role, required/preferred clouds/capabilities, proficiency, certification, industry, experience, recent-use, location/time-zone and availability | Empty requirement blocked, retired skill, expired certification, conflicting requirements; strict/rank mode shown clearly. |
 | STFUI-07 Candidate shortlist | PM, Staffer | Eligible/partial/unavailable groups, fit score/dimensions, availability, relevant evidence, credentials, current assignments and compare/select | No candidate, partial data, stale credentials, score unavailable and why-excluded reason. |
 | STFUI-08 Practitioner 360 drawer | PM, Staffer, manager | Particulars, reporting line, Salesforce capabilities, industry skills, verified credentials, project evidence, current/future schedule and contact actions | Permission-redacted fields, stale source, missing profile; preserves underlying search/Gantt state. Derived from employee popovers and profile videos. |
 | STFUI-09 Classification step | PM | Engagement role, engagement classification, derived billability, delivery tower/team, onsite/offshore and any exception owner/review date | Mandatory LOVs, incompatible role/classification, time-bound unbilled controls, bulk apply and per-person override. |
-| STFUI-10 Scheduling Gantt | PM | Selected resources, capacity cells, accepted/pending bars, non-working days, date range, hours/% toggle, period granularity, auto-allocate and direct click/drag | The principal video screen: empty, partly available, conflict, stale schedule, zoom, horizontal scroll and keyboard edit. |
-| STFUI-11 Effort editor popover | PM | Start, end, effort, unit, work days, total effort, phase/work unit and Save/Cancel | Invalid or past dates, decimal limits, outside budget/role window, no remaining capacity. Mirrors the video effort/work-days popover. |
-| STFUI-12 Auto-allocation review | PM | Proposed distribution, reason for unscheduled cells, capacity/budget warnings and accept/edit proposal | No feasible schedule, partial schedule, holiday/calendar change and concurrent update. |
+| STFUI-10 Scheduling Gantt | PM | Selected resources, capacity heatmap cells, accepted/draft/pending bars, non-working days, date range, hours/% toggle, period granularity, auto-allocate and direct click/drag | The principal video screen: underallocated, fully allocated, approval-required, approved overallocated, hard-ceiling conflict, stale schedule, zoom, horizontal scroll and keyboard edit. |
+| STFUI-11 Effort editor popover | PM | Start, end, effort, unit, work days, total effort, phase/work unit, projected peak, exception reason and Save/Cancel | Invalid or past dates, line above eight hours, outside budget/role window, 8–12-hour approval requirement and >12-hour hard block. Mirrors the video effort/work-days popover. |
+| STFUI-12 Auto-allocation review | PM | Draft distribution, reason for unscheduled cells, capacity/budget warnings, exception reason and publish/request-approval actions | No feasible schedule, partial schedule, holiday/calendar change, concurrent approval, approval expiry and stale proposal. |
 | STFUI-13 Request review and submit | PM | Before-submit summary by person, role, classification, dates, effort, fit, budget coverage and warnings | Explicit Submit staffing request action; validation summary; draft/save; no generic OK confirmation. |
 | STFUI-14 Request success/status | PM | Request IDs, Pending Staffing state, SLA due time, next steps and link back to Resources | Partial failure is not success; notification failure; duplicate submit idempotency. |
 | STFUI-15 Modify allocation | PM, Staffer as authorized | Existing line, editable future segment, before/after metrics, extension or effort change and reason | Used/elapsed segment locked; approval impact; concurrent update. Derived from Modify Allocation videos. |
@@ -587,18 +588,24 @@ Priority labels: **P0** is required before production go-live of the integrated 
 | RAS-004 | P0 | Billability shall be derived from the selected engagement classification; the product shall not capture a separate Billable flag. | Reports and integrations use the classification mapping effective on the allocation date. |
 | RAS-005 | P0 | Scheduling shall support auto-allocation, direct Gantt selection/drag and explicit input. | All three modes produce the same validated daily allocation model. |
 | RAS-006 | P0 | Effort input shall support hours or percentage and display week, month, quarter and year granularity. | Persisted daily hours are deterministically derived; conversions use the active work calendar and capacity. |
-| RAS-007 | P0 | Total accepted allocation across concurrent projects shall never exceed the employee's applicable capacity; initial default is 8 business hours/day and 100%. | UI and database/service enforcement reject a breach atomically, including concurrent approvals. |
+| RAS-007 | P0 | Standard aggregate capacity is eight hours/100% per eligible day. Aggregate accepted allocation above eight and at or below 12 hours/150% is permitted only as a controlled over-allocation; aggregate above 12 is prohibited. | UI, trigger and service enforcement recheck every eligible date atomically, including concurrent approvals and direct DML. |
 | RAS-008 | P0 | Allocation percentage shall be calculated as `allocated hours ÷ (eligible allocated business days × daily capacity) × 100`, rounded for display to two decimal places. | Weekends/holidays/non-working days are excluded according to calendar configuration. |
 | RAS-009 | P0 | Allocation dates shall fall within project dates, employee employment dates and eligible project status. Start date shall not exceed end date. | Invalid range returns a specific validation reason. |
 | RAS-010 | P0 | Weekends shall be disabled by default and holiday/work calendars shall support region and employee work pattern. | Calendar differences change eligible capacity without rewriting history. |
-| RAS-011 | P0 | A resource may have multiple assignments on one project only when date ranges do not represent duplicate/conflicting effort and the aggregate remains within capacity. | Duplicate/overlap validation is deterministic and documented. |
-| RAS-012 | P0 | Overlapping assignments across projects at or below capacity shall be visible to PM and Staffer; a request that would breach capacity shall be blocked. | Conflict panel shows project, dates, role, classification, pending/accepted state and remaining capacity. |
+| RAS-011 | P0 | A resource may have multiple assignments on one or more projects when date ranges do not represent duplicate effort; aggregate state is derived independently for every eligible work date. | Duplicate/overlap validation is deterministic and the schedule shows each contributing line. |
+| RAS-012 | P0 | Cross-project overlap shall be visible to PM and Staffer. Below eight hours is underallocated, exactly eight is fully allocated, above eight through 12 requires approval, and above 12 is blocked. | Conflict panel shows project, dates, role, classification, draft/pending/accepted state, projected peak, approval evidence and remaining/overage hours. |
 | RAS-013 | P0 | New PM allocations shall be created as pending requests and shall not consume committed capacity until accepted by a Staffer. | Pending records are distinguishable from accepted allocations everywhere. |
 | RAS-014 | P0 | PMs shall view, modify, split and deallocate authorized project allocations and view an employee's cross-project schedule and profile. | Each operation applies status, date, capacity and audit rules. |
 | RAS-015 | P0 | For an ongoing project, ordinary users shall not change elapsed dates. An authorized administrator may backdate only with a mandatory reason and complete audit. | Past-date override is permission-gated and reported. |
 | RAS-016 | P0 | A role, classification or mid-range effort/date change to an active or utilized allocation shall create a new effective-dated line item rather than overwrite history. | Timesheet and profitability reports resolve the correct version by work date. |
 | RAS-017 | P0 | An unused future allocation may be updated in place where policy permits; deallocation shall end only the intended future period and preserve history. | No historical time or audit evidence is deleted. |
 | RAS-018 | P1 | The Engagement 360 Resources tab shall show current and future allocations, calculated utilization, availability and line-item history. | Values reconcile to daily allocations. |
+| RAS-019 | P0 | One project-allocation line shall be greater than zero and no more than eight daily hours, regardless of aggregate exception authority. | Validation rule, trigger and service reject direct or API writes outside the range. |
+| RAS-020 | P0 | Multi-line planning shall use non-consuming Draft records followed by explicit publication; a projected 8–12-hour state routes to independent capacity approval. | Legitimate split plans such as 3h + 5h can be assembled without transient false failures; drafts never change committed availability or timesheet eligibility. |
+| RAS-021 | P0 | Every controlled over-allocation shall retain business reason, state, independent approver, approval timestamp, review/expiry date, policy version and immutable audit correlation. | Missing, rejected or expired evidence prevents ordinary publication and is visible in the exception queue. |
+| RAS-022 | P0 | A transactionally derived daily-capacity ledger shall reconcile accepted current allocation lines by resource/as-of date and shall reject direct insert, update, delete and undelete. | Triggered inserts, updates and seeders refresh the ledger; direct DML tests cannot bypass it. |
+| RAS-023 | P0 | Resource and delivery-membership allocated hours, availability, utilization, state and as-of date shall be derived from the same ledger. | Reconciliation reports zero arithmetic/status mismatches and clamp availability at zero for overallocated resources. |
+| RAS-024 | P0 | Actual time remains capped at eight aggregate hours per employee/work date unless a separately approved overtime policy is activated. | Multiple eligible project entries may sum to eight; the next increment is rejected even when planned allocation is approved above eight. |
 | RAS-019 | P1 | Search and Gantt views shall provide field-level tooltips/hover detail for employee, classification and assignment context without exposing unauthorized personal data. | Detail is scope-aware and keyboard accessible. |
 | RAS-020 | P1 | Bulk import shall use a controlled mapping template with field validation, dry-run results and atomic/partial-commit policy selected before execution. | Invalid rows are downloadable with exact errors and no silent truncation. |
 
@@ -679,6 +686,8 @@ Priority labels: **P0** is required before production go-live of the integrated 
 | GOV-008 | P1 | Default ROW planning guardrails of 75% billed / 25% unbilled, WAR ≤10% and IFB ≤2% shall be configurable targets, not hard-coded allocation constraints. | Dashboards show actual versus active target and effective dates. |
 | GOV-009 | P1 | Alerts shall be actionable, with accountable owner, severity, first-seen time, current age, status and closure note. | Closing an alert does not erase the triggering record. |
 | GOV-010 | P2 | Authorized planners shall perform what-if scenarios without changing committed production allocations or budgets. | Scenario data is isolated, labelled and removable without production impact. |
+| GOV-011 | P0 | Staffing, Resource 360, PM Gantt and Command Center shall expose a shared capacity-state definition, heatmap, exception queue and resource drill-down. | Every state drills to the same ledger and accepted allocation evidence; role scope is enforced. |
+| GOV-012 | P1 | The command center shall show full-allocation coverage, exactly-eight balance, over-allocation exposure, approved/unapproved exceptions, pending approval, average allocated utilization, total overage and hard-ceiling/actual-time guardrail breaches. | KPI cards show definition, target, cutoff, source, scope and drill-down; counts reconcile to ledger and time entries. |
 
 ### 7.8 Administration and audit
 
@@ -700,11 +709,14 @@ Priority labels: **P0** is required before production go-live of the integrated 
 - The atomic planning representation is daily allocated hours. Percentage and higher-period views are derived.
 - Eligible days are determined by employment dates, project dates, employee work pattern, regional holiday calendar and permitted project status.
 - Default capacity is 8 hours on an eligible business day. The product shall support part-time or alternative calendars without changing prior records.
+- One allocation line is capped at 8 hours. The initial governed aggregate ceiling is 12 hours/150%; both values are versioned configuration.
 - `Allocation % = allocated hours / (eligible allocated days × applicable daily capacity) × 100`.
 - Display values may round to two decimals; validation must use the underlying precision and a documented tolerance.
 - Pending requests are soft holds. They may be shown as potential demand but do not reduce committed availability.
-- Acceptance is transactional: recheck capacity, budget, employee/project eligibility and conflicting state, then commit or reject the whole decision.
-- A person can be committed across multiple projects as long as accepted daily capacity does not exceed 100%.
+- Draft planning is non-consuming. Publication rechecks capacity, budget, employee/project eligibility, calendar exceptions and conflicting state, then commits, routes for capacity approval or rejects the whole decision.
+- Aggregate `<8h` is **Underallocated**, `=8h` is **Fully Allocated**, `>8h and ≤12h` is **Overallocated**, and `>12h` is a hard ceiling breach.
+- Publication above eight hours requires a non-empty reason, independent approver, decision timestamp, future review/expiry date, policy version and audit event. Rejection consumes no capacity. Expiry leaves the allocation visible as an unresolved exception until reduced or renewed.
+- Resource and delivery-membership availability/utilization are derived from the current daily ledger. Planned over-allocation cannot authorize actual time above eight hours; overtime is a separate future policy decision.
 
 ### 8.2 Allocation line-item versioning
 
@@ -826,6 +838,11 @@ Before dashboards are certified, Product, Finance, Delivery and Data owners must
 | Available capacity | Eligible capacity minus accepted allocation hours |
 | Billed utilization | Approved time in classifications mapped as billed ÷ eligible capacity for the same population/period |
 | Allocated utilization | Accepted allocated hours ÷ eligible capacity |
+| Full-allocation coverage | Active in-scope resources with at least eight accepted daily hours ÷ active in-scope resources |
+| Exactly-eight balance | Active in-scope resources with exactly eight accepted daily hours ÷ active in-scope resources |
+| Over-allocation exposure | Active in-scope resources above eight accepted daily hours ÷ active in-scope resources; approved and unapproved counts shown separately |
+| Capacity exception backlog | Draft/pending over-allocation plans plus accepted over-allocations with rejected, missing or expired approval evidence |
+| Capacity guardrail breaches | Accepted resource-days above 12 planned hours plus employee-days above eight approved actual hours; target is zero |
 | WAR / IFB / Blocked rate | Approved or allocated hours in the respective classification ÷ eligible capacity, with the numerator basis explicitly selected |
 | Staffing SLA | Decision timestamp − request timestamp, excluding or including non-business time according to signed policy |
 | Timesheet compliance | Required employee-weeks submitted and approved within policy ÷ required employee-weeks |
@@ -840,7 +857,7 @@ KPI certification baseline:
 
 | KPI family | Grain and refresh | Accountable owner | Reconciliation/target |
 |---|---|---|---|
-| Capacity, allocation and pending demand | Employee × engagement × work date; event-driven ≤15 minutes | Head of COE Staffing | Daily capacity ledger equals accepted allocation; zero accepted >100% |
+| Capacity, allocation and pending demand | Employee × engagement × work date; transactionally refreshed and scheduled reconciliation | Head of COE Staffing | 100% full-allocation coverage in the certified demo; exactly-eight shown separately; zero >12h, zero unapproved >8h and zero pending exceptions at release cutoff |
 | Staffing SLA and outcomes | Request/decision event; event-driven ≤15 minutes | Head of COE Staffing | ≥95% decided within 3 calendar days; expired reported separately from human decline |
 | Skills/profile/credential coverage | Employee × capability/credential snapshot; People 4-hour, skill real-time, credential daily | Salesforce Capability Lead | Profile completeness ≥90%; mandatory credential validity from Gateway only |
 | Timesheet compliance and actual effort | Employee × engagement × role × work date; event-driven and nightly reconcile | Delivery Operations | ≥95% first-pass compliance; approved, submitted and auto-approved separated |
@@ -963,7 +980,7 @@ The delivery baseline separates platform prerequisites from usable business incr
 | Release | Outcome | Included screen groups | Exit gate |
 |---|---|---|---|
 | R0 – Foundation | Secure, observable, deployable platform and certified source contracts | `GLB-01`, `GLB-03`, `GLB-05`, `GLB-06`, `ADMUI-01`–`ADMUI-08`, `CMD-08`, `CMD-09` | Entra SSO, RBAC, CI/CD, schema migrations, event idempotency, audit, fresh People/Engagement/Commercial/Learning test feeds and quarterly-restore procedure pass in pre-production |
-| R1 – Pilot MVP | One governed path from engagement and approved budget to skills-aware request, Staffer decision, allocation and weekly time | `GLB-02`, `GLB-04`, `ENG-01`–`ENG-08`, `STFUI-01`–`STFUI-18`, `STFUI-21`–`STFUI-23`, `SKLUI-01`, `SKLUI-05`–`SKLUI-11`, `SKLUI-14`–`SKLUI-17`, `SKLUI-20`–`SKLUI-24`, `BUDUI-01`–`BUDUI-10`, `BUDUI-12`, `TIMEUI-01`–`TIMEUI-07` | UAT-01 through UAT-17 and UAT-21 through UAT-25 pass; no Sev-1/2 defect; audit and reconciliation complete without direct database intervention |
+| R1 – Pilot MVP | One governed path from engagement and approved budget to skills-aware request, Staffer decision, allocation and weekly time | `GLB-02`, `GLB-04`, `ENG-01`–`ENG-08`, `STFUI-01`–`STFUI-18`, `STFUI-21`–`STFUI-23`, `SKLUI-01`, `SKLUI-05`–`SKLUI-11`, `SKLUI-14`–`SKLUI-17`, `SKLUI-20`–`SKLUI-24`, `BUDUI-01`–`BUDUI-10`, `BUDUI-12`, `TIMEUI-01`–`TIMEUI-07` | UAT-01 through UAT-17 and UAT-21 through UAT-30 pass; no Sev-1/2 defect; audit and reconciliation complete without direct database intervention |
 | R2 – Scale and control | Bulk operations, manager/COE skills views, certified command center and compliance operations | `STFUI-19`, `STFUI-20`, `STFUI-24`, `SKLUI-02`–`SKLUI-04`, `SKLUI-12`–`SKLUI-13`, `SKLUI-18`–`SKLUI-19`, `BUDUI-11`, `TIMEUI-08`, `CMD-01`–`CMD-07` | UAT-18 through UAT-20 pass; Finance, Delivery and Data owners reconcile two closed periods; P95/SLO and accessibility gates pass at launch volume |
 | R3 – Planning intelligence | Human-controlled prediction, what-if and recommendation workflows | `AIUI-01`–`AIUI-04` | AI entry criteria in Section 17.14 pass for eight consecutive weeks; model and privacy approvals complete; all writes retain explicit human confirmation |
 
@@ -989,7 +1006,7 @@ The delivery baseline separates platform prerequisites from usable business incr
 | UAT-02 | PM searches three Salesforce capabilities, a mandatory certification and minimum experience in Engagement 360 | Strict mode returns only employees meeting all requirements |
 | UAT-03 | SMS user performs the same search in rank mode | Ranked shortlist includes partial matches with transparent per-requirement results |
 | UAT-04 | PM requests 40% of a resource with 50% accepted elsewhere | Pending request is allowed and shows 10% remaining if otherwise eligible |
-| UAT-05 | Staffer attempts to accept a request after another decision raises capacity to 80% | Acceptance revalidates and blocks the resulting >100% state |
+| UAT-05 | Staffer attempts to publish a request after another decision raises capacity to 80% | Publication revalidates; a resulting 8–12-hour state becomes a non-consuming approval request, while a result above 12 hours is blocked |
 | UAT-06 | Pending request remains undecided for configured 3-day SLA | System expires/declines it, releases soft demand and records notification/audit |
 | UAT-07 | Staffer accepts valid request | Allocation commits and appears on employee timesheet only for effective dates/roles |
 | UAT-08 | Staffer declines request | No capacity or timesheet eligibility is created; reason is visible to PM |
@@ -1010,8 +1027,13 @@ The delivery baseline separates platform prerequisites from usable business incr
 | UAT-23 | Practitioner profile has approved proficiency but client/project evidence is confidential | Search uses authorized recency/duration signals without exposing restricted client details |
 | UAT-24 | User traverses all screens permitted to one role and attempts deep links to restricted screens | Navigation shows only permitted destinations; restricted routes and APIs deny access without leaking record existence |
 | UAT-25 | Keyboard-only user completes search, Gantt scheduling, request submission and staffer decision at 200% zoom | Focus, reflow, labels, grid alternatives and decisions remain usable and meet agreed accessibility criteria |
+| UAT-26 | Direct API/DML attempts a nine-hour allocation line or an unapproved aggregate above eight hours | Transaction fails; no allocation, resource summary or ledger drift is committed |
+| UAT-27 | PM assembles a 3h + 5h split in Draft and publishes | Draft lines do not consume capacity; publication produces exactly eight hours and a Fully Allocated ledger state |
+| UAT-28 | Two capacity approvals are submitted from stale views | Each decision locks and rechecks aggregate capacity; approved total may reach 12 but the next increment is blocked |
+| UAT-29 | Approved over-allocation reaches review expiry | Allocation remains visible, approval state becomes Expired, exception queue/ledger flags it as unapproved, and audit/notification evidence is retained |
+| UAT-30 | Employee with an approved ten-hour plan enters time on multiple projects | Entries may total eight actual hours; the increment above eight is rejected unless a future overtime policy is explicitly activated |
 
-The archived `RMG-Business Test Cases.xlsx` contains 239 historical tests. Those tests should be mapped to these signed requirements; contradictory expectations—especially exact-100% allocation versus ≤100%, and warn-versus-block over-allocation—must be retired or rewritten before execution.
+The archived `RMG-Business Test Cases.xlsx` contains 239 historical tests. Those tests should be mapped to these signed requirements. Legacy hard-block-above-100% cases are superseded by the governed 8–12-hour exception workflow; cases that permit above 12 hours or omit approval evidence must be retired.
 
 ---
 
@@ -1025,7 +1047,7 @@ The archived `RMG-Business Test Cases.xlsx` contains 239 historical tests. Those
 | Portfolio, subgroup and team data incomplete | Scope, Team and Portfolio views unreliable | Define authoritative fields and completeness gates; disable dependent views until ready |
 | Duplicate emails and missing email | Identity ambiguity | Use stable Employee ID; define SSO/email collision and no-email handling |
 | Archived budget approval policies conflict | Historical tests or stakeholders may expect the BOOST chain | DEC-01 makes the 30/25/20 chain authoritative for v1; any change follows versioned change control |
-| Historic allocation tests conflict on >100% behavior | Inconsistent implementation/UAT | Adopt hard block and retire conflicting test cases through signed change control |
+| Historic allocation tests conflict on >100% behavior | Inconsistent implementation/UAT | Adopt the authoritative eight-hour standard, independently approved 8–12-hour exception and >12-hour hard block; retire conflicting cases through signed change control |
 | RAS MVP1.5 release status inconsistent | Duplicate work or missed defects | Production configuration/code inspection and item-by-item acceptance evidence |
 | Budgeting, Staffer and integrated prototype store state locally | Prototype behavior may be mistaken for production capability | Build server-backed services and integration contracts; never migrate localStorage as source data |
 | No SMS backup/DR or observability in snapshot | Undetected failures and unrecoverable data | P0 operational foundation with tested restore and monitoring |
@@ -1108,7 +1130,7 @@ Secrets, endpoints, certificates, Named/External Credentials, schema, Apex/LWC, 
 
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.7 target architecture.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.9 target architecture.
 
 ```mermaid
 flowchart LR
@@ -1344,7 +1366,7 @@ Every unbilled/internal record requires owner, start, planned end/review and rea
 ### 17.11 Migration, cutover and reconciliation
 
 1. **Inventory and profile:** extract employees, org hierarchy, engagements, commercial references, skills, credentials, active/future allocations, open staffing requests, budgets and 24 months of timesheet history. Record counts, owners, PII/classification and source keys.
-2. **Map and cleanse:** map legacy identifiers to canonical IDs; quarantine duplicate Employee IDs/email, invalid dates, unknown classifications, overlapping allocation >100%, orphan engagement/employee references and unverified credentials. No fabricated defaults except the explicit capacity fallback in DEC-05.
+2. **Map and cleanse:** map legacy identifiers to canonical IDs; quarantine duplicate Employee IDs/email, invalid dates, unknown classifications, aggregate allocation above 12 hours or above eight without current approval evidence, orphan engagement/employee references and unverified credentials. No fabricated defaults except the explicit capacity fallback in DEC-05.
 3. **Dry run:** load a masked Test dataset, then a production-like Pre-production dataset. Reconcile counts, totals, allocation capacity, budget totals, credential states and referential integrity. Publish signed exception disposition.
 4. **Initial production load:** freeze configuration, load reference/master data, then budget, skills, open requests, current/future allocations and historical time in dependency order. Audit each batch and preserve source ID.
 5. **Delta and parallel run:** apply source deltas, run the four-week pilot parallel validation and compare staffing state, capacity, time and financial totals daily.
@@ -1436,7 +1458,7 @@ The following values are planning assumptions to be replaced by measured pilot b
 | Staffing decision cycle | 5 calendar days | 95% ≤3 calendar days | Request created to accepted/declined/expired |
 | Manual staffing/budget/time reconciliation | 400 person-hours/month for the pilot-equivalent population | Reduce by ≥50% at scale | Time study and Operations work logs |
 | Profile readiness | 60% complete | ≥90% in launch population | Signed completeness definition in DEC-09 |
-| Capacity-control defects | 2 accepted over-allocation corrections/month | Zero accepted >100% | Allocation ledger and correction audit |
+| Capacity-control defects | 2 accepted over-allocation corrections/month | Zero accepted above 12 hours and zero unapproved above eight hours | Allocation ledger and correction audit |
 | Plan/actual reporting latency | T+5 business days | T+1 business day | Source cutoff to certified dashboard availability |
 | Timesheet first-pass compliance | 85% | ≥95% | Required employee-weeks approved without correction by deadline |
 
@@ -1531,7 +1553,7 @@ The demo must prove one coherent project path in Salesforce, not a collection of
 7. Approved time maps to the project and WBS, is visible to the Project Manager through governed parent sharing, and cannot be edited or deleted in place.
 8. Closeout fails closed while active work, required acceptance, high/critical risks, unreconciled time, approved commercial evidence or current approved budget gates fail. Submission releases allocations; a separately permissioned approver records approval or rejection from the workbench and the submitter cannot self-approve.
 9. The Resource 360 app activates a role-aware Home page and an Engagement record page containing dynamic highlights, the delivery workbench and contract/work/skill/staffing/allocation/risk/closeout related lists.
-10. Native analytics include fifteen report types/reports and a fifteen-component command center spanning hierarchy, lifecycle, contracts/payments, modules/WBS, skill match, staffing/membership capacity, allocations, capability supply, budget, actuals, risks and closeout.
+10. Native analytics include seventeen report types/reports and a seventeen-component command center spanning hierarchy, lifecycle, contracts/payments, modules/WBS, skill match, staffing/membership capacity, daily capacity control, over-allocation exceptions, allocations, capability supply, budget, actuals, risks and closeout.
 11. The deterministic seed and preparation gate assert exact golden-path and portfolio-share counts; the controlled Project Manager Login As test must prove the scoped intake portfolio, direct resize handles, and attributable forecast/progress commands in Lightning.
 
 The implementation and seeded counts are maintained in `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.

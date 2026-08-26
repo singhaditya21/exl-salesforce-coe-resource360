@@ -10,6 +10,14 @@
         <columns><checkedByDefault>true</checkedByDefault><field>Billable_Snapshot__c</field><table>Allocation__c</table></columns>
         <columns><checkedByDefault>true</checkedByDefault><field>Daily_Hours__c</field><table>Allocation__c</table></columns>
         <columns><checkedByDefault>true</checkedByDefault><field>State__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Planning_Status__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Capacity_Status__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Overallocated__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Overallocation_Status__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Overallocation_Reason__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Overallocation_Approved_By__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Overallocation_Expiry_Date__c</field><table>Allocation__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Projected_Daily_Hours__c</field><table>Allocation__c</table></columns>
         <masterLabel>Allocation control</masterLabel>
     </sections>
 </ReportType>

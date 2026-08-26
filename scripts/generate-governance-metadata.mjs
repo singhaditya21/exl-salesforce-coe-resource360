@@ -143,7 +143,7 @@ const demoApprovalEvidence = [
   ["APR-SECURITY", "Threat model and access review", "Information Security", "MOCK-SEC-2026-08"],
   ["APR-RETENTION", "Retention, recovery and legal hold", "Legal / Records Management", "MOCK-RET-2026-08"],
   ["APR-A11Y", "Accessibility conformance review", "Accessibility Lead", "MOCK-A11Y-2026-08"],
-  ["APR-UAT", "25-scenario business UAT rehearsal", "Salesforce COE Product Owner", "MOCK-UAT-25-OF-25"],
+  ["APR-UAT", "30-scenario business UAT rehearsal", "Salesforce COE Product Owner", "MOCK-UAT-30-OF-30"],
   ["APR-CUTOVER", "Cutover, rollback and recovery rehearsal", "Release Management", "MOCK-CUTOVER-2026-08"],
 ];
 

@@ -1,4 +1,29 @@
 public inherited sharing class Resource360TimeService {
+    private static Boolean serviceValidatedWrite=false;
+
+    public static Boolean isServiceValidatedWrite(){return serviceValidatedWrite;}
+
+    public static void validateDirectWrite(List<Time_Entry__c> proposed,Map<Id,Time_Entry__c> priorById){
+        if(serviceValidatedWrite||proposed==null||proposed.isEmpty())return;
+        Decimal maximumHours=Resource360Policy.numberValue('Time_Max_Daily_Hours',8);
+        List<Time_Entry__c>relevant=new List<Time_Entry__c>();Set<Id>timesheetIds=new Set<Id>();Set<Id>candidateIds=new Set<Id>();
+        for(Time_Entry__c entry:proposed){
+            if(entry.Hours__c==null||entry.Hours__c<=0||entry.Hours__c>maximumHours){entry.addError('Actual time must be greater than zero and cannot exceed '+maximumHours+' hours per entry.');continue;}
+            Time_Entry__c prior=entry.Id==null||priorById==null?null:priorById.get(entry.Id);
+            Boolean capacityChanged=prior==null||entry.Hours__c!=prior.Hours__c||entry.Work_Date__c!=prior.Work_Date__c||entry.Timesheet__c!=prior.Timesheet__c||(prior.State__c=='Rejected'&&entry.State__c!='Rejected');
+            if(!capacityChanged||entry.State__c=='Rejected'||entry.Timesheet__c==null||entry.Work_Date__c==null)continue;
+            relevant.add(entry);timesheetIds.add(entry.Timesheet__c);if(entry.Id!=null)candidateIds.add(entry.Id);
+        }
+        if(relevant.isEmpty())return;
+        Map<Id,Timesheet__c>sheets=new Map<Id,Timesheet__c>([SELECT Id,Resource__c,Current__c FROM Timesheet__c WHERE Id IN:timesheetIds]);
+        Set<Id>resourceIds=new Set<Id>();Date minimumDate;Date maximumDate;Map<String,List<Time_Entry__c>>candidatesByKey=new Map<String,List<Time_Entry__c>>();
+        for(Time_Entry__c entry:relevant){Timesheet__c sheet=sheets.get(entry.Timesheet__c);if(sheet==null||sheet.Resource__c==null){entry.addError('A governed resource timesheet is required.');continue;}if(!sheet.Current__c)continue;String key=String.valueOf(sheet.Resource__c)+'|'+String.valueOf(entry.Work_Date__c);if(!candidatesByKey.containsKey(key))candidatesByKey.put(key,new List<Time_Entry__c>());candidatesByKey.get(key).add(entry);resourceIds.add(sheet.Resource__c);minimumDate=minimumDate==null||entry.Work_Date__c<minimumDate?entry.Work_Date__c:minimumDate;maximumDate=maximumDate==null||entry.Work_Date__c>maximumDate?entry.Work_Date__c:maximumDate;}
+        if(candidatesByKey.isEmpty())return;
+        Map<String,Decimal>totalsByKey=new Map<String,Decimal>();
+        for(Time_Entry__c existing:[SELECT Id,Timesheet__r.Resource__c,Work_Date__c,Hours__c FROM Time_Entry__c WHERE Timesheet__r.Resource__c IN:resourceIds AND Timesheet__r.Current__c=true AND Work_Date__c>=:minimumDate AND Work_Date__c<=:maximumDate AND State__c IN('Draft','Submitted','Approved')]){if(candidateIds.contains(existing.Id))continue;String key=String.valueOf(existing.Timesheet__r.Resource__c)+'|'+String.valueOf(existing.Work_Date__c);totalsByKey.put(key,(totalsByKey.containsKey(key)?totalsByKey.get(key):0)+existing.Hours__c);}
+        for(String key:candidatesByKey.keySet()){Decimal total=totalsByKey.containsKey(key)?totalsByKey.get(key):0;for(Time_Entry__c entry:candidatesByKey.get(key))total+=entry.Hours__c;if(total>maximumHours)for(Time_Entry__c entry:candidatesByKey.get(key))entry.addError('Aggregate actual time reaches '+total+' hours; the governed maximum is '+maximumHours+' hours per resource-day.');}
+    }
+
     public static Resource360Service.ServiceResult createTimesheet(Id resourceId, Date weekStart) {
         if (resourceId == null || weekStart == null || isoWeekday(weekStart) != 1) fail('Select a resource and a Monday week start.');
         Resource360Security.requireResourceOwnership(resourceId, 'Resource360_Approve_Timesheets', 'You can create only your own timesheet.');
@@ -13,7 +38,7 @@ public inherited sharing class Resource360TimeService {
     }
 
     public static Resource360Service.ServiceResult saveEntry(Id timesheetId, Id allocationId, Date workDate, Decimal hours, Id workUnitId, String comment) {
-        Decimal maximumHours=Resource360Policy.numberValue('Time_Max_Daily_Hours',24);if (workDate==null||hours==null||hours<=0||hours>maximumHours) fail('Provide a work date and hours within the configured '+maximumHours+'-hour maximum.');
+        Decimal maximumHours=Resource360Policy.numberValue('Time_Max_Daily_Hours',8);if (workDate==null||hours==null||hours<=0||hours>maximumHours) fail('Provide a work date and hours within the configured '+maximumHours+'-hour maximum.');
         Timesheet__c timesheet=[SELECT Id,Resource__c,Week_Start__c,Due_At__c,Status__c,Version__c,Current__c FROM Timesheet__c WHERE Id=:timesheetId WITH USER_MODE LIMIT 1 FOR UPDATE];
         Resource360Security.requireResourceOwnership(timesheet.Resource__c,'Resource360_Approve_Timesheets','You can edit only your own timesheet.');
         if(!timesheet.Current__c||(timesheet.Status__c!='Draft'&&timesheet.Status__c!='Rejected'))fail('Only a current draft or rejected timesheet can be edited.');
@@ -31,7 +56,7 @@ public inherited sharing class Resource360TimeService {
         if(otherHours+hours>capacity)fail('Total time exceeds '+String.valueOf(capacity)+' hours for the employee calendar on '+String.valueOf(workDate)+'.');
         Time_Entry__c entry=existing.isEmpty()?new Time_Entry__c(Entry_Key__c=entryKey,Version__c=1):existing[0];
         entry.Timesheet__c=timesheetId;entry.Allocation__c=allocationId;entry.Engagement__c=allocation.Engagement__c;entry.Work_Unit__c=workUnitId;entry.Work_Date__c=workDate;entry.Hours__c=hours;entry.Role__c=allocation.Role__c;entry.State__c='Draft';entry.Comment__c=comment;if(!existing.isEmpty())entry.Version__c=entry.Version__c+1;
-        upsert entry;
+        try{serviceValidatedWrite=true;upsert entry;}finally{serviceValidatedWrite=false;}
         String correlation=correlationId();recordEvent(correlation,'TIME_ENTRY_SAVED',entry.Id,entry.Version__c,'ELIGIBLE_ALLOCATION','Eligible allocation time saved.',null,'Draft');
         return result(true,'Time entry saved.',entry.Id,correlation);
     }

@@ -5,11 +5,11 @@
 | Layer | Implementation | Responsibility |
 |---|---|---|
 | Experience | Lightning app `Resource360`; LWCs `resource360Workspace` and `resource360ProjectWorkbench`; app Home and Engagement record FlexiPages | Role-aware EXL shell, 103-screen routes/contracts, dynamic PM Gantt, commands, related lists and record drill-down |
-| Domain services | 36 production Apex classes and 12 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, capacity/freshness planning, decisions, analytics, integration, notifications and audit |
+| Domain services | 37 production Apex classes and 13 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360CapacityService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, non-bypassable capacity planning/ledger controls, decisions, analytics, integration, notifications and audit |
 | Demo bootstrap | `Resource360DemoData`, `Resource360DemoScenarioData`, `Resource360GoldenPathData` and `Resource360ScaleDemoData` Apex | Idempotent fictional baseline, fully linked project-delivery golden path and exact 10-account/20-project enterprise graph |
-| Data | 38 record objects including Account, six custom-metadata types and one platform event | Account/portfolio hierarchy, engagement, contracts/payments, modules/work/dependencies, delivery membership, skills demand/match, economics, staffing, allocation, time, risk, closeout, configuration, operations and evidence |
-| Policy | 150 governed policy/classification/delivery-role/source/persona/retention records plus effective-dated runtime overrides and atomic release bundles | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, assurance, lineage, retention preview and access |
-| Analytics | `Resource360AnalyticsService`, fifteen custom report types/reports and a fifteen-component dashboard | Scoped KPI populations/definitions/cutoffs, portfolio hierarchy, module delivery, payment position, membership capacity, delivery lifecycle and Salesforce report-builder access |
+| Data | 39 record objects including Account, six custom-metadata types and one platform event | Account/portfolio hierarchy, engagement, contracts/payments, modules/work/dependencies, delivery membership, skills demand/match, economics, staffing, allocation, daily capacity, time, risk, closeout, configuration, operations and evidence |
+| Policy | 157 governed policy/classification/delivery-role/source/persona/retention records plus effective-dated runtime overrides and atomic release bundles | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, capacity guardrails, assurance, lineage, retention preview and access |
+| Analytics | `Resource360AnalyticsService`, sixteen custom report types, seventeen reports and a seventeen-component dashboard | Scoped KPI populations/definitions/cutoffs, portfolio hierarchy, module delivery, payment position, membership/daily capacity, over-allocation exceptions, delivery lifecycle and Salesforce report-builder access |
 | Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
 
 ## Domain model
@@ -20,7 +20,7 @@
 | Commercial and collections | `Commercial_Reference__c`, `Commercial_Line__c`, `Contract_Payment__c` |
 | Budget and WBS | `Budget__c`, `Budget_Line__c`, `R360_Approval_Decision__c` |
 | People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c`, `Engagement_Skill_Requirement__c` |
-| Staffing and allocation | `R360_Delivery_Membership__c`, `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c` |
+| Staffing and allocation | `R360_Delivery_Membership__c`, `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c`, `R360_Daily_Capacity__c` |
 | Time | `Timesheet__c`, `Time_Entry__c` |
 | Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt`, `R360_Persona__mdt`, `R360_Source_Contract__mdt`, `R360_Retention_Rule__mdt` |
 | Operations and evidence | `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
@@ -33,8 +33,8 @@ Relationships preserve organizational and decision lineage: Account owns Portfol
 2. Approved SOW, amendments and change orders retain parent/version/value lineage and map commercial deliverables to WBS work.
 3. A PM baselines work, dependencies and milestones; rescheduling validates project bounds, accepted allocation coverage and dependency dates, then cascades successors when requested.
 4. Industry, functional and technical requirements are scored against approved practitioner evidence; mandatory gaps block acceptance.
-5. Staffing requires an active engagement, current approved signed budget, active classification and per-business-day capacity.
-6. A Staffer decision locks/revalidates the request and creates allocation only on acceptance; impossible competing requests close with attributable evidence.
+5. Staffing requires an active engagement, current approved signed budget, active classification and per-business-day capacity. Allocation planning is Draft until published; a line cannot exceed 8 hours and aggregate 8–12-hour exceptions require an independently approved reason and review/expiry date.
+6. A Staffer decision locks/revalidates the request and creates allocation only on acceptance; allocation and ledger triggers atomically recheck direct DML, lock affected resources and reconcile the daily-capacity ledger, Resource and Delivery Membership summaries. Impossible competing requests remain pending or close with attributable evidence according to policy.
 7. Budget economics reconcile to WBS and route through immutable sequential decisions with separation of duties.
 8. Talent filter/rank normalizes active weights while mandatory capability, credential, employment, scope and availability gates cannot be compensated.
 9. Time uses accepted allocation/date/role and aggregate calendar capacity; approved rows are immutable and corrections create new lineage.

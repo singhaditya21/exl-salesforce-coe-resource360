@@ -30,11 +30,14 @@ const fieldsFor = (objectName) => {
 const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
 const permissions = (read, create = false, edit = false, remove = false, viewAll = false, modifyAll = false) => ({ read, create, edit, remove, viewAll, modifyAll });
 const readOnly = { Account: permissions(true), ...Object.fromEntries(businessObjects.map((name) => [name, permissions(true)])) };
+const stafferAllocationFields = fieldsFor("Allocation__c").map((field) => field.name).filter((name) => ![
+  "Overallocation_Approved_By__c","Overallocation_Approved_At__c","Overallocation_Expiry_Date__c"
+].includes(name));
 
 const roleConfigs = [
   {
     name: "Resource360_Base_User", label: "Resource 360 Base User", description: "Least-privilege read access to Resource 360 operational business data and the Lightning workspace.",
-    objects: readOnly, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360ProjectService", "Resource360AssuranceService", "Resource360GovernanceService", "Resource360RoleScopeService"], customPermissions: ["Resource360_Access"], editable: {}
+    objects: readOnly, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360ProjectService", "Resource360AssuranceService", "Resource360GovernanceService", "Resource360RoleScopeService", "Resource360CapacityService"], customPermissions: ["Resource360_Access"], editable: {}
   },
   {
     name: "Resource360_Practitioner_Actions", label: "Resource 360 Practitioner Actions", description: "Self-service capability, credential and weekly-time commands; record scope remains server enforced.",
@@ -63,8 +66,13 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Staffer_Actions", label: "Resource 360 Staffer Actions", description: "Decide staffing and maintain effective-dated allocations within authorized scope.",
-    objects: { Engagement__c: permissions(true), Staffing_Request__c: permissions(true, true, true), Staffing_Skill_Match__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true), Allocation__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true), Budget__c: permissions(true), Commercial_Reference__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService"], customPermissions: ["Resource360_Manage_Staffing"],
-    editable: { Staffing_Request__c: "ALL", Staffing_Skill_Match__c: "ALL", Allocation__c: "ALL" }
+    objects: { Engagement__c: permissions(true), Staffing_Request__c: permissions(true, true, true), Staffing_Skill_Match__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true), Allocation__c: permissions(true, true, true), R360_Daily_Capacity__c: permissions(true), R360_Role_Scope__c: permissions(true), Budget__c: permissions(true), Commercial_Reference__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360CapacityService"], customPermissions: ["Resource360_Manage_Staffing"],
+    editable: { Staffing_Request__c: "ALL", Staffing_Skill_Match__c: "ALL", Allocation__c: stafferAllocationFields }
+  },
+  {
+    name: "Resource360_Capacity_Approver_Actions", label: "Resource 360 Capacity Approver Actions", description: "Independently approve or reject controlled eight-to-twelve-hour allocation exceptions with attributable expiry and audit evidence.",
+    objects: { Allocation__c: permissions(true, false, true), Staffing_Request__c: permissions(true, false, true), R360_Daily_Capacity__c: permissions(true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360CapacityService", "Resource360Service"], customPermissions: ["Resource360_Approve_Overallocation"],
+    editable: { Allocation__c: ["State__c","Planning_Status__c","Capacity_Status__c","Overallocated__c","Overallocation_Status__c","Overallocation_Reason__c","Overallocation_Approved_By__c","Overallocation_Approved_At__c","Overallocation_Expiry_Date__c","Projected_Daily_Hours__c","Published_By__c","Published_At__c","Capacity_Policy_Version__c"], Staffing_Request__c: ["State__c","Decision_Reason__c"] }
   },
   {
     name: "Resource360_Controlled_Override", label: "Resource 360 Controlled Override", description: "Separately assigned authority for attributable past-date allocation and post-deadline time operations; never included in a default business-role group.",
@@ -141,7 +149,7 @@ const writePermissionSet = (config) => {
   const lines = ['<?xml version="1.0" encoding="UTF-8"?>','<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">',`    <description>${config.description}</description>`,'    <hasActivationRequired>false</hasActivationRequired>',`    <label>${config.label}</label>`];
   if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
     lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
-    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","R360_Sub_Portfolio__c","Project_Module__c","Work_Unit__c","Commercial_Reference__c","Contract_Payment__c","Resource__c","R360_Delivery_Membership__c","Staffing_Request__c","Allocation__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
+    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","R360_Sub_Portfolio__c","Project_Module__c","Work_Unit__c","Commercial_Reference__c","Contract_Payment__c","Resource__c","R360_Delivery_Membership__c","Staffing_Request__c","Allocation__c","R360_Daily_Capacity__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
     for (const permission of ["LightningExperienceUser", "RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
       lines.push(`    <userPermissions><enabled>true</enabled><name>${permission}</name></userPermissions>`);
     }
@@ -174,7 +182,7 @@ const groups = {
   Resource360_Configuration_Approver: ["Resource360_Base_User","Resource360_Configuration_Approver_Actions"],
   Resource360_Portfolio_Lead: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions"],
   Resource360_Account_Owner: ["Resource360_Base_User","Resource360_Portfolio_Control_Actions"],
-  Resource360_Head_of_Delivery: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions"],
+  Resource360_Head_of_Delivery: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions","Resource360_Capacity_Approver_Actions"],
   Resource360_GM_COO_Delegate: ["Resource360_Base_User","Resource360_Budget_Approver_Actions","Resource360_Closeout_Approver_Actions"],
   Resource360_Finance_PMO: ["Resource360_Base_User","Resource360_Finance_PMO_Actions"],
   Resource360_Timesheet_Approver: ["Resource360_Base_User","Resource360_Timesheet_Approver_Actions"],

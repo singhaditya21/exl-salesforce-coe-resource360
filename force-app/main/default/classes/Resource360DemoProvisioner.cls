@@ -5,6 +5,7 @@
  */
 public without sharing class Resource360DemoProvisioner {
     private static final String DEMO_PORTFOLIO_ID = 'PORT-SFCOE-DEMO';
+    @TestVisible private static Boolean bypassGroupRecalculationWait = false;
 
     public class ProvisioningResult {
         @AuraEnabled public Boolean success;
@@ -128,7 +129,10 @@ public without sharing class Resource360DemoProvisioner {
         for (PermissionSetGroup groupRecord : [
             SELECT Id, DeveloperName, Status FROM PermissionSetGroup WHERE DeveloperName IN :requiredGroups
         ]) {
-            if (groupRecord.Status != 'Updated') {
+            // Check-only deployments can leave a changed group in Updating while
+            // Apex tests run. Tests do not exercise permissions through these
+            // assignments; production provisioning must still fail closed.
+            if (groupRecord.Status != 'Updated' && !(Test.isRunningTest() && bypassGroupRecalculationWait)) {
                 throw new AuraHandledException('Permission-set group '+groupRecord.DeveloperName+' is still recalculating.');
             }
             groupByName.put(groupRecord.DeveloperName, groupRecord);

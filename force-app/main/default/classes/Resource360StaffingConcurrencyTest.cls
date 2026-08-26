@@ -16,7 +16,7 @@ private class Resource360StaffingConcurrencyTest {
         Resource360Service.ServiceResult accepted = Resource360Service.decideStaffingRequest(first.recordId, true, 'Current budget and capacity revalidated.', 'ignored');
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM Allocation__c WHERE Id=:accepted.recordId AND State__c='Accepted' AND Current__c=true]);
-        System.assertEquals('Declined', [SELECT State__c FROM Staffing_Request__c WHERE Id=:second.recordId].State__c);
+        System.assertEquals('Pending', [SELECT State__c FROM Staffing_Request__c WHERE Id=:second.recordId].State__c,'A feasible governed over-allocation request must remain non-consuming until independently approved.');
         System.assertEquals(0, [SELECT COUNT() FROM Allocation__c WHERE Originating_Request__c=:second.recordId AND State__c='Accepted' AND Current__c=true]);
     }
 

@@ -15,10 +15,16 @@ public inherited sharing class Resource360CalendarService {
 
     public class CapacityCheck {
         @AuraEnabled public Boolean allowed;
+        @AuraEnabled public Boolean requiresApproval;
         @AuraEnabled public Date conflictDate;
         @AuraEnabled public Decimal capacityHours;
         @AuraEnabled public Decimal committedHours;
         @AuraEnabled public Decimal requestedHours;
+        @AuraEnabled public Decimal standardHours;
+        @AuraEnabled public Decimal safetyCeilingHours;
+        @AuraEnabled public Decimal peakHours;
+        @AuraEnabled public Decimal overageHours;
+        @AuraEnabled public String capacityStatus;
         @AuraEnabled public Integer workingDays;
         @AuraEnabled public String message;
     }
@@ -60,8 +66,19 @@ public inherited sharing class Resource360CalendarService {
         ];
         CapacityCheck result = new CapacityCheck();
         result.allowed = true;
+        result.requiresApproval = false;
         result.requestedHours = requestedHours;
+        result.standardHours = Resource360CapacityService.standardHours();
+        result.safetyCeilingHours = Resource360CapacityService.safetyCeiling();
+        result.peakHours = 0;
+        result.overageHours = 0;
+        result.capacityStatus = 'Underallocated';
         result.workingDays = 0;
+        if (requestedHours > Resource360CapacityService.lineMaximum()) {
+            result.allowed = false;
+            result.message = 'One project-allocation line cannot exceed ' + String.valueOf(Resource360CapacityService.lineMaximum()) + ' hours per day.';
+            return result;
+        }
         for (Integer offset = 0; offset < rangeDays; offset++) {
             Date workDate = startDate.addDays(offset);
             Decimal capacity = capacityFor(resource, workDate, exceptionCapacity);
@@ -74,21 +91,37 @@ public inherited sharing class Resource360CalendarService {
                     committed += allocation.Daily_Hours__c;
                 }
             }
-            if (committed + requestedHours > capacity) {
+            Decimal projected = committed + requestedHours;
+            if (projected > result.peakHours) result.peakHours = projected;
+            if (projected > result.safetyCeilingHours) {
                 result.allowed = false;
                 result.conflictDate = workDate;
                 result.capacityHours = capacity;
                 result.committedHours = committed;
-                result.message = 'Capacity exceeds ' + String.valueOf(capacity) + ' hours on ' + String.valueOf(workDate) + '.';
+                result.overageHours = projected - result.standardHours;
+                result.capacityStatus = 'Overallocated';
+                result.message = 'Aggregate allocation reaches ' + String.valueOf(projected) + ' hours on ' + String.valueOf(workDate) + ', above the configured ' + String.valueOf(result.safetyCeilingHours) + '-hour safety ceiling.';
                 return result;
+            }
+            if (projected > result.standardHours) {
+                result.requiresApproval = true;
+                result.capacityStatus = 'Overallocated';
+                result.overageHours = Math.max(result.overageHours, projected - result.standardHours);
+                if (result.conflictDate == null) {
+                    result.conflictDate = workDate;
+                    result.capacityHours = capacity;
+                    result.committedHours = committed;
+                }
+            } else if (!result.requiresApproval && projected == result.standardHours) {
+                result.capacityStatus = 'Fully Allocated';
             }
         }
         if (result.workingDays == 0) {
             result.allowed = false;
             result.message = 'The requested range contains no working days for the resource calendar.';
-        } else {
-            result.message = 'Capacity is available on every applicable working day.';
-        }
+        } else if (result.requiresApproval) result.message = 'Plan is within the ' + String.valueOf(result.safetyCeilingHours) + '-hour safety ceiling and requires independent over-allocation approval.';
+        else if (result.capacityStatus == 'Fully Allocated') result.message = 'Plan reaches the standard eight-hour daily allocation.';
+        else result.message = 'Plan remains below the standard eight-hour daily allocation.';
         return result;
     }
 

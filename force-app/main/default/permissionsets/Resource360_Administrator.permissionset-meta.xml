@@ -16,6 +16,7 @@
     <tabSettings><tab>R360_Delivery_Membership__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Staffing_Request__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Allocation__c</tab><visibility>Visible</visibility></tabSettings>
+    <tabSettings><tab>R360_Daily_Capacity__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Project_Risk__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Project_Closeout__c</tab><visibility>Visible</visibility></tabSettings>
     <userPermissions><enabled>true</enabled><name>LightningExperienceUser</name></userPermissions>
@@ -30,6 +31,7 @@
     <classAccesses><apexClass>Resource360BudgetService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360BulkService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360CalendarService</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>Resource360CapacityService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360Classification</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360ConfigurationService</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360DemoData</apexClass><enabled>true</enabled></classAccesses>
@@ -69,6 +71,7 @@
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Budgets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Closeout</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Configuration</name></customPermissions>
+    <customPermissions><enabled>true</enabled><name>Resource360_Approve_Overallocation</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Timesheets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Budgets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Bulk_Operations</name></customPermissions>
@@ -88,10 +91,22 @@
     <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Capacity_Policy_Version__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Capacity_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Delivery_Membership__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Overallocated__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Overallocation_Approved_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Overallocation_Approved_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Overallocation_Expiry_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Overallocation_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Overallocation_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Parent_Allocation__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Planning_Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Projected_Daily_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Published_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Published_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
@@ -236,7 +251,15 @@
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Text_Value__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Configuration__c.Validation_Summary__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Daily_Capacity__c.Approved_Overallocated__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Daily_Capacity__c.Overage_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Daily_Capacity__c.Remaining_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Daily_Capacity__c.Utilization_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Allocated_Daily_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Available_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Capacity_As_Of__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Capacity_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Capacity_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Delivery_Membership__c.Primary__c</field><readable>true</readable></fieldPermissions>
@@ -310,6 +333,9 @@
     <fieldPermissions><editable>true</editable><field>R360_Sub_Portfolio__c.Owner_User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Work_Calendar__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Work_Calendar__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Resource__c.Allocated_Daily_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Resource__c.Capacity_As_Of__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Resource__c.Capacity_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Employment_End__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Entra_Object_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Grade__c</field><readable>true</readable></fieldPermissions>
@@ -317,10 +343,12 @@
     <fieldPermissions><editable>true</editable><field>Resource__c.Manager__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Org_Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Resource__c.Overallocated__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Primary_Role__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Salesforce_User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Time_Zone__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Utilization_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Work_Calendar__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Resource__c.Work_Email__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Approved_Level__c</field><readable>true</readable></fieldPermissions>
@@ -405,6 +433,7 @@
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Audit_Event__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Calendar_Exception__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Daily_Capacity__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Delivery_Membership__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Integration_Error__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>true</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>true</modifyAllRecords><object>R360_Integration_Run__c</object><viewAllRecords>true</viewAllRecords></objectPermissions>

@@ -26,6 +26,17 @@
 .content { min-width:0; padding:1.25rem 1.5rem 3rem; }
 .metric-grid { display:grid; gap:.9rem; grid-template-columns:repeat(4,minmax(0,1fr)); }
 .metric-card { background:white; border:1px solid #dfe6ea; border-radius:.7rem; box-shadow:0 2px 8px #12324a0a; padding:1rem; }
+.capacity-control { background:#f8fbfc; border:1px solid #cbdce2; border-top:4px solid var(--exl-teal); border-radius:.75rem; box-shadow:0 3px 14px #12324a12; margin-bottom:1rem; padding:1rem; }
+.capacity-heatmap { display:grid; gap:.55rem; grid-template-columns:repeat(auto-fit,minmax(10rem,1fr)); margin:1rem 0; }
+.capacity-cell { border:1px solid transparent; border-radius:.65rem; display:grid; gap:.15rem; min-height:5.6rem; padding:.7rem; }
+.capacity-cell span { font-size:.72rem; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.capacity-cell strong { font-size:1.45rem; }
+.capacity-cell small { font-size:.65rem; line-height:1.25; }
+.capacity-cell_bench,.capacity-cell_underallocated { background:#fff6db; border-color:#edc35a; color:#674700; }
+.capacity-cell_fully-allocated { background:#e3f5eb; border-color:#67bd8c; color:#174e30; }
+.capacity-cell_overallocated { background:#ffe7e1; border-color:#ef8b73; color:#7b2d1e; }
+.capacity-cell_ceiling-breach { background:#242b31; border-color:#000; color:#fff; }
+.capacity-exceptions { background:white; border:1px solid #dbe4e8; border-radius:.65rem; margin-top:1rem; overflow:hidden; padding:1rem; }
 .metric-card p { color:#657580; font-size:.76rem; margin:0; }
 .metric-card strong { color:var(--exl-navy); display:block; font-size:1.55rem; margin:.25rem 0; }
 .metric-card span { color:#77858f; font-size:.7rem; }
