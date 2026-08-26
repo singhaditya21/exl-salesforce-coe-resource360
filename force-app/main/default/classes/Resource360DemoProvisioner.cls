@@ -260,6 +260,8 @@ public without sharing class Resource360DemoProvisioner {
                 if (personaUser != null) resource.Salesforce_User__c = personaUser.Id;
             }
             if (!resources.isEmpty()) update resources;
+            User projectManager=usersByFederationId.get('R360-DEMO-PROJECT');
+            if(projectManager!=null){List<Engagement__c>projects=[SELECT Id,Project_Manager__c FROM Engagement__c WHERE Intake_Correlation_ID__c LIKE 'R360-SCALE-10X20-V1-%'];for(Engagement__c project:projects)project.Project_Manager__c=projectManager.Id;if(!projects.isEmpty())update projects;}
             if (!sharingUserIds.isEmpty()) Resource360ScopeSharingService.rebuildUsers(sharingUserIds);
         }
     }

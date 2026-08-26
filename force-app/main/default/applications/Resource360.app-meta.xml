@@ -12,9 +12,13 @@
     <tabs>Resource360_Project_Workbench</tabs>
     <tabs>standard-home</tabs>
     <tabs>Engagement__c</tabs>
+    <tabs>R360_Sub_Portfolio__c</tabs>
+    <tabs>Project_Module__c</tabs>
     <tabs>Commercial_Reference__c</tabs>
+    <tabs>Contract_Payment__c</tabs>
     <tabs>Work_Unit__c</tabs>
     <tabs>Resource__c</tabs>
+    <tabs>R360_Delivery_Membership__c</tabs>
     <tabs>Staffing_Request__c</tabs>
     <tabs>Allocation__c</tabs>
     <tabs>Budget__c</tabs>

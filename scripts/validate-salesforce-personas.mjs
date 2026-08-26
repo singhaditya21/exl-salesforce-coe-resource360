@@ -10,7 +10,7 @@ assert(targetOrg, "Pass --target-org or set RESOURCE360_TARGET_ORG.");
 
 const SCREENS = governedScreens(RAW_SCREENS);
 const PERSONAS = Object.freeze([
-    { alias: "r360pmgr", role: "Project Manager", screen: "ENG-01", minimumRecords: 4 },
+    { alias: "r360pmgr", role: "Project Manager", screen: "ENG-01", minimumRecords: 20 },
     { alias: "r360staf", role: "COE Staffer", screen: "STFUI-21", minimumRecords: 1 },
     { alias: "r360mgr", role: "Reporting Manager", screen: "SKLUI-12", minimumRecords: 1 },
     { alias: "r360capa", role: "Capability Administrator", screen: "SKLUI-14", minimumRecords: 1 },
@@ -67,6 +67,12 @@ for (const scope of scopesResult.records) {
     rolesByAlias.get(alias).push(scope.Business_Role__c);
 }
 for (const roles of rolesByAlias.values()) roles.sort();
+
+const intakePortfolio = query(
+    "SELECT Name, Portfolio_ID__c FROM R360_Portfolio__c WHERE Portfolio_ID__c='PORT-SFCOE-DEMO' LIMIT 1"
+).records[0];
+assert(intakePortfolio, "The governed intake portfolio is required.");
+const intakePortfolioLabel = `${intakePortfolio.Portfolio_ID__c} · ${intakePortfolio.Name}`;
 
 const moduleFor = (screenId) => {
     const screen = SCREENS.find((candidate) => candidate.id === screenId);
@@ -207,7 +213,7 @@ try {
                 await intakeSection.click();
                 const portfolioPicker = page.getByRole("combobox", { name: "Authorized portfolio", exact: true });
                 await portfolioPicker.waitFor({ state: "visible", timeout: 30_000 });
-                await page.getByText("PORT-SFCOE-DEMO · Salesforce COE Demo Portfolio", { exact: true })
+                await page.getByText(intakePortfolioLabel, { exact: true })
                     .waitFor({ state: "visible", timeout: 30_000 });
 
                 await page.locator(".task-label").filter({ hasText: "WBS-SF-03" }).first().click();

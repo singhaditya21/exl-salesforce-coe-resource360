@@ -55,7 +55,8 @@ const task = (number, overrides = {}) => ({
 });
 
 const plan = {
-    engagement: { Id: "a06000000000001", Name: "Global Retail Cloud", Engagement_ID__c: "ENG-1001", Start_Date__c: "2026-06-01", End_Date__c: "2027-06-01", Lifecycle_Stage__c: "Delivery", Completion_Percent__c: 42 },
+    engagement: { Id: "a06000000000001", Name: "Global Retail Cloud", Engagement_ID__c: "ENG-1001", Account__r: { Name: "Global Retail Holdings" }, Portfolio__r: { Name: "Retail Salesforce Portfolio" }, Portfolio_ID__c: "PORT-SFCOE-DEMO", Sub_Portfolio__r: { Name: "Retail Data and AI" }, Project_Manager__r: { Name: "Priya Sharma" }, Industry__c: "Retail", Salesforce_Tower__c: "Data Cloud", Revenue_Type__c: "Time and Materials", Currency_Code__c: "INR", Start_Date__c: "2026-06-01", End_Date__c: "2027-06-01", Lifecycle_Stage__c: "Delivery", Completion_Percent__c: 42 },
+    modules: [{ Id: "module1", Module_ID__c: "SCALE-MOD-01-1", Name: "Foundation and Architecture", Module_Type__c: "Foundation", Status__c: "Active", Health__c: "Green", Completion_Percent__c: 55, Owner_Resource__r: { Preferred_Name__c: "Consultant 1" } }],
     tasks: Array.from({ length: 7 }, (_, index) => task(index + 1)),
     dependencies: [],
     allocations: Array.from({ length: 9 }, (_, index) => ({ Id: `a0000000000000${index}`, Resource__c: `a0R00000000000${(index % 7) + 1}`, Resource__r: { Preferred_Name__c: `Consultant ${(index % 7) + 1}` }, Role__c: "Salesforce Consultant", State__c: "Accepted" })),
@@ -65,6 +66,9 @@ const plan = {
         { Id: "cr3", External_ID__c: "CO-R360-1001-01", Reference_Type__c: "Change Order", Version__c: 3, Approval_Status__c: "Approved", Value__c: 9000000 }
     ],
     commercialLines: [],
+    contractPayments: [{ Id: "payment1", Payment_ID__c: "SCALE-PAY-01-1", Milestone__c: "Mobilization", Status__c: "Paid", Due_Date__c: "2026-07-01", Outstanding_Amount__c: 0, Commercial_Reference__r: { External_ID__c: "SOW-R360-1001" } }],
+    skillRequirements: [{ Id: "requirement1", Capability__r: { Name: "Data Cloud" }, Dimension__c: "Technical", Requested_Role__c: "Data Cloud Architect", Required_Level__c: 4, Required_Count__c: 1 }],
+    staffingRequests: [{ Id: "staffing1", Requested_Role__c: "Data Cloud Architect", Resource__r: { Preferred_Name__c: "Consultant 1" }, Classification__c: "Billing", State__c: "Accepted", Fit_Score__c: 96 }],
     budget: { Version__c: 4, State__c: "Approved", Planned_Hours__c: 960 },
     risks: [{ Id: "risk1", External_ID__c: "GOLD-RISK-01", Title__c: "Integration readiness", Severity__c: "High", Status__c: "Open", Mitigation__c: "Daily dependency review." }],
     closeout: { Id: "closeout1", State__c: "Draft", Completion_Date__c: "2027-06-01" },
@@ -99,6 +103,9 @@ describe("c-resource360-project-workbench", () => {
         expect(element.shadowRoot.textContent).toContain("Delivery capacity9current accepted allocation(s)");
         expect(element.shadowRoot.querySelector("lightning-accordion-section").label).toBe("Governed project intake · create project and initial SOW");
         expect(element.shadowRoot.textContent).toContain("Add amendment or change order");
+        expect(element.shadowRoot.textContent).toContain("Global Retail Holdings");
+        expect(element.shadowRoot.textContent).toContain("1 governed project modules");
+        expect(element.shadowRoot.textContent).toContain("1 contract payments");
         expect(element.shadowRoot.querySelectorAll(".resize-handle")).toHaveLength(7);
 
         element.shadowRoot.querySelector(".task-label[data-id='a0E000000000003']").click();

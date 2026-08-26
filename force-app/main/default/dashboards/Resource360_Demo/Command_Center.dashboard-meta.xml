@@ -126,6 +126,26 @@
             <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Closeout Readiness</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Closeout_Readiness</report><showPicturesOnTables>false</showPicturesOnTables><title>Completion gates and final evidence</title></dashboardComponent>
             <rowIndex>18</rowIndex><rowSpan>6</rowSpan>
         </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>0</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Portfolio Hierarchy</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Portfolio_Hierarchy</report><showPicturesOnTables>false</showPicturesOnTables><title>Hierarchy and sub-portfolio health</title></dashboardComponent>
+            <rowIndex>24</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>4</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Module Delivery</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Project_Module_Delivery</report><showPicturesOnTables>false</showPicturesOnTables><title>Module health and completion</title></dashboardComponent>
+            <rowIndex>24</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>8</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Payment Position</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Contract_Payment_Position</report><showPicturesOnTables>false</showPicturesOnTables><title>Collection and outstanding value</title></dashboardComponent>
+            <rowIndex>24</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>12</colSpan><columnIndex>0</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Delivery Membership Capacity</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Delivery_Membership_Capacity</report><showPicturesOnTables>false</showPicturesOnTables><title>Delivery capacity by role</title></dashboardComponent>
+            <rowIndex>30</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
         <numberOfColumns>12</numberOfColumns>
         <rowHeight>36</rowHeight>
     </dashboardGridLayout>

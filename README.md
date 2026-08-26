@@ -9,12 +9,13 @@ The governed chain is:
 ## Salesforce implementation
 
 - EXL-themed Lightning app/LWC with nine modules and all 103 routed screen contracts.
-- 40 Salesforce data/config/event types (33 record objects, six custom-metadata types and one platform event), 544 fields/formulas, 30 validation rules, seven guard triggers and native field history on material controls.
-- 35 production Apex classes plus 11 focused test classes, including governed intake/commercial/work-plan/risk/closeout transactions, structured skill matching, deterministic golden-path seeding and chunked scope sharing.
+- 45 Salesforce data/config/event types (38 record objects including Account, six custom-metadata types and one platform event), 602 fields/formulas, 41 validation rules, seven guard triggers and native field history on material controls.
+- 36 production Apex classes plus 12 focused test classes, including governed intake/commercial/work-plan/risk/closeout transactions, structured skill matching, deterministic golden-path and 10-account/20-project scale seeding, and chunked scope sharing.
 - Approved-budget signatures, sequential separation of duties, atomic capacity, effective classification snapshots, allocation lineage, self-approval, eligible time, controlled corrections and five-/seven-day timesheet controls.
 - Eighteen least-privilege permission sets composed into 17 business-role groups for 18 governed personas, 19 custom permissions, effective organizational/portfolio scopes and Apex-managed sharing.
-- Eleven custom Salesforce report types, eleven runnable reports and an eleven-component dynamic command-center dashboard; two app-activated Lightning pages, nine operating list views, governed related lists and idempotent fictional demo seeding.
+- Fifteen custom Salesforce report types, fifteen runnable reports and a fifteen-component dynamic command-center dashboard; two app-activated Lightning pages, 13 operating list views, governed related lists and idempotent fictional demo seeding.
 - A governed Project Manager workbench for project/initial-SOW intake, approved contract changes and lines, plus a seven-work-package dynamic Gantt with move/resize drag, successor auto-scheduling, critical path, accepted allocation coverage, progress/acceptance evidence, risks and independently approved completion. See the [golden-path contract](docs/PROJECT_DELIVERY_GOLDEN_PATH.md).
+- A deterministic `R360-SCALE-10X20-V1` portfolio graph: exactly 10 fictional enterprise Accounts, 10 account-aligned Portfolios, 20 Sub-portfolios, 20 fully related Projects, 60 governed delivery members and 60 Project Modules. Every account owns exactly two projects and six delivery memberships; every project has at least two contracts, three payment milestones per contract, three modules, six active work units, dependencies, a current budget, Industry/Functional/Technical demand, staffing, allocations, risks and approved actuals.
 - Machine-readable governance, common project and master-data envelope contracts under `contracts/`.
 - Release gates covering lint, unit/contract/build, LWC Jest, desktop/mobile Playwright and axe accessibility, Salesforce `RunLocalTests`, an authenticated 103-route Lightning sweep, CodeQL and GitHub Pages.
 - One five-pillar Demo Activation Center that rehearses SSO, integrations, production-like fictional data, legal/business approvals and operational controls with attributable evidence, zero external calls and zero destructive actions.
@@ -40,7 +41,7 @@ sf apex run --target-org Resource360Hub --file scripts/apex/scheduleResource360.
 sf org open --target-org Resource360Hub --path /lightning/app/c__Resource360
 ```
 
-The seed uses fictional identities and `.invalid` email addresses and is safe to rerun.
+The seed uses fictional identities and `.invalid` email addresses, is safe to rerun, and fails its preparation gate unless the exact 10-account/20-project relationship graph and persona-visible share counts reconcile.
 The pause is idempotent and prevents a known hourly Apex job from colliding with class deployment; always restore the schedule after a successful deployment.
 
 ## Validate
@@ -56,7 +57,7 @@ pnpm sf:test:ui
 sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunLocalTests --wait 120
 ```
 
-GitHub Salesforce validation is mandatory for pushes to `main` and trusted manual runs. It authenticates with encrypted repository secret `RESOURCE360_SFDX_AUTH_URL`; the value is piped to Salesforce CLI through standard input and is never committed. A trusted `main` build pauses the Resource 360 scheduler, deploys with `RunLocalTests`, reinstates the scheduler, waits for permission-group and scope processing, restores deterministic fictional data and persona assignments, verifies the exact scope-share matrix and golden path, refreshes the eleven-component dashboard, validates all eight fictional users through controlled Salesforce Login As (including a live Project Manager workbench write), and then sweeps all 103 Lightning routes as Administrator. Untrusted fork pull requests cannot receive repository secrets and therefore run only the credential-free quality gates.
+GitHub Salesforce validation is mandatory for pushes to `main` and trusted manual runs. It authenticates with encrypted repository secret `RESOURCE360_SFDX_AUTH_URL`; the value is piped to Salesforce CLI through standard input and is never committed. A trusted `main` build pauses the Resource 360 scheduler, deploys with `RunLocalTests`, reinstates the scheduler, waits for permission-group and scope processing, restores deterministic fictional data and persona assignments, verifies the exact scope-share matrix, golden path and 10-account/20-project graph, refreshes the fifteen-component dashboard, validates all eight fictional users through controlled Salesforce Login As (including a live Project Manager workbench write), and then sweeps all 103 Lightning routes as Administrator. Untrusted fork pull requests cannot receive repository secrets and therefore run only the credential-free quality gates.
 
 ## GitHub Pages companion
 

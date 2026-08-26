@@ -119,7 +119,7 @@ export default class Resource360ProjectWorkbench extends LightningElement {
         this.timelineStart = start;
     }
 
-    get projectOptions() { return this.projects.map((item) => ({ label: `${item.Engagement_ID__c} · ${item.Name}`, value: item.Id })); }
+    get projectOptions() { return this.projects.map((item) => ({ label: `${item.Account__r?.Name ? `${item.Account__r.Name} · ` : ""}${item.Engagement_ID__c} · ${item.Name}`, value: item.Id })); }
     get portfolioOptions() { return this.portfolios.map((item) => ({ label: `${item.Portfolio_ID__c} · ${item.Name}`, value: item.Id })); }
     get zoomOptions() { return (this.plan?.zoomOptions || ["Week", "Month", "Quarter", "Year"]).map((value) => ({ label: value, value })); }
     get taskOptions() { return this.taskRows.map((item) => ({ label: `${item.Work_Unit_Code__c} · ${item.Name}`, value: item.Id })); }
@@ -145,6 +145,19 @@ export default class Resource360ProjectWorkbench extends LightningElement {
     get budgetVersion() { return this.plan?.budget?.Version__c || "—"; }
     get budgetHours() { return this.plan?.budget?.Planned_Hours__c || 0; }
     get activeAllocationCount() { return (this.plan?.allocations || []).filter((item) => item.State__c === "Accepted").length; }
+    get accountName() { return this.plan?.engagement?.Account__r?.Name || "Account not assigned"; }
+    get portfolioName() { return this.plan?.engagement?.Portfolio__r?.Name || "Portfolio not assigned"; }
+    get subPortfolioName() { return this.plan?.engagement?.Sub_Portfolio__r?.Name || "Sub-portfolio not assigned"; }
+    get projectManagerName() { return this.plan?.engagement?.Project_Manager__r?.Name || "Project manager not assigned"; }
+    get moduleCount() { return (this.plan?.modules || []).length; }
+    get skillRequirementCount() { return (this.plan?.skillRequirements || []).length; }
+    get staffingRequestCount() { return (this.plan?.staffingRequests || []).length; }
+    get paymentCount() { return (this.plan?.contractPayments || []).length; }
+    get outstandingPaymentValue() { return (this.plan?.contractPayments || []).reduce((sum, item) => sum + (item.Outstanding_Amount__c || 0), 0); }
+    get hasModules() { return this.moduleCount > 0; }
+    get hasSkillRequirements() { return this.skillRequirementCount > 0; }
+    get hasStaffingRequests() { return this.staffingRequestCount > 0; }
+    get hasPayments() { return this.paymentCount > 0; }
     get openRiskCount() { return (this.plan?.risks || []).filter((item) => !["Closed", "Accepted"].includes(item.Status__c)).length; }
     get gateBlockers() { return this.plan?.closeoutGates?.blockers || []; }
     get closeoutReady() { return this.plan?.closeoutGates?.ready === true; }

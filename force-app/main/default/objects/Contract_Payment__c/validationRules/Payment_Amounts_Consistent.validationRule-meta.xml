@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Payment_Amounts_Consistent</fullName><active>true</active><errorConditionFormula>OR(Planned_Amount__c &lt; 0, Invoiced_Amount__c &lt; 0, Paid_Amount__c &lt; 0, Invoiced_Amount__c &gt; Planned_Amount__c, Paid_Amount__c &gt; Invoiced_Amount__c)</errorConditionFormula><errorMessage>Payment amounts must be non-negative and paid cannot exceed invoiced or planned amount.</errorMessage></ValidationRule>

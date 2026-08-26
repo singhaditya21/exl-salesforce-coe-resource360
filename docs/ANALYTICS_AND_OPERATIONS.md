@@ -2,7 +2,7 @@
 
 ## Native analytics baseline
 
-The deployable baseline uses `Resource360AnalyticsService`, eleven Salesforce custom report types/reports and the eleven-component Lightning Command Center. The reporting set covers project lifecycle, contract changes, WBS delivery, skill demand/match, staffing performance, allocations, capability supply, budgets, approved actuals, project risks and closeout readiness. This avoids inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
+The deployable baseline uses `Resource360AnalyticsService`, fifteen Salesforce custom report types/reports and the fifteen-component Lightning Command Center. The reporting set covers portfolio hierarchy, project lifecycle, contract changes and payment position, project module/WBS delivery, skill demand/match, staffing performance, delivery membership capacity, allocations, capability supply, budgets, approved actuals, project risks and closeout readiness. This avoids inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
 
 | Metric/control | Authoritative population | Cutoff and drill path |
 |---|---|---|
@@ -14,6 +14,9 @@ The deployable baseline uses `Resource360AnalyticsService`, eleven Salesforce cu
 | Timesheet compliance | Eligible accepted allocations, submitted/approved time and exception records | Week and policy cutoff; manager → practitioner → entry |
 | Source health | Integration run cutoff, processed/success/failure/collision counts | Source and contract version → redacted row error |
 | Control health | Open notifications, dead letters, scheduler runs and retention preview | Severity/owner → evidence record/correlation ID |
+| Contract payment position | Planned, invoiced, paid and outstanding milestones by contract/project/account | Account → project → contract → payment milestone/work evidence |
+| Delivery membership capacity | Effective-dated Resource membership and capacity across Account, Portfolio and Sub-portfolio | Account → portfolio → sub-portfolio → member → allocation |
+| Project module delivery | Module and WBS forecast/progress/acceptance across project hierarchy | Account → project → module → work unit/dependency/owner |
 
 Every displayed KPI must expose its definition, target, source population, cutoff and drill-down. Runtime policy changes are effective-dated and do not rewrite historic decision snapshots.
 

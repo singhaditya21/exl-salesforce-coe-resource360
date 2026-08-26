@@ -47,6 +47,15 @@ const apiRequest = (url, method = "GET", body) => {
     return output.trim() ? JSON.parse(output) : {};
 };
 
+const executeAnonymous = (apex, label) => {
+    const result = apiRequest(
+        `/services/data/v67.0/tooling/executeAnonymous/?anonymousBody=${encodeURIComponent(apex)}`
+    );
+    assert.equal(result.compiled, true, `${label} did not compile: ${result.compileProblem ?? "unknown error"}`);
+    assert.equal(result.success, true, `${label} failed: ${result.exceptionMessage ?? "unknown error"}`);
+    return result;
+};
+
 const waitFor = async (description, check, timeoutMilliseconds = 120_000) => {
     const deadline = Date.now() + timeoutMilliseconds;
     let lastResult;
@@ -119,12 +128,11 @@ assert.equal(
     "Every persona permission-set group must enable Lightning Experience through the base permission set."
 );
 
-const seedResult = sfJson([
-    "apex", "run", "--target-org", targetOrg,
-    "--file", "scripts/apex/seedResource360.apex"
-]);
-assert.equal(seedResult.compiled, true, "The deterministic demo seed did not compile.");
-assert.equal(seedResult.success, true, `The deterministic demo seed failed: ${seedResult.exceptionMessage}`);
+// Keep the compact baseline and enterprise graph in separate transactions.
+// Their combined DML triggers legitimately exceed a single transaction's
+// 100-query governor limit in a populated Developer Edition org.
+executeAnonymous("Resource360DemoData.seed();", "The deterministic core demo seed");
+executeAnonymous("Resource360ScaleDemoData.ensure();", "The deterministic 10-account/20-project seed");
 
 const provisioningResult = sfJson([
     "apex", "run", "--target-org", targetOrg,
@@ -194,8 +202,45 @@ const appMenu = query("SELECT Name, IsAccessible FROM AppMenuItem WHERE Name='Re
 assert.equal(appMenu.totalSize, 1, "The Resource 360 Lightning app must exist.");
 assert.equal(appMenu.records[0].IsAccessible, true, "The Resource 360 Lightning app must be accessible.");
 
-assert(query("SELECT COUNT() FROM Resource__c").totalSize >= 12, "The demo requires at least 12 resources.");
-assert(query("SELECT COUNT() FROM Engagement__c").totalSize >= 4, "The demo requires at least four engagements.");
+assert.equal(query("SELECT COUNT() FROM Resource__c WHERE Employee_ID__c LIKE 'SCALE-EXL-%' OR Employee_ID__c LIKE 'DEMO-EXL-%' OR Employee_ID__c IN ('EXL-017091','EXL-018462','EXL-019830')").totalSize, 60, "The scaled demo requires exactly 60 governed resources.");
+const scaleProjectFilter = "Intake_Correlation_ID__c LIKE 'R360-SCALE-10X20-V1-%'";
+assert.equal(query(`SELECT COUNT() FROM Engagement__c WHERE ${scaleProjectFilter}`).totalSize, 20, "The scaled demo requires exactly twenty governed projects.");
+
+const scaleGraph = {
+    accounts: query("SELECT COUNT() FROM Account WHERE R360_Demo__c=true AND R360_Account_ID__c LIKE 'R360-ACC-%'").totalSize,
+    portfolios: query("SELECT COUNT() FROM R360_Portfolio__c WHERE Portfolio_ID__c='PORT-SFCOE-DEMO' OR Portfolio_ID__c LIKE 'R360-PORT-%'").totalSize,
+    subPortfolios: query("SELECT COUNT() FROM R360_Sub_Portfolio__c WHERE Sub_Portfolio_ID__c LIKE 'R360-SUB-%'").totalSize,
+    projects: query(`SELECT COUNT() FROM Engagement__c WHERE ${scaleProjectFilter}`).totalSize,
+    contracts: query(`SELECT COUNT() FROM Commercial_Reference__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    payments: query(`SELECT COUNT() FROM Contract_Payment__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    resources: query("SELECT COUNT() FROM Resource__c WHERE Employee_ID__c LIKE 'SCALE-EXL-%' OR Employee_ID__c LIKE 'DEMO-EXL-%' OR Employee_ID__c IN ('EXL-017091','EXL-018462','EXL-019830')").totalSize,
+    memberships: query("SELECT COUNT() FROM R360_Delivery_Membership__c WHERE Membership_ID__c LIKE 'SCALE-DM-%'").totalSize,
+    modules: query("SELECT COUNT() FROM Project_Module__c WHERE Module_ID__c LIKE 'SCALE-MOD-%'").totalSize,
+    workUnits: query(`SELECT COUNT() FROM Work_Unit__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    dependencies: query(`SELECT COUNT() FROM Work_Dependency__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    staffingRequests: query(`SELECT COUNT() FROM Staffing_Request__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    allocations: query(`SELECT COUNT() FROM Allocation__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    budgets: query(`SELECT COUNT() FROM Budget__c WHERE Engagement__r.${scaleProjectFilter} AND Current__c=true`).totalSize,
+    skillRequirements: query(`SELECT COUNT() FROM Engagement_Skill_Requirement__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    risks: query(`SELECT COUNT() FROM Project_Risk__c WHERE Engagement__r.${scaleProjectFilter}`).totalSize,
+    approvedActuals: query(`SELECT COUNT() FROM Time_Entry__c WHERE Engagement__r.${scaleProjectFilter} AND State__c='Approved'`).totalSize,
+    approvedCloseouts: query("SELECT COUNT() FROM Project_Closeout__c WHERE Closeout_ID__c LIKE 'SCALE-CLOSE-%' AND State__c='Approved'").totalSize
+};
+assert.deepEqual({ accounts: scaleGraph.accounts, portfolios: scaleGraph.portfolios, subPortfolios: scaleGraph.subPortfolios, projects: scaleGraph.projects, resources: scaleGraph.resources, memberships: scaleGraph.memberships, modules: scaleGraph.modules, budgets: scaleGraph.budgets, approvedCloseouts: scaleGraph.approvedCloseouts }, { accounts: 10, portfolios: 10, subPortfolios: 20, projects: 20, resources: 60, memberships: 60, modules: 60, budgets: 20, approvedCloseouts: 4 }, "The exact 10-account/20-project hierarchy is incomplete.");
+assert(scaleGraph.contracts >= 40 && scaleGraph.payments >= 120 && scaleGraph.workUnits >= 115 && scaleGraph.dependencies >= 95 && scaleGraph.staffingRequests >= 76 && scaleGraph.allocations >= 76 && scaleGraph.skillRequirements >= 57 && scaleGraph.risks >= 38 && scaleGraph.approvedActuals >= 38, "The rich project relationship graph is below its storage-conscious minimums.");
+
+const assertGroupedGraph = (soql, expectedGroups, predicate, message) => {
+    const grouped = query(soql).records;
+    assert.equal(grouped.length, expectedGroups, `${message} Expected ${expectedGroups} groups; found ${grouped.length}.`);
+    assert(grouped.every((record) => predicate(Number(record.total))), message);
+};
+assertGroupedGraph(`SELECT Account__c category, COUNT(Id) total FROM Engagement__c WHERE ${scaleProjectFilter} GROUP BY Account__c`, 10, (total) => total === 2, "Every account must own exactly two governed projects.");
+assertGroupedGraph(`SELECT Engagement__c category, COUNT(Id) total FROM Commercial_Reference__c WHERE Engagement__r.${scaleProjectFilter} GROUP BY Engagement__c`, 20, (total) => total >= 2, "Every project must have multiple contracts.");
+assertGroupedGraph(`SELECT Commercial_Reference__c category, COUNT(Id) total FROM Contract_Payment__c WHERE Engagement__r.${scaleProjectFilter} GROUP BY Commercial_Reference__c`, scaleGraph.contracts, (total) => total === 3, "Every contract must have exactly three payment milestones.");
+assertGroupedGraph("SELECT Engagement__c category, COUNT(Id) total FROM Project_Module__c WHERE Module_ID__c LIKE 'SCALE-MOD-%' GROUP BY Engagement__c", 20, (total) => total === 3, "Every project must have exactly three governed modules.");
+assertGroupedGraph("SELECT Account__c category, COUNT(Id) total FROM R360_Delivery_Membership__c WHERE Membership_ID__c LIKE 'SCALE-DM-%' GROUP BY Account__c", 10, (total) => total === 6, "Every account must have six named delivery members.");
+assertGroupedGraph(`SELECT Engagement__c category, COUNT(Id) total FROM Work_Unit__c WHERE Engagement__r.${scaleProjectFilter} GROUP BY Engagement__c`, 20, (total) => total >= 6, "Every project must have a multi-unit delivery plan.");
+assertGroupedGraph(`SELECT Engagement__c category, COUNT(Id) total FROM Budget__c WHERE Engagement__r.${scaleProjectFilter} AND Current__c=true GROUP BY Engagement__c`, 20, (total) => total >= 1, "Every project must have a current governed budget.");
 
 const coreRecordCounts = Object.fromEntries([
     "Engagement__c",
@@ -206,6 +251,7 @@ const coreRecordCounts = Object.fromEntries([
     "R360_Approval_Decision__c",
     "R360_Portfolio__c"
 ].map((objectName) => [objectName, query(`SELECT COUNT() FROM ${objectName}`).totalSize]));
+const portfolioShareExpected = new Map(users.records.map((user) => [user.Id, user.Alias === "r360staf" ? scaleGraph.portfolios : 1]));
 const portfolioShareReadiness = await waitFor("Persona portfolio scope sharing", async () => {
     const userFilter = demoUserIds.map((id) => `'${id}'`).join(",");
     const result = query(
@@ -214,16 +260,18 @@ const portfolioShareReadiness = await waitFor("Persona portfolio scope sharing",
     );
     const counts = new Map(result.records.map((record) => [record.UserOrGroupId, record.total]));
     return {
-        ready: demoUserIds.every((id) => counts.get(id) === coreRecordCounts.R360_Portfolio__c),
+        ready: demoUserIds.every((id) => counts.get(id) === portfolioShareExpected.get(id)),
         value: Object.fromEntries(demoUserIds.map((id) => [id, counts.get(id) ?? 0]))
     };
 }, 180_000);
 assert.equal(Object.keys(portfolioShareReadiness).length, demoUserIds.length);
 const shareMatrix = {};
 for (const user of users.records) {
+    const expectedPortfolios = portfolioShareExpected.get(user.Id);
+    const expectedEngagements = user.Alias === "r360pmgr" ? scaleGraph.projects : 2;
     shareMatrix[user.Alias] = {
-        portfolios: assertShareCount("R360_Portfolio__c", user.Id, coreRecordCounts.R360_Portfolio__c, user.FederationIdentifier),
-        engagements: assertShareCount("Engagement__c", user.Id, coreRecordCounts.Engagement__c, user.FederationIdentifier)
+        portfolios: assertShareCount("R360_Portfolio__c", user.Id, expectedPortfolios, user.FederationIdentifier),
+        engagements: assertShareCount("Engagement__c", user.Id, expectedEngagements, user.FederationIdentifier)
     };
 }
 
@@ -232,10 +280,12 @@ const budgetAliases = new Set(["r360pmgr", "r360capa", "r360cfgm", "r360chkr", "
 const commercialAliases = new Set(["r360pmgr", "r360staf", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
 const approvalAliases = new Set(["r360staf", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
 for (const user of users.records) {
-    const staffingExpected = staffingAliases.has(user.Alias) ? coreRecordCounts.Staffing_Request__c : 0;
-    const allocationExpected = staffingAliases.has(user.Alias) ? coreRecordCounts.Allocation__c : 0;
-    const budgetExpected = budgetAliases.has(user.Alias) ? coreRecordCounts.Budget__c : 0;
-    const commercialExpected = commercialAliases.has(user.Alias) ? coreRecordCounts.Commercial_Reference__c : 0;
+    const isGlobalProjectManager = user.Alias === "r360pmgr";
+    const scopedProjectClause = isGlobalProjectManager ? "" : " WHERE Engagement__r.Portfolio_ID__c='PORT-SFCOE-DEMO'";
+    const staffingExpected = staffingAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Staffing_Request__c${scopedProjectClause}`).totalSize : 0;
+    const allocationExpected = staffingAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Allocation__c${scopedProjectClause}`).totalSize : 0;
+    const budgetExpected = budgetAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Budget__c${scopedProjectClause}`).totalSize : 0;
+    const commercialExpected = commercialAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Commercial_Reference__c${scopedProjectClause}`).totalSize : 0;
     const approvalExpected = approvalAliases.has(user.Alias) ? coreRecordCounts.R360_Approval_Decision__c : 0;
     Object.assign(shareMatrix[user.Alias], {
         staffingRequests: assertShareCount("Staffing_Request__c", user.Id, staffingExpected, user.FederationIdentifier),
@@ -364,9 +414,10 @@ assert(
 const reports = query(
     "SELECT Id, DeveloperName FROM Report WHERE DeveloperName IN " +
     "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals'," +
-    "'Project_Lifecycle','Workplan_Delivery','Contract_Changes','Skill_Demand_Match','Project_Risk_Control','Closeout_Readiness')"
+    "'Project_Lifecycle','Workplan_Delivery','Contract_Changes','Skill_Demand_Match','Project_Risk_Control','Closeout_Readiness'," +
+    "'Portfolio_Hierarchy','Project_Module_Delivery','Contract_Payment_Position','Delivery_Membership_Capacity')"
 );
-assert.equal(reports.totalSize, 11, "Eleven native Salesforce reports are required.");
+assert.equal(reports.totalSize, 15, "Fifteen native Salesforce reports are required.");
 const reportRows = {};
 for (const report of reports.records) {
     const result = apiRequest(`/services/data/v67.0/analytics/reports/${report.Id}?includeDetails=false`);
@@ -387,11 +438,11 @@ const statusUrl = refreshRequest.statusUrl ?? `/services/data/v67.0/analytics/da
 await waitFor("Command Center dashboard refresh", async () => {
     const result = apiRequest(statusUrl);
     const statuses = result.componentStatus ?? [];
-    const terminal = statuses.length === 11 && statuses.every((status) => status.refreshStatus === "IDLE");
+    const terminal = statuses.length === 15 && statuses.every((status) => status.refreshStatus === "IDLE");
     return { ready: terminal, value: statuses };
 });
 const dashboard = apiRequest(`/services/data/v67.0/analytics/dashboards/${dashboardId}`);
-assert.equal(dashboard.componentData.length, 11, "The Command Center must have eleven dashboard components.");
+assert.equal(dashboard.componentData.length, 15, "The Command Center must have fifteen dashboard components.");
 assert(
     dashboard.componentData.every((component) => component.status.componentDataStatus === "DATA"),
     "Every Command Center component must contain refreshed data."
@@ -421,6 +472,7 @@ process.stdout.write(`${JSON.stringify({
     allocations,
     timesheets,
     configurations,
+    scaleGraph,
     goldenPath,
     walkthroughs: walkthroughs.totalSize,
     reportRows,

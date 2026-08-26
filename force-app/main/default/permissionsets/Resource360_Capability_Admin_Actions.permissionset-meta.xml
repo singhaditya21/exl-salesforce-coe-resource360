@@ -20,6 +20,7 @@
     <fieldPermissions><editable>false</editable><field>Engagement__c.Revenue_Type__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Salesforce_Tower__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Sub_Portfolio__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Budget_Signature__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
