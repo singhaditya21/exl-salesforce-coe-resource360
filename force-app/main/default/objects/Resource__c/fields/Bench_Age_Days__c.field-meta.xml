@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Bench_Age_Days__c</fullName><description>Continuous bench age as of today.</description><formula>IF(ISBLANK(Bench_Start_Date__c), 0, TODAY() - Bench_Start_Date__c)</formula><formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs><label>Bench Age Days</label><precision>8</precision><scale>0</scale><trackHistory>false</trackHistory><type>Number</type></CustomField>

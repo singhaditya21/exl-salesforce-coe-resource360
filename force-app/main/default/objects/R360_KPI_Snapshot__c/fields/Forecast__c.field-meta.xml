@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Forecast__c</fullName><defaultValue>false</defaultValue><description>True when the value represents an approved planning forecast rather than an actual.</description><label>Forecast</label><trackHistory>false</trackHistory><type>Checkbox</type></CustomField>

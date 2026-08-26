@@ -17,6 +17,8 @@
     <tabSettings><tab>Staffing_Request__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Allocation__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>R360_Daily_Capacity__c</tab><visibility>Visible</visibility></tabSettings>
+    <tabSettings><tab>R360_KPI_Snapshot__c</tab><visibility>Visible</visibility></tabSettings>
+    <tabSettings><tab>R360_Resource_Unavailability__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Project_Risk__c</tab><visibility>Visible</visibility></tabSettings>
     <tabSettings><tab>Project_Closeout__c</tab><visibility>Visible</visibility></tabSettings>
     <userPermissions><enabled>true</enabled><name>LightningExperienceUser</name></userPermissions>
@@ -43,11 +45,16 @@
     <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Billing_Rate_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Capacity_Policy_Version__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Capacity_Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Concurrent_Project_Count__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Context_Switch_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Cost_Rate_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Delivery_Membership__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Expected_Roll_Off_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocated__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Approved_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Approved_By__c</field><readable>true</readable></fieldPermissions>
@@ -77,8 +84,15 @@
     <fieldPermissions><editable>false</editable><field>Budget__c.Decision_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Economic_Signature__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Estimate_At_Completion__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Estimate_To_Complete__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Forecast_Accuracy_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Forecast_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Forecast_Margin_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Forecast_Revenue__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Gross_Margin__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Margin_Erosion_Points__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Margin_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Budget__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
@@ -109,7 +123,10 @@
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Commercial_Reference__c.Version__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Acceptance_Required__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Billing_Realization_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Collection_Effectiveness_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Commercial_Line__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Contract_Payment__c.DSO_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Days_Overdue__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Invoice_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Invoice_Number__c</field><readable>true</readable></fieldPermissions>
@@ -118,11 +135,15 @@
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Paid_Amount__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Paid_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Planned_Amount__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Revenue_Recognized_Amount__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Sequence__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Contract_Payment__c.Write_Off_Amount__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Credential__c.Days_To_Expiry__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Evidence_URL__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Expiry_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Credential__c.Expiry_Risk_Band__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Issue_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Last_Checked_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Maintenance_Date__c</field><readable>true</readable></fieldPermissions>
@@ -131,18 +152,31 @@
     <fieldPermissions><editable>false</editable><field>Credential__c.Verified_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement_Skill_Requirement__c.Description__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement_Skill_Requirement__c.Mandatory__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Acceptance_First_Pass_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Account_Health_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Account__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Actual_End_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.CSAT_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Completion_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Forecast_Completion_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.High_Risk_Age_Days__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Incident_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Industry__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Intake_Correlation_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Intake_Source__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Mandatory_Skill_Coverage_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.NPS_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.PO_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Plan_Actual_Variance_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Portfolio__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Project_Manager__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Release_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Revenue_Type__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Risk_Exposure_Score__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Role_Readiness_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Salesforce_Tower__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Schedule_Variance_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Sub_Portfolio__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Closeout__c.All_Deliverables_Accepted__c</field><readable>true</readable></fieldPermissions>
@@ -171,12 +205,17 @@
     <fieldPermissions><editable>false</editable><field>Project_Module__c.Planned_Budget__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Module__c.Sequence__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Module__c.Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Project_Risk__c.Age_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Risk__c.Closed_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Risk__c.Closure_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Risk__c.Description__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Risk__c.Due_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Project_Risk__c.Exposure_Score__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Project_Risk__c.Impact_Score__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Project_Risk__c.Mitigation_Overdue__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Risk__c.Mitigation__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Project_Risk__c.Owner_User__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Project_Risk__c.Probability_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Approved_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Approved_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Configuration__c.Attributes_JSON__c</field><readable>true</readable></fieldPermissions>
@@ -204,6 +243,26 @@
     <fieldPermissions><editable>false</editable><field>R360_Delivery_Membership__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Delivery_Membership__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Delivery_Membership__c.Primary__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Definition__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Denominator__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Engagement__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Forecast__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Grain__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Metric_Code__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Metric_Label__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Metric_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Numerator__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Owner_Role__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Policy_Version__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Portfolio__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Scope_Key__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Scope_Label__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Scope_Type__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Snapshot_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Source_Cutoff__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Target_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_KPI_Snapshot__c.Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Learning_Achievement__c.Capability__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Accountable_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Notification__c.Closed_At__c</field><readable>true</readable></fieldPermissions>
@@ -226,6 +285,17 @@
     <fieldPermissions><editable>false</editable><field>R360_Project_Evidence__c.Summary__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Project_Evidence__c.Verified_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Project_Evidence__c.Verified_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Approved_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Approved_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.End_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Hours_Per_Day__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Resource__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Source_System__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Start_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Resource_Unavailability__c.Type__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Sub_Portfolio__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Sub_Portfolio__c.Description__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Sub_Portfolio__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
@@ -234,27 +304,39 @@
     <fieldPermissions><editable>false</editable><field>R360_Work_Calendar__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Work_Calendar__c.Effective_To__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Allocated_Daily_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Bench_Age_Days__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Bench_Start_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Capacity_As_Of__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Capacity_Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Consecutive_Overallocation_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Employment_End__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Entra_Object_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Expected_Roll_Off_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Grade__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Location__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Manager__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Org_Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Overallocated__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Preferred_Capability__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Preferred_Location__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Preferred_Project_Type__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Preferred_Shift__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Primary_Role__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Rolling_Overage_Hours_13W__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Salesforce_User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Time_Zone__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Resource__c.Travel_Preference__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Utilization_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Work_Calendar__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Resource__c.Work_Email__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Approved_Level__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decay_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Evidence__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Freshness_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Last_Used__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Request_Fingerprint__c</field><readable>true</readable></fieldPermissions>
@@ -267,6 +349,7 @@
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_Correlation_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_Role__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Filled_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Fit_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Request_Fingerprint__c</field><readable>true</readable></fieldPermissions>
@@ -274,7 +357,11 @@
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Requirement_Summary__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Shortlist_Conversion_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Shortlist_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Source_Criteria__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Time_To_Fill_Hours__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Skill_Match__c.Eligible__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Skill_Match__c.Evidence_Summary__c</field><readable>true</readable></fieldPermissions>
@@ -302,19 +389,34 @@
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Acceptance_Required__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Accepted_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Accepted_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Actual_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Actual_End_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Actual_Start_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Assigned_Resource__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Baseline_End_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Baseline_Start_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Cost_Performance_Index__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Critical_Path__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Daily_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Defect_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Deliverable__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Earned_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Estimate_At_Completion__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Estimate_To_Complete__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Forecast_Completion_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Forecast_End_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Forecast_Start_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Last_Progress_Update__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Milestone_Delay_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Milestone__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Owner_User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Percent_Complete__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Planned_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Planned_Value__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Project_Module__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Schedule_Performance_Index__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Work_Unit__c.Sequence__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Work_Unit__c.Test_Pass_Percent__c</field><readable>true</readable></fieldPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Account</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Allocation__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Budget__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
@@ -333,11 +435,13 @@
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Configuration__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Daily_Capacity__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Delivery_Membership__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_KPI_Snapshot__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Learning_Achievement__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Notification__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Org_Unit__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Portfolio__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Project_Evidence__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
+    <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Resource_Unavailability__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Sub_Portfolio__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>R360_Work_Calendar__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>
     <objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Resource__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>

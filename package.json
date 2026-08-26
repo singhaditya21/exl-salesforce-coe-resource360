@@ -18,7 +18,7 @@
     "test:e2e": "playwright test",
     "test:all": "pnpm test && pnpm test:e2e",
     "lint": "eslint . --ignore-pattern dist",
-    "sf:generate": "node scripts/generate-classification-metadata.mjs && node scripts/generate-policy-metadata.mjs && node scripts/generate-governance-metadata.mjs && node scripts/generate-salesforce-permissions.mjs && node scripts/generate-traceability.mjs",
+    "sf:generate": "node scripts/generate-classification-metadata.mjs && node scripts/generate-policy-metadata.mjs && node scripts/generate-governance-metadata.mjs && node scripts/generate-performance-metadata.mjs && node scripts/generate-salesforce-permissions.mjs && node scripts/generate-traceability.mjs",
     "sf:validate": "sf project deploy start --source-dir force-app --target-org Resource360Hub --dry-run --test-level RunLocalTests --wait 120",
     "sf:test": "sf apex run test --target-org Resource360Hub --test-level RunLocalTests --code-coverage --result-format human --wait 120",
     "sf:test:ui": "node scripts/validate-salesforce-ui.mjs --target-org Resource360Hub",
@@ -26,6 +26,7 @@
     "sf:prepare-demo": "node scripts/prepare-salesforce-demo.mjs --target-org Resource360Hub",
     "sf:deploy": "sf project deploy start --source-dir force-app --target-org Resource360Hub --test-level RunLocalTests --wait 120",
     "sf:seed": "sf apex run --target-org Resource360Hub --file scripts/apex/seedResource360.apex",
+    "sf:export-pages": "node scripts/export-salesforce-pages-snapshot.mjs --target-org Resource360Hub --output public/data/salesforce-snapshot.json",
     "sf:open": "sf org open --target-org Resource360Hub --path /lightning/app/c__Resource360"
   },
   "dependencies": {

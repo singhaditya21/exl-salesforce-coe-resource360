@@ -149,7 +149,7 @@ const writePermissionSet = (config) => {
   const lines = ['<?xml version="1.0" encoding="UTF-8"?>','<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">',`    <description>${config.description}</description>`,'    <hasActivationRequired>false</hasActivationRequired>',`    <label>${config.label}</label>`];
   if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
     lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
-    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","R360_Sub_Portfolio__c","Project_Module__c","Work_Unit__c","Commercial_Reference__c","Contract_Payment__c","Resource__c","R360_Delivery_Membership__c","Staffing_Request__c","Allocation__c","R360_Daily_Capacity__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
+    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","R360_Sub_Portfolio__c","Project_Module__c","Work_Unit__c","Commercial_Reference__c","Contract_Payment__c","Resource__c","R360_Delivery_Membership__c","Staffing_Request__c","Allocation__c","R360_Daily_Capacity__c","R360_KPI_Snapshot__c","R360_Resource_Unavailability__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
     for (const permission of ["LightningExperienceUser", "RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
       lines.push(`    <userPermissions><enabled>true</enabled><name>${permission}</name></userPermissions>`);
     }

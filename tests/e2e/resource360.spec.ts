@@ -42,6 +42,22 @@ test("renders every one of the 103 PRD routes", async ({ page }, testInfo) => {
   }
 });
 
+test("renders materially distinct Salesforce-backed command experiences", async ({ page }) => {
+  await page.goto("/?screen=CMD-02");
+  await expect(page.locator('[data-route-experience="CMD-02"]')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Utilization and delivery variance" })).toBeVisible();
+
+  await page.goto("/?screen=CMD-03");
+  await expect(page.locator('[data-route-experience="CMD-03"]')).toBeVisible();
+  await expect(page.getByLabel("Thirteen week supply and demand forecast")).toBeVisible();
+  await expect(page.locator(".forecast-ledger > button")).toHaveCount(13);
+
+  await page.goto("/?screen=CMD-08");
+  await expect(page.locator('[data-route-experience="CMD-08"]')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Salesforce → GitHub Pages" })).toBeVisible();
+  await expect(page.getByText("214", { exact: true }).first()).toBeVisible();
+});
+
 test("executes the attributable staffing decision path", async ({ page }) => {
   await page.goto("/?screen=GLB-05");
   await page.getByRole("button", { name: /COE Staffer Salesforce COE/ }).click();

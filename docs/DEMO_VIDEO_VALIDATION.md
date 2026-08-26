@@ -25,7 +25,7 @@ The recordings are published on `GLB-06 · User preferences and help` from five 
 - Every MP4 decoded without media errors and reports H.264, 1280×720 and 24 fps.
 - Posters and video hashes are protected by the repository test suite.
 - The existing browser and accessibility suite continues to exercise desktop and mobile behavior.
-- Salesforce validation remains independent: the current release gate runs all 13 local test classes/52 executable methods, LWC Jest, and an authenticated 103/103 Lightning route sweep with 57/57 explicit workbenches and zero console errors.
+- Salesforce validation remains independent: the current release gate runs all 14 local test classes/53 executable methods, LWC Jest, and an authenticated 103/103 Lightning route sweep with 57/57 explicit workbenches and zero console errors.
 
 ## Source archive note
 

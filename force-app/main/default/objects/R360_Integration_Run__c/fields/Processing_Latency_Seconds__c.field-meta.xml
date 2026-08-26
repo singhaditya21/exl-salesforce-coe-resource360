@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Processing_Latency_Seconds__c</fullName><description>Elapsed processing latency for the governed run.</description><label>Processing Latency Seconds</label><precision>12</precision><scale>2</scale><trackHistory>false</trackHistory><type>Number</type></CustomField>

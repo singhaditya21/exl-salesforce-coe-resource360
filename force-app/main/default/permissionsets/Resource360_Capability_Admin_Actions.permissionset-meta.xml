@@ -7,18 +7,31 @@
     <classAccesses><apexClass>Resource360TalentService</apexClass><enabled>true</enabled></classAccesses>
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Credentials</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Review_Skills</name></customPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Acceptance_First_Pass_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Account_Health_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Account__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Actual_End_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.CSAT_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Completion_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Forecast_Completion_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.High_Risk_Age_Days__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Incident_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Industry__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Intake_Correlation_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Intake_Source__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Mandatory_Skill_Coverage_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.NPS_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.PO_Value__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Plan_Actual_Variance_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Portfolio__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Project_Manager__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Release_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Revenue_Type__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Risk_Exposure_Score__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Role_Readiness_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Salesforce_Tower__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Schedule_Variance_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Sub_Portfolio__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Budget_Signature__c</field><readable>true</readable></fieldPermissions>
@@ -28,6 +41,7 @@
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_Correlation_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Decision_Role__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Filled_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Fit_Score__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Request_Fingerprint__c</field><readable>true</readable></fieldPermissions>
@@ -35,7 +49,11 @@
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Requirement_Summary__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Shortlist_Conversion_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Shortlist_Count__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Source_Criteria__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Time_To_Fill_Hours__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Staffing_Request__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Capability__c.Active__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Capability__c.Aliases__c</field><readable>true</readable></fieldPermissions>
@@ -48,16 +66,20 @@
     <fieldPermissions><editable>true</editable><field>Capability__c.Level_4_Descriptor__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Capability__c.Tower__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Approved_Level__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Decay_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Evidence__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Freshness_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Last_Used__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Request_Fingerprint__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Reviewer__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Credential__c.Days_To_Expiry__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Evidence_URL__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Expiry_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Credential__c.Expiry_Risk_Band__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Issue_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Last_Checked_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Maintenance_Date__c</field><readable>true</readable></fieldPermissions>
@@ -83,8 +105,11 @@
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Last_Certified_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Recertification_Due_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.SoD_Conflict_Detail__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.SoD_Conflict__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Valid_To__c</field><readable>true</readable></fieldPermissions>
     <objectPermissions><allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Capability__c</object><viewAllRecords>false</viewAllRecords></objectPermissions>

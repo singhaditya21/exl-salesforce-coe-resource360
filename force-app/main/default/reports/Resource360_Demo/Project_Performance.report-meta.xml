@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns><field>Engagement__c$Name</field></columns><columns><field>Engagement__c$Account__c</field></columns><columns><field>Engagement__c$Completion_Percent__c</field></columns><columns><field>Engagement__c$Forecast_Completion_Date__c</field></columns><columns><field>Engagement__c$Schedule_Variance_Days__c</field></columns><columns><field>Engagement__c$Acceptance_First_Pass_Percent__c</field></columns><columns><field>Engagement__c$CSAT_Score__c</field></columns><columns><field>Engagement__c$Mandatory_Skill_Coverage_Percent__c</field></columns><columns><field>Engagement__c$Risk_Exposure_Score__c</field></columns>
+    <description>Project schedule, quality, customer, skill and risk performance.</description><format>Summary</format>
+    <groupingsDown><field>Engagement__c$Status__c</field><sortOrder>Asc</sortOrder></groupingsDown>
+    <name>Project Performance</name><reportType>Resource360_Project_Performance__c</reportType><scope>organization</scope><showDetails>true</showDetails><showGrandTotal>true</showGrandTotal><showSubTotals>true</showSubTotals>
+</Report>

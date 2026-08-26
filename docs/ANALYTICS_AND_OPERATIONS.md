@@ -2,7 +2,7 @@
 
 ## Native analytics baseline
 
-The deployable baseline uses `Resource360AnalyticsService`, sixteen Salesforce custom report types, seventeen runnable reports and the seventeen-component Lightning Command Center. The reporting set covers portfolio hierarchy, project lifecycle, contract changes and payment position, project module/WBS delivery, skill demand/match, staffing performance, delivery membership capacity, daily capacity and over-allocation exceptions, allocations, capability supply, budgets, approved actuals, project risks and closeout readiness. Role-aware Lightning and Pages surfaces add KPI cards, a 60-member capacity heatmap, exception queue and resource drill-down without inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
+The deployable baseline uses `Resource360AnalyticsService`, nineteen Salesforce custom report types, twenty runnable reports and the twenty-component Lightning Command Center. The reporting set covers portfolio hierarchy, project lifecycle, contract changes and payment position, project module/WBS delivery, skill demand/match, staffing performance, delivery membership capacity, daily capacity and over-allocation exceptions, allocations, capability supply, budgets, approved actuals, project risks, closeout readiness, KPI history/forecast, project performance and resource unavailability. Role-aware Lightning and Pages surfaces add KPI cards, a 60-member capacity heatmap, exception queues, a 13-week supply-demand runway and resource/project drill-down without inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
 
 | Metric/control | Authoritative population | Cutoff and drill path |
 |---|---|---|
@@ -21,8 +21,18 @@ The deployable baseline uses `Resource360AnalyticsService`, sixteen Salesforce c
 | Controlled over-allocation | Resources above 8 and at or below 12 hours, with current independent approval evidence | Portfolio → exception queue → reason/approver/expiry → allocation/audit |
 | Capacity guardrail health | Lines above 8, aggregates above 12, missing approval evidence, expired exceptions and ledger reconciliation failures | Control status → resource/date → source transaction and correlation evidence |
 | Daily actual-time compliance | Approved/submitted time aggregated by resource and date against the 8-hour actual ceiling | Week → practitioner/date → timesheet → time entries/correction lineage |
+| 13-week capacity coverage | Productive capacity after approved leave/training divided by committed plus soft forecast demand | Week → portfolio/role gap → staffing demand and expected roll-off |
+| Bench age and roll-off | Continuous available-capacity age plus accepted hours expected to release | Portfolio → sub-portfolio → practitioner schedule |
+| Fulfilment and time to staff | Accepted requests and elapsed submitted-to-filled time | Portfolio/role → request shortlist and decision evidence |
+| Schedule and earned value | Baseline/forecast/actual dates, PV, EV, actual cost, SPI, CPI, ETC and EAC | Project → module → work unit/milestone |
+| Revenue and collection | Recognized revenue, billing realization, DSO, collection effectiveness and write-offs | Account → project → contract → payment |
+| Customer and quality | Acceptance first-pass, CSAT, NPS, account health, releases, incidents, defects and test pass rate | Account/project → work unit and acceptance evidence |
+| Skill and credential readiness | Mandatory coverage, role readiness, freshness/decay and credential expiry risk | Portfolio/project → role/capability → practitioner evidence |
+| Access and integration assurance | Recertification, SoD conflict, identity match, orphans, completeness, latency and retry | Persona/source → scope/run → redacted evidence |
 
 Every displayed KPI must expose its definition, target, source population, cutoff and drill-down. Runtime policy changes are effective-dated and do not rewrite historic decision snapshots.
+
+`R360_KPI_Snapshot__c` is the effective-dated semantic history. The deterministic demo holds 214 records: 78 forecast observations (six measures × thirteen weeks), 96 monthly enterprise observations and 40 portfolio observations. `R360_Resource_Unavailability__c` holds twelve approved mock leave/training windows. GitHub Pages consumes the same data through a build-time allowlist; it never queries the private org from a browser.
 
 ## Operations
 

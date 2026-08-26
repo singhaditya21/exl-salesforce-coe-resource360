@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Retry_Count__c</fullName><description>Technical retry attempts for the run.</description><label>Retry Count</label><precision>5</precision><scale>0</scale><trackHistory>false</trackHistory><type>Number</type></CustomField>

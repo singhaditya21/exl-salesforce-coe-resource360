@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Expected_Roll_Off_Date__c</fullName><description>Forecast release date for this allocation segment.</description><label>Expected Roll-Off Date</label><trackHistory>false</trackHistory><type>Date</type></CustomField>

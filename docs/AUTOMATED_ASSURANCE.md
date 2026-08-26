@@ -13,7 +13,7 @@
 | Protected-org CI | GitHub `ci.yml` with `RESOURCE360_SFDX_AUTH_URL` | Secret-enabled dry run does not pass `RunLocalTests` |
 | Persona Lightning sessions | `pnpm sf:test:personas` | Any of eight fictional identities cannot be reached with controlled Login As, render positive workflow/data, suppress unauthorized modules, or the Project Manager cannot execute an audited live workbench write |
 | Security | CodeQL, dependency review and tracked-secret scan | High-confidence credential or blocking code finding |
-| Pages | GitHub Pages workflow plus remote HTTP/browser smoke | Build/deploy failure or non-200 public endpoint |
+| Pages | Hourly Salesforce allowlist export, GitHub Pages workflow plus remote HTTP/browser smoke | Export contract/security/count failure, build/deploy failure or non-200 public endpoint |
 
 ## Covered invariants
 
@@ -28,7 +28,9 @@
 - the exact `ENG-1001` golden path: three contract versions, six commercial lines, seven governed WBS items/dependencies, eleven structured requirements/matches, four staffing/allocation links, approved actuals, risks and closeout;
 - the exact `R360-SCALE-10X20-V1` graph: 10 Accounts/Portfolios, 20 Sub-portfolios/Projects, 60 Resources/Memberships/Modules, two projects and six members per Account, multiple contracts, three payments per contract, multi-unit WBS, budgets, three-dimensional skill demand, staffing/allocation, risk, actual and closeout evidence;
 - the Project Manager workbench: governed project/SOW intake, commercial-change and line controls, seven direct duration-resize handles, a live forecast write and a live progress write;
-- app-activated Home/Engagement pages, governed related lists, 13 operating list views, seventeen non-empty native reports and seventeen refreshed dashboard components, plus role-aware capacity KPIs, heatmap and exception queue;
+- app-activated Home/Engagement pages, governed related lists, 13 operating list views, twenty non-empty native reports and twenty refreshed dashboard components, plus role-aware capacity/performance KPIs, 13-week forecast, heatmap and exception queues;
+- exactly 214 effective-dated KPI snapshots, 78 forecast observations across 13 weeks and twelve approved unavailability events;
+- a sanitized Pages snapshot with exact 10-account/20-project/60-resource/13-week populations and zero Salesforce IDs, identities, credentials or guardrail breaches;
 - eight legal-hold-eligible retention categories with non-destructive preview only;
 - all five demo activation domains in one attributable 5/5 dry run with zero external calls and zero destructive actions;
 - five published walkthroughs covering discovery, skills, staffing, budget/time and activation at 1280×720 H.264;

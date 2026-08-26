@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Engagement__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Schedule, acceptance, customer, capability, risk and plan-to-actual performance by project.</description><label>Resource 360 Project Performance</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Account__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Portfolio__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Status__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Completion_Percent__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Forecast_Completion_Date__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Schedule_Variance_Days__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Acceptance_First_Pass_Percent__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>CSAT_Score__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>NPS_Score__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Account_Health_Score__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Mandatory_Skill_Coverage_Percent__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Role_Readiness_Percent__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Risk_Exposure_Score__c</field><table>Engagement__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Plan_Actual_Variance_Percent__c</field><table>Engagement__c</table></columns>
+        <masterLabel>Project performance</masterLabel>
+    </sections>
+</ReportType>
