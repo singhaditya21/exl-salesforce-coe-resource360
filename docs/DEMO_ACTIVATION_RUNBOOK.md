@@ -12,7 +12,7 @@ The shared decision is `R360-MOCK-ACTIVATION-2026-08-24`. The machine-readable d
 |---|---|---|---|
 | Identity and SSO | Fictional Entra assertion, MFA claim, lifecycle state, group-to-permission mapping and active scope | 18 governed persona mappings and least-privilege route tests | No password, token, device ID, tenant call or real identity |
 | EXL integrations | Contract/version/schema, idempotency, collision, completeness, freshness, retry and reconciliation checks | 13 `R360-MOCK-1.2` source contracts and sanitized run counts | No EXL endpoint, credential or raw payload |
-| Production-like data | Seeded cross-domain population and representative volume/reconciliation profile | Fictional people, engagement, commercial, skills, budget, staffing and time records using `.invalid` identities | No employee, customer, project or commercial production record |
+| Production-like data | Seeded cross-domain population and representative volume/reconciliation profile | Exact 10-account, 10-portfolio, 20-sub-portfolio, 20-project, 60-resource/membership graph with commercial, payment, module/WBS, budget, skill, staffing, allocation, risk, actual and closeout evidence using `.invalid` identities | No employee, customer, project or commercial production record |
 | Legal and business approvals | Privacy, security, accessibility, retention/legal-hold, 25-scenario UAT and cutover/recovery evidence decisions | Six explicit mock decisions, eight legal-hold-eligible rules, fictional owners and audit evidence | No claim of EXL Legal, Privacy, Security or business acceptance; deletion disabled |
 | Operational controls | Scheduler, source monitoring, alert closure, retry/dead-letter, backup, restore and disaster-recovery rehearsal | Attributable dry-run record, correlation ID, 5/5 result and audit event | No external message, restore, failover or destructive action |
 
@@ -61,7 +61,7 @@ The permanent Developer Edition demo org uses Salesforce **Login As**, not share
 
 3. Retain the JSON result showing the Login As identity banner, assigned role options, positive workflow route, live user-mode record count, missing unauthorized module and zero browser errors for every identity.
 
-The preparation gate fails unless all 17 scopes use `PORT-SFCOE-DEMO` and the engagement, staffing, allocation, budget, approval, commercial-reference and practitioner self-record share matrices match the seeded data exactly. The `.invalid` email addresses remain deliberately non-deliverable; no persona password is created, stored or distributed. `LastLoginDate` is not used as evidence because controlled administrator impersonation is proven directly in Lightning.
+The preparation gate fails unless the exact enterprise graph reconciles and the engagement, staffing, allocation, budget, approval, commercial-reference and practitioner self-record share matrices match the seeded data. Project Manager scope is deliberately extended across the 20-project demonstration, Operations can see all 10 portfolios, and other composite demo users remain constrained to the governed anchor scope. The `.invalid` email addresses remain deliberately non-deliverable; no persona password is created, stored or distributed. `LastLoginDate` is not used as evidence because controlled administrator impersonation is proven directly in Lightning.
 
 ## Acceptance criteria
 

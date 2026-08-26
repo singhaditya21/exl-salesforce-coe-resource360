@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Owner_User__c</fullName><deleteConstraint>SetNull</deleteConstraint><label>Sub-portfolio Lead</label><referenceTo>User</referenceTo><relationshipLabel>Owned Sub-portfolios</relationshipLabel><relationshipName>Owned_Sub_Portfolios</relationshipName><type>Lookup</type></CustomField>

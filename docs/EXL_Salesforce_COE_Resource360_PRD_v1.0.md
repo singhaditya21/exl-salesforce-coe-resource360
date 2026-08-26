@@ -5,8 +5,8 @@
 | Document field | Value |
 |---|---|
 | Status | Demo-complete Salesforce-native baseline including safe simulations of every external activation domain; real production activation still requires the EXL-owned evidence in Section 19 |
-| Version | 1.7 |
-| Date | 25 August 2026 |
+| Version | 1.8 |
+| Date | 26 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
 | Product scope | Engagement 360, Resource Management, Salesforce Skills & Credentials, Budgeting/WBS, Timesheet and COE Command Center |
 | Target organization | EXL Salesforce Center of Excellence (COE) |
@@ -31,6 +31,7 @@
 | 1.5 | 24 August 2026 | Closed the approved sanitized-mock implementation baseline: 13 versioned source/lineage contracts, machine-readable common project and ingestion schemas, 18 governed personas with positive/negative screen authorization, eight legal-hold-eligible retention rules, automated browser/accessibility/deployment assurance and explicit non-destructive production gates. |
 | 1.6 | 24 August 2026 | Added the interactive five-pillar Demo Activation Center in GitHub Pages and Salesforce: mock Entra SSO, all source integrations, production-like fictional data, legal/business approval evidence and operational controls now execute as one attributable 5/5 rehearsal with zero external calls and zero destructive actions. |
 | 1.7 | 25 August 2026 | Implemented the end-to-end Salesforce project-delivery golden path: governed intake, contract versions/lines, structured industry-functional-technical skill demand and match evidence, staffing-to-allocation-to-WBS traceability, dynamic PM Gantt, risks, acceptance, closeout, app pages, related lists and eleven native reports/dashboard components. |
+| 1.8 | 26 August 2026 | Added the idempotent enterprise demo graph: exactly 10 Accounts, 10 Portfolios, 20 Sub-portfolios, 20 fully related Projects, 60 governed Resources/Memberships and 60 Project Modules; added contract payments, delivery membership lineage, role-aware Project 360 context, four analytics domains and executable graph/share reconciliation. |
 
 ---
 
@@ -1530,14 +1531,24 @@ The demo must prove one coherent project path in Salesforce, not a collection of
 7. Approved time maps to the project and WBS, is visible to the Project Manager through governed parent sharing, and cannot be edited or deleted in place.
 8. Closeout fails closed while active work, required acceptance, high/critical risks, unreconciled time, approved commercial evidence or current approved budget gates fail. Submission releases allocations; a separately permissioned approver records approval or rejection from the workbench and the submitter cannot self-approve.
 9. The Resource 360 app activates a role-aware Home page and an Engagement record page containing dynamic highlights, the delivery workbench and contract/work/skill/staffing/allocation/risk/closeout related lists.
-10. Native analytics include eleven report types/reports and an eleven-component command center spanning lifecycle, contracts, WBS, skill match, staffing, allocations, capability supply, budget, actuals, risks and closeout.
+10. Native analytics include fifteen report types/reports and a fifteen-component command center spanning hierarchy, lifecycle, contracts/payments, modules/WBS, skill match, staffing/membership capacity, allocations, capability supply, budget, actuals, risks and closeout.
 11. The deterministic seed and preparation gate assert exact golden-path and portfolio-share counts; the controlled Project Manager Login As test must prove the scoped intake portfolio, direct resize handles, and attributable forecast/progress commands in Lightning.
 
 The implementation and seeded counts are maintained in `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
 
+### 18.2 Enterprise demonstration volume and relationship baseline
+
+The permanent Developer Edition shall carry a representative, storage-conscious operating portfolio rather than 100 shallow project shells. The approved baseline is exactly 10 fictional enterprise Accounts and 20 fully rich Projects, with two Projects per Account. It shall also contain exactly 10 Account-aligned Portfolios, 20 Sub-portfolios, 60 governed Resources, 60 effective-dated Delivery Memberships and 60 Project Modules.
+
+Every Project shall be traversable from Account → Portfolio → Sub-portfolio → Project and shall expose its Project Manager, commercial position, at least two contracts, exactly three payment milestones per contract, three modules, at least six active WBS items, dependencies, a current budget, Industry/Functional/Technical skill demand, staffing decisions, membership-linked allocations, risks and approved actuals. Four Projects shall demonstrate completed lifecycle and approved closeout; the others shall demonstrate active delivery at varied progress, health, industry, tower and commercial states.
+
+Every governed delivery member shall have an effective-dated Account/Portfolio/Sub-portfolio membership, and every seeded allocation shall retain that membership lineage. Relationship validation shall fail on orphaned or cross-hierarchy records. The Project Manager experience shall present hierarchy, module, resource/membership, contract-payment, budget, WBS/Gantt, skill, risk, actual and closeout context as one role-aware Project 360. Native analytics shall include portfolio hierarchy, project module delivery, contract payment position and delivery membership capacity in addition to the existing operational reports.
+
+`Resource360ScaleDemoData.ensure()` and the preparation gate are the executable acceptance evidence. The seed is idempotent, never deletes user-created data and shall fail unless exact top-level counts, per-account cardinality, per-project minimums, report execution, dashboard components and persona-visible sharing reconcile.
+
 ## 19. Definition of done and implementation readiness
 
-Version 1.7 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, the governed project-delivery golden path, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, native pages/analytics, generated traceability and accountable roles. `ADMUI-01` executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md` and `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
+Version 1.8 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, the governed project-delivery golden path, the exact 10-account/20-project enterprise graph, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, native pages/analytics, generated traceability and accountable roles. `ADMUI-01` executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md` and `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
 
 The implemented product is also evidenced by five silent 1280×720 H.264 walkthroughs published on `GLB-06 · User preferences and help`. They record the actual deployed GitHub Pages UI and demonstrate the 103-screen directory, skills/talent discovery, a completed staffing acceptance, calculated budget and timesheet approvals, and the five-pillar demo activation. File hashes, durations, personas and observed outcomes are maintained in `public/demo-videos/manifest.json` and `docs/DEMO_VIDEO_VALIDATION.md`; these recordings remain sanitized demo evidence and do not imply a live EXL connection.
 

@@ -17,7 +17,7 @@ const fieldsFor = (objectName) => {
     const xml = fs.readFileSync(path.join(fieldsDir, file), "utf8");
     return {
       name: file.replace(".field-meta.xml", ""),
-      editable: !xml.includes("<type>Formula</type>") && !xml.includes("<type>RollUpSummary</type>"),
+      editable: !xml.includes("<formula>") && !xml.includes("<type>Formula</type>") && !xml.includes("<type>RollUpSummary</type>"),
       permissionable: !xml.includes("<required>true</required>") && !xml.includes("<type>MasterDetail</type>")
     };
   });
@@ -29,7 +29,7 @@ const fieldsFor = (objectName) => {
 // configuration shares still prevent direct access to governed version records.
 const businessObjects = allObjects.filter((name) => !["R360_Audit_Event__c", "R360_Integration_Run__c", "R360_Integration_Error__c", "R360_Outbox_Event__c", "R360_Approval_Decision__c", "R360_Role_Scope__c"].includes(name));
 const permissions = (read, create = false, edit = false, remove = false, viewAll = false, modifyAll = false) => ({ read, create, edit, remove, viewAll, modifyAll });
-const readOnly = Object.fromEntries(businessObjects.map((name) => [name, permissions(true)]));
+const readOnly = { Account: permissions(true), ...Object.fromEntries(businessObjects.map((name) => [name, permissions(true)])) };
 
 const roleConfigs = [
   {
@@ -48,8 +48,8 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Project_Manager_Actions", label: "Resource 360 Project Manager Actions", description: "Create governed staffing demand and manage engagement working records within sharing scope.",
-    objects: { Staffing_Request__c: permissions(true, true, false), Staffing_Skill_Match__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true, true, true), Budget__c: permissions(true, true, true), Budget_Line__c: permissions(true, true, true), Engagement__c: permissions(true, true, true), Commercial_Reference__c: permissions(true, true, true), Commercial_Line__c: permissions(true, true, true), Work_Unit__c: permissions(true, true, true), Work_Dependency__c: permissions(true, true, true, true), Project_Risk__c: permissions(true, true, true), Project_Closeout__c: permissions(true, true, true), Allocation__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360ProjectService", "Resource360BudgetImportService"], customPermissions: ["Resource360_Manage_Budgets","Resource360_Manage_Projects"],
-    editable: { Staffing_Request__c: ["Engagement__c","Resource__c","Work_Unit__c","Requested_Role__c","Classification__c","Start_Date__c","End_Date__c","Daily_Hours__c","Priority__c","State__c","Requester__c","SLA_Due__c","Requirement_Summary__c","Request_Version__c","Idempotency_Key__c","Request_Fingerprint__c","Responsible_Owner__c","Review_Date__c","Control_Reason__c","Source_Criteria__c","Budget_Signature__c","Fit_Score__c"], Staffing_Skill_Match__c: "ALL", Engagement_Skill_Requirement__c: "ALL", Budget__c: "ALL", Budget_Line__c: "ALL", Engagement__c: "ALL", Commercial_Reference__c: "ALL", Commercial_Line__c: "ALL", Work_Unit__c: "ALL", Work_Dependency__c: "ALL", Project_Risk__c: "ALL", Project_Closeout__c: "ALL" }
+    objects: { Staffing_Request__c: permissions(true, true, false), Staffing_Skill_Match__c: permissions(true, true, true), Engagement_Skill_Requirement__c: permissions(true, true, true), Budget__c: permissions(true, true, true), Budget_Line__c: permissions(true, true, true), Engagement__c: permissions(true, true, true), Commercial_Reference__c: permissions(true, true, true), Commercial_Line__c: permissions(true, true, true), Work_Unit__c: permissions(true, true, true), Work_Dependency__c: permissions(true, true, true, true), Project_Module__c: permissions(true, true, true), Project_Risk__c: permissions(true, true, true), Project_Closeout__c: permissions(true, true, true), Allocation__c: permissions(true) }, classes: ["Resource360Service", "Resource360TalentService", "Resource360PlanningService", "Resource360ProjectService", "Resource360BudgetImportService"], customPermissions: ["Resource360_Manage_Budgets","Resource360_Manage_Projects"],
+    editable: { Staffing_Request__c: ["Engagement__c","Resource__c","Work_Unit__c","Requested_Role__c","Classification__c","Start_Date__c","End_Date__c","Daily_Hours__c","Priority__c","State__c","Requester__c","SLA_Due__c","Requirement_Summary__c","Request_Version__c","Idempotency_Key__c","Request_Fingerprint__c","Responsible_Owner__c","Review_Date__c","Control_Reason__c","Source_Criteria__c","Budget_Signature__c","Fit_Score__c"], Staffing_Skill_Match__c: "ALL", Engagement_Skill_Requirement__c: "ALL", Budget__c: "ALL", Budget_Line__c: "ALL", Engagement__c: "ALL", Commercial_Reference__c: "ALL", Commercial_Line__c: "ALL", Work_Unit__c: "ALL", Work_Dependency__c: "ALL", Project_Module__c: "ALL", Project_Risk__c: "ALL", Project_Closeout__c: "ALL" }
   },
   {
     name: "Resource360_Manager_Actions", label: "Resource 360 Manager Actions", description: "Review skill claims and timesheets only within manager/delegated scope.",
@@ -84,8 +84,8 @@ const roleConfigs = [
   },
   {
     name: "Resource360_Finance_PMO_Actions", label: "Resource 360 Finance PMO Actions", description: "Review economics, reconcile commercial context and execute only assigned budget decisions within effective scope.",
-    objects: { Budget__c: permissions(true, false, true), Budget_Line__c: permissions(true), Commercial_Reference__c: permissions(true), R360_Approval_Decision__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service","Resource360AssuranceService"], customPermissions: ["Resource360_Approve_Budgets"],
-    editable: { Budget__c: ["State__c","Approval_Level__c","Approval_Step__c","Approver__c","Approved_At__c","Decision_Note__c"], R360_Approval_Decision__c: ["Decision_ID__c","Entity_Type__c","Entity_ID__c","Entity_Version__c","Step_Number__c","Required_Role__c","State__c","Approver__c","Decided_At__c","Decision_Note__c","Economic_Signature__c","Correlation_ID__c"] }
+    objects: { Budget__c: permissions(true, false, true), Budget_Line__c: permissions(true), Commercial_Reference__c: permissions(true), Contract_Payment__c: permissions(true, true, true), R360_Approval_Decision__c: permissions(true, true, true), R360_Role_Scope__c: permissions(true) }, classes: ["Resource360Service","Resource360AssuranceService"], customPermissions: ["Resource360_Approve_Budgets"],
+    editable: { Budget__c: ["State__c","Approval_Level__c","Approval_Step__c","Approver__c","Approved_At__c","Decision_Note__c"], Contract_Payment__c: "ALL", R360_Approval_Decision__c: ["Decision_ID__c","Entity_Type__c","Entity_ID__c","Entity_Version__c","Step_Number__c","Required_Role__c","State__c","Approver__c","Decided_At__c","Decision_Note__c","Economic_Signature__c","Correlation_ID__c"] }
   },
   {
     name: "Resource360_Portfolio_Control_Actions", label: "Resource 360 Portfolio Control Actions", description: "Read portfolio commercial and delivery controls and close attributable alerts within scope.",
@@ -141,7 +141,7 @@ const writePermissionSet = (config) => {
   const lines = ['<?xml version="1.0" encoding="UTF-8"?>','<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">',`    <description>${config.description}</description>`,'    <hasActivationRequired>false</hasActivationRequired>',`    <label>${config.label}</label>`];
   if (config.name === "Resource360_Base_User" || config.name === "Resource360_Administrator") {
     lines.push('    <applicationVisibilities><application>Resource360</application><visible>true</visible></applicationVisibilities>');
-    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","Work_Unit__c","Commercial_Reference__c","Staffing_Request__c","Allocation__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
+    for (const tab of ["Resource360_Workspace","Resource360_Project_Workbench","Engagement__c","R360_Sub_Portfolio__c","Project_Module__c","Work_Unit__c","Commercial_Reference__c","Contract_Payment__c","Resource__c","R360_Delivery_Membership__c","Staffing_Request__c","Allocation__c","Project_Risk__c","Project_Closeout__c"]) lines.push(`    <tabSettings><tab>${tab}</tab><visibility>Visible</visibility></tabSettings>`);
     for (const permission of ["LightningExperienceUser", "RunReports", "ViewPublicDashboards", "ViewPublicReports"]) {
       lines.push(`    <userPermissions><enabled>true</enabled><name>${permission}</name></userPermissions>`);
     }
@@ -158,8 +158,8 @@ const writePermissionSet = (config) => {
 };
 for (const config of roleConfigs) writePermissionSet(config);
 
-const adminObjects = Object.fromEntries(allObjects.map((name) => [name, name === "R360_Audit_Event__c" ? permissions(true,true,false,false,true,false) : permissions(true,true,true,true,true,true)]));
-writePermissionSet({ name: "Resource360_Administrator", label: "Resource 360 Administrator", description: "Full Resource 360 administration. Audit deletion/update remains blocked by immutable triggers.", objects: adminObjects, classes: fs.readdirSync(path.join(metadataRoot,"classes")).filter((name)=>name.endsWith(".cls")&&!name.endsWith("Test.cls")).map((name)=>name.replace(".cls","")), customPermissions: fs.readdirSync(path.join(metadataRoot,"customPermissions")).map((name)=>name.replace(".customPermission-meta.xml","")), editable: Object.fromEntries(allObjects.map((name)=>[name,"ALL"])) });
+const adminObjects = { Account: permissions(true,true,true,true,true,true), ...Object.fromEntries(allObjects.map((name) => [name, name === "R360_Audit_Event__c" ? permissions(true,true,false,false,true,false) : permissions(true,true,true,true,true,true)])) };
+writePermissionSet({ name: "Resource360_Administrator", label: "Resource 360 Administrator", description: "Full Resource 360 administration. Audit deletion/update remains blocked by immutable triggers.", objects: adminObjects, classes: fs.readdirSync(path.join(metadataRoot,"classes")).filter((name)=>name.endsWith(".cls")&&!name.endsWith("Test.cls")).map((name)=>name.replace(".cls","")), customPermissions: fs.readdirSync(path.join(metadataRoot,"customPermissions")).map((name)=>name.replace(".customPermission-meta.xml","")), editable: { Account: "ALL", ...Object.fromEntries(allObjects.map((name)=>[name,"ALL"])) } });
 
 const groups = {
   Resource360_Practitioner: ["Resource360_Base_User","Resource360_Practitioner_Actions"],

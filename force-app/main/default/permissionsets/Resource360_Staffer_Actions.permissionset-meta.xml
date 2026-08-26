@@ -20,6 +20,7 @@
     <fieldPermissions><editable>false</editable><field>Engagement__c.Revenue_Type__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Salesforce_Tower__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement__c.Source_Last_Sync__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Engagement__c.Sub_Portfolio__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Staffing_Request__c.Budget_Signature__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Staffing_Request__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Staffing_Request__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
@@ -41,11 +42,12 @@
     <fieldPermissions><editable>true</editable><field>Staffing_Skill_Match__c.Gap_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement_Skill_Requirement__c.Description__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Engagement_Skill_Requirement__c.Mandatory__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Current__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Allocation__c.Delivery_Membership__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Parent_Allocation__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Allocation__c.Review_Date__c</field><readable>true</readable></fieldPermissions>

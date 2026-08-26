@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Payment_Project_Matches_Contract</fullName><active>true</active><errorConditionFormula>Engagement__c &lt;&gt; Commercial_Reference__r.Engagement__c</errorConditionFormula><errorMessage>Payment project must match the contract project.</errorMessage></ValidationRule>

@@ -25,8 +25,9 @@
 - outbox retry/dead-letter recovery and exactly one governed operations schedule;
 - corrected-time dual control, compliance exceptions and immutable approved actuals;
 - the exact `ENG-1001` golden path: three contract versions, six commercial lines, seven governed WBS items/dependencies, eleven structured requirements/matches, four staffing/allocation links, approved actuals, risks and closeout;
+- the exact `R360-SCALE-10X20-V1` graph: 10 Accounts/Portfolios, 20 Sub-portfolios/Projects, 60 Resources/Memberships/Modules, two projects and six members per Account, multiple contracts, three payments per contract, multi-unit WBS, budgets, three-dimensional skill demand, staffing/allocation, risk, actual and closeout evidence;
 - the Project Manager workbench: governed project/SOW intake, commercial-change and line controls, seven direct duration-resize handles, a live forecast write and a live progress write;
-- app-activated Home/Engagement pages, governed related lists, nine operating list views, eleven non-empty native reports and eleven refreshed dashboard components;
+- app-activated Home/Engagement pages, governed related lists, 13 operating list views, fifteen non-empty native reports and fifteen refreshed dashboard components;
 - eight legal-hold-eligible retention categories with non-destructive preview only;
 - all five demo activation domains in one attributable 5/5 dry run with zero external calls and zero destructive actions;
 - five published walkthroughs covering discovery, skills, staffing, budget/time and activation at 1280×720 H.264;

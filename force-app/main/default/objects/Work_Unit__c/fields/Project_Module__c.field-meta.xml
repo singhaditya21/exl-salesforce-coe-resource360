@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Project_Module__c</fullName><deleteConstraint>SetNull</deleteConstraint><label>Project Module</label><referenceTo>Project_Module__c</referenceTo><relationshipLabel>Work Units</relationshipLabel><relationshipName>Work_Units</relationshipName><type>Lookup</type></CustomField>

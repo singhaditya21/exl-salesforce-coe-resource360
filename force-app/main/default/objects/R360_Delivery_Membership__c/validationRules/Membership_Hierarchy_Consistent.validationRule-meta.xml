@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Membership_Hierarchy_Consistent</fullName><active>true</active><errorConditionFormula>OR(Sub_Portfolio__r.Portfolio__c &lt;&gt; Portfolio__c, Account__c &lt;&gt; Portfolio__r.Account__c)</errorConditionFormula><errorMessage>Membership account, portfolio and sub-portfolio must belong to the same hierarchy.</errorMessage></ValidationRule>

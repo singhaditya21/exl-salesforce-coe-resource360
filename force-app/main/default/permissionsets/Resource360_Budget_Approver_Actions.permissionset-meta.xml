@@ -9,23 +9,23 @@
     <customPermissions><enabled>true</enabled><name>Resource360_Manage_Budgets</name></customPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Approval_Level__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Approval_Step__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget__c.Blended_Cost__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget__c.Burdened_Labour__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Blended_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Burdened_Labour__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Decision_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Economic_Signature__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget__c.Gross_Margin__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Gross_Margin__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget__c.Margin_Percent__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Margin_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget__c.Submitted_By__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget__c.Total_Cost__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget__c.Travel_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Total_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget__c.Travel_Cost__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Location__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Onsite__c</field><readable>true</readable></fieldPermissions>
-    <fieldPermissions><editable>true</editable><field>Budget_Line__c.Planned_Cost__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Budget_Line__c.Planned_Cost__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Resource__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_End__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Budget_Line__c.Role_Start__c</field><readable>true</readable></fieldPermissions>

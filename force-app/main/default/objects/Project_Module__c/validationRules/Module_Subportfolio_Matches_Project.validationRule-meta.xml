@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Module_Subportfolio_Matches_Project</fullName><active>true</active><errorConditionFormula>Sub_Portfolio__c &lt;&gt; Engagement__r.Sub_Portfolio__c</errorConditionFormula><errorMessage>Module sub-portfolio must match the project sub-portfolio.</errorMessage></ValidationRule>

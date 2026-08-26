@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Open_Contract_Payments</fullName><columns>NAME</columns><columns>Payment_ID__c</columns><columns>Engagement__c</columns><columns>Commercial_Reference__c</columns><columns>Milestone__c</columns><columns>Status__c</columns><columns>Outstanding_Amount__c</columns><columns>Due_Date__c</columns><filterScope>Everything</filterScope><filters><field>Status__c</field><operation>notEqual</operation><value>Paid</value></filters><label>Open Contract Payments</label></ListView>

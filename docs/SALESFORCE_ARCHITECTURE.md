@@ -5,26 +5,27 @@
 | Layer | Implementation | Responsibility |
 |---|---|---|
 | Experience | Lightning app `Resource360`; LWCs `resource360Workspace` and `resource360ProjectWorkbench`; app Home and Engagement record FlexiPages | Role-aware EXL shell, 103-screen routes/contracts, dynamic PM Gantt, commands, related lists and record drill-down |
-| Domain services | 35 production Apex classes and 11 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, capacity/freshness planning, decisions, analytics, integration, notifications and audit |
-| Demo bootstrap | `Resource360DemoData`, `Resource360DemoScenarioData` and `Resource360GoldenPathData` Apex | Idempotent fictional portfolio plus fully linked project-delivery golden path |
-| Data | 33 custom record objects, six custom-metadata types and one platform event | Engagement, contracts, work/dependencies, skills demand/match, economics, staffing, allocation, time, risk, closeout, configuration, operations and evidence |
+| Domain services | 36 production Apex classes and 12 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, capacity/freshness planning, decisions, analytics, integration, notifications and audit |
+| Demo bootstrap | `Resource360DemoData`, `Resource360DemoScenarioData`, `Resource360GoldenPathData` and `Resource360ScaleDemoData` Apex | Idempotent fictional baseline, fully linked project-delivery golden path and exact 10-account/20-project enterprise graph |
+| Data | 38 record objects including Account, six custom-metadata types and one platform event | Account/portfolio hierarchy, engagement, contracts/payments, modules/work/dependencies, delivery membership, skills demand/match, economics, staffing, allocation, time, risk, closeout, configuration, operations and evidence |
 | Policy | 150 governed policy/classification/delivery-role/source/persona/retention records plus effective-dated runtime overrides and atomic release bundles | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, assurance, lineage, retention preview and access |
-| Analytics | `Resource360AnalyticsService`, eleven custom report types/reports and an eleven-component dashboard | Scoped KPI populations/definitions/cutoffs, delivery lifecycle and Salesforce report-builder access |
+| Analytics | `Resource360AnalyticsService`, fifteen custom report types/reports and a fifteen-component dashboard | Scoped KPI populations/definitions/cutoffs, portfolio hierarchy, module delivery, payment position, membership capacity, delivery lifecycle and Salesforce report-builder access |
 | Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
 
 ## Domain model
 
 | Domain | Salesforce objects |
 |---|---|
-| Engagement, commercials and delivery | `Engagement__c`, `Commercial_Reference__c`, `Commercial_Line__c`, `Work_Unit__c`, `Work_Dependency__c`, `Project_Risk__c`, `Project_Closeout__c`, `R360_Portfolio__c` |
+| Account, portfolio and delivery | `Account`, `R360_Portfolio__c`, `R360_Sub_Portfolio__c`, `Engagement__c`, `Project_Module__c`, `Work_Unit__c`, `Work_Dependency__c`, `Project_Risk__c`, `Project_Closeout__c` |
+| Commercial and collections | `Commercial_Reference__c`, `Commercial_Line__c`, `Contract_Payment__c` |
 | Budget and WBS | `Budget__c`, `Budget_Line__c`, `R360_Approval_Decision__c` |
 | People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c`, `Engagement_Skill_Requirement__c` |
-| Staffing and allocation | `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c` |
+| Staffing and allocation | `R360_Delivery_Membership__c`, `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c` |
 | Time | `Timesheet__c`, `Time_Entry__c` |
 | Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt`, `R360_Persona__mdt`, `R360_Source_Contract__mdt`, `R360_Retention_Rule__mdt` |
 | Operations and evidence | `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
 
-Relationships preserve decision lineage: approved contract lines map to WBS items; structured industry/functional/technical requirements produce persisted match evidence; accepted staffing creates a versioned current allocation; allocations map resources to project work; only eligible accepted allocation periods receive time; delivery acceptance, risk and closeout retain accountable decisions.
+Relationships preserve organizational and decision lineage: Account owns Portfolio, Portfolio owns Sub-portfolio, Delivery Membership effective-dates a Resource's Account/Portfolio/Sub-portfolio alignment, and Project belongs to the same hierarchy. Approved contracts own payment milestones and lines mapped to project modules/WBS items; structured industry/functional/technical requirements produce persisted match evidence; accepted staffing creates a membership-linked current allocation; only eligible accepted allocation periods receive time; delivery acceptance, risk and closeout retain accountable decisions.
 
 ## Governed transaction chain
 

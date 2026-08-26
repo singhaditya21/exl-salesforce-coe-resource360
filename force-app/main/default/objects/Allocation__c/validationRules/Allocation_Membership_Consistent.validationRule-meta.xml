@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Allocation_Membership_Consistent</fullName><active>true</active><errorConditionFormula>AND(NOT(ISBLANK(Delivery_Membership__c)), OR(Delivery_Membership__r.Resource__c &lt;&gt; Resource__c, Delivery_Membership__r.Portfolio__c &lt;&gt; Engagement__r.Portfolio__c))</errorConditionFormula><errorMessage>Allocation resource and project portfolio must match the selected delivery membership.</errorMessage></ValidationRule>

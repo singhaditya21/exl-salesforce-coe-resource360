@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Current_Sub_Portfolios</fullName><columns>NAME</columns><columns>Sub_Portfolio_ID__c</columns><columns>Account__c</columns><columns>Portfolio__c</columns><columns>Tower__c</columns><columns>Health__c</columns><filterScope>Everything</filterScope><filters><field>Current__c</field><operation>equals</operation><value>1</value></filters><label>Current Sub-portfolios</label></ListView>
