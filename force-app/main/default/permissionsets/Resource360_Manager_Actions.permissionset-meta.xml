@@ -8,9 +8,11 @@
     <customPermissions><enabled>true</enabled><name>Resource360_Approve_Timesheets</name></customPermissions>
     <customPermissions><enabled>true</enabled><name>Resource360_Review_Skills</name></customPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Approved_Level__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decay_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Evidence__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Freshness_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Last_Used__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Request_Fingerprint__c</field><readable>true</readable></fieldPermissions>
@@ -45,8 +47,11 @@
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Last_Certified_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Org_Unit_ID__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Portfolio_ID__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Recertification_Due_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Revoked_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.SoD_Conflict_Detail__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.SoD_Conflict__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.User__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>R360_Role_Scope__c.Valid_To__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>R360_Approval_Decision__c.Approver__c</field><readable>true</readable></fieldPermissions>

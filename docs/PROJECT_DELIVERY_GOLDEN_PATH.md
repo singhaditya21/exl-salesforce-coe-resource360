@@ -47,7 +47,7 @@ The operating chain is:
 - `Resource360_Engagement_Record` is the app-specific Engagement record page with dynamic highlights, the project workbench and governed related lists.
 - `resource360ProjectWorkbench` provides governed project/initial-SOW intake, amendment/change-order and contract-line entry, Week/Month/Quarter/Year zoom, baseline/forecast bars, direct drag and duration-resize handles with successor auto-scheduling, critical path, WBS creation, dependencies, progress, acceptance, risk actions, closeout gates and independent approval actions.
 - Thirteen native list views cover active delivery, closeout, work/acceptance, contracts, contract payments, modules, delivery membership, sub-portfolios, staffing, allocations and risk.
-- Sixteen custom report types and seventeen reports cover lifecycle, portfolio hierarchy, contract changes/payment position, module/WBS delivery, skill demand/match, staffing, delivery membership and daily capacity, over-allocation exceptions, allocations, capability supply, budgets, actuals, risk and closeout.
+- Nineteen custom report types and twenty reports cover lifecycle, portfolio hierarchy, contract changes/payment position, module/WBS delivery, skill demand/match, staffing, delivery membership and daily capacity, over-allocation exceptions, allocations, capability supply, budgets, actuals, risk, closeout, KPI forecast/history, project performance and resource unavailability.
 - `Resource 360 Command Center` contains seventeen live components backed by those reports, while role-aware workspace surfaces add KPI cards, a capacity heatmap and exception queue.
 
 ## Acceptance evidence

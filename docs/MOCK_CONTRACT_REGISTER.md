@@ -9,7 +9,7 @@ Two demo runtimes are deliberately different:
 | Runtime | What is real | What is mocked |
 |---|---|---|
 | Salesforce Developer Edition `Resource360Hub` | Salesforce objects/fields, Apex transactions, validation, permissions, sharing, separation of duties, audit, scheduling, reports and Lightning behavior | EXL records, users/personas, source payloads, endpoints, business volumes and policy approvals |
-| GitHub Pages | Static application code, 103 routed screen contracts and browser interaction logic | All records and transactions; state is fictional browser-local demo state and never synchronizes with Salesforce |
+| GitHub Pages | Static application code, 103 routed screen contracts, browser interaction logic and an hourly build-time Salesforce public allowlist | Transactional state remains fictional/local and never writes to Salesforce; the published read-only snapshot excludes private/raw records, Salesforce IDs, usernames, emails and credentials |
 
 The banner and source-health surfaces must identify this boundary. No demo state may be presented as a production reconciliation or approved EXL decision.
 

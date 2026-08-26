@@ -32,7 +32,7 @@ jobs:
         run: pnpm sf:generate
       - name: Verify generated metadata and traceability are committed
         run: |
-          git status --porcelain -- force-app/main/default/customMetadata force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md > "${RUNNER_TEMP}/resource360-governance-status"
+          git status --porcelain -- force-app/main/default/customMetadata force-app/main/default/objects force-app/main/default/tabs force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md > "${RUNNER_TEMP}/resource360-governance-status"
           if [[ -s "${RUNNER_TEMP}/resource360-governance-status" ]]; then
             cat "${RUNNER_TEMP}/resource360-governance-status"
             exit 1

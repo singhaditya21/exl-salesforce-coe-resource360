@@ -4,7 +4,7 @@
 
 | Area | Completion evidence |
 |---|---|
-| Product definition | PRD v1.9; 117/117 functional/admin requirements implemented within the stated mock boundary; 30 UAT paths traced |
+| Product definition | PRD v2.0; 117/117 functional/admin requirements implemented within the stated mock boundary; 30 UAT paths traced |
 | Experiences | 103 governed screens across nine modules in Lightning and the GitHub Pages companion |
 | Personas | 18 metadata-governed personas with permission-set groups, scope/delegation controls, positive/negative routed authorization and all-persona active/expired scope tests |
 | Salesforce core | Transactional engagement, budget/WBS, staffing/allocation, skills/credentials, time, command-center and administration services |
@@ -14,10 +14,10 @@
 | Project delivery | Idempotent `ENG-1001` golden path with three contract versions, six commercial lines, approved budget, seven WBS items/dependencies, eleven structured skill requirements/matches, four staffing decisions/allocations, approved WBS actuals, risks and gated closeout |
 | Enterprise demo graph | Idempotent `R360-SCALE-10X20-V1` with exactly 10 Accounts, 10 Portfolios, 20 Sub-portfolios, 20 Projects, 60 Resources, 60 Delivery Memberships and 60 Project Modules; per-parent assurance covers contracts/payments, WBS/dependencies, budgets, three-dimensional skills, staffing/allocations, risks, actuals and four completed closeouts |
 | Native experiences | Governed project/SOW intake, commercial-change/line controls, dynamic PM move/resize Gantt with successor auto-scheduling, independent closeout decision UI, app-activated Home and Engagement record pages, governed related lists and project/contract/WBS/allocation/risk/closeout tabs/list views |
-| Analytics/operations | Sixteen custom report types, seventeen runnable reports, one seventeen-component dynamic Salesforce dashboard, role-aware capacity KPI cards, heatmap and exception queue, portfolio/module/payment/membership drill-down, source/control health, scheduler overlap protection and recovery controls |
+| Analytics/operations | Nineteen custom report types, twenty runnable reports, one twenty-component dynamic Salesforce dashboard, 214 certified KPI observations, 13-week capacity forecast, twelve approved unavailability events, role-aware performance/capacity drill-down, source/control health, scheduler overlap protection and recovery controls |
 | Demo activation | Five-pillar interactive rehearsal for SSO, integrations, production-like fictional data, six explicit legal/risk/business decisions and operational controls; 5/5 evidence, zero external calls and zero destructive actions |
 | Recorded validation | Five captioned H.264 walkthroughs are deployed as private Salesforce static resources on `GLB-06` and cover the 103-screen inventory, skills, staffing acceptance, budget/time approval and five-pillar activation; integrity manifest and posters are checked in CI |
-| Quality | Unit, LWC Jest, static contract, 18-pass desktop/mobile browser suite, video integrity, axe, 13 Salesforce Apex test classes/52 executable test methods, authenticated 103/103 Lightning screen and 57/57 workbench sweep, CodeQL and Pages release gates |
+| Quality | Unit, LWC Jest, static contract, 18-pass desktop/mobile browser suite, video integrity, axe, 14 Salesforce Apex test classes/53 executable test methods, authenticated 103/103 Lightning screen and 57/57 workbench sweep, CodeQL and Pages release gates |
 | Credential hygiene | Previously exposed classic PAT revoked on 24 August 2026; repository access verified through SSH and GitHub CLI OAuth; tracked/untracked credential-pattern scan clean |
 
 ## Live Salesforce release evidence — 25 August 2026
@@ -38,6 +38,13 @@
 - Capacity population: all 60 Resources and Delivery Memberships reconcile to a non-bypassable daily ledger; 50 are fully allocated at 8 hours and 10 have independently approved, reasoned, expiring 10-hour examples. Minimum is 8 hours, maximum is 10 hours, average utilization is 104.17%, no accepted line exceeds 8 hours, no aggregate exceeds the 12-hour safety ceiling and no current Timesheet exceeds 8 actual hours per day.
 - Access: eight controlled Administrator Login As sessions prove all 17 composite roles, positive workflow access, negative module isolation and zero browser errors. Project Manager sees all 20 Projects and performs attributable forecast/progress writes; Operations receives all 10 Portfolio shares while other demo roles retain the governed anchor scope.
 - Analytics/experience: all seventeen reports return data; all seventeen dashboard components refresh to `DATA`; role-aware Staffing, Resource 360, PM Gantt and Command Center surfaces expose Underallocated/Fully Allocated/Overallocated states, the 60-member heatmap and governed exception queue. The Administrator sweep passes nine modules, 103/103 screens, 57/57 workbenches and five walkthroughs with zero console errors; the scheduler remains `WAITING`.
+
+## Live performance and synchronized Pages release evidence — 26 August 2026
+
+- The permanent org contains 41 record objects (including Account), six custom-metadata types, one platform event, 747 fields/formulas, 38 production Apex classes and 14 focused test classes. Full deployment `0AfgK00000RdwChSAJ` committed 1,224 components and all 53 local Apex test methods passed with zero component or test errors.
+- Performance seed: 214 KPI observations, including six measures across 13 forecast weeks, 96 monthly enterprise snapshots and 40 portfolio snapshots; 12 approved leave/training events; enriched schedule/EVM, budget/forecast, collection, staffing, skill, credential, risk, identity, data-quality and access-assurance fields.
+- Native analytics: all 20 reports return data and all 20 Command Center components refresh to `DATA`, including KPI forecast/history, project performance and resource unavailability.
+- Public companion: every one of 103 route IDs resolves to a route-specific experience. The scheduled GitHub action exports only a credential-free allowlist containing 10 demo Accounts, 20 Projects, 60 aliased Resources, 13 forecast weeks and 214 KPI observations; it never publishes Salesforce IDs, emails, usernames or tokens and has no browser-to-org write path.
 
 ## Not a software backlog
 

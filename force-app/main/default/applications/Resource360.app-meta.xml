@@ -19,8 +19,10 @@
     <tabs>Work_Unit__c</tabs>
     <tabs>Resource__c</tabs>
     <tabs>R360_Delivery_Membership__c</tabs>
+    <tabs>R360_Resource_Unavailability__c</tabs>
     <tabs>Staffing_Request__c</tabs>
     <tabs>Allocation__c</tabs>
+    <tabs>R360_KPI_Snapshot__c</tabs>
     <tabs>Budget__c</tabs>
     <tabs>Capability__c</tabs>
     <tabs>Timesheet__c</tabs>

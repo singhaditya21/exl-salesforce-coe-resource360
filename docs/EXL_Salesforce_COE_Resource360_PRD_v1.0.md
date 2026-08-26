@@ -5,7 +5,7 @@
 | Document field | Value |
 |---|---|
 | Status | Demo-complete Salesforce-native baseline including safe simulations of every external activation domain; real production activation still requires the EXL-owned evidence in Section 19 |
-| Version | 1.8 |
+| Version | 2.0 |
 | Date | 26 August 2026 |
 | Product name | EXL Salesforce COE Resource360 |
 | Product scope | Engagement 360, Resource Management, Salesforce Skills & Credentials, Budgeting/WBS, Timesheet and COE Command Center |
@@ -33,6 +33,7 @@
 | 1.7 | 25 August 2026 | Implemented the end-to-end Salesforce project-delivery golden path: governed intake, contract versions/lines, structured industry-functional-technical skill demand and match evidence, staffing-to-allocation-to-WBS traceability, dynamic PM Gantt, risks, acceptance, closeout, app pages, related lists and eleven native reports/dashboard components. |
 | 1.8 | 26 August 2026 | Added the idempotent enterprise demo graph: exactly 10 Accounts, 10 Portfolios, 20 Sub-portfolios, 20 fully related Projects, 60 governed Resources/Memberships and 60 Project Modules; added contract payments, delivery membership lineage, role-aware Project 360 context, four analytics domains and executable graph/share reconciliation. |
 | 1.9 | 26 August 2026 | Replaced the legacy 100% hard block with governed capacity control: eight-hour line maximum, eight-hour standard, independently approved 8–12 hour aggregate exceptions, 12-hour/150% safety ceiling, draft-to-publish planning, compact daily ledger, expiry/audit evidence, eight-hour actual-time cap, role-aware heatmaps/queues and certified capacity KPIs. The deterministic demo now reconciles all 60 resources: 50 at 8 hours and 10 approved examples at 10 hours. |
+| 2.0 | 26 August 2026 | Added the effective-dated performance semantic layer and approved unavailability calendar; enriched resources, staffing, allocations, WBS, budgets, collections, delivery, skills, credentials, risk, access and integration assurance; expanded native analytics to 19 report types, 20 reports and 20 dashboard components; and introduced a credential-free hourly Salesforce-to-GitHub-Pages public snapshot with 103 route-specific companion experiences. |
 
 ---
 
@@ -54,7 +55,7 @@ The target product has five operating components:
 
 ### Mock-complete delivery boundary
 
-Version 1.9 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed only by browser-local mock state.
+Version 2.0 treats every EXL-specific fact as fictional while retaining genuine Salesforce controls. The Developer Edition runs real metadata, Apex validation/transactions, permissions, sharing, audit, schedules and Lightning components against sanitized records. GitHub Pages supplies an interactive 103-screen design companion backed by an hourly, build-time, explicitly allowlisted Salesforce snapshot plus browser-local workflow simulations. The public artifact contains no Salesforce credentials, record identifiers, usernames, emails or private/raw records and never writes to the org.
 
 The implemented mock baseline now includes the decision-critical items previously classified as partial or later-phase: resource-month budgeting and 160-hour assurance; atomic import/error export; three-mode governed capacity planning; deterministic source duplicate/collision reconciliation; candidate eligibility/gap reasons; staffing owner transfer; timesheet exceptions; KPI hierarchy/definitions; accountable alert closure; isolated what-if scenarios; retention dry run; atomic configuration release control; and persona-level screen authorization. All 117 functional/admin requirements are implemented within the approved sanitized-mock boundary. Four retain an EXL production certification gate.
 
@@ -677,9 +678,9 @@ Priority labels: **P0** is required before production go-live of the integrated 
 | ID | Pri. | Requirement | Acceptance summary |
 |---|---:|---|---|
 | GOV-001 | P0 | Engagement classifications and their billability, duration, approval, escalation and reporting behavior shall be effective-dated configuration. | Historical reports use the mapping effective on the work/allocation date. |
-| GOV-002 | P0 | Initial classifications shall include Billing, Contractual Shadow, WAR, IFB/PO Awaited, Blocked, Value Consulting/Pre-sales, Shadow Trainee, Shadow Lateral, Leadership/PMO, Testing COE, DLP COE, Regression, Training, Investment/COE, NAFB and AFB. | The active v1 mapping is in Section 17.10.1; changes are effective-dated and historical classifications remain resolvable. |
+| GOV-002 | P0 | Initial classifications shall include Billing, Contractual Shadow, WAR, IFB/PO Awaited, Blocked, Value Consulting/Pre-sales, Shadow Trainee, Shadow Lateral, Leadership/PMO, Testing COE, DLP COE, Regression, Training, Investment/COE, NAFB and AFB. | The active v1 mapping is in Section 17.10.2; changes are effective-dated and historical classifications remain resolvable. |
 | GOV-003 | P0 | Every time-bound unbilled allocation shall carry owner, start date, planned end/review date and escalation state. | No governed unbilled allocation can be accepted without required control fields. |
-| GOV-004 | P1 | Escalation timers shall be effective-dated configuration. V1 uses: WAR to Delivery Head at 4 weeks, Account Owner at 6 and Operations at 8; IFB/Blocked to Delivery at 2, Account Owner at 4 and Operations at 6; Shadow Lateral to Delivery at 4 and Operations at 6. Other mappings follow Section 17.10.1. | Timer tests and notification/escalation records are available. |
+| GOV-004 | P1 | Escalation timers shall be effective-dated configuration. V1 uses: WAR to Delivery Head at 4 weeks, Account Owner at 6 and Operations at 8; IFB/Blocked to Delivery at 2, Account Owner at 4 and Operations at 6; Shadow Lateral to Delivery at 4 and Operations at 6. Other mappings follow Section 17.10.2. | Timer tests and notification/escalation records are available. |
 | GOV-005 | P1 | Leadership views shall provide a hierarchy from geography to portfolio, account/project and employee, subject to authorization. | Each KPI can drill to its contributing records. |
 | GOV-006 | P1 | Command Center shall report headcount, billing, billed utilization, WAR, Blocked, IFB/Shadows, internal spend, allocation-versus-timesheet variance and budget-versus-actual margin. | Metric definitions, refresh time, source and filters are visible. |
 | GOV-007 | P1 | Utilization views shall support target versus actual, engagement classification, trend, forecasted release/availability and delivery pyramid/span-of-control cuts where data is certified. | Totals reconcile across hierarchy; double counting is prevented. |
@@ -850,6 +851,18 @@ Before dashboards are certified, Product, Finance, Delivery and Data owners must
 | Realized margin | Recognized/approved revenue basis − actual cost, divided by the same revenue basis; Finance must approve revenue and cost sources |
 | Forecast margin | Forecast revenue − EAC, divided by forecast revenue |
 | Profile completeness | Active in-scope employees meeting the signed minimum verified skill/profile criteria ÷ active in-scope employees |
+| 13-week capacity coverage | Productive capacity after approved leave/training ÷ committed plus soft forecast demand for each week |
+| Bench aging / roll-off runway | Continuous available-capacity age and accepted hours scheduled to release by week |
+| Fulfilment / time to staff | Filled requests ÷ closed requests; elapsed business hours from submitted to filled |
+| Mandatory skill coverage | Required project skill demand covered by eligible, current evidence ÷ mandatory skill demand |
+| Milestone on-time rate | Milestones accepted on/before current committed date ÷ completed milestones |
+| Schedule and cost performance | Schedule variance plus earned-value SPI/CPI, with PV, EV, actual cost, ETC and EAC exposed |
+| Margin erosion | Approved baseline margin percentage minus current forecast margin percentage |
+| Revenue realization / collections | Recognized revenue and collected amount against billable/contracted amounts; DSO and write-offs disclosed |
+| Customer and delivery quality | Acceptance first-pass, CSAT, NPS, account health, defects, test pass, releases and incidents |
+| Forecast accuracy | One minus absolute forecast-versus-actual variance as a percentage of actual, with zero-denominator policy |
+| Risk aging / exposure | Open-risk age and probability × impact exposure, with overdue mitigations separated |
+| Data and access assurance | Identity match, orphans, field completeness, processing latency, retries, access recertification and SoD conflicts |
 
 Every dashboard shall display reporting period, data cutoff, last refresh, filters, currency where relevant and whether it contains stale or incomplete source data.
 
@@ -864,6 +877,9 @@ KPI certification baseline:
 | Utilization and unbilled governance | Employee × classification × work date; T+1 certified | Delivery Operations | Numerator/denominator population identical; active target and classification version shown |
 | Budget, plan variance and margin | Engagement × WBS/phase × reporting period × currency; T+1 certified | Finance Controller | Exact currency-precision reconciliation to approved budget, Commercial Master and approved time |
 | Data quality and integration | Source × run/event × entity; real time | Data Product Owner | Freshness thresholds in Section 17.2; unmatched/quarantined records excluded and disclosed |
+| Forecast, delivery and commercial performance | Week/month × portfolio/account/project/WBS; transactional plus monthly certified snapshot | Delivery Operations and Finance Controller | 13 visible forecast weeks; PV/EV/AC and contract/payment totals reconcile to source records |
+| Customer, quality and risk | Account × project × WBS/risk; event-driven and monthly certified snapshot | Account Owner and Quality Lead | Accepted outcomes, incidents/defects and open-risk aging disclose numerator, population and cutoff |
+| Access and identity assurance | User/persona/source × recertification/run; daily | Security Owner and Data Product Owner | Zero unresolved SoD conflicts; identity/orphan exceptions excluded and disclosed |
 
 ---
 
@@ -1130,7 +1146,7 @@ Secrets, endpoints, certificates, Named/External Credentials, schema, Apex/LWC, 
 
 ### 17.3 Target architecture and deployment decisions
 
-Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v1.9 target architecture.
+Resource360 is a Salesforce-native EXL product. Salesforce is the application runtime and transactional system of record for Resource360-owned budgets, staffing requests, allocation decisions, capability claims, credentials, timesheets, notifications and audit evidence. EXL People Master, Engagement Master, Commercial Master, Learning Gateway and approved credential sources remain authoritative for the master data identified in Sections 9 and 17.2. The accepted decision is recorded in `ADR-001-SALESFORCE-NATIVE.md`; this section is the controlling v2.0 target architecture.
 
 ```mermaid
 flowchart LR
@@ -1323,6 +1339,21 @@ Initial operating conventions:
 - Decimal, date and number formats follow user locale; identifiers and exported machine formats remain invariant.
 - Regional work patterns and holidays drive capacity, SLA business-day calculations and timesheet due dates.
 
+#### 17.10.1 Implemented performance and forecast data contract
+
+Salesforce is the system of record for the demo semantic layer. `R360_KPI_Snapshot__c` stores effective-dated metric code/name, family, grain, scope type/key, period, value, unit, target, status, source, cutoff, freshness and reconciliation state. The deterministic population contains 214 observations: 78 forecast observations (six measures across 13 weeks), 96 monthly enterprise observations and 40 portfolio observations. `R360_Resource_Unavailability__c` stores approved leave/training windows, hours per day, approval evidence, source and resource/portfolio lineage; the deterministic population contains 12 events.
+
+The source objects additionally retain the following role-actionable points:
+
+- resource capacity history, expected roll-off, bench age/start, rolling 13-week overage, consecutive over-allocation, preferences and travel/shift fit;
+- staffing submitted/filled timestamps, time to fill, shortlist volume/conversion and allocation context-switch/concurrent-project exposure;
+- WBS baseline/forecast/actual dates, planned value, earned value, actual cost, SPI, CPI, ETC, EAC, delay, defects and test-pass rate;
+- budget forecast cost/revenue/margin, forecast accuracy and margin erosion; payment recognized revenue, realization, DSO, collection effectiveness and write-off;
+- project skill/readiness coverage, acceptance first-pass, CSAT/NPS/account health, schedule variance, risk exposure/age, release and incident counts;
+- skill freshness/decay, credential expiry risk, source identity/completeness/orphan/latency/retry evidence and role-scope access-recertification/SoD evidence.
+
+The GitHub Pages publisher authenticates only inside GitHub Actions, queries an explicit public allowlist, replaces resource identity with deterministic aliases, rejects forbidden identity/credential patterns and publishes a static `data/salesforce-snapshot.json`. The browser has no Salesforce authentication, IDs or write path. The hourly schedule is eventual-consistency presentation; Salesforce Lightning remains authoritative for every transaction.
+
 Canonical terminology:
 
 | Term | Definition |
@@ -1338,7 +1369,7 @@ Canonical terminology:
 | Budget version | Immutable planned economics and WBS snapshot; only one current approved economic signature governs staffing |
 | Actual | Approved timesheet hours and derived approved cost; submitted/unapproved time is reported separately |
 
-#### 17.10.1 Initial classification, billability and review policy
+#### 17.10.2 Initial classification, billability and review policy
 
 The classification assigned to an allocation is the only source of billability. `Billed` below means eligible for billed-utilization reporting subject to a valid commercial reference; all other categories are unbilled. `AFB` and `NAFB` are capacity states represented through governed internal allocations so they remain visible and time-bound.
 
@@ -1553,7 +1584,7 @@ The demo must prove one coherent project path in Salesforce, not a collection of
 7. Approved time maps to the project and WBS, is visible to the Project Manager through governed parent sharing, and cannot be edited or deleted in place.
 8. Closeout fails closed while active work, required acceptance, high/critical risks, unreconciled time, approved commercial evidence or current approved budget gates fail. Submission releases allocations; a separately permissioned approver records approval or rejection from the workbench and the submitter cannot self-approve.
 9. The Resource 360 app activates a role-aware Home page and an Engagement record page containing dynamic highlights, the delivery workbench and contract/work/skill/staffing/allocation/risk/closeout related lists.
-10. Native analytics include seventeen report types/reports and a seventeen-component command center spanning hierarchy, lifecycle, contracts/payments, modules/WBS, skill match, staffing/membership capacity, daily capacity control, over-allocation exceptions, allocations, capability supply, budget, actuals, risks and closeout.
+10. Native analytics include nineteen report types, twenty reports and a twenty-component command center spanning hierarchy, lifecycle, contracts/payments, modules/WBS, skill match, staffing/membership capacity, daily capacity control, over-allocation exceptions, allocations, capability supply, budget, actuals, risks, closeout, 13-week KPI forecast/history, project performance and resource unavailability.
 11. The deterministic seed and preparation gate assert exact golden-path and portfolio-share counts; the controlled Project Manager Login As test must prove the scoped intake portfolio, direct resize handles, and attributable forecast/progress commands in Lightning.
 
 The implementation and seeded counts are maintained in `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
@@ -1570,7 +1601,7 @@ Every governed delivery member shall have an effective-dated Account/Portfolio/S
 
 ## 19. Definition of done and implementation readiness
 
-Version 1.8 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, the governed project-delivery golden path, the exact 10-account/20-project enterprise graph, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, native pages/analytics, generated traceability and accountable roles. `ADMUI-01` executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md` and `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
+Version 2.0 is implemented as a demo-complete, production-shaped Salesforce product and is ready for presentation because it contains the complete screen inventory, the governed project-delivery golden path, the exact 10-account/20-project enterprise graph, deterministic mock source contracts, target architecture, canonical data model, governed atomic configuration control plane, security/operations policy, migration approach, native pages/analytics, performance history/forecast, secure Pages publication, generated traceability and accountable roles. `ADMUI-01` executes all external dependencies as five safe simulations: identity/SSO, integrations, production-like fictional data, legal/business approvals and operational controls. One run records 5/5 evidence, zero external calls and zero destructive actions in the audit ledger. The operating steps and proof are in `docs/DEMO_ACTIVATION_RUNBOOK.md` and `docs/PROJECT_DELIVERY_GOLDEN_PATH.md`.
 
 The implemented product is also evidenced by five silent 1280×720 H.264 walkthroughs published on `GLB-06 · User preferences and help`. They record the actual deployed GitHub Pages UI and demonstrate the 103-screen directory, skills/talent discovery, a completed staffing acceptance, calculated budget and timesheet approvals, and the five-pillar demo activation. File hashes, durations, personas and observed outcomes are maintained in `public/demo-videos/manifest.json` and `docs/DEMO_VIDEO_VALIDATION.md`; these recordings remain sanitized demo evidence and do not imply a live EXL connection.
 

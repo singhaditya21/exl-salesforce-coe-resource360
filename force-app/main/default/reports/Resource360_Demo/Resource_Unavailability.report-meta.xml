@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns><field>R360_Resource_Unavailability__c$Name</field></columns><columns><field>R360_Resource_Unavailability__c$Resource__c</field></columns><columns><field>R360_Resource_Unavailability__c$Start_Date__c</field></columns><columns><field>R360_Resource_Unavailability__c$End_Date__c</field></columns><columns><field>R360_Resource_Unavailability__c$Hours_Per_Day__c</field></columns><columns><field>R360_Resource_Unavailability__c$Status__c</field></columns>
+    <description>Approved capacity reductions by type, period and resource scope.</description><format>Summary</format>
+    <groupingsDown><field>R360_Resource_Unavailability__c$Type__c</field><sortOrder>Asc</sortOrder></groupingsDown>
+    <name>Resource Unavailability</name><reportType>Resource360_Resource_Unavailability__c</reportType><scope>organization</scope><showDetails>true</showDetails><showGrandTotal>true</showGrandTotal><showSubTotals>true</showSubTotals>
+</Report>

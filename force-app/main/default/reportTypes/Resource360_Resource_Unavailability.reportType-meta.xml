@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>R360_Resource_Unavailability__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Approved leave, training and other capacity-reducing windows used in supply planning.</description><label>Resource 360 Resource Unavailability</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Resource__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Type__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Start_Date__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>End_Date__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Hours_Per_Day__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Status__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Source_System__c</field><table>R360_Resource_Unavailability__c</table></columns>
+        <masterLabel>Resource unavailability</masterLabel>
+    </sections>
+</ReportType>

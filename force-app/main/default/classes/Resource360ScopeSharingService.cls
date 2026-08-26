@@ -10,6 +10,7 @@ public without sharing class Resource360ScopeSharingService {
         'R360_Audit_Event__c',
         'R360_Daily_Capacity__c',
         'R360_Integration_Run__c',
+        'R360_Resource_Unavailability__c',
         'R360_Learning_Achievement__c',
         'R360_Notification__c',
         'R360_Org_Unit__c',
@@ -121,6 +122,8 @@ public without sharing class Resource360ScopeSharingService {
             accessByObject.put('Resource__c', 'Read');
             mapByLookup(idsByObject, 'R360_Daily_Capacity__c', 'Resource__c', resourceIds);
             accessByObject.put('R360_Daily_Capacity__c', 'Read');
+            mapByLookup(idsByObject, 'R360_Resource_Unavailability__c', 'Resource__c', resourceIds);
+            accessByObject.put('R360_Resource_Unavailability__c', 'Read');
         }
 
         Set<Id> engagementIds = new Set<Id>();

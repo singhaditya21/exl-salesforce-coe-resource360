@@ -5,12 +5,12 @@
 | Layer | Implementation | Responsibility |
 |---|---|---|
 | Experience | Lightning app `Resource360`; LWCs `resource360Workspace` and `resource360ProjectWorkbench`; app Home and Engagement record FlexiPages | Role-aware EXL shell, 103-screen routes/contracts, dynamic PM Gantt, commands, related lists and record drill-down |
-| Domain services | 37 production Apex classes and 13 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360CapacityService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, non-bypassable capacity planning/ledger controls, decisions, analytics, integration, notifications and audit |
-| Demo bootstrap | `Resource360DemoData`, `Resource360DemoScenarioData`, `Resource360GoldenPathData` and `Resource360ScaleDemoData` Apex | Idempotent fictional baseline, fully linked project-delivery golden path and exact 10-account/20-project enterprise graph |
-| Data | 39 record objects including Account, six custom-metadata types and one platform event | Account/portfolio hierarchy, engagement, contracts/payments, modules/work/dependencies, delivery membership, skills demand/match, economics, staffing, allocation, daily capacity, time, risk, closeout, configuration, operations and evidence |
+| Domain services | 38 production Apex classes and 14 focused test classes, including `Resource360ProjectService`, `Resource360StaffingService`, `Resource360PlanningService`, `Resource360CapacityService`, `Resource360Service` and governance/assurance services | Scoped access, locking, commercial/work-plan/closeout gates, skills-backed staffing, non-bypassable capacity planning/ledger controls, decisions, analytics, integration, notifications and audit |
+| Demo bootstrap | `Resource360DemoData`, `Resource360DemoScenarioData`, `Resource360GoldenPathData`, `Resource360ScaleDemoData` and `Resource360PerformanceData` Apex | Idempotent fictional baseline, fully linked project-delivery golden path, exact 10-account/20-project enterprise graph and certified forecast/performance history |
+| Data | 41 record objects including Account, six custom-metadata types and one platform event | Account/portfolio hierarchy, engagement, contracts/payments, modules/work/dependencies, delivery membership, skills demand/match, economics, staffing, allocation, daily capacity, unavailability, KPI history/forecast, time, risk, closeout, configuration, operations and evidence |
 | Policy | 157 governed policy/classification/delivery-role/source/persona/retention records plus effective-dated runtime overrides and atomic release bundles | Thresholds, taxonomies, freshness, scoring, escalation, notification, KPI, lifecycle, margin calculation, capacity guardrails, assurance, lineage, retention preview and access |
-| Analytics | `Resource360AnalyticsService`, sixteen custom report types, seventeen reports and a seventeen-component dashboard | Scoped KPI populations/definitions/cutoffs, portfolio hierarchy, module delivery, payment position, membership/daily capacity, over-allocation exceptions, delivery lifecycle and Salesforce report-builder access |
-| Public companion | React/Vite on GitHub Pages | Sanitized design review only; never a production system of record |
+| Analytics | `Resource360AnalyticsService`, nineteen custom report types, twenty reports and a twenty-component dashboard | Scoped KPI populations/definitions/cutoffs, 13-week forecast, performance history, project/portfolio drill-down, payment position, capacity/unavailability, over-allocation exceptions and Salesforce report-builder access |
+| Public companion | React/Vite on GitHub Pages | Hourly allowlisted Salesforce snapshot plus local fictional workflow demonstrations; never a production system of record |
 
 ## Domain model
 
@@ -20,10 +20,10 @@
 | Commercial and collections | `Commercial_Reference__c`, `Commercial_Line__c`, `Contract_Payment__c` |
 | Budget and WBS | `Budget__c`, `Budget_Line__c`, `R360_Approval_Decision__c` |
 | People and capability | `Resource__c`, `Capability__c`, `Skill_Claim__c`, `Credential__c`, `R360_Project_Evidence__c`, `R360_Learning_Achievement__c`, `Engagement_Skill_Requirement__c` |
-| Staffing and allocation | `R360_Delivery_Membership__c`, `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c`, `R360_Daily_Capacity__c` |
+| Staffing and allocation | `R360_Delivery_Membership__c`, `Staffing_Request__c`, `Staffing_Skill_Match__c`, `Allocation__c`, `R360_Daily_Capacity__c`, `R360_Resource_Unavailability__c` |
 | Time | `Timesheet__c`, `Time_Entry__c` |
 | Scope and configuration | `R360_Role_Scope__c`, `R360_Org_Unit__c`, `R360_Work_Calendar__c`, `R360_Calendar_Exception__c`, `R360_Configuration__c`, `R360_Classification__mdt`, `R360_Delivery_Role__mdt`, `R360_Policy__mdt`, `R360_Persona__mdt`, `R360_Source_Contract__mdt`, `R360_Retention_Rule__mdt` |
-| Operations and evidence | `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
+| Operations, analytics and evidence | `R360_KPI_Snapshot__c`, `R360_Notification__c`, `R360_Audit_Event__c`, `R360_Integration_Run__c`, `R360_Integration_Error__c`, `R360_Outbox_Event__c`, `Resource360_Domain_Event__e` |
 
 Relationships preserve organizational and decision lineage: Account owns Portfolio, Portfolio owns Sub-portfolio, Delivery Membership effective-dates a Resource's Account/Portfolio/Sub-portfolio alignment, and Project belongs to the same hierarchy. Approved contracts own payment milestones and lines mapped to project modules/WBS items; structured industry/functional/technical requirements produce persisted match evidence; accepted staffing creates a membership-linked current allocation; only eligible accepted allocation periods receive time; delivery acceptance, risk and closeout retain accountable decisions.
 
@@ -55,7 +55,7 @@ For the demo, EXL People Master, engagement/commercial, learning, credential, ca
 - Material object changes have native field history; immutable audit records add correlation, actor, active role, before/after summaries and hashes.
 - Hourly operations process staffing expiry, credential state, timesheet escalation/auto-approval, outbox publication and notification delivery.
 - Configuration operators draft/preview/submit; independent configuration approvers activate/rollback and apply the governed cron. See `CONFIGURATION_CONTROL_MATRIX.md` for the full boundary.
-- GitHub Pages never receives Salesforce authentication or business records.
+- GitHub Pages never receives Salesforce authentication, record IDs, usernames, emails or private/raw business records. GitHub Actions publishes only the explicit sanitized demo allowlist and scans the JSON artifact before release.
 
 ## Implemented versus activation-dependent
 

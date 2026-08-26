@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>SoD_Conflict__c</fullName><defaultValue>false</defaultValue><description>True when the assignment conflicts with the approved segregation matrix.</description><label>SoD Conflict</label><trackHistory>false</trackHistory><type>Checkbox</type></CustomField>

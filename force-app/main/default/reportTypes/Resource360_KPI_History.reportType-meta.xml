@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>R360_KPI_Snapshot__c</baseObject><category>other</category><deployed>true</deployed>
+    <description>Certified historical, forecast, target and scope values for Resource 360 KPIs.</description><label>Resource 360 KPI History</label>
+    <sections>
+        <columns><checkedByDefault>true</checkedByDefault><field>Name</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Metric_Code__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Metric_Label__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Snapshot_Date__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Grain__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Scope_Type__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Scope_Label__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Metric_Value__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Target_Value__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Unit__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Status__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Forecast__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <columns><checkedByDefault>true</checkedByDefault><field>Owner_Role__c</field><table>R360_KPI_Snapshot__c</table></columns>
+        <masterLabel>KPI history</masterLabel>
+    </sections>
+</ReportType>

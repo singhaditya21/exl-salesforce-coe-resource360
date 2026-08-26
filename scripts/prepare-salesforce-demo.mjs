@@ -133,6 +133,7 @@ assert.equal(
 // 100-query governor limit in a populated Developer Edition org.
 executeAnonymous("Resource360DemoData.seed();", "The deterministic core demo seed");
 executeAnonymous("Resource360ScaleDemoData.ensure();", "The deterministic 10-account/20-project seed");
+executeAnonymous("Resource360PerformanceData.ensure();", "The deterministic forecast, performance and assurance seed");
 
 const provisioningResult = sfJson([
     "apex", "run", "--target-org", targetOrg,
@@ -186,6 +187,10 @@ assert(
     scopes.records.every((scope) => scope.Portfolio_ID__c === "PORT-SFCOE-DEMO"),
     "Every fictional persona must be scoped to the seeded PORT-SFCOE-DEMO portfolio."
 );
+
+assert.equal(query("SELECT COUNT() FROM R360_KPI_Snapshot__c").totalSize, 214, "The certified demo requires 214 historical, forecast and portfolio KPI snapshots.");
+assert.equal(query("SELECT COUNT() FROM R360_KPI_Snapshot__c WHERE Forecast__c=true").totalSize, 78, "The certified demo requires six metrics across thirteen forecast weeks.");
+assert.equal(query("SELECT COUNT() FROM R360_Resource_Unavailability__c WHERE Status__c='Approved'").totalSize, 12, "The certified demo requires twelve approved leave or training capacity events.");
 
 const administratorBusinessScopes = query(
     "SELECT COUNT() FROM R360_Role_Scope__c WHERE Active__c=true " +
@@ -439,9 +444,9 @@ const reports = query(
     "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals'," +
     "'Project_Lifecycle','Workplan_Delivery','Contract_Changes','Skill_Demand_Match','Project_Risk_Control','Closeout_Readiness'," +
     "'Portfolio_Hierarchy','Project_Module_Delivery','Contract_Payment_Position','Delivery_Membership_Capacity'," +
-    "'Daily_Capacity_Control','Overallocation_Exceptions')"
+    "'Daily_Capacity_Control','Overallocation_Exceptions','KPI_Forecast_and_History','Resource_Unavailability','Project_Performance')"
 );
-assert.equal(reports.totalSize, 17, "Seventeen native Salesforce reports are required.");
+assert.equal(reports.totalSize, 20, "Twenty native Salesforce reports are required.");
 const reportRows = {};
 for (const report of reports.records) {
     const result = apiRequest(`/services/data/v67.0/analytics/reports/${report.Id}?includeDetails=false`);
@@ -462,11 +467,11 @@ const statusUrl = refreshRequest.statusUrl ?? `/services/data/v67.0/analytics/da
 await waitFor("Command Center dashboard refresh", async () => {
     const result = apiRequest(statusUrl);
     const statuses = result.componentStatus ?? [];
-    const terminal = statuses.length === 17 && statuses.every((status) => status.refreshStatus === "IDLE");
+    const terminal = statuses.length === 20 && statuses.every((status) => status.refreshStatus === "IDLE");
     return { ready: terminal, value: statuses };
 });
 const dashboard = apiRequest(`/services/data/v67.0/analytics/dashboards/${dashboardId}`);
-assert.equal(dashboard.componentData.length, 17, "The Command Center must have seventeen dashboard components.");
+assert.equal(dashboard.componentData.length, 20, "The Command Center must have twenty dashboard components.");
 assert(
     dashboard.componentData.every((component) => component.status.componentDataStatus === "DATA"),
     "Every Command Center component must contain refreshed data."

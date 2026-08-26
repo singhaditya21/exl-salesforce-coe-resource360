@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
 
 permissions:
   contents: read
@@ -17,6 +19,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SALESFORCE_CLI_TELEMETRY_DISABLED: "true"
     steps:
       - name: Check out source
         uses: actions/checkout@v7
@@ -31,10 +35,22 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Install Salesforce CLI
+        run: npm install --global @salesforce/cli
+      - name: Authenticate snapshot publisher
+        env:
+          RESOURCE360_SFDX_AUTH_URL: ${{ secrets.RESOURCE360_SFDX_AUTH_URL }}
+        run: |
+          test -n "${RESOURCE360_SFDX_AUTH_URL}"
+          printf '%s' "${RESOURCE360_SFDX_AUTH_URL}" > "${RUNNER_TEMP}/resource360-sfdx-url.txt"
+          sf org login sfdx-url --sfdx-url-file "${RUNNER_TEMP}/resource360-sfdx-url.txt" --alias Resource360Pages
+          rm -f "${RUNNER_TEMP}/resource360-sfdx-url.txt"
+      - name: Export allowlisted Salesforce snapshot
+        run: node scripts/export-salesforce-pages-snapshot.mjs --target-org Resource360Pages --output public/data/salesforce-snapshot.json
       - name: Verify generated governance artifacts
         run: |
           pnpm sf:generate
-          git status --porcelain -- force-app/main/default/customMetadata force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md > "${RUNNER_TEMP}/resource360-governance-status"
+          git status --porcelain -- force-app/main/default/customMetadata force-app/main/default/objects force-app/main/default/tabs force-app/main/default/permissionsets force-app/main/default/permissionsetgroups docs/REQUIREMENTS_TRACEABILITY.md > "${RUNNER_TEMP}/resource360-governance-status"
           if [[ -s "${RUNNER_TEMP}/resource360-governance-status" ]]; then
             cat "${RUNNER_TEMP}/resource360-governance-status"
             exit 1

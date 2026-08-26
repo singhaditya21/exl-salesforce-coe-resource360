@@ -51,6 +51,42 @@ test("connects the full static-demo transaction chain", async () => {
   assert.match(system, /TIME_SUBMITTED/);
 });
 
+test("renders route-specific Pages workbenches instead of module-wide repeated screens", async () => {
+  const [page, operations] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/operational-screens.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(page, /data-route-experience/);
+  assert.match(page, /data-active-screen/);
+  assert.doesNotMatch(page, /if \(screen\.module === "engagement"\) return <EngagementDemo/);
+  assert.doesNotMatch(page, /if \(screen\.module === "budget"\) return <BudgetDemo/);
+  assert.doesNotMatch(page, /if \(screen\.module === "skills"\) return <SkillsDemo/);
+  for (const id of ["CMD-02", "CMD-03", "CMD-04", "CMD-05", "CMD-06", "CMD-07"]) assert.match(operations, new RegExp(id));
+  for (const title of ["Utilization explorer", "Supply, demand and capacity", "Unbilled governance", "Staffing performance", "Salesforce capability coverage", "Engagement economics", "Data quality and sync operations"]) assert.match(operations, new RegExp(title));
+});
+
+test("publishes an allowlisted Salesforce snapshot without credentials or record ids", async () => {
+  const [workflow, exporter, snapshotText] = await Promise.all([
+    readFile(new URL("../.github/workflows/deploy-pages.yml", import.meta.url), "utf8"),
+    readFile(new URL("../scripts/export-salesforce-pages-snapshot.mjs", import.meta.url), "utf8"),
+    readFile(new URL("../public/data/salesforce-snapshot.json", import.meta.url), "utf8"),
+  ]);
+  const snapshot = JSON.parse(snapshotText);
+  assert.match(workflow, /cron: "17 \* \* \* \*"/);
+  assert.match(workflow, /RESOURCE360_SFDX_AUTH_URL/);
+  assert.match(workflow, /export-salesforce-pages-snapshot/);
+  assert.match(exporter, /SANITIZED_DEMO_ONLY/);
+  assert.equal(snapshot.schemaVersion, 2);
+  assert.equal(snapshot.classification, "SANITIZED_DEMO_ONLY");
+  assert.equal(snapshot.counts.accounts, 10);
+  assert.equal(snapshot.counts.projects, 20);
+  assert.equal(snapshot.counts.resources, 60);
+  assert.equal(snapshot.capacity.length, 60);
+  assert.equal(snapshot.forecast.length, 13);
+  assert.equal(snapshot.quality.guardrailBreaches, 0);
+  assert.doesNotMatch(snapshotText, /@|gh[pousr]_|sfdxAuthUrl|access.?token|refresh.?token|instanceUrl|"Id"\s*:/i);
+});
+
 test("the help screen publishes the validated recording library", async () => {
   const [page, operations] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),

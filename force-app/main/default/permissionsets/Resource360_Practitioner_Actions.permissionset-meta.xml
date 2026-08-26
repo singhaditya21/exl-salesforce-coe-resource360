@@ -6,16 +6,20 @@
     <classAccesses><apexClass>Resource360Service</apexClass><enabled>true</enabled></classAccesses>
     <classAccesses><apexClass>Resource360TalentService</apexClass><enabled>true</enabled></classAccesses>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Approved_Level__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decay_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decision_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Decision_Note__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Evidence__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Freshness_Days__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Idempotency_Key__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Last_Used__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Request_Fingerprint__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Skill_Claim__c.Reviewer__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Skill_Claim__c.Submitted_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Credential__c.Days_To_Expiry__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Evidence_URL__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Expiry_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Credential__c.Expiry_Risk_Band__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>true</editable><field>Credential__c.Issue_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Last_Checked_At__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Credential__c.Maintenance_Date__c</field><readable>true</readable></fieldPermissions>

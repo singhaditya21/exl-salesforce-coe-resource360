@@ -156,6 +156,21 @@
             <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Overallocation Exceptions</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Overallocation_Exceptions</report><showPicturesOnTables>false</showPicturesOnTables><title>Reason, approver, expiry and state</title></dashboardComponent>
             <rowIndex>36</rowIndex><rowSpan>6</rowSpan>
         </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>0</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>KPI Forecast and History</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/KPI_Forecast_and_History</report><showPicturesOnTables>false</showPicturesOnTables><title>13-week forecast and KPI history</title></dashboardComponent>
+            <rowIndex>42</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>4</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Project Performance</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Project_Performance</report><showPicturesOnTables>false</showPicturesOnTables><title>Schedule, quality and risk health</title></dashboardComponent>
+            <rowIndex>42</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>4</colSpan><columnIndex>8</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Resource Unavailability</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Resource_Unavailability</report><showPicturesOnTables>false</showPicturesOnTables><title>Approved leave and training impact</title></dashboardComponent>
+            <rowIndex>42</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
         <numberOfColumns>12</numberOfColumns>
         <rowHeight>36</rowHeight>
     </dashboardGridLayout>
