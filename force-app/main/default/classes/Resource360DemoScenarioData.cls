@@ -71,6 +71,11 @@ public without sharing class Resource360DemoScenarioData {
     }
 
     private static void ensureEngagements(Date today, R360_Portfolio__c portfolio, Id projectUserId) {
+        Map<String,Engagement__c> existingByCode = new Map<String,Engagement__c>();
+        for (Engagement__c existing : [
+            SELECT Id,Engagement_ID__c,Account__c,Portfolio_ID__c,Portfolio__c,Sub_Portfolio__c
+            FROM Engagement__c WHERE Engagement_ID__c IN ('DEMO-ENG-1003','DEMO-ENG-1004')
+        ]) existingByCode.put(existing.Engagement_ID__c, existing);
         List<Engagement__c> records = new List<Engagement__c>{
             new Engagement__c(
                 Name='Consumer Loyalty Transformation', Engagement_ID__c='DEMO-ENG-1003', Account__c=portfolio.Account__c,
@@ -89,6 +94,15 @@ public without sharing class Resource360DemoScenarioData {
                 Salesforce_Tower__c='Service Cloud', Industry__c='Banking', Confidentiality__c='EXL Internal', Source_Last_Sync__c=System.now()
             )
         };
+        for (Engagement__c record : records) {
+            Engagement__c existing = existingByCode.get(record.Engagement_ID__c);
+            if (existing == null) continue;
+            record.Id = existing.Id;
+            record.Account__c = existing.Account__c;
+            record.Portfolio_ID__c = existing.Portfolio_ID__c;
+            record.Portfolio__c = existing.Portfolio__c;
+            record.Sub_Portfolio__c = existing.Sub_Portfolio__c;
+        }
         upsert records Engagement_ID__c;
     }
 
