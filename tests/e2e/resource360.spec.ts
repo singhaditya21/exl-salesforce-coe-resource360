@@ -58,6 +58,38 @@ test("renders materially distinct Salesforce-backed command experiences", async 
   await expect(page.getByText("214", { exact: true }).first()).toBeVisible();
 });
 
+test("uses the Salesforce snapshot for account, project and resource 360s", async ({ page }) => {
+  await page.goto("/?screen=ENG-01");
+  await expect(page.locator('[data-route-experience="ENG-01"]')).toBeVisible();
+  await expect(page.getByLabel("Synchronized account selector").locator("button")).toHaveCount(10);
+  await page.getByLabel("Synchronized account selector").locator("button").nth(1).click();
+  await expect(page.locator("[data-account-360]")).toHaveAttribute("data-account-360", "ACCOUNT-02");
+  await page.locator(".data-surface tbody .row-action").first().click();
+  await expect(page.locator("[data-project-360]")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Open another synchronized project" })).toBeVisible();
+  await expect(page.locator('[data-project-360] .data-surface tbody tr')).toHaveCount(20);
+
+  await page.goto("/?screen=SKLUI-05");
+  await expect(page.locator("[data-resource-360]")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Current daily capacity ledger" })).toBeVisible();
+  await expect(page.locator('[data-resource-360] .data-surface tbody tr')).toHaveCount(60);
+  await page.locator('[data-resource-360] .data-surface tbody .row-action').nth(1).click();
+  await expect(page.locator('[data-resource-360="RESOURCE-002"]')).toBeVisible();
+});
+
+test("executes recorded-path header actions without the generic placeholder", async ({ page }) => {
+  await page.goto("/?screen=GLB-02");
+  await page.locator(".page-actions").getByRole("button", { name: /New staffing request/ }).click();
+  await expect(page.locator(".page-header h1")).toHaveText("Request review and submit");
+  await expect(page.getByText(/opened Request review and submit/)).toBeVisible();
+
+  await page.goto("/?screen=ENG-02");
+  await page.locator(".page-actions").getByRole("button", { name: /Open staffing/ }).click();
+  await expect(page.locator(".page-header h1")).toHaveText("Add-resource launcher");
+  await expect(page.getByText(/opened Add-resource launcher/)).toBeVisible();
+  await expect(page.getByText(/available in the browser demo/)).toHaveCount(0);
+});
+
 test("executes the attributable staffing decision path", async ({ page }) => {
   await page.goto("/?screen=GLB-05");
   await page.getByRole("button", { name: /COE Staffer Salesforce COE/ }).click();

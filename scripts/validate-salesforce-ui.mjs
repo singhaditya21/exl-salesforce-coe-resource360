@@ -35,20 +35,6 @@ try {
 
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-    page.on("console", (message) => {
-        if (message.type() === "error") {
-            consoleErrors.push({
-                kind: "console",
-                text: message.text(),
-                url: message.location().url || ""
-            });
-        }
-    });
-    page.on("pageerror", (error) => consoleErrors.push({ kind: "pageerror", text: error.message, url: page.url() }));
-    page.on("response", (response) => {
-        if (response.status() === 404) notFoundResponses.push(response.url());
-    });
-
     try {
         await page.goto(loginUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
         await page.waitForURL(
@@ -67,6 +53,22 @@ try {
         lightningHostname.endsWith(".lightning.force.com") || lightningHostname.endsWith(".my.salesforce.com"),
         "Authentication did not reach a trusted Salesforce host."
     );
+    // The Salesforce frontdoor may traverse a Salesforce-owned login helper that emits
+    // unrelated asset errors. Begin application telemetry only after reaching the trusted
+    // Lightning origin so the release gate remains strict for Resource 360 itself.
+    page.on("console", (message) => {
+        if (message.type() === "error") {
+            consoleErrors.push({
+                kind: "console",
+                text: message.text(),
+                url: message.location().url || ""
+            });
+        }
+    });
+    page.on("pageerror", (error) => consoleErrors.push({ kind: "pageerror", text: error.message, url: page.url() }));
+    page.on("response", (response) => {
+        if (response.status() === 404) notFoundResponses.push(response.url());
+    });
     await page.goto(`${lightningOrigin}/lightning/n/Resource360_Workspace?c__screen=GLB-06`, {
         waitUntil: "domcontentloaded",
         timeout: 60_000

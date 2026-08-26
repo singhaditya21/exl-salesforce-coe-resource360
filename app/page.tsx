@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { canAccessScreen, defaultScreenId, modules, screenById, screens, type ModuleId, type ScreenSpec } from "./screen-data";
 import { useDemoSystem, type DemoSystem } from "./demo-system";
-import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, EngagementDemo, NotificationDemo, RoleDemo, ScenarioDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo, VideoLibrary } from "./operational-screens";
-import { useSalesforceSnapshot, type SalesforceSnapshot } from "./salesforce-snapshot";
+import { AdminDemo, BudgetDemo, CommandDemo, DemoHome, NotificationDemo, RoleDemo, ScenarioDemo, SkillsDemo, StaffingPlanningDemo, TimesheetDemo, VideoLibrary } from "./operational-screens";
+import { SynchronizedEngagement360, SynchronizedResource360 } from "./synchronized-360";
+import { useSalesforceSnapshot, type AccountSnapshot, type CapacitySnapshot, type ProjectSnapshot, type SalesforceSnapshot } from "./salesforce-snapshot";
 import {
   StaffingDecisionForm,
   StaffingQueue,
@@ -16,6 +17,16 @@ import {
 
 type TableModel = { columns: string[]; rows: string[][] };
 const initialSelectedRequestId = "SR-1842";
+const primaryActionTargets: Record<string, string> = {
+  "GLB-01": "GLB-02", "GLB-02": "STFUI-13", "GLB-03": "GLB-03", "GLB-05": "GLB-02", "GLB-06": "GLB-01",
+  "ENG-01": "ENG-02", "ENG-02": "STFUI-01", "ENG-03": "STFUI-01", "ENG-04": "BUDUI-05", "ENG-05": "TIMEUI-08", "ENG-06": "BUDUI-03", "ENG-07": "ENG-07", "ENG-08": "ENG-08",
+  "STFUI-01": "STFUI-06", "STFUI-05": "STFUI-10", "STFUI-06": "STFUI-07", "STFUI-07": "STFUI-13", "STFUI-10": "STFUI-13", "STFUI-13": "STFUI-21", "STFUI-14": "ENG-02", "STFUI-21": "STFUI-22", "STFUI-22": "STFUI-23", "STFUI-24": "CMD-03",
+  "SKLUI-01": "SKLUI-10", "SKLUI-02": "SKLUI-14", "SKLUI-03": "SKLUI-17", "SKLUI-04": "ADMUI-08", "SKLUI-05": "SKLUI-06", "SKLUI-14": "SKLUI-15", "SKLUI-16": "SKLUI-17", "SKLUI-17": "STFUI-13",
+  "BUDUI-01": "BUDUI-02", "BUDUI-02": "BUDUI-03", "BUDUI-04": "BUDUI-05", "BUDUI-05": "BUDUI-08", "BUDUI-08": "BUDUI-09", "BUDUI-09": "BUDUI-10", "BUDUI-10": "ENG-02", "BUDUI-11": "BUDUI-04",
+  "TIMEUI-01": "TIMEUI-02", "TIMEUI-02": "TIMEUI-03", "TIMEUI-03": "TIMEUI-04", "TIMEUI-04": "TIMEUI-06", "TIMEUI-06": "TIMEUI-08", "TIMEUI-08": "CMD-01",
+  "CMD-01": "CMD-02", "CMD-02": "ENG-02", "CMD-03": "STFUI-24", "CMD-04": "BUDUI-12", "CMD-05": "STFUI-21", "CMD-06": "SKLUI-17", "CMD-07": "BUDUI-09", "CMD-08": "ADMUI-08", "CMD-09": "ADMUI-01",
+  "ADMUI-02": "ADMUI-03", "ADMUI-03": "GLB-05", "ADMUI-07": "CMD-08", "ADMUI-08": "CMD-09", "AIUI-03": "CMD-03",
+};
 
 const people = [
   ["Aarav Mehta", "Data Cloud Architect", "Data & AI", "94%", "02 Sep", "Available"],
@@ -276,6 +287,12 @@ function ScreenCanvas({
   onSelect,
   onToast,
   snapshot,
+  selectedAccountKey,
+  selectedProjectKey,
+  selectedResourceKey,
+  onAccountSelect,
+  onProjectSelect,
+  onResourceSelect,
 }: {
   screen: ScreenSpec;
   staffingRequests: StaffingRequest[];
@@ -291,6 +308,12 @@ function ScreenCanvas({
   onSelect: (id: string) => void;
   onToast: (message: string) => void;
   snapshot: SalesforceSnapshot | null;
+  selectedAccountKey: string;
+  selectedProjectKey: string;
+  selectedResourceKey: string;
+  onAccountSelect: (account: AccountSnapshot) => void;
+  onProjectSelect: (project: ProjectSnapshot) => void;
+  onResourceSelect: (resource: CapacitySnapshot) => void;
 }) {
   if (!canAccessScreen(system.state.activeRole, screen)) return <section className="surface access-denied" role="alert"><span className="section-kicker">Access control</span><h2>Screen unavailable for {system.state.activeRole}</h2><p>This sanitized demo applies the same persona-to-module contract as Salesforce. Switch to an authorized active role to open {screen.id}; restricted data has not been rendered.</p><button className="primary-button" onClick={() => onSelect("GLB-05")}>Switch role and scope →</button></section>;
   if (screen.id === "GLB-01") return <SsoCanvas onContinue={() => { system.setSignedIn(true); onSelect("GLB-02"); onToast("Sanitized demo session started"); }} />;
@@ -298,9 +321,10 @@ function ScreenCanvas({
   if (screen.id === "GLB-03") return <NotificationDemo system={system} onSelect={onSelect} />;
   if (screen.id === "GLB-05") return <RoleDemo system={system} onSelect={onSelect} onToast={onToast} />;
   if (screen.id === "GLB-06") return <VideoLibrary />;
-  if (["ENG-01", "ENG-02"].includes(screen.id)) return <EngagementDemo screen={screen} system={system} onSelect={onSelect} />;
+  if (["ENG-01", "ENG-02"].includes(screen.id)) return <SynchronizedEngagement360 screen={screen} snapshot={snapshot} selectedAccountKey={selectedAccountKey} selectedProjectKey={selectedProjectKey} onAccountSelect={onAccountSelect} onProjectSelect={onProjectSelect} onSelect={onSelect} />;
   if (["BUDUI-01", "BUDUI-02", "BUDUI-04", "BUDUI-08", "BUDUI-09", "BUDUI-10", "BUDUI-11"].includes(screen.id)) return <BudgetDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
-  if (["SKLUI-01", "SKLUI-05", "SKLUI-10", "SKLUI-11", "SKLUI-14", "SKLUI-15", "SKLUI-16", "SKLUI-17"].includes(screen.id)) return <SkillsDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
+  if (screen.id === "SKLUI-05") return <SynchronizedResource360 snapshot={snapshot} selectedResourceKey={selectedResourceKey} onResourceSelect={onResourceSelect} onSelect={onSelect} />;
+  if (["SKLUI-01", "SKLUI-10", "SKLUI-11", "SKLUI-14", "SKLUI-15", "SKLUI-16", "SKLUI-17"].includes(screen.id)) return <SkillsDemo screen={screen} system={system} onSelect={onSelect} onToast={onToast} />;
   if (screen.id === "STFUI-21") return <StaffingQueue requests={staffingRequests} onOpen={onOpenStaffingRequest} onReset={onResetStaffingDemo} />;
   if (screen.id === "STFUI-22") return <StaffingRequestDetail request={selectedStaffingRequest} onBack={onBackToStaffingQueue} onDecide={onOpenStaffingDecision} />;
   if (screen.id === "STFUI-23") return <StaffingDecisionForm request={selectedStaffingRequest} onBack={onBackToStaffingRequest} onSubmit={onSubmitStaffingDecision} />;
@@ -334,6 +358,9 @@ export default function Home() {
   const staffingWorkflow = useStaffingWorkflow();
   const [activeId, setActiveId] = useState(defaultScreenId);
   const [selectedStaffingRequestId, setSelectedStaffingRequestId] = useState(initialSelectedRequestId);
+  const [selectedAccountKey, setSelectedAccountKey] = useState("");
+  const [selectedProjectKey, setSelectedProjectKey] = useState("");
+  const [selectedResourceKey, setSelectedResourceKey] = useState("");
   const [screenFilter, setScreenFilter] = useState("");
   const [globalQuery, setGlobalQuery] = useState("");
   const [showDirectory, setShowDirectory] = useState(false);
@@ -350,7 +377,11 @@ export default function Home() {
   useEffect(() => {
     const syncFromUrl = () => {
       const requested = new URLSearchParams(window.location.search).get("screen");
+      const record = new URLSearchParams(window.location.search).get("record") ?? "";
       if (requested && screenById[requested]) setActiveId(requested);
+      if (record.startsWith("ACCOUNT-")) setSelectedAccountKey(record);
+      if (record.startsWith("PROJECT-")) setSelectedProjectKey(record);
+      if (record.startsWith("RESOURCE-")) setSelectedResourceKey(record);
     };
     const timer = window.setTimeout(syncFromUrl, 0);
     window.addEventListener("popstate", syncFromUrl);
@@ -401,7 +432,47 @@ export default function Home() {
       showAction(`${id} passed all five sanitized activation simulations`);
       return;
     }
-    showAction(`${active.primary} is available in the browser demo`);
+    if (active.id === "GLB-03") {
+      demoSystem.markNotificationsRead();
+      showAction("Notification center updated: every current demo notification is marked read");
+      return;
+    }
+    const allModuleScreens = authorizedScreens.filter((screen) => screen.module === active.module);
+    const currentIndex = allModuleScreens.findIndex((screen) => screen.id === active.id);
+    const fallback = allModuleScreens[(currentIndex + 1) % allModuleScreens.length]?.id ?? "GLB-02";
+    const target = primaryActionTargets[active.id] ?? fallback;
+    if (target === active.id) {
+      showAction(`${active.id} evidence is already visible in the active governed workbench`);
+      return;
+    }
+    selectScreen(target);
+    showAction(`${active.primary} opened ${screenById[target]?.title ?? target}`);
+  }
+
+  function selectRecord(screenId: string, record: string) {
+    selectScreen(screenId);
+    const url = new URL(window.location.href);
+    url.searchParams.set("record", record);
+    window.history.replaceState({}, "", url);
+  }
+
+  function selectAccount(account: AccountSnapshot) {
+    setSelectedAccountKey(account.key);
+    const firstProject = salesforce.snapshot?.projects.find((project) => project.account === account.name);
+    if (firstProject) setSelectedProjectKey(firstProject.key);
+    selectRecord("ENG-01", account.key);
+  }
+
+  function selectProject(project: ProjectSnapshot) {
+    setSelectedProjectKey(project.key);
+    const account = salesforce.snapshot?.accounts.find((item) => item.name === project.account);
+    if (account) setSelectedAccountKey(account.key);
+    selectRecord("ENG-02", project.key);
+  }
+
+  function selectResource(resource: CapacitySnapshot) {
+    setSelectedResourceKey(resource.key);
+    selectRecord("SKLUI-05", resource.key);
   }
 
   function openStaffingRequest(id: string) {
@@ -442,7 +513,7 @@ export default function Home() {
       <div className="workbench">
         <aside className="screen-rail"><div className="rail-title"><span className="rail-icon">{activeModule.icon}</span><div><small>{activeModule.label}</small><strong>{authorizedScreens.filter((screen) => screen.module === active.module).length} authorized screens</strong></div></div><label className="rail-search"><span>⌕</span><input value={screenFilter} onChange={(event) => setScreenFilter(event.target.value)} placeholder="Filter screens..." /></label><div className="screen-links">{moduleScreens.map((screen) => <button className={screen.id === active.id ? "active" : ""} key={screen.id} onClick={() => selectScreen(screen.id)}><span>{screen.id}</span><strong>{screen.title}</strong><b>{screen.release}</b></button>)}</div><button className="rail-all" onClick={() => setShowDirectory(true)}>Browse all 103 screens <span>→</span></button></aside>
 
-        <section className="canvas" data-active-screen={active.id}><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => showAction("Demo states include seeded, changed and empty paths")}>View states <span>⌄</span></button><button className="primary-button" onClick={runPrimaryAction}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} onCreateStaffingRequest={createStaffingRequest} system={demoSystem} onSelect={selectScreen} onToast={showAction} snapshot={salesforce.snapshot} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · sanitized GitHub Pages demo</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
+        <section className="canvas" data-active-screen={active.id}><header className="page-header"><div className="breadcrumbs"><button onClick={() => setShowDirectory(true)}>Product workspace</button><span>/</span><button>{activeModule.label}</button><span>/</span><b>{active.id}</b></div><div className="title-row"><div><span className="page-eyebrow">{active.eyebrow ?? activeModule.label}<b>{active.release}</b></span><h1>{active.title}</h1><p>{active.description}</p></div><div className="page-actions"><button className="secondary-button" onClick={() => setShowDirectory(true)}>Screen directory <span>→</span></button><button className="primary-button" onClick={runPrimaryAction}>{active.primary} <span>＋</span></button></div></div></header><div className="canvas-content"><ScreenCanvas screen={active} staffingRequests={staffingWorkflow.requests} selectedStaffingRequest={selectedStaffingRequest} onOpenStaffingRequest={openStaffingRequest} onOpenStaffingDecision={() => selectScreen("STFUI-23")} onBackToStaffingQueue={() => selectScreen("STFUI-21")} onBackToStaffingRequest={() => selectScreen("STFUI-22")} onSubmitStaffingDecision={submitStaffingDecision} onResetStaffingDemo={resetStaffingDemo} onCreateStaffingRequest={createStaffingRequest} system={demoSystem} onSelect={selectScreen} onToast={showAction} snapshot={salesforce.snapshot} selectedAccountKey={selectedAccountKey} selectedProjectKey={selectedProjectKey} selectedResourceKey={selectedResourceKey} onAccountSelect={selectAccount} onProjectSelect={selectProject} onResourceSelect={selectResource} /></div><footer className="prototype-footer"><span>Screen {screens.findIndex((screen) => screen.id === active.id) + 1} of 103</span><b>EXL Salesforce COE Resource360 · sanitized GitHub Pages demo</b><button onClick={() => setShowDirectory(true)}>Open screen directory</button></footer></section>
       </div>
     </section>
     {showDirectory && <ScreenDirectory onClose={() => setShowDirectory(false)} onSelect={selectScreen} />}

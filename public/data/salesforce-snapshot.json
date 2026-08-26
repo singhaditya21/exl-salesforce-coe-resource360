@@ -1,13 +1,13 @@
 {
   "schemaVersion": 2,
   "classification": "SANITIZED_DEMO_ONLY",
-  "generatedAt": "2026-08-26T14:38:30.644Z",
+  "generatedAt": "2026-08-26T16:10:51.988Z",
   "source": {
     "system": "Salesforce",
     "org": "Resource 360 Developer Org",
     "mode": "Allowlisted build-time snapshot",
     "syncCadence": "Hourly GitHub Actions publication",
-    "dataCutoff": "2026-08-26T14:38:30.644Z",
+    "dataCutoff": "2026-08-26T16:10:51.988Z",
     "policyVersion": "R360-KPI-1.0"
   },
   "counts": {
@@ -81,7 +81,7 @@
       "unit": "Days",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Median bench age under the approved Resource 360 semantic definition.",
       "ownerRole": "Head of Delivery",
       "policyVersion": "R360-KPI-1.0"
@@ -101,7 +101,7 @@
       "unit": "Percent",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Billed utilization under the approved Resource 360 semantic definition.",
       "ownerRole": "Head of Delivery",
       "policyVersion": "R360-KPI-1.0"
@@ -121,7 +121,7 @@
       "unit": "Ratio",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Cost performance index under the approved Resource 360 semantic definition.",
       "ownerRole": "Finance/PMO",
       "policyVersion": "R360-KPI-1.0"
@@ -141,7 +141,7 @@
       "unit": "Percent",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Data quality score under the approved Resource 360 semantic definition.",
       "ownerRole": "Operations",
       "policyVersion": "R360-KPI-1.0"
@@ -161,7 +161,7 @@
       "unit": "Percent",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Demand fulfilment rate under the approved Resource 360 semantic definition.",
       "ownerRole": "COE Staffer",
       "policyVersion": "R360-KPI-1.0"
@@ -181,7 +181,7 @@
       "unit": "Points",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Margin erosion under the approved Resource 360 semantic definition.",
       "ownerRole": "Finance/PMO",
       "policyVersion": "R360-KPI-1.0"
@@ -201,7 +201,7 @@
       "unit": "Days",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Schedule variance under the approved Resource 360 semantic definition.",
       "ownerRole": "Project Manager",
       "policyVersion": "R360-KPI-1.0"
@@ -221,7 +221,7 @@
       "unit": "Days",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T14:15:42.000+0000",
+      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
       "definition": "Median time to staff under the approved Resource 360 semantic definition.",
       "ownerRole": "COE Staffer",
       "policyVersion": "R360-KPI-1.0"
@@ -244,7 +244,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-002",
@@ -262,7 +262,7 @@
       "allocationCount": 2,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-003",
@@ -280,7 +280,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-004",
@@ -298,7 +298,7 @@
       "allocationCount": 2,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-005",
@@ -316,7 +316,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-006",
@@ -334,7 +334,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-007",
@@ -352,7 +352,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-008",
@@ -370,7 +370,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-009",
@@ -388,7 +388,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-010",
@@ -406,7 +406,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-011",
@@ -424,7 +424,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-012",
@@ -442,7 +442,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-013",
@@ -460,7 +460,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-014",
@@ -478,7 +478,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-015",
@@ -496,7 +496,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-016",
@@ -514,7 +514,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-017",
@@ -532,7 +532,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-018",
@@ -550,7 +550,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-019",
@@ -568,7 +568,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-020",
@@ -586,7 +586,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-021",
@@ -604,7 +604,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-022",
@@ -622,7 +622,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-023",
@@ -640,7 +640,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-024",
@@ -658,7 +658,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-025",
@@ -676,7 +676,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-026",
@@ -694,7 +694,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-027",
@@ -712,7 +712,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-028",
@@ -730,7 +730,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-029",
@@ -748,7 +748,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-030",
@@ -766,7 +766,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-031",
@@ -784,7 +784,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-032",
@@ -802,7 +802,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-033",
@@ -820,7 +820,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-034",
@@ -838,7 +838,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-035",
@@ -856,7 +856,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-036",
@@ -874,7 +874,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-037",
@@ -892,7 +892,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-038",
@@ -910,7 +910,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-039",
@@ -928,7 +928,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-040",
@@ -946,7 +946,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-041",
@@ -964,7 +964,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-042",
@@ -982,7 +982,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-043",
@@ -1000,7 +1000,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-044",
@@ -1018,7 +1018,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-045",
@@ -1036,7 +1036,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-046",
@@ -1054,7 +1054,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-047",
@@ -1072,7 +1072,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-048",
@@ -1090,7 +1090,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-049",
@@ -1108,7 +1108,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-050",
@@ -1126,7 +1126,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-051",
@@ -1144,7 +1144,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-052",
@@ -1162,7 +1162,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-053",
@@ -1180,7 +1180,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-054",
@@ -1198,7 +1198,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-055",
@@ -1216,7 +1216,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-056",
@@ -1234,7 +1234,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-057",
@@ -1252,7 +1252,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-058",
@@ -1270,7 +1270,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-059",
@@ -1288,7 +1288,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     },
     {
       "key": "RESOURCE-060",
@@ -1306,7 +1306,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T14:15:47.000+0000"
+      "reconciledAt": "2026-08-26T16:05:45.000+0000"
     }
   ],
   "forecast": [
@@ -1454,6 +1454,148 @@
       "status": "On Target"
     }
   ],
+  "accounts": [
+    {
+      "key": "ACCOUNT-01",
+      "name": "Civic Education and Public Services",
+      "portfolio": "Civic Education and Public Services Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 1,
+      "approvedRevenue": 8470000,
+      "forecastRevenue": 8597600,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 86,
+      "deliveryRiskScore": 24.5
+    },
+    {
+      "key": "ACCOUNT-02",
+      "name": "Global Retail Holdings",
+      "portfolio": "Global Retail Holdings Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 2,
+      "approvedRevenue": 153000000,
+      "forecastRevenue": 147570000,
+      "contractCount": 5,
+      "paymentCount": 15,
+      "allocationCount": 20,
+      "accountHealthScore": 89,
+      "deliveryRiskScore": 30.5
+    },
+    {
+      "key": "ACCOUNT-03",
+      "name": "Helix Health and Life Sciences",
+      "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 1,
+      "approvedRevenue": 6270000,
+      "forecastRevenue": 6301900,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 88.5,
+      "deliveryRiskScore": 29.5
+    },
+    {
+      "key": "ACCOUNT-04",
+      "name": "Horizon Travel and Hospitality",
+      "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 2,
+      "approvedRevenue": 8030000,
+      "forecastRevenue": 7990400,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 86.5,
+      "deliveryRiskScore": 25.5
+    },
+    {
+      "key": "ACCOUNT-05",
+      "name": "Meridian Financial Services",
+      "portfolio": "Meridian Financial Services Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 2,
+      "approvedRevenue": 5830000,
+      "forecastRevenue": 5743100,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 77,
+      "deliveryRiskScore": 12.5
+    },
+    {
+      "key": "ACCOUNT-06",
+      "name": "Nova Telecom and Media",
+      "portfolio": "Nova Telecom and Media Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 2,
+      "approvedRevenue": 7590000,
+      "forecastRevenue": 7400800,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 87,
+      "deliveryRiskScore": 26.5
+    },
+    {
+      "key": "ACCOUNT-07",
+      "name": "Orion Manufacturing and Automotive",
+      "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 2,
+      "approvedRevenue": 6710000,
+      "forecastRevenue": 6878300,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 88,
+      "deliveryRiskScore": 28.5
+    },
+    {
+      "key": "ACCOUNT-08",
+      "name": "Summit Consumer Goods",
+      "portfolio": "Summit Consumer Goods Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 1,
+      "approvedRevenue": 9350000,
+      "forecastRevenue": 9023300,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 14,
+      "accountHealthScore": 85,
+      "deliveryRiskScore": 22.5
+    },
+    {
+      "key": "ACCOUNT-09",
+      "name": "Terra Energy and Utilities",
+      "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 1,
+      "approvedRevenue": 7150000,
+      "forecastRevenue": 7145600,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 87.5,
+      "deliveryRiskScore": 27.5
+    },
+    {
+      "key": "ACCOUNT-10",
+      "name": "Vertex High Tech and Logistics",
+      "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
+      "projectCount": 2,
+      "activeProjectCount": 2,
+      "approvedRevenue": 8910000,
+      "forecastRevenue": 9222400,
+      "contractCount": 4,
+      "paymentCount": 12,
+      "allocationCount": 15,
+      "accountHealthScore": 85.5,
+      "deliveryRiskScore": 23.5
+    }
+  ],
   "projects": [
     {
       "key": "PROJECT-001",
@@ -1487,7 +1629,15 @@
       "marginErosionPoints": 0.4669456436420722,
       "estimateToComplete": 388358.31375,
       "estimateAtCompletion": 1294527.7125,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-002",
@@ -1521,7 +1671,15 @@
       "marginErosionPoints": 0.46568955548753527,
       "estimateToComplete": 420888.178,
       "estimateAtCompletion": 1357703.8,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-003",
@@ -1555,7 +1713,15 @@
       "marginErosionPoints": 0.7020293898809524,
       "estimateToComplete": 15426567.66,
       "estimateAtCompletion": 55094884.5,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 3,
+      "paymentCount": 9,
+      "moduleCount": 3,
+      "workUnitCount": 8,
+      "staffingRequestCount": 21,
+      "allocationCount": 16,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-004",
@@ -1589,7 +1755,15 @@
       "marginErosionPoints": 0.7629583146571044,
       "estimateToComplete": 14458859.73,
       "estimateAtCompletion": 49858137,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Pending Approval",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-005",
@@ -1623,7 +1797,15 @@
       "marginErosionPoints": 0.4549960519480519,
       "estimateToComplete": 455002.201088,
       "estimateAtCompletion": 1421881.8784,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-006",
@@ -1657,7 +1839,15 @@
       "marginErosionPoints": 0.45481448213786896,
       "estimateToComplete": 490730.449374,
       "estimateAtCompletion": 1487061.9678,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-007",
@@ -1691,7 +1881,15 @@
       "marginErosionPoints": 0.4450997682709447,
       "estimateToComplete": 528102.979788,
       "estimateAtCompletion": 1553244.0582,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-008",
@@ -1725,7 +1923,15 @@
       "marginErosionPoints": -2.6594823819149846,
       "estimateToComplete": 528976.304605,
       "estimateAtCompletion": 1511360.8703,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-009",
@@ -1759,7 +1965,15 @@
       "marginErosionPoints": -2.6382091564685313,
       "estimateToComplete": 567374.385312,
       "estimateAtCompletion": 1576039.9592,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-010",
@@ -1793,7 +2007,15 @@
       "marginErosionPoints": 1.4309113636363637,
       "estimateToComplete": 607436.784504,
       "estimateAtCompletion": 1641721.0392,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-011",
@@ -1827,7 +2049,15 @@
       "marginErosionPoints": 1.4120152709631182,
       "estimateToComplete": 649193.5694,
       "estimateAtCompletion": 1708404.13,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-012",
@@ -1861,7 +2091,15 @@
       "marginErosionPoints": 1.393660795123244,
       "estimateToComplete": 692674.796502,
       "estimateAtCompletion": 1776089.2218,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-013",
@@ -1895,7 +2133,15 @@
       "marginErosionPoints": 1.3858186562595654,
       "estimateToComplete": 737910.52584,
       "estimateAtCompletion": 1844776.3146,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-014",
@@ -1929,7 +2175,15 @@
       "marginErosionPoints": 1.3684621228501228,
       "estimateToComplete": 784930.817444,
       "estimateAtCompletion": 1914465.4084,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-015",
@@ -1963,7 +2217,15 @@
       "marginErosionPoints": -1.8133466672983087,
       "estimateToComplete": 777646.879968,
       "estimateAtCompletion": 1851540.1904,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-016",
@@ -1997,7 +2259,15 @@
       "marginErosionPoints": -1.7885643173819645,
       "estimateToComplete": 825482.301518,
       "estimateAtCompletion": 1919726.2826,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-017",
@@ -2031,7 +2301,15 @@
       "marginErosionPoints": -1.7739811165048545,
       "estimateToComplete": 875122.325352,
       "estimateAtCompletion": 1988914.3758,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 11,
+      "allocationCount": 11,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-018",
@@ -2065,7 +2343,15 @@
       "marginErosionPoints": -1.7595976888964693,
       "estimateToComplete": 926597.0115,
       "estimateAtCompletion": 2059104.47,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-019",
@@ -2099,7 +2385,15 @@
       "marginErosionPoints": 2.3815784000721503,
       "estimateToComplete": 979936.419992,
       "estimateAtCompletion": 2130296.5652,
-      "forecastAccuracyPercent": 86
+      "forecastAccuracyPercent": 86,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 10,
+      "allocationCount": 10,
+      "riskCount": 2
     },
     {
       "key": "PROJECT-020",
@@ -2133,7 +2427,15 @@
       "marginErosionPoints": 2.3544168871646214,
       "estimateToComplete": 1035170.606064,
       "estimateAtCompletion": 2202490.6512,
-      "forecastAccuracyPercent": 93
+      "forecastAccuracyPercent": 93,
+      "budgetState": "Approved",
+      "contractCount": 2,
+      "paymentCount": 6,
+      "moduleCount": 3,
+      "workUnitCount": 6,
+      "staffingRequestCount": 4,
+      "allocationCount": 4,
+      "riskCount": 2
     }
   ],
   "portfolios": [
@@ -2245,7 +2547,8 @@
   "unavailability": [
     {
       "key": "UNAVAILABLE-001",
-      "resource": "Practitioner 01",
+      "resourceKey": "RESOURCE-002",
+      "resource": "Practitioner 02",
       "type": "Training",
       "startDate": "2026-09-02",
       "endDate": "2026-09-02",
@@ -2255,7 +2558,8 @@
     },
     {
       "key": "UNAVAILABLE-002",
-      "resource": "Practitioner 02",
+      "resourceKey": "RESOURCE-003",
+      "resource": "Practitioner 03",
       "type": "Leave",
       "startDate": "2026-09-05",
       "endDate": "2026-09-06",
@@ -2265,7 +2569,8 @@
     },
     {
       "key": "UNAVAILABLE-003",
-      "resource": "Practitioner 03",
+      "resourceKey": "RESOURCE-004",
+      "resource": "Practitioner 04",
       "type": "Leave",
       "startDate": "2026-09-08",
       "endDate": "2026-09-10",
@@ -2275,7 +2580,8 @@
     },
     {
       "key": "UNAVAILABLE-004",
-      "resource": "Practitioner 04",
+      "resourceKey": "RESOURCE-005",
+      "resource": "Practitioner 05",
       "type": "Training",
       "startDate": "2026-09-11",
       "endDate": "2026-09-11",
@@ -2285,7 +2591,8 @@
     },
     {
       "key": "UNAVAILABLE-005",
-      "resource": "Practitioner 05",
+      "resourceKey": "RESOURCE-006",
+      "resource": "Practitioner 06",
       "type": "Leave",
       "startDate": "2026-09-14",
       "endDate": "2026-09-15",
@@ -2295,7 +2602,8 @@
     },
     {
       "key": "UNAVAILABLE-006",
-      "resource": "Practitioner 06",
+      "resourceKey": "RESOURCE-007",
+      "resource": "Practitioner 07",
       "type": "Leave",
       "startDate": "2026-09-17",
       "endDate": "2026-09-19",
@@ -2305,7 +2613,8 @@
     },
     {
       "key": "UNAVAILABLE-007",
-      "resource": "Practitioner 07",
+      "resourceKey": "RESOURCE-008",
+      "resource": "Practitioner 08",
       "type": "Training",
       "startDate": "2026-09-20",
       "endDate": "2026-09-20",
@@ -2315,7 +2624,8 @@
     },
     {
       "key": "UNAVAILABLE-008",
-      "resource": "Practitioner 08",
+      "resourceKey": "RESOURCE-009",
+      "resource": "Practitioner 09",
       "type": "Leave",
       "startDate": "2026-09-23",
       "endDate": "2026-09-24",
@@ -2325,7 +2635,8 @@
     },
     {
       "key": "UNAVAILABLE-009",
-      "resource": "Practitioner 09",
+      "resourceKey": "RESOURCE-010",
+      "resource": "Practitioner 10",
       "type": "Leave",
       "startDate": "2026-09-26",
       "endDate": "2026-09-28",
@@ -2335,7 +2646,8 @@
     },
     {
       "key": "UNAVAILABLE-010",
-      "resource": "Practitioner 10",
+      "resourceKey": "RESOURCE-001",
+      "resource": "Practitioner 01",
       "type": "Training",
       "startDate": "2026-09-29",
       "endDate": "2026-09-29",
@@ -2345,6 +2657,7 @@
     },
     {
       "key": "UNAVAILABLE-011",
+      "resourceKey": "RESOURCE-011",
       "resource": "Practitioner 11",
       "type": "Leave",
       "startDate": "2026-10-02",
@@ -2355,6 +2668,7 @@
     },
     {
       "key": "UNAVAILABLE-012",
+      "resourceKey": "RESOURCE-012",
       "resource": "Practitioner 12",
       "type": "Leave",
       "startDate": "2026-10-05",

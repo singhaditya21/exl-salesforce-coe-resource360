@@ -28,6 +28,9 @@ const number = (value) => Number(value ?? 0);
 const round = (value, precision = 1) => Number(number(value).toFixed(precision));
 const isoDate = (value) => value ? String(value).slice(0, 10) : null;
 const labelForStatus = (hours) => hours < 8 ? "Underallocated" : hours === 8 ? "Fully allocated" : "Approved overallocated";
+const countByEngagement = (objectName) => new Map(records(
+  `SELECT Engagement__r.Engagement_ID__c engagementKey, COUNT(Id) total FROM ${objectName} WHERE Engagement__r.Account__r.R360_Demo__c=true GROUP BY Engagement__r.Engagement_ID__c`,
+).map((item) => [item.engagementKey, number(item.total)]));
 
 const generatedAt = new Date().toISOString();
 const counts = Object.fromEntries([
@@ -45,13 +48,15 @@ const portfolioById = new Map(portfolioRecords.map((item, index) => [item.Portfo
 const membershipRecords = records("SELECT Resource__c, Delivery_Role__c, Portfolio__r.Portfolio_ID__c, Sub_Portfolio__r.Name FROM R360_Delivery_Membership__c WHERE Current__c=true AND Account__r.R360_Demo__c=true ORDER BY Resource__c LIMIT 100");
 const membershipByResource = new Map(membershipRecords.map((item) => [item.Resource__c, item]));
 const capacityRecords = records("SELECT Resource__c, Work_Date__c, Standard_Hours__c, Allocated_Hours__c, Remaining_Hours__c, Overage_Hours__c, Utilization_Percent__c, Capacity_Status__c, Allocation_Count__c, Approved_Overallocated__c, Pending_Approval_Count__c, Reconciled_At__c FROM R360_Daily_Capacity__c WHERE Work_Date__c=TODAY AND Resource__c IN (SELECT Resource__c FROM R360_Delivery_Membership__c WHERE Account__r.R360_Demo__c=true AND Current__c=true) ORDER BY Allocated_Hours__c DESC, Resource__c LIMIT 100");
-const capacity = capacityRecords.map((item, index) => {
+const resourceAliasById = new Map(capacityRecords.map((item, index) => [item.Resource__c, { key: `RESOURCE-${String(index + 1).padStart(3, "0")}`, label: `Practitioner ${String(index + 1).padStart(2, "0")}` }]));
+const capacity = capacityRecords.map((item) => {
   const membership = membershipByResource.get(item.Resource__c);
   const portfolio = portfolioById.get(membership?.Portfolio__r?.Portfolio_ID__c);
+  const alias = resourceAliasById.get(item.Resource__c);
   const hours = number(item.Allocated_Hours__c);
   return {
-    key: `RESOURCE-${String(index + 1).padStart(3, "0")}`,
-    label: `Practitioner ${String(index + 1).padStart(2, "0")}`,
+    key: alias.key,
+    label: alias.label,
     role: membership?.Delivery_Role__c ?? "Salesforce Practitioner",
     portfolio: portfolio?.name ?? "Salesforce COE",
     subPortfolio: membership?.Sub_Portfolio__r?.Name ?? "Delivery Pool",
@@ -65,6 +70,12 @@ const capacity = capacityRecords.map((item, index) => {
 
 const budgetRecords = records("SELECT Engagement__c, Engagement__r.Engagement_ID__c, Revenue__c, Total_Cost__c, Margin_Percent__c, Forecast_Revenue__c, Forecast_Cost__c, Forecast_Margin_Percent__c, Margin_Erosion_Points__c, Estimate_To_Complete__c, Estimate_At_Completion__c, Forecast_Accuracy_Percent__c, State__c FROM Budget__c WHERE Current__c=true AND Engagement__r.Account__r.R360_Demo__c=true ORDER BY Engagement__c LIMIT 100");
 const budgetByEngagement = new Map(budgetRecords.map((item) => [item.Engagement__r?.Engagement_ID__c, item]));
+const relatedCounts = {
+  contracts: countByEngagement("Commercial_Reference__c"), payments: countByEngagement("Contract_Payment__c"),
+  modules: countByEngagement("Project_Module__c"), workUnits: countByEngagement("Work_Unit__c"),
+  staffingRequests: countByEngagement("Staffing_Request__c"), allocations: countByEngagement("Allocation__c"),
+  risks: countByEngagement("Project_Risk__c"),
+};
 const engagementRecords = records("SELECT Name, Engagement_ID__c, Account__r.Name, Portfolio__r.Portfolio_ID__c, Status__c, Lifecycle_Stage__c, Completion_Percent__c, Start_Date__c, End_Date__c, Forecast_Completion_Date__c, Schedule_Variance_Days__c, Acceptance_First_Pass_Percent__c, CSAT_Score__c, NPS_Score__c, Account_Health_Score__c, Release_Count__c, Incident_Count__c, Mandatory_Skill_Coverage_Percent__c, Role_Readiness_Percent__c, Risk_Exposure_Score__c, High_Risk_Age_Days__c, Plan_Actual_Variance_Percent__c FROM Engagement__c WHERE Account__r.R360_Demo__c=true ORDER BY Engagement_ID__c LIMIT 100");
 const projects = engagementRecords.map((item, index) => {
   const budget = budgetByEngagement.get(item.Engagement_ID__c) ?? budgetRecords[index];
@@ -81,6 +92,24 @@ const projects = engagementRecords.map((item, index) => {
     approvedRevenue: number(budget?.Revenue__c), approvedCost: number(budget?.Total_Cost__c), approvedMarginPercent: number(budget?.Margin_Percent__c),
     forecastRevenue: number(budget?.Forecast_Revenue__c), forecastCost: number(budget?.Forecast_Cost__c), forecastMarginPercent: number(budget?.Forecast_Margin_Percent__c),
     marginErosionPoints: number(budget?.Margin_Erosion_Points__c), estimateToComplete: number(budget?.Estimate_To_Complete__c), estimateAtCompletion: number(budget?.Estimate_At_Completion__c), forecastAccuracyPercent: number(budget?.Forecast_Accuracy_Percent__c),
+    budgetState: budget?.State__c ?? "Not available", contractCount: relatedCounts.contracts.get(item.Engagement_ID__c) ?? 0,
+    paymentCount: relatedCounts.payments.get(item.Engagement_ID__c) ?? 0, moduleCount: relatedCounts.modules.get(item.Engagement_ID__c) ?? 0,
+    workUnitCount: relatedCounts.workUnits.get(item.Engagement_ID__c) ?? 0, staffingRequestCount: relatedCounts.staffingRequests.get(item.Engagement_ID__c) ?? 0,
+    allocationCount: relatedCounts.allocations.get(item.Engagement_ID__c) ?? 0, riskCount: relatedCounts.risks.get(item.Engagement_ID__c) ?? 0,
+  };
+});
+
+const accounts = [...new Set(projects.map((project) => project.account))].sort().map((name, index) => {
+  const accountProjects = projects.filter((project) => project.account === name);
+  const sum = (field) => accountProjects.reduce((total, project) => total + number(project[field]), 0);
+  return {
+    key: `ACCOUNT-${String(index + 1).padStart(2, "0")}`, name,
+    portfolio: portfolioRecords.find((item) => item.Account__r?.Name === name)?.Name ?? "Salesforce COE",
+    projectCount: accountProjects.length, activeProjectCount: accountProjects.filter((project) => project.status === "Active").length,
+    approvedRevenue: sum("approvedRevenue"), forecastRevenue: sum("forecastRevenue"), contractCount: sum("contractCount"),
+    paymentCount: sum("paymentCount"), allocationCount: sum("allocationCount"),
+    accountHealthScore: round(accountProjects.reduce((total, project) => total + project.accountHealthScore, 0) / Math.max(1, accountProjects.length)),
+    deliveryRiskScore: round(accountProjects.reduce((total, project) => total + project.riskExposureScore, 0) / Math.max(1, accountProjects.length)),
   };
 });
 
@@ -119,7 +148,7 @@ const workRows = records("SELECT SUM(Planned_Value__c) plannedValue, SUM(Earned_
 const workSource = workRows[0] ?? {};
 const delivery = { plannedValue: number(workSource.plannedValue), earnedValue: number(workSource.earnedValue), actualCost: number(workSource.actualCost), estimateToComplete: number(workSource.etcValue), estimateAtCompletion: number(workSource.eacValue), schedulePerformanceIndex: round(workSource.spi, 2), costPerformanceIndex: round(workSource.cpi, 2), testPassPercent: round(workSource.testPass), defectCount: number(workSource.defects) };
 
-const unavailability = records("SELECT Type__c, Start_Date__c, End_Date__c, Hours_Per_Day__c, Status__c, Source_System__c FROM R360_Resource_Unavailability__c WHERE Status__c='Approved' AND Resource__c IN (SELECT Resource__c FROM R360_Delivery_Membership__c WHERE Account__r.R360_Demo__c=true AND Current__c=true) ORDER BY Start_Date__c LIMIT 100").map((item, index) => ({ key: `UNAVAILABLE-${String(index + 1).padStart(3, "0")}`, resource: `Practitioner ${String(index + 1).padStart(2, "0")}`, type: item.Type__c, startDate: isoDate(item.Start_Date__c), endDate: isoDate(item.End_Date__c), hoursPerDay: number(item.Hours_Per_Day__c), status: item.Status__c, source: item.Source_System__c }));
+const unavailability = records("SELECT Resource__c, Type__c, Start_Date__c, End_Date__c, Hours_Per_Day__c, Status__c, Source_System__c FROM R360_Resource_Unavailability__c WHERE Status__c='Approved' AND Resource__c IN (SELECT Resource__c FROM R360_Delivery_Membership__c WHERE Account__r.R360_Demo__c=true AND Current__c=true) ORDER BY Start_Date__c LIMIT 100").map((item, index) => { const alias = resourceAliasById.get(item.Resource__c); return { key: `UNAVAILABLE-${String(index + 1).padStart(3, "0")}`, resourceKey: alias?.key ?? "RESOURCE-UNKNOWN", resource: alias?.label ?? "Sanitized practitioner", type: item.Type__c, startDate: isoDate(item.Start_Date__c), endDate: isoDate(item.End_Date__c), hoursPerDay: number(item.Hours_Per_Day__c), status: item.Status__c, source: item.Source_System__c }; });
 
 const capacityTotals = capacity.reduce((result, item) => ({ standard: result.standard + item.standardHours, allocated: result.allocated + item.allocatedHours, overage: result.overage + item.overageHours }), { standard: 0, allocated: 0, overage: 0 });
 const kpis = [
@@ -133,7 +162,7 @@ const kpis = [
 const snapshot = {
   schemaVersion: 2, classification: "SANITIZED_DEMO_ONLY", generatedAt,
   source: { system: "Salesforce", org: "Resource 360 Developer Org", mode: "Allowlisted build-time snapshot", syncCadence: "Hourly GitHub Actions publication", dataCutoff: generatedAt, policyVersion: "R360-KPI-1.0" },
-  counts, kpis, capacity, forecast, projects,
+  counts, kpis, capacity, forecast, accounts, projects,
   portfolios: portfolioRecords.map((item, index) => ({ key: `PORTFOLIO-${String(index + 1).padStart(2, "0")}`, name: item.Name, account: item.Account__r?.Name ?? "Mock account", status: item.Current__c ? "Current" : "Historic", projects: projects.filter((project) => project.portfolio === item.Name).length })),
   staffing, commercial, delivery, unavailability,
   quality: { guardrailBreaches: capacity.filter((item) => item.allocatedHours > 12 || (item.allocatedHours > 8 && !item.approvedOverallocation)).length, pendingCapacityApprovals: capacity.reduce((sum, item) => sum + item.pendingApprovalCount, 0), forecastWeeks: forecast.length, snapshotRecords: sanitizedKpis.length },
@@ -142,6 +171,7 @@ const snapshot = {
 assert.equal(snapshot.classification, "SANITIZED_DEMO_ONLY");
 assert.equal(snapshot.counts.accounts, 10, "Snapshot requires exactly the seeded ten-account population.");
 assert.equal(snapshot.counts.projects, 20, "Snapshot requires exactly the seeded twenty-project population.");
+assert.equal(snapshot.accounts.length, 10, "Snapshot requires ten sanitized account summaries.");
 assert.equal(snapshot.capacity.length, 60, "Snapshot requires one current capacity row per demo resource.");
 assert.equal(snapshot.forecast.length, 13, "Snapshot requires thirteen forecast weeks.");
 assert.equal(snapshot.counts.kpiSnapshots, 214, "Snapshot requires exactly 214 governed KPI observations.");

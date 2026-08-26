@@ -52,9 +52,10 @@ test("connects the full static-demo transaction chain", async () => {
 });
 
 test("renders route-specific Pages workbenches instead of module-wide repeated screens", async () => {
-  const [page, operations] = await Promise.all([
+  const [page, operations, synchronized] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/operational-screens.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/synchronized-360.tsx", import.meta.url), "utf8"),
   ]);
   assert.match(page, /data-route-experience/);
   assert.match(page, /data-active-screen/);
@@ -63,6 +64,10 @@ test("renders route-specific Pages workbenches instead of module-wide repeated s
   assert.doesNotMatch(page, /if \(screen\.module === "skills"\) return <SkillsDemo/);
   for (const id of ["CMD-02", "CMD-03", "CMD-04", "CMD-05", "CMD-06", "CMD-07"]) assert.match(operations, new RegExp(id));
   for (const title of ["Utilization explorer", "Supply, demand and capacity", "Unbilled governance", "Staffing performance", "Salesforce capability coverage", "Engagement economics", "Data quality and sync operations"]) assert.match(operations, new RegExp(title));
+  assert.match(synchronized, /Account 360 · synchronized/);
+  assert.match(synchronized, /Twenty-project selector/);
+  assert.match(synchronized, /Sixty-resource selector/);
+  assert.doesNotMatch(page, /is available in the browser demo/);
 });
 
 test("publishes an allowlisted Salesforce snapshot without credentials or record ids", async () => {
@@ -81,6 +86,12 @@ test("publishes an allowlisted Salesforce snapshot without credentials or record
   assert.equal(snapshot.counts.accounts, 10);
   assert.equal(snapshot.counts.projects, 20);
   assert.equal(snapshot.counts.resources, 60);
+  assert.equal(snapshot.accounts.length, 10);
+  assert.equal(snapshot.projects.length, 20);
+  assert.ok(snapshot.projects.every((project) => project.contractCount >= 1));
+  assert.ok(snapshot.projects.every((project) => project.paymentCount >= 1));
+  assert.ok(snapshot.projects.every((project) => project.moduleCount >= 1));
+  assert.ok(snapshot.projects.every((project) => project.workUnitCount >= 1));
   assert.equal(snapshot.capacity.length, 60);
   assert.equal(snapshot.forecast.length, 13);
   assert.equal(snapshot.quality.guardrailBreaches, 0);
