@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { chromium } from "@playwright/test";
 import { MODULES, SCREENS } from "../force-app/main/default/lwc/resource360Workspace/screenCatalog.js";
 import { DECLARATIVE_SCREEN_IDS } from "../force-app/main/default/lwc/resource360Workspace/screenExperiences.js";
+import { isDeveloperEditionShellArtifact } from "./salesforce-ui-telemetry.mjs";
 
 const targetIndex = process.argv.indexOf("--target-org");
 const targetOrg = targetIndex >= 0 ? process.argv[targetIndex + 1] : process.env.RESOURCE360_TARGET_ORG;
@@ -11,6 +12,7 @@ assert(targetOrg, "Pass --target-org or set RESOURCE360_TARGET_ORG.");
 const declarativeIds = new Set(DECLARATIVE_SCREEN_IDS);
 const consoleErrors = [];
 const notFoundResponses = [];
+const excludedShellArtifacts = new Set();
 const genericNotFoundMessage = "Failed to load resource: the server responded with a status of 404 (Not Found)";
 let loginUrl;
 let browser;
@@ -58,16 +60,20 @@ try {
     // Lightning origin so the release gate remains strict for Resource 360 itself.
     page.on("console", (message) => {
         if (message.type() === "error") {
-            consoleErrors.push({
+            const entry = {
                 kind: "console",
                 text: message.text(),
                 url: message.location().url || ""
-            });
+            };
+            if (isDeveloperEditionShellArtifact(entry.url)) excludedShellArtifacts.add(entry.url);
+            else consoleErrors.push(entry);
         }
     });
     page.on("pageerror", (error) => consoleErrors.push({ kind: "pageerror", text: error.message, url: page.url() }));
     page.on("response", (response) => {
-        if (response.status() === 404) notFoundResponses.push(response.url());
+        if (response.status() !== 404) return;
+        if (isDeveloperEditionShellArtifact(response.url())) excludedShellArtifacts.add(response.url());
+        else notFoundResponses.push(response.url());
     });
     await page.goto(`${lightningOrigin}/lightning/n/Resource360_Workspace?c__screen=GLB-06`, {
         waitUntil: "domcontentloaded",
@@ -149,7 +155,8 @@ try {
         declarativeWorkbenches: verifiedDeclarativeWorkbenches,
         walkthroughVideos: 5,
         consoleErrors: 0,
-        salesforceShellRetries
+        salesforceShellRetries,
+        excludedShellArtifacts: excludedShellArtifacts.size
     }, null, 2)}\n`);
 } finally {
     loginUrl = undefined;

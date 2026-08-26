@@ -1,8 +1,16 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import { isDeveloperEditionShellArtifact } from "../scripts/salesforce-ui-telemetry.mjs";
 
 const root = new URL("../", import.meta.url);
+
+test("scopes the known Developer Edition helper artifact without hiding application errors", () => {
+  assert.equal(isDeveloperEditionShellArtifact("https://developer-edition-sites-26c6ad65143b.herokuapp.com/developer-edition/$assetsDir/styles/salesforce-lightning-design-system.min.css"), true);
+  assert.equal(isDeveloperEditionShellArtifact("https://example.herokuapp.com/assets/app.css"), false);
+  assert.equal(isDeveloperEditionShellArtifact("https://example.lightning.force.com/lightning/resource/missing.css"), false);
+  assert.equal(isDeveloperEditionShellArtifact("not-a-url"), false);
+});
 
 test("builds a static GitHub Pages application", async () => {
   const [html, viteConfig, workflow] = await Promise.all([
