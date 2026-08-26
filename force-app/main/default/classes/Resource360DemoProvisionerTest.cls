@@ -7,14 +7,6 @@ private class Resource360DemoProvisionerTest {
 
     @IsTest
     static void provisionsEveryBusinessPersonaAcrossRealPermissionGroupsAndUsers() {
-        List<Id> groupIds = new List<Id>();
-        for (PermissionSetGroup groupRecord : [
-            SELECT Id FROM PermissionSetGroup WHERE DeveloperName LIKE 'Resource360_%'
-        ]) {
-            groupIds.add(groupRecord.Id);
-        }
-        Test.calculatePermissionSetGroup(groupIds);
-
         Test.startTest();
         Resource360DemoProvisioner.ProvisioningResult first = Resource360DemoProvisioner.provision();
         Test.stopTest();
