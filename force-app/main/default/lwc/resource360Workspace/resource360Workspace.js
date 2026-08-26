@@ -8,6 +8,7 @@ import decideStaffingRequest from "@salesforce/apex/Resource360Service.decideSta
 import modifyAllocation from "@salesforce/apex/Resource360Service.modifyAllocation";
 import splitAllocation from "@salesforce/apex/Resource360Service.splitAllocation";
 import deallocate from "@salesforce/apex/Resource360Service.deallocate";
+import decideOverallocation from "@salesforce/apex/Resource360Service.decideOverallocation";
 import previewAllocationPlan from "@salesforce/apex/Resource360PlanningService.preview";
 import submitBudget from "@salesforce/apex/Resource360Service.submitBudget";
 import decideBudget from "@salesforce/apex/Resource360Service.decideBudget";
@@ -249,10 +250,12 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         const metrics = this.data.metrics || {};
         const targets = metrics.targets || {};
         return [
-            { label: "Active resources", value: metrics.activeHeadcount ?? 0, note: `${metrics.billingMixPercent ?? 0}% billed mix · target ${targets.billedUtilizationPercent ?? 75}%` },
-            { label: "Pending staffing", value: metrics.pendingStaffing ?? 0, note: `${metrics.overdueStaffing ?? 0} beyond configured SLA` },
+            { label: "Full-allocation coverage", value: `${metrics.fullAllocationCoveragePercent ?? 0}%`, note: `${metrics.activeHeadcount ?? 0} active · target ${targets.fullAllocationCoveragePercent ?? 100}% at ≥8h` },
+            { label: "Exactly at 8 hours", value: `${metrics.balancedCapacityPercent ?? 0}%`, note: `${metrics.fullyAllocatedResources ?? 0} balanced resources` },
+            { label: "Controlled over-allocation", value: `${metrics.overallocatedResources ?? 0}`, note: `${metrics.totalOverageHours ?? 0} overage hours · ${metrics.pendingOverallocationPlans ?? 0} pending` },
+            { label: "Capacity guardrails", value: (metrics.hardCeilingBreaches || metrics.unapprovedOverallocatedResources || metrics.actualTimeBreaches) ? "Exception" : "All clear", note: `>12h ${metrics.hardCeilingBreaches ?? 0} · unapproved ${metrics.unapprovedOverallocatedResources ?? 0} · actuals >8h ${metrics.actualTimeBreaches ?? 0}` },
             { label: "Approved revenue", value: this.money(metrics.approvedRevenue || 0), note: `${metrics.approvedMarginPercent ?? 0}% weighted gross margin` },
-            { label: "Unbilled guardrails", value: `WAR ${metrics.warPercent ?? 0}%`, note: `target ≤${targets.warMaximumPercent ?? 10}% · IFB ${metrics.ifbPercent ?? 0}% / ≤${targets.ifbMaximumPercent ?? 2}%` }
+            { label: "Billable mix", value: `${metrics.billingMixPercent ?? 0}%`, note: `WAR ${metrics.warPercent ?? 0}% · IFB ${metrics.ifbPercent ?? 0}%` }
         ];
     }
 
@@ -321,6 +324,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showRetentionAssurance() { return this.selectedScreenId === "ADMUI-07"; }
     get showDemoActivation() { return this.selectedScreenId === "ADMUI-01"; }
     get showKpiHierarchy() { return ["CMD-01", "CMD-02", "CMD-04", "CMD-07"].includes(this.selectedScreenId); }
+    get showCapacityControl() { return ["STFUI-05","STFUI-10","STFUI-12","SKLUI-05","CMD-01","CMD-02","CMD-04","CMD-07"].includes(this.selectedScreenId); }
     get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
     get showAlertLifecycle() { return this.selectedScreenId === "GLB-03"; }
     get showHelpCenter() { return this.selectedScreenId === "GLB-06"; }
@@ -393,9 +397,15 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get agentButtonLabel() { return this.agentPaused ? "Resume mock agent" : "Pause mock agent"; }
     get hasTalentResults() { return this.talentResults.length > 0; }
     get hasPlanningPreview() { return Boolean(this.planningPreview); }
-    get planningDays() { return (this.planningPreview?.days || []).map((day) => ({ ...day, id: day.workDate, status: !day.workingDay ? "Non-working" : day.conflict ? "Conflict" : "Available" })); }
-    get planningStatus() { return this.planningPreview?.allowed ? "Valid capacity plan" : "Capacity conflict"; }
-    get planningColumns() { return [{ label: "Date", fieldName: "workDate", type: "date" }, { label: "Calendar", fieldName: "status" }, { label: "Capacity", fieldName: "capacityHours", type: "number" }, { label: "Accepted", fieldName: "acceptedHours", type: "number" }, { label: "Pending", fieldName: "pendingHours", type: "number" }, { label: "Proposed", fieldName: "requestedHours", type: "number" }, { label: "Remaining", fieldName: "remainingHours", type: "number" }, { label: "Accepted context", fieldName: "acceptedContext", wrapText: true }, { label: "Pending context", fieldName: "pendingContext", wrapText: true }]; }
+    get planningDays() { return (this.planningPreview?.days || []).map((day) => ({ ...day, id: day.workDate, status: day.capacityStatus || (!day.workingDay ? "Non-working" : day.conflict ? "Ceiling breach" : day.requiresApproval ? "Approval required" : "Available") })); }
+    get planningStatus() { return !this.planningPreview?.allowed ? "Blocked above 12 hours" : this.planningPreview?.requiresApproval ? "Draft · approval required" : this.planningPreview?.capacityStatus || "Valid capacity plan"; }
+    get planningColumns() { return [{ label: "Date", fieldName: "workDate", type: "date" }, { label: "Capacity state", fieldName: "status" }, { label: "Standard", fieldName: "capacityHours", type: "number" }, { label: "Accepted", fieldName: "acceptedHours", type: "number" }, { label: "Pending", fieldName: "pendingHours", type: "number" }, { label: "Proposed line", fieldName: "requestedHours", type: "number" }, { label: "Projected", fieldName: "projectedHours", type: "number" }, { label: "Overage", fieldName: "overageHours", type: "number" }, { label: "Remaining to 8h", fieldName: "remainingHours", type: "number" }, { label: "Accepted context", fieldName: "acceptedContext", wrapText: true }]; }
+    get capacityHeatRows() { return (this.data.dailyCapacityLedger || []).map((row)=>({...row,id:row.Id,name:row.Resource__r?.Preferred_Name__c||row.Name,className:`capacity-cell capacity-cell_${(row.Capacity_Status__c||"Bench").toLowerCase().replaceAll(" ","-")}`,utilizationLabel:`${row.Utilization_Percent__c||0}%`,approvalLabel:row.Capacity_Status__c==="Overallocated"?(row.Approved_Overallocated__c?"Approved exception":"Approval missing"):`${row.Allocation_Count__c||0} allocation line(s)`})); }
+    get hasCapacityRows() { return this.capacityHeatRows.length > 0; }
+    get capacityExceptionRows() { return (this.data.allocations || []).filter((row)=>row.Planning_Status__c==="Pending Approval"||row.Overallocated__c).map((row)=>({...row,resourceName:row.Resource__r?.Preferred_Name__c,projectName:row.Engagement__r?.Name,approverName:row.Overallocation_Approved_By__r?.Name||"—",rowActions:row.Planning_Status__c==="Pending Approval"&&this.canApproveOverallocation?[{label:"Approve controlled exception",name:"approveOverallocation"},{label:"Reject exception",name:"rejectOverallocation"},{label:"Open record",name:"view"}]:[{label:"Open record",name:"view"}]})); }
+    get hasCapacityExceptions() { return this.capacityExceptionRows.length > 0; }
+    get capacityExceptionColumns() { return [{label:"Resource",fieldName:"resourceName"},{label:"Project",fieldName:"projectName"},{label:"Line hours",fieldName:"Daily_Hours__c",type:"number"},{label:"Projected daily",fieldName:"Projected_Daily_Hours__c",type:"number"},{label:"Planning",fieldName:"Planning_Status__c"},{label:"Approval",fieldName:"Overallocation_Status__c"},{label:"Reason",fieldName:"Overallocation_Reason__c",wrapText:true},{label:"Approver",fieldName:"approverName"},{label:"Review expiry",fieldName:"Overallocation_Expiry_Date__c",type:"date"},{type:"action",typeAttributes:{rowActions:{fieldName:"rowActions"}}}]; }
+    get canApproveOverallocation() { return Boolean(this.data.configurationCapabilities?.approveOverallocation); }
     get budgetLineRows() { return (this.data.budgetLines || []).filter((line) => !this.budgetDraft.budgetId || line.Budget__c === this.budgetDraft.budgetId).map((line) => ({ ...line, resourceName: line.Resource__r?.Preferred_Name__c || "Role placeholder", allocationFraction: (line.Allocation_Percent__c || 0) / 100 })); }
     get hasBudgetLines() { return this.budgetLineRows.length > 0; }
     get budgetLineColumns() { return [{ label: "Period", fieldName: "Period_Start__c", type: "date" }, { label: "Practitioner", fieldName: "resourceName" }, { label: "Role start", fieldName: "Role_Start__c", type: "date" }, { label: "Role end", fieldName: "Role_End__c", type: "date" }, { label: "Phase", fieldName: "Phase__c" }, { label: "Work unit", fieldName: "Work_Unit__c" }, { label: "Role", fieldName: "Role__c" }, { label: "Location", fieldName: "Location__c" }, { label: "Hours", fieldName: "Planned_Hours__c", type: "number" }, { label: "Rate", fieldName: "Cost_Rate__c", type: "currency" }, { label: "Cost", fieldName: "Planned_Cost__c", type: "currency" }, { label: "Allocation", fieldName: "allocationFraction", type: "percent" }]; }
@@ -502,7 +512,7 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get hasScenarioResult() { return Boolean(this.scenarioResult); }
     get showDecisionPanel() { return Boolean(this.decisionDraft); }
     get decisionRequiresLevel() { return this.decisionDraft?.actionName === "approveClaim"; }
-    get decisionNoteRequired() { return ["decline", "rejectClaim", "rejectBudget", "rejectTimesheet", "correctTimesheet"].includes(this.decisionDraft?.actionName); }
+    get decisionNoteRequired() { return ["decline", "rejectClaim", "rejectBudget", "rejectTimesheet", "correctTimesheet", "approveOverallocation", "rejectOverallocation"].includes(this.decisionDraft?.actionName); }
     get hasRows() { return this.tableRows.length > 0; }
 
     get tableColumns() {
@@ -817,6 +827,12 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
         if (action.name === "closeAlert") await this.execute("Close accountable alert",()=>closeAlert({notificationId:row.Id,closureNote:this.alertClosureNote}));
     }
 
+    async handleCapacityAction(event) {
+        const {action,row}=event.detail;
+        if(action.name==="view")return this.navigateToRecord(row.Id);
+        this.decisionDraft={actionName:action.name,row:{...row,id:row.Id},title:action.label,note:""};
+    }
+
     async handleRowAction(event) {
         const { action, row } = event.detail;
         if (action.name === "view") return this.navigateToRecord(row.id);
@@ -841,7 +857,9 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
             rejectBudget: () => decideBudget({ budgetId: draft.row.id, approve: false, note: draft.note, activeRole: this.activeRole }),
             approveTimesheet: () => decideTimesheet({ timesheetId: draft.row.id, approve: true, note: draft.note || null }),
             rejectTimesheet: () => decideTimesheet({ timesheetId: draft.row.id, approve: false, note: draft.note }),
-            correctTimesheet: () => createTimeCorrection({ timesheetId: draft.row.id, reason: draft.note })
+            correctTimesheet: () => createTimeCorrection({ timesheetId: draft.row.id, reason: draft.note }),
+            approveOverallocation: () => decideOverallocation({ allocationId: draft.row.id, approve: true, note: draft.note }),
+            rejectOverallocation: () => decideOverallocation({ allocationId: draft.row.id, approve: false, note: draft.note })
         };
         this.decisionDraft = undefined;
         if (operations[draft.actionName]) await this.execute(draft.title, operations[draft.actionName]);

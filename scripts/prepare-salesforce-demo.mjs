@@ -203,6 +203,27 @@ assert.equal(appMenu.totalSize, 1, "The Resource 360 Lightning app must exist.")
 assert.equal(appMenu.records[0].IsAccessible, true, "The Resource 360 Lightning app must be accessible.");
 
 assert.equal(query("SELECT COUNT() FROM Resource__c WHERE Employee_ID__c LIKE 'SCALE-EXL-%' OR Employee_ID__c LIKE 'DEMO-EXL-%' OR Employee_ID__c IN ('EXL-017091','EXL-018462','EXL-019830')").totalSize, 60, "The scaled demo requires exactly 60 governed resources.");
+const capacityPopulation = query("SELECT Resource__c, Allocated_Hours__c, Standard_Hours__c, Capacity_Status__c, Approved_Overallocated__c, Pending_Approval_Count__c, Resource__r.Allocated_Daily_Hours__c, Resource__r.Available_Percent__c, Resource__r.Capacity_Status__c, Resource__r.Capacity_As_Of__c FROM R360_Daily_Capacity__c WHERE Work_Date__c=TODAY").records;
+assert.equal(capacityPopulation.length, 60, "The current daily-capacity ledger requires exactly one reconciled row for every demo resource.");
+assert(capacityPopulation.every((row) => Number(row.Allocated_Hours__c) >= 8), "Every demo resource must have at least eight aggregate accepted allocation hours.");
+assert(capacityPopulation.every((row) => Number(row.Allocated_Hours__c) <= 12), "No demo resource may exceed the twelve-hour safety ceiling.");
+const controlledOverallocations = capacityPopulation.filter((row) => Number(row.Allocated_Hours__c) > 8);
+assert(controlledOverallocations.length >= 10, "The demo requires at least one controlled over-allocation example per account.");
+assert(controlledOverallocations.every((row) => row.Approved_Overallocated__c), "Every published over-allocation must carry active approval evidence.");
+assert(capacityPopulation.every((row) => Number(row.Pending_Approval_Count__c) === 0), "The certified demo baseline must not contain an undecided capacity plan.");
+assert(capacityPopulation.every((row) => Number(row.Resource__r.Allocated_Daily_Hours__c) === Number(row.Allocated_Hours__c) && row.Resource__r.Capacity_Status__c === row.Capacity_Status__c && row.Resource__r.Capacity_As_Of__c), "Resource 360 capacity fields must reconcile to the ledger.");
+assert.equal(query("SELECT COUNT() FROM Allocation__c WHERE Current__c=true AND Daily_Hours__c>8").totalSize,0,"No project-allocation line may exceed eight hours per day.");
+const overageEvidence=query("SELECT Id,Overallocation_Reason__c,Overallocation_Status__c,Overallocation_Approved_By__c,Overallocation_Approved_At__c,Overallocation_Expiry_Date__c FROM Allocation__c WHERE State__c='Accepted' AND Current__c=true AND Overallocated__c=true").records;
+assert(overageEvidence.length>=10,"At least ten published allocation lines must demonstrate governed over-allocation.");
+assert(overageEvidence.every((row)=>row.Overallocation_Status__c==="Approved"&&row.Overallocation_Reason__c&&row.Overallocation_Approved_By__c&&row.Overallocation_Approved_At__c&&row.Overallocation_Expiry_Date__c),"Every governed over-allocation line must retain reason, approval, approver, timestamp and review expiry.");
+const membershipPopulation=query("SELECT Id,Resource__c,Capacity_Percent__c,Allocated_Daily_Hours__c,Available_Percent__c,Capacity_Status__c,Capacity_As_Of__c FROM R360_Delivery_Membership__c WHERE Membership_ID__c LIKE 'SCALE-DM-%' AND Current__c=true").records;
+assert.equal(membershipPopulation.length,60,"The scaled demo requires one current delivery membership for every governed resource.");
+const allocationHoursByMembership=new Map(query("SELECT Delivery_Membership__c membershipId,SUM(Daily_Hours__c) hours FROM Allocation__c WHERE Delivery_Membership__c!=null AND State__c='Accepted' AND Current__c=true AND Start_Date__c<=TODAY AND End_Date__c>=TODAY GROUP BY Delivery_Membership__c").records.map((row)=>[row.membershipId,Number(row.hours)]));
+const expectedMembershipStatus=(allocated,authorized)=>allocated===0?"Bench":allocated<authorized?"Underallocated":allocated===authorized?"Fully Allocated":"Overallocated";
+assert(membershipPopulation.every((row)=>{const authorized=8*Number(row.Capacity_Percent__c??100)/100;const allocated=allocationHoursByMembership.get(row.Id)??0;const available=authorized===0?0:Math.max(0,(authorized-allocated)/authorized*100);return Number(row.Allocated_Daily_Hours__c)===allocated&&Math.abs(Number(row.Available_Percent__c)-available)<0.01&&row.Capacity_Status__c===expectedMembershipStatus(allocated,authorized)&&row.Capacity_As_Of__c;}),"Membership capacity, availability and status must reconcile to membership-attributed accepted allocations.");
+const actualHoursByResourceDay=query("SELECT Timesheet__r.Resource__c resourceId,Work_Date__c workDate,SUM(Hours__c) total FROM Time_Entry__c WHERE Timesheet__r.Current__c=true AND State__c IN ('Draft','Submitted','Approved') GROUP BY Timesheet__r.Resource__c,Work_Date__c").records;
+assert(actualHoursByResourceDay.every((row)=>Number(row.total)<=8),"Actual time must remain capped at eight aggregate hours per resource-day.");
+const capacitySummary={underallocated:capacityPopulation.filter((row)=>row.Capacity_Status__c==="Underallocated").length,fullyAllocated:capacityPopulation.filter((row)=>row.Capacity_Status__c==="Fully Allocated").length,overallocated:controlledOverallocations.length,minimumHours:Math.min(...capacityPopulation.map((row)=>Number(row.Allocated_Hours__c))),maximumHours:Math.max(...capacityPopulation.map((row)=>Number(row.Allocated_Hours__c))),averageUtilization:Number((capacityPopulation.reduce((sum,row)=>sum+(Number(row.Allocated_Hours__c)/Number(row.Standard_Hours__c)*100),0)/capacityPopulation.length).toFixed(2)),reconciledMemberships:membershipPopulation.length};
 const scaleProjectFilter = "Intake_Correlation_ID__c LIKE 'R360-SCALE-10X20-V1-%'";
 assert.equal(query(`SELECT COUNT() FROM Engagement__c WHERE ${scaleProjectFilter}`).totalSize, 20, "The scaled demo requires exactly twenty governed projects.");
 
@@ -276,6 +297,7 @@ for (const user of users.records) {
 }
 
 const staffingAliases = new Set(["r360pmgr", "r360staf", "r360prac"]);
+const allocationAliases = new Set([...staffingAliases, "r360chkr"]);
 const budgetAliases = new Set(["r360pmgr", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
 const commercialAliases = new Set(["r360pmgr", "r360staf", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
 const approvalAliases = new Set(["r360staf", "r360capa", "r360cfgm", "r360chkr", "r360aprv", "r360prac"]);
@@ -283,7 +305,7 @@ for (const user of users.records) {
     const isGlobalProjectManager = user.Alias === "r360pmgr";
     const scopedProjectClause = isGlobalProjectManager ? "" : " WHERE Engagement__r.Portfolio_ID__c='PORT-SFCOE-DEMO'";
     const staffingExpected = staffingAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Staffing_Request__c${scopedProjectClause}`).totalSize : 0;
-    const allocationExpected = staffingAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Allocation__c${scopedProjectClause}`).totalSize : 0;
+    const allocationExpected = allocationAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Allocation__c${scopedProjectClause}`).totalSize : 0;
     const budgetExpected = budgetAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Budget__c${scopedProjectClause}`).totalSize : 0;
     const commercialExpected = commercialAliases.has(user.Alias) ? query(`SELECT COUNT() FROM Commercial_Reference__c${scopedProjectClause}`).totalSize : 0;
     const approvalExpected = approvalAliases.has(user.Alias) ? coreRecordCounts.R360_Approval_Decision__c : 0;
@@ -294,6 +316,7 @@ for (const user of users.records) {
         commercialReferences: assertShareCount("Commercial_Reference__c", user.Id, commercialExpected, user.FederationIdentifier),
         approvalDecisions: assertShareCount("R360_Approval_Decision__c", user.Id, approvalExpected, user.FederationIdentifier)
     });
+    shareMatrix[user.Alias].dailyCapacity = assertShareCount("R360_Daily_Capacity__c", user.Id, 60, user.FederationIdentifier);
 }
 
 const practitioner = users.records.find((user) => user.Alias === "r360prac");
@@ -415,9 +438,10 @@ const reports = query(
     "SELECT Id, DeveloperName FROM Report WHERE DeveloperName IN " +
     "('Allocation_Control','Budget_Economics','Capability_Supply','Staffing_Performance','Timesheet_Actuals'," +
     "'Project_Lifecycle','Workplan_Delivery','Contract_Changes','Skill_Demand_Match','Project_Risk_Control','Closeout_Readiness'," +
-    "'Portfolio_Hierarchy','Project_Module_Delivery','Contract_Payment_Position','Delivery_Membership_Capacity')"
+    "'Portfolio_Hierarchy','Project_Module_Delivery','Contract_Payment_Position','Delivery_Membership_Capacity'," +
+    "'Daily_Capacity_Control','Overallocation_Exceptions')"
 );
-assert.equal(reports.totalSize, 15, "Fifteen native Salesforce reports are required.");
+assert.equal(reports.totalSize, 17, "Seventeen native Salesforce reports are required.");
 const reportRows = {};
 for (const report of reports.records) {
     const result = apiRequest(`/services/data/v67.0/analytics/reports/${report.Id}?includeDetails=false`);
@@ -438,11 +462,11 @@ const statusUrl = refreshRequest.statusUrl ?? `/services/data/v67.0/analytics/da
 await waitFor("Command Center dashboard refresh", async () => {
     const result = apiRequest(statusUrl);
     const statuses = result.componentStatus ?? [];
-    const terminal = statuses.length === 15 && statuses.every((status) => status.refreshStatus === "IDLE");
+    const terminal = statuses.length === 17 && statuses.every((status) => status.refreshStatus === "IDLE");
     return { ready: terminal, value: statuses };
 });
 const dashboard = apiRequest(`/services/data/v67.0/analytics/dashboards/${dashboardId}`);
-assert.equal(dashboard.componentData.length, 15, "The Command Center must have fifteen dashboard components.");
+assert.equal(dashboard.componentData.length, 17, "The Command Center must have seventeen dashboard components.");
 assert(
     dashboard.componentData.every((component) => component.status.componentDataStatus === "DATA"),
     "Every Command Center component must contain refreshed data."
@@ -456,7 +480,7 @@ const scheduler = query(
     "SELECT State, NextFireTime FROM CronTrigger WHERE CronJobDetail.Name='Resource360 Operational Controls'"
 );
 assert.equal(scheduler.totalSize, 1, "Exactly one Resource 360 operational scheduler must be active.");
-assert.equal(scheduler.records[0].State, "WAITING", "The Resource 360 operational scheduler must be waiting.");
+assert(new Set(["WAITING","ACQUIRED"]).has(scheduler.records[0].State),"The Resource 360 operational scheduler must be waiting or actively executing.");
 
 process.stdout.write(`${JSON.stringify({
     targetOrg,
@@ -473,6 +497,7 @@ process.stdout.write(`${JSON.stringify({
     timesheets,
     configurations,
     scaleGraph,
+    capacitySummary,
     goldenPath,
     walkthroughs: walkthroughs.totalSize,
     reportRows,

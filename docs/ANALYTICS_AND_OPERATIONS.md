@@ -2,7 +2,7 @@
 
 ## Native analytics baseline
 
-The deployable baseline uses `Resource360AnalyticsService`, fifteen Salesforce custom report types/reports and the fifteen-component Lightning Command Center. The reporting set covers portfolio hierarchy, project lifecycle, contract changes and payment position, project module/WBS delivery, skill demand/match, staffing performance, delivery membership capacity, allocations, capability supply, budgets, approved actuals, project risks and closeout readiness. This avoids inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
+The deployable baseline uses `Resource360AnalyticsService`, sixteen Salesforce custom report types, seventeen runnable reports and the seventeen-component Lightning Command Center. The reporting set covers portfolio hierarchy, project lifecycle, contract changes and payment position, project module/WBS delivery, skill demand/match, staffing performance, delivery membership capacity, daily capacity and over-allocation exceptions, allocations, capability supply, budgets, approved actuals, project risks and closeout readiness. Role-aware Lightning and Pages surfaces add KPI cards, a 60-member capacity heatmap, exception queue and resource drill-down without inventing CRM Analytics or Tableau licensing in the Developer Edition. A licensed EXL target may add either visualization layer later without changing governed metric definitions.
 
 | Metric/control | Authoritative population | Cutoff and drill path |
 |---|---|---|
@@ -17,6 +17,10 @@ The deployable baseline uses `Resource360AnalyticsService`, fifteen Salesforce c
 | Contract payment position | Planned, invoiced, paid and outstanding milestones by contract/project/account | Account → project → contract → payment milestone/work evidence |
 | Delivery membership capacity | Effective-dated Resource membership and capacity across Account, Portfolio and Sub-portfolio | Account → portfolio → sub-portfolio → member → allocation |
 | Project module delivery | Module and WBS forecast/progress/acceptance across project hierarchy | Account → project → module → work unit/dependency/owner |
+| Full allocation coverage | Resources with aggregate published allocation ≥8 hours ÷ governed active resources | Portfolio/sub-portfolio → capacity state → resource → published allocation lines |
+| Controlled over-allocation | Resources above 8 and at or below 12 hours, with current independent approval evidence | Portfolio → exception queue → reason/approver/expiry → allocation/audit |
+| Capacity guardrail health | Lines above 8, aggregates above 12, missing approval evidence, expired exceptions and ledger reconciliation failures | Control status → resource/date → source transaction and correlation evidence |
+| Daily actual-time compliance | Approved/submitted time aggregated by resource and date against the 8-hour actual ceiling | Week → practitioner/date → timesheet → time entries/correction lineage |
 
 Every displayed KPI must expose its definition, target, source population, cutoff and drill-down. Runtime policy changes are effective-dated and do not rewrite historic decision snapshots.
 

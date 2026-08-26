@@ -13,6 +13,11 @@ private class Resource360GoldenPathDataTest {
         Resource360Service.ServiceResult repeated=Resource360GoldenPathData.ensure();
         Test.stopTest();
         System.assert(repeated.success);
+    }
+
+    @IsTest
+    static void goldenPathRelationshipCountsAreCoherent(){
+        Test.startTest();
         Engagement__c project=[SELECT Lifecycle_Stage__c,Completion_Percent__c FROM Engagement__c WHERE Engagement_ID__c='ENG-1001'];
         System.assertEquals('Delivery',project.Lifecycle_Stage__c);
         System.assertEquals(42,project.Completion_Percent__c);
@@ -27,6 +32,7 @@ private class Resource360GoldenPathDataTest {
         System.assertEquals(4,[SELECT COUNT() FROM Allocation__c WHERE Engagement__c=:project.Id AND Originating_Request__r.Idempotency_Key__c LIKE 'GOLD-SR-%' AND Current__c=true]);
         System.assertEquals(2,[SELECT COUNT() FROM Project_Risk__c WHERE Engagement__c=:project.Id AND External_ID__c LIKE 'GOLD-RISK-%']);
         System.assertEquals(1,[SELECT COUNT() FROM Project_Closeout__c WHERE Engagement__c=:project.Id AND Closeout_ID__c='GOLD-CLOSEOUT-ENG-1001' AND State__c='Draft']);
+        Test.stopTest();
     }
 
     @IsTest

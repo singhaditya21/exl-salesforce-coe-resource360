@@ -703,9 +703,9 @@
     },
     {
       "id": "APR-UAT",
-      "decision": "25-scenario business UAT rehearsal",
+      "decision": "30-scenario business UAT rehearsal",
       "mockOwner": "Salesforce COE Product Owner",
-      "evidenceReference": "MOCK-UAT-25-OF-25",
+      "evidenceReference": "MOCK-UAT-30-OF-30",
       "decisionDate": "2026-08-24",
       "status": "Approved mock assumption",
       "nonProductionBoundary": "Fictional demonstration evidence; not an EXL approval."

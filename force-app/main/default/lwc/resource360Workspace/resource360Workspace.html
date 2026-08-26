@@ -76,6 +76,24 @@
                     </div>
                 </section>
 
+                <template lwc:if={showCapacityControl}>
+                    <section class="capacity-control" aria-label="Daily capacity command center">
+                        <div class="panel-heading"><div><p class="eyebrow">8 / 12 governed capacity</p><h3>Resource capacity heatmap and exception queue</h3></div><span>Green = exactly 8h · amber = below 8h · red = approved 8–12h exception · black = ceiling breach</span></div>
+                        <template lwc:if={hasCapacityRows}>
+                            <div class="capacity-heatmap" role="list" aria-label="Resource daily capacity heatmap">
+                                <template for:each={capacityHeatRows} for:item="row">
+                                    <article key={row.id} class={row.className} role="listitem">
+                                        <span>{row.name}</span><strong>{row.Allocated_Hours__c}h</strong><small>{row.Capacity_Status__c} · {row.approvalLabel}</small>
+                                    </article>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:if={hasCapacityExceptions}>
+                            <div class="capacity-exceptions"><div class="panel-heading"><div><p class="eyebrow">Exception workbench</p><h3>Controlled over-allocation evidence</h3></div><span>Draft plans consume no capacity until Head of Delivery approval</span></div><lightning-datatable key-field="Id" data={capacityExceptionRows} columns={capacityExceptionColumns} onrowaction={handleCapacityAction} hide-checkbox-column></lightning-datatable></div>
+                        </template>
+                    </section>
+                </template>
+
                 <template lwc:if={showStaffingForm}>
                     <section class="action-panel">
                         <div class="panel-heading"><div><p class="eyebrow">Governed command</p><h3>Create staffing request</h3></div><span>Approved-budget and capacity gates run in Apex</span></div>
@@ -86,7 +104,7 @@
                             <lightning-combobox label="Classification" value={staffingDraft.classification} options={classificationOptions} data-field="classification" onchange={handleStaffingInput} required></lightning-combobox>
                             <lightning-input type="date" label="Start date" value={staffingDraft.startDate} data-field="startDate" onchange={handleStaffingInput} required></lightning-input>
                             <lightning-input type="date" label="End date" value={staffingDraft.endDate} data-field="endDate" onchange={handleStaffingInput} required></lightning-input>
-                            <lightning-input type="number" label="Daily hours" value={staffingDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleStaffingInput} required></lightning-input>
+                            <lightning-input type="number" label="Daily hours" value={staffingDraft.dailyHours} min="0.25" max="8" step="0.25" data-field="dailyHours" onchange={handleStaffingInput} required></lightning-input>
                             <lightning-combobox label="Unbilled control owner" value={staffingDraft.responsibleOwnerId} options={userOptions} data-field="responsibleOwnerId" onchange={handleStaffingInput}></lightning-combobox>
                             <lightning-input type="date" label="Unbilled review date" value={staffingDraft.reviewDate} data-field="reviewDate" onchange={handleStaffingInput}></lightning-input>
                             <lightning-textarea class="form-span" label="Unbilled control reason" value={staffingDraft.controlReason} data-field="controlReason" onchange={handleStaffingInput}></lightning-textarea>
@@ -114,6 +132,8 @@
                                 <div><span>Working days</span><strong>{planningPreview.workingDays}</strong></div>
                                 <div><span>Proposed hours</span><strong>{planningPreview.requestedTotalHours}</strong></div>
                                 <div><span>Allocation</span><strong>{planningPreview.allocationPercent}%</strong></div>
+                                <div><span>Peak aggregate</span><strong>{planningPreview.peakHours}h</strong></div>
+                                <div><span>Approval days</span><strong>{planningPreview.overallocatedDays}</strong></div>
                                 <div><span>Conflicts</span><strong>{planningPreview.conflictDays}</strong></div>
                             </div>
                             <p class="preview-message">{planningPreview.message}</p>
@@ -131,7 +151,7 @@
                             <lightning-combobox label="Classification" value={allocationDraft.classification} options={classificationOptions} data-field="classification" onchange={handleAllocationInput} required></lightning-combobox>
                             <lightning-input type="date" label="Start date" value={allocationDraft.startDate} data-field="startDate" onchange={handleAllocationInput} required></lightning-input>
                             <lightning-input type="date" label="End date" value={allocationDraft.endDate} data-field="endDate" onchange={handleAllocationInput} required></lightning-input>
-                            <lightning-input type="number" label="Daily hours" value={allocationDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="number" label="Daily hours" value={allocationDraft.dailyHours} min="0.25" max="8" step="0.25" data-field="dailyHours" onchange={handleAllocationInput} required></lightning-input>
                             <lightning-combobox label="Unbilled control owner" value={allocationDraft.responsibleOwnerId} options={userOptions} data-field="responsibleOwnerId" onchange={handleAllocationInput}></lightning-combobox>
                             <lightning-input type="date" label="Unbilled review date" value={allocationDraft.reviewDate} data-field="reviewDate" onchange={handleAllocationInput}></lightning-input>
                             <lightning-textarea class="form-span" label="Change reason" value={allocationDraft.reason} data-field="reason" onchange={handleAllocationInput} required></lightning-textarea>
@@ -146,8 +166,8 @@
                         <div class="form-grid">
                             <lightning-combobox label="Accepted allocation" value={allocationDraft.allocationId} options={allocationOptions} data-field="allocationId" onchange={handleAllocationInput} required></lightning-combobox>
                             <lightning-input type="date" label="Second segment starts" value={allocationDraft.splitDate} data-field="splitDate" onchange={handleAllocationInput} required></lightning-input>
-                            <lightning-input type="number" label="First segment daily hours" value={allocationDraft.firstDailyHours} min="0.25" max="24" step="0.25" data-field="firstDailyHours" onchange={handleAllocationInput} required></lightning-input>
-                            <lightning-input type="number" label="Second segment daily hours" value={allocationDraft.secondDailyHours} min="0.25" max="24" step="0.25" data-field="secondDailyHours" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="number" label="First segment daily hours" value={allocationDraft.firstDailyHours} min="0.25" max="8" step="0.25" data-field="firstDailyHours" onchange={handleAllocationInput} required></lightning-input>
+                            <lightning-input type="number" label="Second segment daily hours" value={allocationDraft.secondDailyHours} min="0.25" max="8" step="0.25" data-field="secondDailyHours" onchange={handleAllocationInput} required></lightning-input>
                             <lightning-textarea class="form-span" label="Split reason" value={allocationDraft.reason} data-field="reason" onchange={handleAllocationInput} required></lightning-textarea>
                         </div>
                         <div class="panel-footer"><lightning-button variant="brand" label="Split allocation" onclick={handleSplitAllocation}></lightning-button></div>
@@ -393,7 +413,7 @@
                             <lightning-input label="Location" value={talentDraft.location} data-field="location" onchange={handleTalentInput}></lightning-input>
                             <lightning-input type="date" label="Start date" value={talentDraft.startDate} data-field="startDate" onchange={handleTalentInput} required></lightning-input>
                             <lightning-input type="date" label="End date" value={talentDraft.endDate} data-field="endDate" onchange={handleTalentInput} required></lightning-input>
-                            <lightning-input type="number" label="Daily hours" value={talentDraft.dailyHours} min="0.25" max="24" step="0.25" data-field="dailyHours" onchange={handleTalentInput}></lightning-input>
+                            <lightning-input type="number" label="Daily hours" value={talentDraft.dailyHours} min="0.25" max="8" step="0.25" data-field="dailyHours" onchange={handleTalentInput}></lightning-input>
                         </div>
                         <div class="panel-footer"><lightning-button variant="brand" label="Rank eligible talent" onclick={handleTalentSearch}></lightning-button></div>
                         <template lwc:if={hasTalentResults}><lightning-datatable key-field="resourceId" data={talentResults} columns={talentColumns} hide-checkbox-column></lightning-datatable></template>
@@ -478,7 +498,7 @@
                             <lightning-combobox label="Timesheet" value={timeDraft.timesheetId} options={timesheetOptions} data-field="timesheetId" onchange={handleTimeInput} required></lightning-combobox>
                             <lightning-combobox label="Accepted allocation" value={timeDraft.allocationId} options={allocationOptions} data-field="allocationId" onchange={handleTimeInput} required></lightning-combobox>
                             <lightning-input type="date" label="Work date" value={timeDraft.workDate} data-field="workDate" onchange={handleTimeInput} required></lightning-input>
-                            <lightning-input type="number" label="Hours" value={timeDraft.hours} min="0.25" max="24" step="0.25" data-field="hours" onchange={handleTimeInput} required></lightning-input>
+                            <lightning-input type="number" label="Hours" value={timeDraft.hours} min="0.25" max="8" step="0.25" data-field="hours" onchange={handleTimeInput} required></lightning-input>
                             <lightning-textarea class="form-span" label="Work comment" value={timeDraft.comment} data-field="comment" onchange={handleTimeInput}></lightning-textarea>
                         </div>
                         <div class="panel-footer"><lightning-button variant="brand" label="Save time entry" onclick={handleSaveTimeEntry}></lightning-button></div>

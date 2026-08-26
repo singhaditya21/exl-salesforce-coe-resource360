@@ -47,7 +47,7 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 
 ## Business acceptance and cutover
 
-1. Execute UAT-01 through UAT-25 with named EXL owners and retained evidence; record pass, accepted exception or defect for every scenario.
+1. Execute UAT-01 through UAT-30 with named EXL owners and retained evidence; record pass, accepted exception or defect for every scenario.
 2. Obtain Product, Salesforce COE Delivery/Staffing, Finance, HR/L&D, Security, Privacy, Accessibility, Operations and Release Management sign-off.
 3. Freeze configuration and migration inputs, take the rollback checkpoint, run the final delta load, reconcile counts/financial totals and enable integrations.
 4. Confirm SSO, scoped permissions, notification delivery, scheduled controls, dashboards and support channels before admitting the pilot cohort.
@@ -55,4 +55,4 @@ If the underlying vendor differs, the façade and canonical Resource360 payload 
 
 ## Go/no-go evidence
 
-Production go-live is permitted only when all 25 UAT scenarios pass or have approved exceptions, the four activation requirements in `REQUIREMENTS_TRACEABILITY.md` are signed, there are no open Sev-1/Sev-2 defects, reconciliation is signed, security/privacy approvals are recorded, recovery is demonstrated, and operational ownership is accepted. Until then the repository and `Resource360Hub` remain a production-shaped sanitized mock baseline.
+Production go-live is permitted only when all 30 UAT scenarios pass or have approved exceptions, the four activation requirements in `REQUIREMENTS_TRACEABILITY.md` are signed, there are no open Sev-1/Sev-2 defects, reconciliation is signed, security/privacy approvals are recorded, recovery is demonstrated, and operational ownership is accepted. Until then the repository and `Resource360Hub` remain a production-shaped sanitized mock baseline.

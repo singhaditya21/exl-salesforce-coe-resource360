@@ -8,6 +8,7 @@ public without sharing class Resource360ScopeSharingService {
         'Engagement__c',
         'R360_Approval_Decision__c',
         'R360_Audit_Event__c',
+        'R360_Daily_Capacity__c',
         'R360_Integration_Run__c',
         'R360_Learning_Achievement__c',
         'R360_Notification__c',
@@ -118,6 +119,8 @@ public without sharing class Resource360ScopeSharingService {
         if (!resourceIds.isEmpty()) {
             add(idsByObject, 'Resource__c', resourceIds);
             accessByObject.put('Resource__c', 'Read');
+            mapByLookup(idsByObject, 'R360_Daily_Capacity__c', 'Resource__c', resourceIds);
+            accessByObject.put('R360_Daily_Capacity__c', 'Read');
         }
 
         Set<Id> engagementIds = new Set<Id>();
@@ -164,6 +167,10 @@ public without sharing class Resource360ScopeSharingService {
                 add(idsByObject, 'R360_Approval_Decision__c', queryTextIds('R360_Approval_Decision__c', 'Entity_ID__c', textIds));
                 accessByObject.put('R360_Approval_Decision__c', 'Edit');
             }
+        }
+        if (roles.contains('HOD')) {
+            mapByLookup(idsByObject, 'Allocation__c', 'Engagement__c', engagementIds);
+            accessByObject.put('Allocation__c', 'Edit');
         }
         if (roles.contains('Account Owner') || roles.contains('Executive Viewer')) {
             mapByLookup(idsByObject, 'Budget__c', 'Engagement__c', engagementIds);

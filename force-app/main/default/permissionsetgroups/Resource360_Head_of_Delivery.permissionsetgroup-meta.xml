@@ -5,4 +5,5 @@
     <permissionSets>Resource360_Base_User</permissionSets>
     <permissionSets>Resource360_Budget_Approver_Actions</permissionSets>
     <permissionSets>Resource360_Closeout_Approver_Actions</permissionSets>
+    <permissionSets>Resource360_Capacity_Approver_Actions</permissionSets>
 </PermissionSetGroup>

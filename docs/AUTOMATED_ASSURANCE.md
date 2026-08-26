@@ -19,6 +19,7 @@
 
 - approved budget signature and immutable decision lineage;
 - capacity locking, deterministic competing-request outcome and accepted-allocation-only time;
+- eight-hour allocation-line maximum, 12-hour aggregate ceiling, independently approved/expiring over-allocation evidence, direct-DML enforcement, all-60 capacity reconciliation and eight-hour aggregate actual-time ceiling;
 - all 18 personas with positive/negative routed access, plus active multi-role and expired-scope Salesforce boundaries, delegation, revocation and separation of duties;
 - eight live composite demo identities with 17 certified `PORT-SFCOE-DEMO` scopes, exact Apex-managed shares for the intake portfolio and private business records, commercial-evidence access, stale-share revocation and practitioner self-record isolation;
 - source schema version, idempotent run identity, deterministic duplicate survivor, completeness/freshness and redacted errors;
@@ -27,7 +28,7 @@
 - the exact `ENG-1001` golden path: three contract versions, six commercial lines, seven governed WBS items/dependencies, eleven structured requirements/matches, four staffing/allocation links, approved actuals, risks and closeout;
 - the exact `R360-SCALE-10X20-V1` graph: 10 Accounts/Portfolios, 20 Sub-portfolios/Projects, 60 Resources/Memberships/Modules, two projects and six members per Account, multiple contracts, three payments per contract, multi-unit WBS, budgets, three-dimensional skill demand, staffing/allocation, risk, actual and closeout evidence;
 - the Project Manager workbench: governed project/SOW intake, commercial-change and line controls, seven direct duration-resize handles, a live forecast write and a live progress write;
-- app-activated Home/Engagement pages, governed related lists, 13 operating list views, fifteen non-empty native reports and fifteen refreshed dashboard components;
+- app-activated Home/Engagement pages, governed related lists, 13 operating list views, seventeen non-empty native reports and seventeen refreshed dashboard components, plus role-aware capacity KPIs, heatmap and exception queue;
 - eight legal-hold-eligible retention categories with non-destructive preview only;
 - all five demo activation domains in one attributable 5/5 dry run with zero external calls and zero destructive actions;
 - five published walkthroughs covering discovery, skills, staffing, budget/time and activation at 1280×720 H.264;

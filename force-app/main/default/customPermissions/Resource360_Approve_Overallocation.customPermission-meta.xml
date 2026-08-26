@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Independently approve a governed aggregate daily allocation above eight hours and no greater than the configured twelve-hour safety ceiling.</description>
+    <isLicensed>false</isLicensed>
+    <label>Resource 360 Approve Over-allocation</label>
+</CustomPermission>

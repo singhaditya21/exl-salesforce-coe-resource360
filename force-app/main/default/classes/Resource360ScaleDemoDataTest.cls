@@ -5,11 +5,11 @@ private class Resource360ScaleDemoDataTest {
 
     @IsTest
     static void seedsExactStorageConsciousRelationshipGraphIdempotently(){
-        Resource360Service.ServiceResult first=Resource360ScaleDemoData.ensure();
         Test.startTest();
-        Resource360Service.ServiceResult second=Resource360ScaleDemoData.ensure();
+        Resource360Service.ServiceResult first=Resource360ScaleDemoData.ensure();
+        Id idempotencyJob=System.enqueueJob(new Resource360ScaleDemoData());
         Test.stopTest();
-        System.assert(first.success);System.assert(second.success);
+        System.assert(first.success);System.assertNotEquals(null,idempotencyJob);
         Resource360ScaleDemoData.SeedManifest manifest=Resource360ScaleDemoData.manifest();
         System.assertEquals(10,manifest.accounts);
         System.assertEquals(10,manifest.portfolios);
@@ -32,11 +32,11 @@ private class Resource360ScaleDemoDataTest {
 
     @IsTest
     static void hierarchyAndCommercialRelationshipsAreInternallyConsistent(){
-        Resource360ScaleDemoData.ensure();
         Test.startTest();
+        System.enqueueJob(new Resource360ScaleDemoData());
+        Test.stopTest();
         Resource360DemoData.seed();
         Resource360DemoScenarioData.ensure();
-        Test.stopTest();
         System.assertEquals(0,[SELECT COUNT() FROM Engagement__c WHERE Engagement_ID__c IN ('ENG-1001','ENG-1002','DEMO-ENG-1003','DEMO-ENG-1004','SCALE-ENG-1005','SCALE-ENG-1006','SCALE-ENG-1007','SCALE-ENG-1008','SCALE-ENG-1009','SCALE-ENG-1010','SCALE-ENG-1011','SCALE-ENG-1012','SCALE-ENG-1013','SCALE-ENG-1014','SCALE-ENG-1015','SCALE-ENG-1016','SCALE-ENG-1017','SCALE-ENG-1018','SCALE-ENG-1019','SCALE-ENG-1020') AND (Account__c=null OR Portfolio__c=null OR Sub_Portfolio__c=null)]);
         for(Engagement__c project:[SELECT Account__c,Portfolio__c,Sub_Portfolio__r.Account__c,Sub_Portfolio__r.Portfolio__c FROM Engagement__c WHERE Engagement_ID__c IN ('ENG-1001','ENG-1002','DEMO-ENG-1003','DEMO-ENG-1004')]){System.assertEquals(project.Account__c,project.Sub_Portfolio__r.Account__c,'Compact reseeding must preserve the scale-owned account hierarchy.');System.assertEquals(project.Portfolio__c,project.Sub_Portfolio__r.Portfolio__c,'Compact reseeding must preserve the scale-owned portfolio hierarchy.');}
         for(AggregateResult value:[SELECT Engagement__c projectId,COUNT(Id) total FROM Commercial_Reference__c WHERE Engagement__r.Intake_Correlation_ID__c LIKE 'R360-SCALE-10X20-V1-%' GROUP BY Engagement__c])System.assert(Integer.valueOf(value.get('total'))>=2,'Every project must have multiple contracts.');

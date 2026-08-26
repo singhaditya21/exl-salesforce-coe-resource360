@@ -27,6 +27,7 @@ private class Resource360AccessControlTest {
             };
             Resource360ScopeSharingService.rebuildUser(user.Id);
         }
+        Test.startTest();
         System.runAs(user) {
             Set<String> active = Resource360Security.activeRoles();
             System.assertEquals(new Set<String>{'Project Manager','Reporting Manager'}, active);
@@ -39,6 +40,7 @@ private class Resource360AccessControlTest {
             catch (AuraHandledException expected) { bulkBlocked = true; }
             System.assert(bulkBlocked, 'A base user must not inherit Operations bulk authority from a business-role label.');
         }
+        Test.stopTest();
     }
 
     @IsTest

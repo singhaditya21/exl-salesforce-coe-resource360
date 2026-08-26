@@ -39,14 +39,15 @@ private class Resource360ServiceTest {
         Resource360Service.ServiceResult accepted = Resource360Service.decideStaffingRequest(first.recordId, true, 'Revalidated', 'ignored-client-role');
 
         System.assertEquals('Accepted', [SELECT State__c FROM Staffing_Request__c WHERE Id=:first.recordId].State__c);
-        System.assertEquals('Declined', [SELECT State__c FROM Staffing_Request__c WHERE Id=:competing.recordId].State__c,
-            'An impossible competing soft request must close when capacity becomes committed.');
+        System.assertEquals('Pending', [SELECT State__c FROM Staffing_Request__c WHERE Id=:competing.recordId].State__c,
+            'A competing request within the twelve-hour ceiling must remain non-consuming until independently approved.');
+        System.assertEquals(0,[SELECT COUNT() FROM Allocation__c WHERE Originating_Request__c=:competing.recordId AND State__c='Accepted' AND Current__c=true]);
         System.assertEquals(1, [SELECT COUNT() FROM Allocation__c WHERE Id=:accepted.recordId AND Current__c=true AND State__c='Accepted']);
         System.assert([SELECT COUNT() FROM R360_Audit_Event__c WHERE Entity_ID__c=:String.valueOf(accepted.recordId)] > 0);
-        Resource360Service.ServiceResult modified=Resource360Service.modifyAllocation(accepted.recordId,startDate,endDate,3,'MuleSoft Lead','Billing',null,null,'Approved delivery-plan change.');
+        Test.startTest();Resource360Service.ServiceResult modified=Resource360Service.modifyAllocation(accepted.recordId,startDate,endDate,3,'MuleSoft Lead','Billing',null,null,'Approved delivery-plan change.');
         System.assertEquals(2,[SELECT Version__c FROM Allocation__c WHERE Id=:modified.recordId].Version__c);
         Resource360Service.ServiceResult ended=Resource360Service.deallocate(modified.recordId,endDate.addDays(-1),'Controlled early release.');
-        Allocation__c shortened=[SELECT State__c,End_Date__c FROM Allocation__c WHERE Id=:ended.recordId];System.assertEquals('Accepted',shortened.State__c);System.assertEquals(endDate.addDays(-1),shortened.End_Date__c);
+        Allocation__c shortened=[SELECT State__c,End_Date__c FROM Allocation__c WHERE Id=:ended.recordId];System.assertEquals('Accepted',shortened.State__c);System.assertEquals(endDate.addDays(-1),shortened.End_Date__c);Test.stopTest();
     }
 
     @IsTest
@@ -410,7 +411,10 @@ private class Resource360ServiceTest {
         Resource360Service.ServiceResult classification=Resource360ConfigurationService.saveDraft(null,'Classification','Innovation Lab','Innovation Lab','Boolean',null,null,true,'{"billable":false,"requiresControl":true,"requiresSow":false,"defaultReviewDays":21,"escalationPolicy":"Operations day 21"}',null,today,null,'Add controlled innovation classification.');
         Resource360ConfigurationService.submit(classification.recordId);System.runAs(configApprover){Resource360ConfigurationService.decide(classification.recordId,true,'Classification owner approved.');}Resource360ConfigurationService.clearCache();
         System.assert(Resource360Classification.requiresControl('Innovation Lab'));System.assertEquals(false,Resource360Classification.isBillable('Innovation Lab'));
-        System.assert(Resource360ConfigurationService.catalog().size()>53);
+        Test.startTest();
+        List<Resource360ConfigurationService.ConfigurationItem> governedCatalog=Resource360ConfigurationService.catalog();
+        Test.stopTest();
+        System.assert(governedCatalog.size()>53);
         }
     }
 
@@ -454,9 +458,11 @@ private class Resource360ServiceTest {
         System.runAs(new User(Id=UserInfo.getUserId())) {
         Staffing_Request__c pending=[SELECT Id FROM Staffing_Request__c WHERE Idempotency_Key__c='DEMO-SR-1001'];Id allocationId=Resource360Service.decideStaffingRequest(pending.Id,true,'Capacity revalidated for correction control.','ignored').recordId;Allocation__c allocation=[SELECT Id,Resource__c,Start_Date__c,End_Date__c FROM Allocation__c WHERE Id=:allocationId];Date weekStart=nextMonday(allocation.Start_Date__c);if(weekStart>allocation.End_Date__c)weekStart=mondayFor(allocation.Start_Date__c);Id sheetId=Resource360Service.createTimesheet(allocation.Resource__c,weekStart).recordId;Resource360Service.saveTimeEntry(sheetId,allocation.Id,weekStart,2,null,'Original approved entry.');Resource360Service.submitTimesheet(sheetId);Resource360Service.decideTimesheet(sheetId,true,'Original manager approval.');Id correctionId=Resource360Service.createTimeCorrection(sheetId,'Move approved time to the correct project context.').recordId;Resource360Service.submitTimesheet(correctionId);
         Timesheet__c submitted=[SELECT Status__c,Dual_Control_Required__c,Approval_Step__c,Required_Approval_Role__c,Correction_Requested_By__c FROM Timesheet__c WHERE Id=:correctionId];System.assert(submitted.Dual_Control_Required__c);System.assertEquals(1,submitted.Approval_Step__c);System.assertEquals('Reporting Manager',submitted.Required_Approval_Role__c);System.assertEquals(UserInfo.getUserId(),submitted.Correction_Requested_By__c);
+        Test.startTest();
         System.runAs(firstApprover){Resource360Service.decideTimesheet(correctionId,true,'Reporting manager correction control passed.');}
         submitted=[SELECT Status__c,Approval_Step__c,Required_Approval_Role__c FROM Timesheet__c WHERE Id=:correctionId];System.assertEquals('Submitted',submitted.Status__c);System.assertEquals(2,submitted.Approval_Step__c);System.assertEquals('Timesheet Approver',submitted.Required_Approval_Role__c);
         System.runAs(secondApprover){Resource360Service.decideTimesheet(correctionId,true,'Independent timesheet control passed.');}
+        Test.stopTest();
         System.assertEquals('Approved',[SELECT Status__c FROM Timesheet__c WHERE Id=:correctionId].Status__c);System.assertEquals(2,[SELECT COUNT() FROM R360_Approval_Decision__c WHERE Entity_Type__c='Timesheet__c' AND Entity_ID__c=:String.valueOf(correctionId) AND State__c='Approved']);
         }
     }

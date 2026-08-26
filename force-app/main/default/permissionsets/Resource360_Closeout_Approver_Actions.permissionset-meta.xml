@@ -77,10 +77,22 @@
     <fieldPermissions><editable>false</editable><field>Allocation__c.Allocation_Percent__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable_Snapshot__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Billable__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Capacity_Policy_Version__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Capacity_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Control_Reason__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Current__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Delivery_Membership__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocated__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Approved_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Approved_By__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Expiry_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Reason__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Overallocation_Status__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Parent_Allocation__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Planning_Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Projected_Daily_Hours__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Published_At__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Allocation__c.Published_By__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Responsible_Owner__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Review_Date__c</field><readable>true</readable></fieldPermissions>
     <fieldPermissions><editable>false</editable><field>Allocation__c.Work_Unit__c</field><readable>true</readable></fieldPermissions>

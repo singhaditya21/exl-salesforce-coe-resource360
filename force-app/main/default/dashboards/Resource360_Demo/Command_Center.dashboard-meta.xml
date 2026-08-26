@@ -146,6 +146,16 @@
             <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Delivery Membership Capacity</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Delivery_Membership_Capacity</report><showPicturesOnTables>false</showPicturesOnTables><title>Delivery capacity by role</title></dashboardComponent>
             <rowIndex>30</rowIndex><rowSpan>6</rowSpan>
         </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>6</colSpan><columnIndex>0</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Daily Capacity Control</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Daily_Capacity_Control</report><showPicturesOnTables>false</showPicturesOnTables><title>Capacity status by resource</title></dashboardComponent>
+            <rowIndex>36</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
+        <dashboardGridComponents>
+            <colSpan>6</colSpan><columnIndex>6</columnIndex>
+            <dashboardComponent><autoselectColumnsFromReport>true</autoselectColumnsFromReport><componentType>Table</componentType><drillEnabled>true</drillEnabled><header>Overallocation Exceptions</header><indicatorHighColor>#2E844A</indicatorHighColor><indicatorLowColor>#BA0517</indicatorLowColor><indicatorMiddleColor>#FE9339</indicatorMiddleColor><report>Resource360_Demo/Overallocation_Exceptions</report><showPicturesOnTables>false</showPicturesOnTables><title>Reason, approver, expiry and state</title></dashboardComponent>
+            <rowIndex>36</rowIndex><rowSpan>6</rowSpan>
+        </dashboardGridComponents>
         <numberOfColumns>12</numberOfColumns>
         <rowHeight>36</rowHeight>
     </dashboardGridLayout>
