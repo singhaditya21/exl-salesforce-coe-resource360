@@ -15,7 +15,7 @@ describe("c-resource360-workspace", () => {
         jest.clearAllMocks();
     });
 
-    it("renders the authenticated 103-screen shell and native help videos", async () => {
+    it("renders the authenticated 103-screen shell and specialized Global experiences", async () => {
         getWorkspaceData.mockResolvedValue(JSON.stringify({
             generatedAt: "2026-08-25T05:00:00.000Z",
             user: { Id: "005000000000001", Name: "Resource 360 Administrator" },
@@ -44,8 +44,7 @@ describe("c-resource360-workspace", () => {
         helpButton.click();
         await flushPromises();
 
-        expect(element.shadowRoot.querySelectorAll("video")).toHaveLength(5);
-        expect(element.shadowRoot.textContent).toContain("Demo walkthrough library");
-        expect(element.shadowRoot.textContent).toContain("Private static resources");
+        expect(element.shadowRoot.querySelector("c-resource360-global-experience")).toBeTruthy();
+        expect(element.shadowRoot.querySelector(".contract-panel")).toBeNull();
     });
 });

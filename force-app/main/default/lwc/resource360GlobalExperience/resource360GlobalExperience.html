@@ -1,0 +1,55 @@
+<template>
+    <section class={experienceClass} data-experience={screenId} aria-label={routeTitle}>
+        <header class="experience-header">
+            <div><p class="experience-kicker">{routeLabel}</p><h2>{routeTitle}</h2><p>{routeDescription}</p></div>
+            <div class="header-context"><span class="role-chip master-role-chip">{activeRole}</span><div class="source-badge"><span>Live source</span><strong>Salesforce user-mode data</strong><small>Refreshed {generatedLabel}</small></div></div>
+        </header>
+
+        <template lwc:if={isSecureEntry}>
+            <div class="identity-layout">
+                <div class="journey" aria-label="Authentication journey">
+                    <template for:each={identitySteps} for:item="step"><article key={step.id} class={step.className}><span>{step.number}</span><div><strong>{step.title}</strong><p>{step.detail}</p></div></article></template>
+                </div>
+                <article class="session-card">
+                    <div class="session-mark"><lightning-icon icon-name="utility:shield" size="medium"></lightning-icon></div>
+                    <p>Authenticated Salesforce identity</p><h3>{currentUserLabel}</h3><span>{currentRoleLabel}</span>
+                    <div class={verifiedClass} role="status"><strong>{verificationOutcome}</strong></div>
+                    <lightning-button data-recording-action="verify-session" variant="brand" label={verificationLabel} onclick={handleVerifySession}></lightning-button>
+                </article>
+                <div class="assurance-stack">
+                    <template for:each={assuranceFacts} for:item="fact"><article key={fact.id}><span>{fact.label}</span><strong>{fact.value}</strong><p>{fact.detail}</p></article></template>
+                    <button class="text-action" data-recording-action="continue-home" onclick={handleNavigateHome}>Continue to authorized home <span>→</span></button>
+                </div>
+            </div>
+        </template>
+
+        <template lwc:if={isRoleHome}>
+            <div class="home-metrics" aria-label="Role-aware metrics"><template for:each={homeMetrics} for:item="metric"><article key={metric.id} data-tone={metric.tone}><span>{metric.label}</span><strong>{metric.value}</strong><p>{metric.trend}</p></article></template></div>
+            <div class="home-layout">
+                <section><div class="section-title"><div><p>My work</p><h3>Authorized priority queue</h3></div><span>{currentRoleLabel}</span></div><div class="priority-grid"><template for:each={homeQueues} for:item="queue"><button key={queue.id} class={queue.className} data-target={queue.target} data-recording-action={queue.id} onclick={handleHomeQueue}><span>{queue.eyebrow}</span><strong>{queue.count}</strong><h4>{queue.title}</h4><p>{queue.detail}</p><small>Open workbench →</small></button></template></div></section>
+                <aside class="portfolio-pulse"><div class="section-title"><div><p>Portfolio pulse</p><h3>Project delivery health</h3></div><span>Live</span></div><template for:each={portfolioPulse} for:item="project"><article key={project.id} class={project.className}><div><strong>{project.Name}</strong><span>{project.Salesforce_Tower__c} · {project.Status__c}</span></div><div><b>{project.completion}</b><small>Health {project.health} · Risk {project.risk}</small></div></article></template></aside>
+            </div>
+        </template>
+
+        <template lwc:if={isNotifications}>
+            <div class="toolbar toolbar_alert"><div><p>Exception inbox</p><h3>Accountable alert lifecycle</h3></div><lightning-combobox data-recording-action="severity-filter" label="Severity" value={severity} options={severityOptions} onchange={handleSeverity}></lightning-combobox></div>
+            <div class="notification-layout">
+                <div class="alert-list" aria-label="Filtered alerts"><template for:each={notificationRows} for:item="alert"><button key={alert.id} class={alert.className} data-record-id={alert.id} data-recording-action="select-alert" onclick={handleSelectAlert}><div><span>{alert.Severity__c}</span><small>{alert.state}</small></div><strong>{alert.title}</strong><p>{alert.message}</p><footer>{alert.owner}</footer></button></template></div>
+                <aside class="alert-detail" aria-live="polite"><div class="detail-label"><span>{selectedNotificationView.severity}</span><strong>{selectedNotificationView.resolution}</strong></div><h3>{selectedNotificationView.title}</h3><p>{selectedNotificationView.message}</p><dl><div><dt>Accountable owner</dt><dd>{selectedNotificationView.owner}</dd></div><div><dt>First seen</dt><dd>{selectedNotificationView.occurred}</dd></div><div><dt>Preserved evidence</dt><dd>Trigger, recipient, severity and lifecycle state</dd></div></dl><lightning-button data-recording-action="mark-reviewed" variant="brand" label="Mark reviewed in this session" onclick={handleMarkReviewed} disabled={selectedNotificationView.actionDisabled}></lightning-button></aside>
+            </div>
+        </template>
+
+        <template lwc:if={isSearch}>
+            <div class="search-stage"><div class="search-control"><lightning-icon icon-name="utility:search" size="small"></lightning-icon><lightning-input data-recording-action="search-input" type="search" variant="label-hidden" label="Search Resource 360" placeholder="Project, employee ID, role or request..." value={searchTerm} onchange={handleSearchInput}></lightning-input></div><lightning-combobox data-recording-action="search-type" label="Record type" value={searchType} options={searchTypeOptions} onchange={handleSearchType}></lightning-combobox></div>
+            <div class="search-layout"><div class="search-results"><div class="result-count"><span>{searchResults.length} scoped results</span><small>Projects · practitioners · staffing demand</small></div><template for:each={searchResults} for:item="result"><button key={result.id} class={result.className} data-record-id={result.id} data-recording-action="select-result" onclick={handleSelectSearch}><span>{result.type}</span><div><strong>{result.title}</strong><p>{result.subtitle}</p></div><small>{result.status}</small></button></template></div><aside class="search-preview" aria-live="polite"><span>{selectedSearchView.type}</span><h3>{selectedSearchView.title}</h3><p>{selectedSearchView.subtitle}</p><div><strong>{selectedSearchView.status}</strong><small>{selectedSearchView.detail}</small></div><lightning-button data-recording-action="open-result" variant="brand" label="Open role-specific 360" onclick={handleOpenSearchResult} disabled={selectedSearchView.disabled}></lightning-button></aside></div>
+        </template>
+
+        <template lwc:if={isScopeSwitcher}>
+            <div class="scope-stage"><section class="scope-controls"><p class="mini-kicker">Operating context</p><h3>Preview a certified assignment</h3><lightning-combobox data-recording-action="role-filter" label="Business persona" value={selectedDraftRole} options={roleOptions} onchange={handleDraftRole}></lightning-combobox><lightning-combobox data-recording-action="scope-filter" label="Portfolio scope" value={selectedDraftScope} options={scopeOptions} onchange={handleDraftScope}></lightning-combobox><lightning-button data-recording-action="apply-context" variant="brand" label="Apply role and scope" onclick={handleApplyContext}></lightning-button><template lwc:if={appliedContext}><div class="context-outcome" role="status"><lightning-icon icon-name="utility:success" size="x-small"></lightning-icon><span>Applied {appliedContext}</span></div></template></section><section class="scope-preview"><div class="scope-map"><div class="scope-node scope-node_user">Authenticated user</div><span>certified as</span><div class="scope-node scope-node_role">{selectedDraftRole}</div><span>constrained to</span><div class="scope-node scope-node_portfolio">{selectedDraftScope}</div></div><div class="scope-facts"><template for:each={scopePreviewFacts} for:item="fact"><article key={fact.id}><span>{fact.label}</span><strong>{fact.value}</strong><p>{fact.detail}</p></article></template></div></section></div>
+        </template>
+
+        <template lwc:if={isPreferences}>
+            <div class="preferences-layout"><section class="preference-panel"><div class="section-title"><div><p>Workspace preferences</p><h3>Personalize the Salesforce demo</h3></div><span>Demo-safe</span></div><div class="preference-form"><lightning-combobox data-recording-action="density" label="Information density" value={density} options={densityOptions} onchange={handleDensity}></lightning-combobox><lightning-combobox data-recording-action="timezone" label="Planning time zone" value={timezone} options={timezoneOptions} onchange={handleTimezone}></lightning-combobox><lightning-input data-preference="emailAlerts" type="toggle" label="Email exception digests" checked={emailAlerts} onchange={handleToggle}></lightning-input><lightning-input data-preference="browserAlerts" type="toggle" label="In-app priority alerts" checked={browserAlerts} onchange={handleToggle}></lightning-input></div><div class="preference-save"><span role="status">{preferenceOutcome}</span><lightning-button data-recording-action="save-preferences" variant="brand" label="Save preferences" onclick={handleSavePreferences}></lightning-button></div></section><section class="guide-library"><div class="section-title"><div><p>Guided paths</p><h3>Role-specific runbooks</h3></div><span>4 paths</span></div><div class="guide-grid"><template for:each={guideCards} for:item="guide"><button key={guide.id} class={guide.className} data-target={guide.target} data-recording-action={guide.id} onclick={handleGuide}><span>{guide.number}</span><div><strong>{guide.title}</strong><p>{guide.detail}</p></div><small>Launch →</small></button></template></div></section></div>
+        </template>
+    </section>
+</template>

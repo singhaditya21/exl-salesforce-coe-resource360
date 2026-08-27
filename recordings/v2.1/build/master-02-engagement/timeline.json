@@ -1,0 +1,91 @@
+{
+  "totalDurationSeconds": 219.946077,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 29
+    },
+    {
+      "slug": "01-eng-01",
+      "screen": "ENG-01",
+      "title": "Scoped project portfolio",
+      "interaction": "Filter active projects, search Global Retail, select the project, and open Project 360.",
+      "startSeconds": 29,
+      "durationSeconds": 24.248162999999998,
+      "rawFrames": 48,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "02-eng-02",
+      "screen": "ENG-02",
+      "title": "Project and commercial 360",
+      "interaction": "Select an amendment, inspect accepted commercial lines, drill into the work plan, and continue to the roster.",
+      "startSeconds": 53.248163,
+      "durationSeconds": 23.218503,
+      "rawFrames": 39,
+      "uniqueFrames": 6
+    },
+    {
+      "slug": "03-eng-03",
+      "screen": "ENG-03",
+      "title": "Project resource roster",
+      "interaction": "Filter billing resources, search Riya, inspect an allocation, and open practitioner Resource 360.",
+      "startSeconds": 76.466666,
+      "durationSeconds": 23.718458,
+      "rawFrames": 53,
+      "uniqueFrames": 10
+    },
+    {
+      "slug": "04-eng-04",
+      "screen": "ENG-04",
+      "title": "Project economics",
+      "interaction": "Filter approved budgets, select the current version, and expose approval and policy evidence.",
+      "startSeconds": 100.185124,
+      "durationSeconds": 23.944172,
+      "rawFrames": 46,
+      "uniqueFrames": 9
+    },
+    {
+      "slug": "05-eng-05",
+      "screen": "ENG-05",
+      "title": "Actuals reconciliation",
+      "interaction": "Filter submitted timesheets, select a weekly sheet, and run the eight-hour daily-cap validation.",
+      "startSeconds": 124.129296,
+      "durationSeconds": 24.104082,
+      "rawFrames": 45,
+      "uniqueFrames": 8
+    },
+    {
+      "slug": "06-eng-06",
+      "screen": "ENG-06",
+      "title": "Dynamic delivery plan",
+      "interaction": "Filter Build work, select a WBS item, isolate the critical path, and open related risks.",
+      "startSeconds": 148.233378,
+      "durationSeconds": 24.156916,
+      "rawFrames": 43,
+      "uniqueFrames": 7
+    },
+    {
+      "slug": "07-eng-07",
+      "screen": "ENG-07",
+      "title": "Risk and action board",
+      "interaction": "Filter high mitigating risks, select one, and record an accountable acknowledgement.",
+      "startSeconds": 172.39029399999998,
+      "durationSeconds": 22.728209,
+      "rawFrames": 41,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "08-eng-08",
+      "screen": "ENG-08",
+      "title": "Effective-dated allocation history",
+      "interaction": "Select a practitioner and compare allocation versions, publication evidence and capacity states.",
+      "startSeconds": 195.11850299999998,
+      "durationSeconds": 24.736689,
+      "rawFrames": 33,
+      "uniqueFrames": 6
+    }
+  ]
+}

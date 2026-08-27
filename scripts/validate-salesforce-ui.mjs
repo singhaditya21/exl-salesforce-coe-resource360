@@ -10,6 +10,7 @@ const targetOrg = targetIndex >= 0 ? process.argv[targetIndex + 1] : process.env
 assert(targetOrg, "Pass --target-org or set RESOURCE360_TARGET_ORG.");
 
 const declarativeIds = new Set(DECLARATIVE_SCREEN_IDS);
+const masterExperienceIds = new Set(["GLB-01","GLB-02","GLB-03","GLB-04","GLB-05","GLB-06","ENG-01","ENG-02","ENG-03","ENG-04","ENG-05","ENG-06","ENG-07","ENG-08"]);
 const consoleErrors = [];
 const notFoundResponses = [];
 const excludedShellArtifacts = new Set();
@@ -83,21 +84,24 @@ try {
     await page.getByText("103 governed screens", { exact: true }).waitFor({ state: "visible", timeout: 60_000 });
     await page.getByText("Administrator", { exact: true }).first().waitFor({ state: "visible", timeout: 60_000 });
     assert.equal(await page.locator(".module-button").count(), MODULES.length, "Every governed module must render.");
-    assert.equal(await page.locator("video").count(), 5, "The Salesforce help center must expose five walkthroughs.");
-    assert.equal(await page.locator("video track[kind='captions']").count(), 5, "Every walkthrough must have captions.");
+    assert.equal(await page.locator('[data-experience="GLB-06"]').count(), 1, "The specialized Salesforce preference and guidance experience must render.");
 
     const selectScreen = async (screen) => {
         try {
             await page.locator(".screen-button").filter({ hasText: screen.id }).first().click({ timeout: 15_000 });
         } catch (error) {
-            const observedId = (await page.locator(".screen-id").innerText()).trim();
+            const observedId = masterExperienceIds.has(screen.id)
+                ? await page.locator(`.master-experience[data-experience="${screen.id}"]`).getAttribute("data-experience")
+                : (await page.locator(".screen-id").innerText()).trim();
             if (observedId !== screen.id) throw error;
         }
-        await page.locator(".screen-id").filter({ hasText: screen.id }).waitFor({ state: "visible", timeout: 15_000 });
+        if (masterExperienceIds.has(screen.id)) await page.locator(`.master-experience[data-experience="${screen.id}"]`).waitFor({ state: "visible", timeout: 15_000 });
+        else await page.locator(".screen-id").filter({ hasText: screen.id }).waitFor({ state: "visible", timeout: 15_000 });
     };
 
     let visitedScreens = 0;
     let verifiedDeclarativeWorkbenches = 0;
+    let verifiedMasterExperiences = 0;
     for (const module of MODULES) {
         const expectedScreens = SCREENS.filter((screen) => screen.module === module.id);
         const moduleButton = page.locator(".module-button").filter({ hasText: module.label }).first();
@@ -107,10 +111,16 @@ try {
 
         for (const screen of expectedScreens) {
             await selectScreen(screen);
-            const activeId = page.locator(".screen-id");
-            assert.equal((await activeId.innerText()).trim(), screen.id, `${screen.id} did not become the active Lightning route.`);
-            assert.equal(await page.getByRole("heading", { name: screen.title, exact: true }).count() > 0, true, `${screen.id} title did not render.`);
-            assert.equal(await page.locator(".contract-panel").count(), 1, `${screen.id} is missing its governed screen contract.`);
+            if (masterExperienceIds.has(screen.id)) {
+                assert.equal(await page.locator(`.master-experience[data-experience="${screen.id}"]`).count(), 1, `${screen.id} is missing its specialized master experience.`);
+                assert.equal(await page.locator(".contract-panel").count(), 0, `${screen.id} must not fall back to the generic screen contract.`);
+                verifiedMasterExperiences += 1;
+            } else {
+                const activeId = page.locator(".screen-id");
+                assert.equal((await activeId.innerText()).trim(), screen.id, `${screen.id} did not become the active Lightning route.`);
+                assert.equal(await page.getByRole("heading", { name: screen.title, exact: true }).count() > 0, true, `${screen.id} title did not render.`);
+                assert.equal(await page.locator(".contract-panel").count(), 1, `${screen.id} is missing its governed screen contract.`);
+            }
             if (declarativeIds.has(screen.id)) {
                 assert.equal(await page.locator(".route-workbench").count(), 1, `${screen.id} is missing its explicit route workbench.`);
                 verifiedDeclarativeWorkbenches += 1;
@@ -120,7 +130,8 @@ try {
     }
 
     assert.equal(visitedScreens, 103, "Authenticated route sweep did not visit all 103 screens.");
-    assert.equal(verifiedDeclarativeWorkbenches, 57, "Authenticated route sweep did not verify all 57 declarative workbenches.");
+    assert.equal(verifiedDeclarativeWorkbenches, 44, "Authenticated route sweep did not verify all 44 declarative workbenches.");
+    assert.equal(verifiedMasterExperiences, 14, "Authenticated route sweep did not verify all 14 specialized master experiences.");
     let salesforceShellRetries = 0;
     if (consoleErrors.length > 0) {
         const onlyGeneric404s = consoleErrors.every((entry) => entry.kind === "console" && entry.text === genericNotFoundMessage);
@@ -153,7 +164,7 @@ try {
         modules: MODULES.length,
         screens: visitedScreens,
         declarativeWorkbenches: verifiedDeclarativeWorkbenches,
-        walkthroughVideos: 5,
+        masterExperiences: verifiedMasterExperiences,
         consoleErrors: 0,
         salesforceShellRetries,
         excludedShellArtifacts: excludedShellArtifacts.size

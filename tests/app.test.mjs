@@ -193,8 +193,8 @@ test("gives every Salesforce route either a specialized command panel or a disti
   ]);
   const allIds = catalogue.SCREENS.map((screen) => screen.id);
   const implemented = [...experiences.SPECIALIZED_SCREEN_IDS, ...experiences.DECLARATIVE_SCREEN_IDS];
-  assert.equal(experiences.SPECIALIZED_SCREEN_IDS.length, 46);
-  assert.equal(experiences.DECLARATIVE_SCREEN_IDS.length, 57);
+  assert.equal(experiences.SPECIALIZED_SCREEN_IDS.length, 59);
+  assert.equal(experiences.DECLARATIVE_SCREEN_IDS.length, 44);
   assert.equal(new Set(implemented).size, 103);
   assert.deepEqual(new Set(implemented), new Set(allIds));
   for (const id of experiences.DECLARATIVE_SCREEN_IDS) {

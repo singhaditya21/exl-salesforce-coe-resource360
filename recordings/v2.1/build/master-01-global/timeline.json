@@ -1,0 +1,71 @@
+{
+  "totalDurationSeconds": 187.283129,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 31.256372
+    },
+    {
+      "slug": "01-glb-01",
+      "screen": "GLB-01",
+      "title": "Identity assurance",
+      "interaction": "Verify the authenticated session and continue into the role-aware home.",
+      "startSeconds": 31.256372,
+      "durationSeconds": 26.59551,
+      "rawFrames": 51,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "02-glb-02",
+      "screen": "GLB-02",
+      "title": "Role-aware home",
+      "interaction": "Select a delivery priority, observe its destination, and return through the visible module navigation.",
+      "startSeconds": 57.851882,
+      "durationSeconds": 23.76966,
+      "rawFrames": 50,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "03-glb-03",
+      "screen": "GLB-03",
+      "title": "Notification center",
+      "interaction": "Filter high-severity alerts, select one, and record a reviewed outcome.",
+      "startSeconds": 81.621542,
+      "durationSeconds": 26,
+      "rawFrames": 65,
+      "uniqueFrames": 22
+    },
+    {
+      "slug": "04-glb-04",
+      "screen": "GLB-04",
+      "title": "Governed global search",
+      "interaction": "Search for Architect practitioners, filter by object type, select a result, and open its drill-down.",
+      "startSeconds": 107.621542,
+      "durationSeconds": 26.8,
+      "rawFrames": 67,
+      "uniqueFrames": 19
+    },
+    {
+      "slug": "05-glb-05",
+      "screen": "GLB-05",
+      "title": "Role and scope switcher",
+      "interaction": "Select Project Manager, choose a permitted scope, and apply the effective context.",
+      "startSeconds": 134.42154200000002,
+      "durationSeconds": 26.4,
+      "rawFrames": 66,
+      "uniqueFrames": 20
+    },
+    {
+      "slug": "06-glb-06",
+      "screen": "GLB-06",
+      "title": "Preferences and contextual help",
+      "interaction": "Change density and time zone, save preferences, and launch the engagement guide.",
+      "startSeconds": 160.82154200000002,
+      "durationSeconds": 26.4,
+      "rawFrames": 66,
+      "uniqueFrames": 20
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "id": "master-01-global",
+  "baseline": "resource360-demo-v2.1-live-interaction",
+  "durationSeconds": 187.283129,
+  "screenCount": 6,
+  "overviewSlides": 1,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "GLB-01",
+      "frames": 51,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 20.4,
+      "renderedDurationSeconds": 26.59551
+    },
+    {
+      "screen": "GLB-02",
+      "frames": 50,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 20,
+      "renderedDurationSeconds": 23.76966
+    },
+    {
+      "screen": "GLB-03",
+      "frames": 65,
+      "uniqueFrames": 22,
+      "capturedDurationSeconds": 26,
+      "renderedDurationSeconds": 26
+    },
+    {
+      "screen": "GLB-04",
+      "frames": 67,
+      "uniqueFrames": 19,
+      "capturedDurationSeconds": 26.8,
+      "renderedDurationSeconds": 26.8
+    },
+    {
+      "screen": "GLB-05",
+      "frames": 66,
+      "uniqueFrames": 20,
+      "capturedDurationSeconds": 26.4,
+      "renderedDurationSeconds": 26.4
+    },
+    {
+      "screen": "GLB-06",
+      "frames": 66,
+      "uniqueFrames": 20,
+      "capturedDurationSeconds": 26.4,
+      "renderedDurationSeconds": 26.4
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "187.283129"
+    }
+  }
+}

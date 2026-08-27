@@ -1,0 +1,95 @@
+{
+  "id": "master-02-engagement",
+  "baseline": "resource360-demo-v2.1-live-interaction",
+  "durationSeconds": 219.946077,
+  "screenCount": 8,
+  "overviewSlides": 1,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "ENG-01",
+      "frames": 48,
+      "uniqueFrames": 15,
+      "capturedDurationSeconds": 19.2,
+      "renderedDurationSeconds": 24.248162999999998
+    },
+    {
+      "screen": "ENG-02",
+      "frames": 39,
+      "uniqueFrames": 6,
+      "capturedDurationSeconds": 15.6,
+      "renderedDurationSeconds": 23.218503
+    },
+    {
+      "screen": "ENG-03",
+      "frames": 53,
+      "uniqueFrames": 10,
+      "capturedDurationSeconds": 21.2,
+      "renderedDurationSeconds": 23.718458
+    },
+    {
+      "screen": "ENG-04",
+      "frames": 46,
+      "uniqueFrames": 9,
+      "capturedDurationSeconds": 18.4,
+      "renderedDurationSeconds": 23.944172
+    },
+    {
+      "screen": "ENG-05",
+      "frames": 45,
+      "uniqueFrames": 8,
+      "capturedDurationSeconds": 18,
+      "renderedDurationSeconds": 24.104082
+    },
+    {
+      "screen": "ENG-06",
+      "frames": 43,
+      "uniqueFrames": 7,
+      "capturedDurationSeconds": 17.2,
+      "renderedDurationSeconds": 24.156916
+    },
+    {
+      "screen": "ENG-07",
+      "frames": 41,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 16.4,
+      "renderedDurationSeconds": 22.728209
+    },
+    {
+      "screen": "ENG-08",
+      "frames": 33,
+      "uniqueFrames": 6,
+      "capturedDurationSeconds": 13.2,
+      "renderedDurationSeconds": 24.736689
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "219.946077"
+    }
+  }
+}
