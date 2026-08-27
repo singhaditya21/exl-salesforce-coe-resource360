@@ -50,7 +50,8 @@ Coverage arithmetic: `6 + 8 + 12 + 12 + 12 + 12 + 12 + 8 + 9 + 8 + 4 = 103` uniq
 | Master | Status | Validated artifact |
 | --- | --- | --- |
 | 01 — Global Entry, Home and Access | Complete | `public/demo-videos/master-01-global-entry-home-access.mp4` · 8:05 · 1080p · narration · captions |
-| 02–12 | Pending recording | Title slide, narration, actual navigation, outcome evidence and QA required |
+| 02 — Engagement 360 | Complete | `public/demo-videos/master-02-engagement-360.mp4` · 13:32 · 1080p · narration · captions |
+| 03–12 | Pending recording | Title slide, narration, actual navigation, outcome evidence and QA required |
 
 ## Superseded early eight-video outline
 

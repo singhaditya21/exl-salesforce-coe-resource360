@@ -112,8 +112,8 @@ test("the help screen publishes the validated recording library", async () => {
     readFile(new URL("../app/operational-screens.tsx", import.meta.url), "utf8"),
   ]);
   assert.match(operations, /export function VideoLibrary/);
-  assert.match(operations, /6 recordings verified/);
-  for (const name of ["master-01-global-entry-home-access", "01-product-overview", "02-skills-and-talent", "03-staffing-decision", "04-budget-and-actuals", "05-demo-activation"]) assert.match(operations, new RegExp(name));
+  assert.match(operations, /7 recordings verified/);
+  for (const name of ["master-01-global-entry-home-access", "master-02-engagement-360", "01-product-overview", "02-skills-and-talent", "03-staffing-decision", "04-budget-and-actuals", "05-demo-activation"]) assert.match(operations, new RegExp(name));
   assert.match(page, /screen\.id === "GLB-06"/);
 });
 
