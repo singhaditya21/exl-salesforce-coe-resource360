@@ -1,0 +1,131 @@
+{
+  "totalDurationSeconds": 1065.276417,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 30
+    },
+    {
+      "slug": "01-stfui-13",
+      "screen": "STFUI-13",
+      "title": "Request review and submit",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 30,
+      "durationSeconds": 72.92825400000001,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "02-stfui-14",
+      "screen": "STFUI-14",
+      "title": "Request success and status",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 102.92825400000001,
+      "durationSeconds": 73.936145,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "03-stfui-15",
+      "screen": "STFUI-15",
+      "title": "Modify allocation",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 176.864399,
+      "durationSeconds": 73.5322,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "04-stfui-16",
+      "screen": "STFUI-16",
+      "title": "Split allocation",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 250.39659899999998,
+      "durationSeconds": 127.779864,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "05-stfui-17",
+      "screen": "STFUI-17",
+      "title": "Deallocate resource",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 378.176463,
+      "durationSeconds": 73.49315200000001,
+      "rawFrames": 24,
+      "uniqueFrames": 17
+    },
+    {
+      "slug": "06-stfui-18",
+      "screen": "STFUI-18",
+      "title": "Allocation action menu",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 451.669615,
+      "durationSeconds": 74.32226800000001,
+      "rawFrames": 24,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "07-stfui-19",
+      "screen": "STFUI-19",
+      "title": "Bulk import wizard",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 525.991883,
+      "durationSeconds": 72.743583,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "08-stfui-20",
+      "screen": "STFUI-20",
+      "title": "Import result",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 598.7354660000001,
+      "durationSeconds": 73.674467,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "09-stfui-21",
+      "screen": "STFUI-21",
+      "title": "Staffing queue",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 672.4099330000001,
+      "durationSeconds": 115.326032,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "10-stfui-22",
+      "screen": "STFUI-22",
+      "title": "Staffing request detail",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 787.7359650000001,
+      "durationSeconds": 72.757642,
+      "rawFrames": 24,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "11-stfui-23",
+      "screen": "STFUI-23",
+      "title": "Accept or decline decision",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 860.4936070000001,
+      "durationSeconds": 117.84766400000001,
+      "rawFrames": 24,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "12-stfui-24",
+      "screen": "STFUI-24",
+      "title": "Staffing workload and SLA",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 978.3412710000001,
+      "durationSeconds": 86.84757400000001,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    }
+  ]
+}

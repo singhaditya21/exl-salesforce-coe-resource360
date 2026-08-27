@@ -1,13 +1,13 @@
 {
   "schemaVersion": 2,
   "classification": "SANITIZED_DEMO_ONLY",
-  "generatedAt": "2026-08-26T16:10:51.988Z",
+  "generatedAt": "2026-08-27T13:11:14.844Z",
   "source": {
     "system": "Salesforce",
     "org": "Resource 360 Developer Org",
     "mode": "Allowlisted build-time snapshot",
     "syncCadence": "Hourly GitHub Actions publication",
-    "dataCutoff": "2026-08-26T16:10:51.988Z",
+    "dataCutoff": "2026-08-27T13:11:14.844Z",
     "policyVersion": "R360-KPI-1.0"
   },
   "counts": {
@@ -81,7 +81,7 @@
       "unit": "Days",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Median bench age under the approved Resource 360 semantic definition.",
       "ownerRole": "Head of Delivery",
       "policyVersion": "R360-KPI-1.0"
@@ -101,7 +101,7 @@
       "unit": "Percent",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Billed utilization under the approved Resource 360 semantic definition.",
       "ownerRole": "Head of Delivery",
       "policyVersion": "R360-KPI-1.0"
@@ -121,7 +121,7 @@
       "unit": "Ratio",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Cost performance index under the approved Resource 360 semantic definition.",
       "ownerRole": "Finance/PMO",
       "policyVersion": "R360-KPI-1.0"
@@ -141,7 +141,7 @@
       "unit": "Percent",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Data quality score under the approved Resource 360 semantic definition.",
       "ownerRole": "Operations",
       "policyVersion": "R360-KPI-1.0"
@@ -161,7 +161,7 @@
       "unit": "Percent",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Demand fulfilment rate under the approved Resource 360 semantic definition.",
       "ownerRole": "COE Staffer",
       "policyVersion": "R360-KPI-1.0"
@@ -181,7 +181,7 @@
       "unit": "Points",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Margin erosion under the approved Resource 360 semantic definition.",
       "ownerRole": "Finance/PMO",
       "policyVersion": "R360-KPI-1.0"
@@ -201,7 +201,7 @@
       "unit": "Days",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Schedule variance under the approved Resource 360 semantic definition.",
       "ownerRole": "Project Manager",
       "policyVersion": "R360-KPI-1.0"
@@ -221,7 +221,7 @@
       "unit": "Days",
       "status": "On Target",
       "forecast": false,
-      "sourceCutoff": "2026-08-26T16:05:40.000+0000",
+      "sourceCutoff": "2026-08-27T13:02:17.000+0000",
       "definition": "Median time to staff under the approved Resource 360 semantic definition.",
       "ownerRole": "COE Staffer",
       "policyVersion": "R360-KPI-1.0"
@@ -234,7 +234,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Summit Consumer Goods Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -244,7 +244,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-002",
@@ -252,7 +252,7 @@
       "role": "Data Cloud Consultant",
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -262,7 +262,7 @@
       "allocationCount": 2,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-003",
@@ -270,7 +270,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Meridian Financial Services Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -280,7 +280,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-004",
@@ -288,7 +288,7 @@
       "role": "Service Cloud Consultant",
       "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -298,7 +298,7 @@
       "allocationCount": 2,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-005",
@@ -306,7 +306,7 @@
       "role": "CRM Analytics Lead",
       "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -316,7 +316,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-006",
@@ -324,7 +324,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -334,7 +334,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-007",
@@ -342,7 +342,7 @@
       "role": "Integration Developer",
       "portfolio": "Nova Telecom and Media Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -352,7 +352,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-008",
@@ -360,7 +360,7 @@
       "role": "AI Cloud Consultant",
       "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -370,7 +370,7 @@
       "allocationCount": 4,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-009",
@@ -378,7 +378,7 @@
       "role": "Experience Cloud Lead",
       "portfolio": "Civic Education and Public Services Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -388,7 +388,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-010",
@@ -396,7 +396,7 @@
       "role": "Quality Engineer",
       "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 10,
       "remainingHours": -2,
@@ -406,7 +406,7 @@
       "allocationCount": 3,
       "approvedOverallocation": true,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-011",
@@ -414,7 +414,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -424,7 +424,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-012",
@@ -432,7 +432,7 @@
       "role": "MuleSoft Developer",
       "portfolio": "Meridian Financial Services Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -442,7 +442,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-013",
@@ -450,7 +450,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -460,7 +460,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-014",
@@ -468,7 +468,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -478,7 +478,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-015",
@@ -486,7 +486,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -496,7 +496,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-016",
@@ -504,7 +504,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Nova Telecom and Media Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -514,7 +514,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-017",
@@ -522,7 +522,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -532,7 +532,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-018",
@@ -540,7 +540,7 @@
       "role": "Quality Engineer",
       "portfolio": "Civic Education and Public Services Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -550,7 +550,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-019",
@@ -558,7 +558,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -568,7 +568,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-020",
@@ -576,7 +576,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Summit Consumer Goods Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -586,7 +586,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-021",
@@ -594,7 +594,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -604,7 +604,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-022",
@@ -612,7 +612,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Meridian Financial Services Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -622,7 +622,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-023",
@@ -630,7 +630,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -640,7 +640,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-024",
@@ -648,7 +648,7 @@
       "role": "Quality Engineer",
       "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -658,7 +658,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-025",
@@ -666,7 +666,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -676,7 +676,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-026",
@@ -684,7 +684,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Nova Telecom and Media Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -694,7 +694,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-027",
@@ -702,7 +702,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -712,7 +712,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-028",
@@ -720,7 +720,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Civic Education and Public Services Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -730,7 +730,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-029",
@@ -738,7 +738,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -748,7 +748,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-030",
@@ -756,7 +756,7 @@
       "role": "Quality Engineer",
       "portfolio": "Summit Consumer Goods Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -766,7 +766,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-031",
@@ -774,7 +774,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -784,7 +784,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-032",
@@ -792,7 +792,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Meridian Financial Services Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -802,7 +802,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-033",
@@ -810,7 +810,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -820,7 +820,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-034",
@@ -828,7 +828,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -838,7 +838,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-035",
@@ -846,7 +846,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -856,7 +856,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-036",
@@ -864,7 +864,7 @@
       "role": "Quality Engineer",
       "portfolio": "Nova Telecom and Media Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -874,7 +874,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-037",
@@ -882,7 +882,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -892,7 +892,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-038",
@@ -900,7 +900,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Civic Education and Public Services Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -910,7 +910,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-039",
@@ -918,7 +918,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -928,7 +928,7 @@
       "allocationCount": 3,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-040",
@@ -936,7 +936,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Summit Consumer Goods Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -946,7 +946,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-041",
@@ -954,7 +954,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -964,7 +964,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-042",
@@ -972,7 +972,7 @@
       "role": "Quality Engineer",
       "portfolio": "Meridian Financial Services Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -982,7 +982,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-043",
@@ -990,7 +990,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1000,7 +1000,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-044",
@@ -1008,7 +1008,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1018,7 +1018,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-045",
@@ -1026,7 +1026,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1036,7 +1036,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-046",
@@ -1044,7 +1044,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Nova Telecom and Media Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1054,7 +1054,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-047",
@@ -1062,7 +1062,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1072,7 +1072,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-048",
@@ -1080,7 +1080,7 @@
       "role": "Quality Engineer",
       "portfolio": "Civic Education and Public Services Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1090,7 +1090,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-049",
@@ -1098,7 +1098,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1108,7 +1108,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-050",
@@ -1116,7 +1116,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Summit Consumer Goods Salesforce Portfolio",
       "subPortfolio": "Transformation Delivery",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1126,7 +1126,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-051",
@@ -1134,7 +1134,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1144,7 +1144,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-052",
@@ -1152,7 +1152,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Meridian Financial Services Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1162,7 +1162,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-053",
@@ -1170,7 +1170,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Helix Health and Life Sciences Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1180,7 +1180,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-054",
@@ -1188,7 +1188,7 @@
       "role": "Quality Engineer",
       "portfolio": "Orion Manufacturing and Automotive Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1198,7 +1198,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-055",
@@ -1206,7 +1206,7 @@
       "role": "Salesforce Program Manager",
       "portfolio": "Terra Energy and Utilities Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1216,7 +1216,7 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-056",
@@ -1224,7 +1224,7 @@
       "role": "Data Cloud Architect",
       "portfolio": "Nova Telecom and Media Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1234,7 +1234,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-057",
@@ -1242,7 +1242,7 @@
       "role": "Service Cloud Lead",
       "portfolio": "Horizon Travel and Hospitality Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1252,7 +1252,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-058",
@@ -1260,7 +1260,7 @@
       "role": "MuleSoft Architect",
       "portfolio": "Civic Education and Public Services Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1270,7 +1270,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-059",
@@ -1278,7 +1278,7 @@
       "role": "Salesforce Developer",
       "portfolio": "Vertex High Tech and Logistics Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1288,7 +1288,7 @@
       "allocationCount": 2,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     },
     {
       "key": "RESOURCE-060",
@@ -1296,7 +1296,7 @@
       "role": "Quality Engineer",
       "portfolio": "Summit Consumer Goods Salesforce Portfolio",
       "subPortfolio": "Managed Services and Innovation",
-      "workDate": "2026-08-26",
+      "workDate": "2026-08-27",
       "standardHours": 8,
       "allocatedHours": 8,
       "remainingHours": 0,
@@ -1306,12 +1306,12 @@
       "allocationCount": 1,
       "approvedOverallocation": false,
       "pendingApprovalCount": 0,
-      "reconciledAt": "2026-08-26T16:05:45.000+0000"
+      "reconciledAt": "2026-08-27T13:02:23.000+0000"
     }
   ],
   "forecast": [
     {
-      "week": "2026-08-26",
+      "week": "2026-08-27",
       "coveragePercent": 89.9,
       "availableHours": 480,
       "committedHours": 500,
@@ -1322,7 +1322,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-09-02",
+      "week": "2026-09-03",
       "coveragePercent": 88.7,
       "availableHours": 472,
       "committedHours": 489,
@@ -1333,7 +1333,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-09-09",
+      "week": "2026-09-10",
       "coveragePercent": 87.5,
       "availableHours": 464,
       "committedHours": 478,
@@ -1344,7 +1344,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-09-16",
+      "week": "2026-09-17",
       "coveragePercent": 86.4,
       "availableHours": 456,
       "committedHours": 467,
@@ -1355,7 +1355,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-09-23",
+      "week": "2026-09-24",
       "coveragePercent": 91.3,
       "availableHours": 480,
       "committedHours": 456,
@@ -1366,7 +1366,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-09-30",
+      "week": "2026-10-01",
       "coveragePercent": 90.1,
       "availableHours": 472,
       "committedHours": 445,
@@ -1377,7 +1377,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-10-07",
+      "week": "2026-10-08",
       "coveragePercent": 98.7,
       "availableHours": 464,
       "committedHours": 434,
@@ -1388,7 +1388,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-10-14",
+      "week": "2026-10-15",
       "coveragePercent": 97.4,
       "availableHours": 456,
       "committedHours": 423,
@@ -1399,7 +1399,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-10-21",
+      "week": "2026-10-22",
       "coveragePercent": 103,
       "availableHours": 480,
       "committedHours": 412,
@@ -1410,7 +1410,7 @@
       "status": "On Target"
     },
     {
-      "week": "2026-10-28",
+      "week": "2026-10-29",
       "coveragePercent": 101.7,
       "availableHours": 472,
       "committedHours": 401,
@@ -1421,7 +1421,7 @@
       "status": "On Target"
     },
     {
-      "week": "2026-11-04",
+      "week": "2026-11-05",
       "coveragePercent": 100.4,
       "availableHours": 464,
       "committedHours": 390,
@@ -1432,7 +1432,7 @@
       "status": "On Target"
     },
     {
-      "week": "2026-11-11",
+      "week": "2026-11-12",
       "coveragePercent": 99.1,
       "availableHours": 456,
       "committedHours": 379,
@@ -1443,7 +1443,7 @@
       "status": "Watch"
     },
     {
-      "week": "2026-11-18",
+      "week": "2026-11-19",
       "coveragePercent": 118.2,
       "availableHours": 480,
       "committedHours": 368,
@@ -1605,9 +1605,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 46,
-      "startDate": "2026-04-26",
-      "endDate": "2027-03-26",
-      "forecastCompletionDate": "2027-03-21",
+      "startDate": "2026-04-27",
+      "endDate": "2027-03-27",
+      "forecastCompletionDate": "2027-03-22",
       "scheduleVarianceDays": -5,
       "acceptanceFirstPassPercent": 82,
       "csatScore": 3.8,
@@ -1647,9 +1647,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 59,
-      "startDate": "2026-03-26",
-      "endDate": "2027-04-26",
-      "forecastCompletionDate": "2027-04-26",
+      "startDate": "2026-03-27",
+      "endDate": "2027-04-27",
+      "forecastCompletionDate": "2027-04-27",
       "scheduleVarianceDays": 0,
       "acceptanceFirstPassPercent": 86,
       "csatScore": 3.9,
@@ -1688,10 +1688,10 @@
       "portfolio": "Global Retail Holdings Salesforce Portfolio",
       "status": "Active",
       "lifecycle": "Delivery",
-      "completionPercent": 20,
-      "startDate": "2026-06-26",
-      "endDate": "2027-01-26",
-      "forecastCompletionDate": "2027-01-31",
+      "completionPercent": 41.93,
+      "startDate": "2026-06-27",
+      "endDate": "2027-01-27",
+      "forecastCompletionDate": "2027-02-01",
       "scheduleVarianceDays": 5,
       "acceptanceFirstPassPercent": 90,
       "csatScore": 4,
@@ -1731,9 +1731,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 33,
-      "startDate": "2026-05-26",
-      "endDate": "2027-02-26",
-      "forecastCompletionDate": "2027-03-08",
+      "startDate": "2026-05-27",
+      "endDate": "2027-02-27",
+      "forecastCompletionDate": "2027-03-09",
       "scheduleVarianceDays": 10,
       "acceptanceFirstPassPercent": 94,
       "csatScore": 4.1,
@@ -1773,9 +1773,9 @@
       "status": "Completed",
       "lifecycle": "Complete",
       "completionPercent": 100,
-      "startDate": "2025-07-26",
-      "endDate": "2026-08-07",
-      "forecastCompletionDate": "2026-08-03",
+      "startDate": "2025-07-27",
+      "endDate": "2026-08-08",
+      "forecastCompletionDate": "2026-08-04",
       "scheduleVarianceDays": -4,
       "acceptanceFirstPassPercent": 98,
       "csatScore": 4.2,
@@ -1815,9 +1815,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 20,
-      "startDate": "2026-01-26",
-      "endDate": "2027-06-26",
-      "forecastCompletionDate": "2027-06-27",
+      "startDate": "2026-01-27",
+      "endDate": "2027-06-27",
+      "forecastCompletionDate": "2027-06-28",
       "scheduleVarianceDays": 1,
       "acceptanceFirstPassPercent": 84,
       "csatScore": 4.3,
@@ -1857,9 +1857,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 33,
-      "startDate": "2025-12-26",
-      "endDate": "2027-07-26",
-      "forecastCompletionDate": "2027-08-01",
+      "startDate": "2025-12-27",
+      "endDate": "2027-07-27",
+      "forecastCompletionDate": "2027-08-02",
       "scheduleVarianceDays": 6,
       "acceptanceFirstPassPercent": 88,
       "csatScore": 4.4,
@@ -1899,9 +1899,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 46,
-      "startDate": "2026-06-26",
-      "endDate": "2027-01-26",
-      "forecastCompletionDate": "2027-02-06",
+      "startDate": "2026-06-27",
+      "endDate": "2027-01-27",
+      "forecastCompletionDate": "2027-02-07",
       "scheduleVarianceDays": 11,
       "acceptanceFirstPassPercent": 92,
       "csatScore": 4.5,
@@ -1941,9 +1941,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 59,
-      "startDate": "2026-05-26",
-      "endDate": "2027-02-26",
-      "forecastCompletionDate": "2027-02-23",
+      "startDate": "2026-05-27",
+      "endDate": "2027-02-27",
+      "forecastCompletionDate": "2027-02-24",
       "scheduleVarianceDays": -3,
       "acceptanceFirstPassPercent": 96,
       "csatScore": 4.6,
@@ -1983,9 +1983,9 @@
       "status": "Completed",
       "lifecycle": "Complete",
       "completionPercent": 100,
-      "startDate": "2025-08-26",
-      "endDate": "2026-08-02",
-      "forecastCompletionDate": "2026-08-04",
+      "startDate": "2025-08-27",
+      "endDate": "2026-08-03",
+      "forecastCompletionDate": "2026-08-05",
       "scheduleVarianceDays": 2,
       "acceptanceFirstPassPercent": 82,
       "csatScore": 4.7,
@@ -2025,9 +2025,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 20,
-      "startDate": "2026-03-26",
-      "endDate": "2027-04-26",
-      "forecastCompletionDate": "2027-05-03",
+      "startDate": "2026-03-27",
+      "endDate": "2027-04-27",
+      "forecastCompletionDate": "2027-05-04",
       "scheduleVarianceDays": 7,
       "acceptanceFirstPassPercent": 86,
       "csatScore": 4.8,
@@ -2067,9 +2067,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 33,
-      "startDate": "2026-02-26",
-      "endDate": "2027-05-26",
-      "forecastCompletionDate": "2027-06-07",
+      "startDate": "2026-02-27",
+      "endDate": "2027-05-27",
+      "forecastCompletionDate": "2027-06-08",
       "scheduleVarianceDays": 12,
       "acceptanceFirstPassPercent": 90,
       "csatScore": 3.8,
@@ -2109,9 +2109,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 46,
-      "startDate": "2026-01-26",
-      "endDate": "2027-06-26",
-      "forecastCompletionDate": "2027-06-24",
+      "startDate": "2026-01-27",
+      "endDate": "2027-06-27",
+      "forecastCompletionDate": "2027-06-25",
       "scheduleVarianceDays": -2,
       "acceptanceFirstPassPercent": 94,
       "csatScore": 3.9,
@@ -2151,9 +2151,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 59,
-      "startDate": "2025-12-26",
-      "endDate": "2027-07-26",
-      "forecastCompletionDate": "2027-07-29",
+      "startDate": "2025-12-27",
+      "endDate": "2027-07-27",
+      "forecastCompletionDate": "2027-07-30",
       "scheduleVarianceDays": 3,
       "acceptanceFirstPassPercent": 98,
       "csatScore": 4,
@@ -2193,9 +2193,9 @@
       "status": "Completed",
       "lifecycle": "Complete",
       "completionPercent": 100,
-      "startDate": "2025-06-26",
-      "endDate": "2026-07-28",
-      "forecastCompletionDate": "2026-08-05",
+      "startDate": "2025-06-27",
+      "endDate": "2026-07-29",
+      "forecastCompletionDate": "2026-08-06",
       "scheduleVarianceDays": 8,
       "acceptanceFirstPassPercent": 84,
       "csatScore": 4.1,
@@ -2235,9 +2235,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 20,
-      "startDate": "2026-05-26",
-      "endDate": "2027-02-26",
-      "forecastCompletionDate": "2027-03-11",
+      "startDate": "2026-05-27",
+      "endDate": "2027-02-27",
+      "forecastCompletionDate": "2027-03-12",
       "scheduleVarianceDays": 13,
       "acceptanceFirstPassPercent": 88,
       "csatScore": 4.2,
@@ -2277,9 +2277,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 33,
-      "startDate": "2026-04-26",
-      "endDate": "2027-03-26",
-      "forecastCompletionDate": "2027-03-25",
+      "startDate": "2026-04-27",
+      "endDate": "2027-03-27",
+      "forecastCompletionDate": "2027-03-26",
       "scheduleVarianceDays": -1,
       "acceptanceFirstPassPercent": 92,
       "csatScore": 4.3,
@@ -2319,9 +2319,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 46,
-      "startDate": "2026-03-26",
-      "endDate": "2027-04-26",
-      "forecastCompletionDate": "2027-04-30",
+      "startDate": "2026-03-27",
+      "endDate": "2027-04-27",
+      "forecastCompletionDate": "2027-05-01",
       "scheduleVarianceDays": 4,
       "acceptanceFirstPassPercent": 96,
       "csatScore": 4.4,
@@ -2361,9 +2361,9 @@
       "status": "Active",
       "lifecycle": "Delivery",
       "completionPercent": 59,
-      "startDate": "2026-02-26",
-      "endDate": "2027-05-26",
-      "forecastCompletionDate": "2027-06-04",
+      "startDate": "2026-02-27",
+      "endDate": "2027-05-27",
+      "forecastCompletionDate": "2027-06-05",
       "scheduleVarianceDays": 9,
       "acceptanceFirstPassPercent": 82,
       "csatScore": 4.5,
@@ -2403,9 +2403,9 @@
       "status": "Completed",
       "lifecycle": "Complete",
       "completionPercent": 100,
-      "startDate": "2025-07-26",
-      "endDate": "2026-07-23",
-      "forecastCompletionDate": "2026-07-18",
+      "startDate": "2025-07-27",
+      "endDate": "2026-07-24",
+      "forecastCompletionDate": "2026-07-19",
       "scheduleVarianceDays": -5,
       "acceptanceFirstPassPercent": 86,
       "csatScore": 4.6,
@@ -2530,7 +2530,7 @@
     "revenueRecognized": 919675000,
     "writeOff": 1074750,
     "billingRealizationPercent": 91.1,
-    "dsoDays": 31,
+    "dsoDays": 31.1,
     "collectionEffectivenessPercent": 64.6
   },
   "delivery": {
@@ -2550,8 +2550,8 @@
       "resourceKey": "RESOURCE-002",
       "resource": "Practitioner 02",
       "type": "Training",
-      "startDate": "2026-09-02",
-      "endDate": "2026-09-02",
+      "startDate": "2026-09-03",
+      "endDate": "2026-09-03",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2561,8 +2561,8 @@
       "resourceKey": "RESOURCE-003",
       "resource": "Practitioner 03",
       "type": "Leave",
-      "startDate": "2026-09-05",
-      "endDate": "2026-09-06",
+      "startDate": "2026-09-06",
+      "endDate": "2026-09-07",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2572,8 +2572,8 @@
       "resourceKey": "RESOURCE-004",
       "resource": "Practitioner 04",
       "type": "Leave",
-      "startDate": "2026-09-08",
-      "endDate": "2026-09-10",
+      "startDate": "2026-09-09",
+      "endDate": "2026-09-11",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2583,8 +2583,8 @@
       "resourceKey": "RESOURCE-005",
       "resource": "Practitioner 05",
       "type": "Training",
-      "startDate": "2026-09-11",
-      "endDate": "2026-09-11",
+      "startDate": "2026-09-12",
+      "endDate": "2026-09-12",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2594,8 +2594,8 @@
       "resourceKey": "RESOURCE-006",
       "resource": "Practitioner 06",
       "type": "Leave",
-      "startDate": "2026-09-14",
-      "endDate": "2026-09-15",
+      "startDate": "2026-09-15",
+      "endDate": "2026-09-16",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2605,8 +2605,8 @@
       "resourceKey": "RESOURCE-007",
       "resource": "Practitioner 07",
       "type": "Leave",
-      "startDate": "2026-09-17",
-      "endDate": "2026-09-19",
+      "startDate": "2026-09-18",
+      "endDate": "2026-09-20",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2616,8 +2616,8 @@
       "resourceKey": "RESOURCE-008",
       "resource": "Practitioner 08",
       "type": "Training",
-      "startDate": "2026-09-20",
-      "endDate": "2026-09-20",
+      "startDate": "2026-09-21",
+      "endDate": "2026-09-21",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2627,8 +2627,8 @@
       "resourceKey": "RESOURCE-009",
       "resource": "Practitioner 09",
       "type": "Leave",
-      "startDate": "2026-09-23",
-      "endDate": "2026-09-24",
+      "startDate": "2026-09-24",
+      "endDate": "2026-09-25",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2638,8 +2638,8 @@
       "resourceKey": "RESOURCE-010",
       "resource": "Practitioner 10",
       "type": "Leave",
-      "startDate": "2026-09-26",
-      "endDate": "2026-09-28",
+      "startDate": "2026-09-27",
+      "endDate": "2026-09-29",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2649,8 +2649,8 @@
       "resourceKey": "RESOURCE-001",
       "resource": "Practitioner 01",
       "type": "Training",
-      "startDate": "2026-09-29",
-      "endDate": "2026-09-29",
+      "startDate": "2026-09-30",
+      "endDate": "2026-09-30",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2660,8 +2660,8 @@
       "resourceKey": "RESOURCE-011",
       "resource": "Practitioner 11",
       "type": "Leave",
-      "startDate": "2026-10-02",
-      "endDate": "2026-10-03",
+      "startDate": "2026-10-03",
+      "endDate": "2026-10-04",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"
@@ -2671,8 +2671,8 @@
       "resourceKey": "RESOURCE-012",
       "resource": "Practitioner 12",
       "type": "Leave",
-      "startDate": "2026-10-05",
-      "endDate": "2026-10-07",
+      "startDate": "2026-10-06",
+      "endDate": "2026-10-08",
       "hoursPerDay": 8,
       "status": "Approved",
       "source": "EXL People Master Mock"

@@ -330,8 +330,10 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
     get showGlobalMasterExperience() { return ["GLB-01","GLB-02","GLB-03","GLB-04","GLB-05","GLB-06"].includes(this.selectedScreenId); }
     get showEngagementMasterExperience() { return ["ENG-01","ENG-02","ENG-03","ENG-04","ENG-05","ENG-06","ENG-07","ENG-08"].includes(this.selectedScreenId); }
+    get showDomainMasterExperience() { return /^(STFUI|SKLUI|BUDUI|TIMEUI|CMD|ADMUI|AIUI)-/.test(this.selectedScreenId); }
     get showMasterExperience() { return this.showGlobalMasterExperience || this.showEngagementMasterExperience; }
     get showStandardExperience() { return !this.showMasterExperience; }
+    get showStandardShell() { return this.showStandardExperience && !this.showDomainMasterExperience; }
     get showAlertLifecycle() { return false; }
     get showHelpCenter() { return false; }
     get helpVideos() { return HELP_VIDEOS; }

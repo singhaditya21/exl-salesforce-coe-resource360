@@ -193,7 +193,7 @@ export const SCREENS = [
     "module": "staffing",
     "kind": "form",
     "description": "Start a governed resource request from an approved engagement and budget.",
-    "primary": "Continue",
+    "primary": "Select engagement and demand source",
     "release": "R1",
     "eyebrow": "New staffing request"
   },
@@ -363,7 +363,7 @@ export const SCREENS = [
     "module": "staffing",
     "kind": "detail",
     "description": "Permission-aware details, schedule, modify, split and deallocation actions.",
-    "primary": "View details",
+    "primary": "Open selected allocation controls",
     "release": "R1",
     "eyebrow": "Allocation actions"
   },
@@ -393,7 +393,7 @@ export const SCREENS = [
     "module": "staffing",
     "kind": "list",
     "description": "Prioritized pending requests with age, fit, conflict, budget and ownership context.",
-    "primary": "Review next",
+    "primary": "Review highest-priority staffing request",
     "release": "R1",
     "eyebrow": "Staffer workbench"
   },
@@ -563,7 +563,7 @@ export const SCREENS = [
     "module": "skills",
     "kind": "list",
     "description": "Prioritized capability claims with evidence, age and decision entry points.",
-    "primary": "Review next",
+    "primary": "Review oldest pending capability claim",
     "release": "R1",
     "eyebrow": "Manager workspace"
   },
@@ -753,7 +753,7 @@ export const SCREENS = [
     "module": "budget",
     "kind": "list",
     "description": "Prioritize budgets by active approval level, margin, change and age.",
-    "primary": "Review next",
+    "primary": "Review next budget approval",
     "release": "R1",
     "eyebrow": "Approvals"
   },
@@ -823,7 +823,7 @@ export const SCREENS = [
     "module": "timesheet",
     "kind": "list",
     "description": "Track employee-week state, totals, exceptions and approval entry points.",
-    "primary": "Review next",
+    "primary": "Review next submitted timesheet",
     "release": "R1",
     "eyebrow": "Team time"
   },

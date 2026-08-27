@@ -1,0 +1,131 @@
+{
+  "totalDurationSeconds": 912.110476,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 30
+    },
+    {
+      "slug": "01-sklui-13",
+      "screen": "SKLUI-13",
+      "title": "Team hierarchy",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 30,
+      "durationSeconds": 71.50254,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "02-sklui-14",
+      "screen": "SKLUI-14",
+      "title": "Pending reviews",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 101.50254,
+      "durationSeconds": 70.463946,
+      "rawFrames": 24,
+      "uniqueFrames": 17
+    },
+    {
+      "slug": "03-sklui-15",
+      "screen": "SKLUI-15",
+      "title": "Review decision",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 171.966486,
+      "durationSeconds": 71.988934,
+      "rawFrames": 24,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "04-sklui-16",
+      "screen": "SKLUI-16",
+      "title": "Talent search builder",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 243.95542,
+      "durationSeconds": 72.167574,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "05-sklui-17",
+      "screen": "SKLUI-17",
+      "title": "Talent search results",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 316.122994,
+      "durationSeconds": 72.235737,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "06-sklui-18",
+      "screen": "SKLUI-18",
+      "title": "Capability inventory",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 388.35873100000003,
+      "durationSeconds": 72.760363,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "07-sklui-19",
+      "screen": "SKLUI-19",
+      "title": "Capability detail",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 461.119094,
+      "durationSeconds": 72.839819,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "08-sklui-20",
+      "screen": "SKLUI-20",
+      "title": "Catalogue create and edit",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 533.958913,
+      "durationSeconds": 75.549705,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "09-sklui-21",
+      "screen": "SKLUI-21",
+      "title": "Proficiency tier editor",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 609.5086180000001,
+      "durationSeconds": 72.233787,
+      "rawFrames": 24,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "10-sklui-22",
+      "screen": "SKLUI-22",
+      "title": "Role permissions",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 681.7424050000001,
+      "durationSeconds": 71.720181,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "11-sklui-23",
+      "screen": "SKLUI-23",
+      "title": "User access management",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 753.4625860000001,
+      "durationSeconds": 87.621633,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "12-sklui-24",
+      "screen": "SKLUI-24",
+      "title": "Skills settings and sync health",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 841.0842190000001,
+      "durationSeconds": 70.93297100000001,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    }
+  ]
+}

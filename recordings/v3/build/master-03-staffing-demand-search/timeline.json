@@ -1,0 +1,131 @@
+{
+  "totalDurationSeconds": 895.777409,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 41.0122
+    },
+    {
+      "slug": "01-stfui-01",
+      "screen": "STFUI-01",
+      "title": "Add-resource launcher",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 41.0122,
+      "durationSeconds": 72.13242600000001,
+      "rawFrames": 28,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "02-stfui-02",
+      "screen": "STFUI-02",
+      "title": "Search by availability",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 113.14462600000002,
+      "durationSeconds": 72.06367300000001,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "03-stfui-03",
+      "screen": "STFUI-03",
+      "title": "Availability results",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 185.208299,
+      "durationSeconds": 70.17034,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "04-stfui-04",
+      "screen": "STFUI-04",
+      "title": "Search by resource",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 255.37863900000002,
+      "durationSeconds": 69.37614500000001,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "05-stfui-05",
+      "screen": "STFUI-05",
+      "title": "Cross-engagement schedule",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 324.75478400000003,
+      "durationSeconds": 71.520998,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "06-stfui-06",
+      "screen": "STFUI-06",
+      "title": "Requirement builder",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 396.27578200000005,
+      "durationSeconds": 71.595329,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "07-stfui-07",
+      "screen": "STFUI-07",
+      "title": "Candidate shortlist",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 467.87111100000004,
+      "durationSeconds": 71.100227,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "08-stfui-08",
+      "screen": "STFUI-08",
+      "title": "Practitioner 360 drawer",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 538.9713380000001,
+      "durationSeconds": 72.195828,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "09-stfui-09",
+      "screen": "STFUI-09",
+      "title": "Classification step",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 611.1671660000001,
+      "durationSeconds": 71.224036,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "10-stfui-10",
+      "screen": "STFUI-10",
+      "title": "Scheduling Gantt",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 682.391202,
+      "durationSeconds": 71.24000000000001,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "11-stfui-11",
+      "screen": "STFUI-11",
+      "title": "Effort editor",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 753.631202,
+      "durationSeconds": 70.594694,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "12-stfui-12",
+      "screen": "STFUI-12",
+      "title": "Auto-allocation review",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 824.225896,
+      "durationSeconds": 71.462857,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    }
+  ]
+}

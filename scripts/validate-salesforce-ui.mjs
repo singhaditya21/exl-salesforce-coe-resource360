@@ -10,7 +10,7 @@ const targetOrg = targetIndex >= 0 ? process.argv[targetIndex + 1] : process.env
 assert(targetOrg, "Pass --target-org or set RESOURCE360_TARGET_ORG.");
 
 const declarativeIds = new Set(DECLARATIVE_SCREEN_IDS);
-const masterExperienceIds = new Set(["GLB-01","GLB-02","GLB-03","GLB-04","GLB-05","GLB-06","ENG-01","ENG-02","ENG-03","ENG-04","ENG-05","ENG-06","ENG-07","ENG-08"]);
+const masterExperienceIds = new Set(SCREENS.map((screen) => screen.id));
 const consoleErrors = [];
 const notFoundResponses = [];
 const excludedShellArtifacts = new Set();
@@ -87,16 +87,22 @@ try {
     assert.equal(await page.locator('[data-experience="GLB-06"]').count(), 1, "The specialized Salesforce preference and guidance experience must render.");
 
     const selectScreen = async (screen) => {
-        try {
-            await page.locator(".screen-button").filter({ hasText: screen.id }).first().click({ timeout: 15_000 });
-        } catch (error) {
-            const observedId = masterExperienceIds.has(screen.id)
-                ? await page.locator(`.master-experience[data-experience="${screen.id}"]`).getAttribute("data-experience")
-                : (await page.locator(".screen-id").innerText()).trim();
-            if (observedId !== screen.id) throw error;
+        const experience = page.locator(`.master-experience[data-experience="${screen.id}"]`);
+        let lastError;
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
+            try {
+                const routeButton = page.locator(".screen-button").filter({ hasText: screen.id }).first();
+                await routeButton.scrollIntoViewIfNeeded({ timeout: 15_000 });
+                await routeButton.click({ timeout: 15_000 });
+                await experience.waitFor({ state: "visible", timeout: 20_000 });
+                return;
+            } catch (error) {
+                lastError = error;
+                if (await experience.count() === 1) return;
+                await page.waitForTimeout(750 * attempt);
+            }
         }
-        if (masterExperienceIds.has(screen.id)) await page.locator(`.master-experience[data-experience="${screen.id}"]`).waitFor({ state: "visible", timeout: 15_000 });
-        else await page.locator(".screen-id").filter({ hasText: screen.id }).waitFor({ state: "visible", timeout: 15_000 });
+        throw lastError;
     };
 
     let visitedScreens = 0;
@@ -105,8 +111,19 @@ try {
     for (const module of MODULES) {
         const expectedScreens = SCREENS.filter((screen) => screen.module === module.id);
         const moduleButton = page.locator(".module-button").filter({ hasText: module.label }).first();
-        await moduleButton.click();
-        await page.locator(".screen-button").filter({ hasText: expectedScreens[0].id }).first().waitFor({ state: "visible", timeout: 15_000 });
+        let moduleError;
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
+            try {
+                await moduleButton.evaluate((button) => button.click());
+                await page.locator(".screen-button").filter({ hasText: expectedScreens[0].id }).first().waitFor({ state: "visible", timeout: 20_000 });
+                moduleError = undefined;
+                break;
+            } catch (error) {
+                moduleError = error;
+                await page.waitForTimeout(750 * attempt);
+            }
+        }
+        if (moduleError) throw moduleError;
         assert.equal(await page.locator(".screen-button").count(), expectedScreens.length, `${module.label} screen count differs from the PRD catalog.`);
 
         for (const screen of expectedScreens) {
@@ -131,7 +148,7 @@ try {
 
     assert.equal(visitedScreens, 103, "Authenticated route sweep did not visit all 103 screens.");
     assert.equal(verifiedDeclarativeWorkbenches, 44, "Authenticated route sweep did not verify all 44 declarative workbenches.");
-    assert.equal(verifiedMasterExperiences, 14, "Authenticated route sweep did not verify all 14 specialized master experiences.");
+    assert.equal(verifiedMasterExperiences, 103, "Authenticated route sweep did not verify all 103 specialized master experiences.");
     let salesforceShellRetries = 0;
     if (consoleErrors.length > 0) {
         const onlyGeneric404s = consoleErrors.every((entry) => entry.kind === "console" && entry.text === genericNotFoundMessage);

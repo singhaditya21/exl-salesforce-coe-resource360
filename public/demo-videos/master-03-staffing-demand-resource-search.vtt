@@ -1,0 +1,357 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:09.953
+Welcome to Master 03 — Staffing Demand & Resource Search for EXL Salesforce COE Resource 360.
+
+2
+00:00:09.953 --> 00:00:16.174
+This recording covers 12 governed stages through actual Salesforce navigation.
+
+3
+00:00:16.174 --> 00:00:21.772
+The acting personas are Project Manager · COE Staffer.
+
+4
+00:00:21.772 --> 00:00:31.103
+Every stage uses fictional seeded data, visible selection, filtering, evidence lineage and an action outcome.
+
+5
+00:00:31.103 --> 00:00:39.812
+Salesforce remains the transactional system of record; the public companion is read-only and sanitized.
+
+6
+00:00:41.012 --> 00:00:46.299
+STFUI-01 is Add-resource launcher, stage 1 in Staffing Demand & Resource Search.
+
+7
+00:00:46.299 --> 00:00:51.145
+Start a governed resource request from an approved engagement and budget.
+
+8
+00:00:51.145 --> 00:00:59.957
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+9
+00:00:59.957 --> 00:01:12.734
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Select engagement and demand source”.
+
+10
+00:01:12.734 --> 00:01:23.307
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+11
+00:01:23.307 --> 00:01:38.287
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+12
+00:01:38.287 --> 00:01:51.945
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+13
+00:01:53.145 --> 00:01:58.939
+STFUI-02 is Search by availability, stage 2 in Staffing Demand & Resource Search.
+
+14
+00:01:58.939 --> 00:02:03.841
+Find capacity by dates, organizational scope, grade, geography and work pattern.
+
+15
+00:02:03.841 --> 00:02:12.755
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+16
+00:02:12.755 --> 00:02:24.342
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Search availability”.
+
+17
+00:02:24.342 --> 00:02:35.039
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+18
+00:02:35.039 --> 00:02:50.192
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+19
+00:02:50.192 --> 00:03:04.008
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+20
+00:03:05.208 --> 00:03:10.514
+STFUI-03 is Availability results, stage 3 in Staffing Demand & Resource Search.
+
+21
+00:03:10.514 --> 00:03:14.493
+Compare accepted availability, pending demand and capability entry points.
+
+22
+00:03:14.493 --> 00:03:23.335
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+23
+00:03:23.335 --> 00:03:34.830
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add selected”.
+
+24
+00:03:34.830 --> 00:03:45.441
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+25
+00:03:45.441 --> 00:04:00.473
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+26
+00:04:00.473 --> 00:04:14.179
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+27
+00:04:15.379 --> 00:04:21.024
+STFUI-04 is Search by resource, stage 4 in Staffing Demand & Resource Search.
+
+28
+00:04:21.024 --> 00:04:24.932
+Locate a named practitioner and open their cross-engagement schedule.
+
+29
+00:04:24.932 --> 00:04:33.617
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+30
+00:04:33.617 --> 00:04:44.907
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Show schedule”.
+
+31
+00:04:44.907 --> 00:04:55.329
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+32
+00:04:55.329 --> 00:05:10.093
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+33
+00:05:10.093 --> 00:05:23.555
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+34
+00:05:24.755 --> 00:05:30.096
+STFUI-05 is Cross-engagement schedule, stage 5 in Staffing Demand & Resource Search.
+
+35
+00:05:30.096 --> 00:05:34.991
+Accepted and pending assignments across projects with capacity remaining by period.
+
+36
+00:05:34.991 --> 00:05:43.893
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+37
+00:05:43.893 --> 00:05:55.465
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Propose allocation”.
+
+38
+00:05:55.465 --> 00:06:06.146
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+39
+00:06:06.146 --> 00:06:21.279
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+40
+00:06:21.279 --> 00:06:35.076
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+41
+00:06:36.276 --> 00:06:41.622
+STFUI-06 is Requirement builder, stage 6 in Staffing Demand & Resource Search.
+
+42
+00:06:41.622 --> 00:06:46.523
+Define required and preferred role, capability, credential, industry and availability criteria.
+
+43
+00:06:46.523 --> 00:06:55.434
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+44
+00:06:55.434 --> 00:07:07.018
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Find candidates”.
+
+45
+00:07:07.018 --> 00:07:17.711
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+46
+00:07:17.711 --> 00:07:32.859
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+47
+00:07:32.859 --> 00:07:46.671
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+48
+00:07:47.871 --> 00:07:53.214
+STFUI-07 is Candidate shortlist, stage 7 in Staffing Demand & Resource Search.
+
+49
+00:07:53.214 --> 00:07:57.666
+Compare eligible, partial and unavailable candidates with transparent fit evidence.
+
+50
+00:07:57.666 --> 00:08:06.571
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+51
+00:08:06.571 --> 00:08:18.146
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Compare selected”.
+
+52
+00:08:18.146 --> 00:08:28.832
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+53
+00:08:28.832 --> 00:08:43.969
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+54
+00:08:43.969 --> 00:08:57.771
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+55
+00:08:58.971 --> 00:09:04.740
+STFUI-08 is Practitioner 360 drawer, stage 8 in Staffing Demand & Resource Search.
+
+56
+00:09:04.740 --> 00:09:09.621
+Review capability, credential, project evidence and schedule without leaving the shortlist.
+
+57
+00:09:09.621 --> 00:09:18.495
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+58
+00:09:18.495 --> 00:09:30.476
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add to request”.
+
+59
+00:09:30.476 --> 00:09:41.125
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+60
+00:09:41.125 --> 00:09:56.212
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+61
+00:09:56.212 --> 00:10:09.967
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+62
+00:10:11.167 --> 00:10:16.519
+STFUI-09 is Classification step, stage 9 in Staffing Demand & Resource Search.
+
+63
+00:10:16.519 --> 00:10:20.979
+Set role, classification, derived billability, tower and unbilled control fields.
+
+64
+00:10:20.979 --> 00:10:29.900
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+65
+00:10:29.900 --> 00:10:41.496
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Apply classification”.
+
+66
+00:10:41.496 --> 00:10:52.200
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+67
+00:10:52.200 --> 00:11:07.365
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+68
+00:11:07.365 --> 00:11:21.191
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+69
+00:11:22.391 --> 00:11:27.711
+STFUI-10 is Scheduling Gantt, stage 10 in Staffing Demand & Resource Search.
+
+70
+00:11:27.711 --> 00:11:32.587
+Plan daily effort against accepted commitments, non-working days, WBS and capacity.
+
+71
+00:11:32.587 --> 00:11:41.453
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+72
+00:11:41.453 --> 00:11:52.978
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Review request”.
+
+73
+00:11:52.978 --> 00:12:03.617
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+74
+00:12:03.617 --> 00:12:18.689
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+75
+00:12:18.689 --> 00:12:32.431
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+76
+00:12:33.631 --> 00:12:38.869
+STFUI-11 is Effort editor, stage 11 in Staffing Demand & Resource Search.
+
+77
+00:12:38.869 --> 00:12:44.106
+Edit dates, effort, work days, phase and work unit with live validation.
+
+78
+00:12:44.106 --> 00:12:52.835
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+79
+00:12:52.835 --> 00:13:04.182
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Save effort”.
+
+80
+00:13:04.182 --> 00:13:14.657
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+81
+00:13:14.657 --> 00:13:29.496
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+82
+00:13:29.496 --> 00:13:43.026
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+83
+00:13:44.226 --> 00:13:49.562
+STFUI-12 is Auto-allocation review, stage 12 in Staffing Demand & Resource Search.
+
+84
+00:13:49.562 --> 00:13:54.454
+Review a capacity-aware proposed schedule and unresolved cells before accepting it.
+
+85
+00:13:54.454 --> 00:14:03.348
+The acting Project Manager or COE Staffer works only with records returned inside the effective Salesforce role and portfolio scope.
+
+86
+00:14:03.348 --> 00:14:14.910
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Accept proposal”.
+
+87
+00:14:14.910 --> 00:14:25.583
+Current signed budget; active employment; per-business-day capacity; idempotency; row locks The screen retains STAFFING_REQUEST_CREATED; ALLOCATION_COMMITTED; STAFFING_REQUEST_DECLINED/EXPIRED so the resulting choice is attributable and reviewable.
+
+88
+00:14:25.583 --> 00:14:40.703
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the staffing contract rather than a generic call-to-action.
+
+89
+00:14:40.703 --> 00:14:54.489
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.

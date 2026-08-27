@@ -82,4 +82,9 @@ describe("sanitized fixture integrity", () => {
     expect(canAccessScreen("Configuration Approver", screens.find((screen) => screen.id === "ADMUI-06")!)).toBe(true);
     expect(canAccessScreen("Finance/PMO", screens.find((screen) => screen.id === "BUDUI-10")!)).toBe(true);
   });
+
+  it("uses outcome-specific primary controls on every governed screen", () => {
+    const genericLabels = new Set(["Continue", "View details", "Review next", "Open workbench", "Review evidence"]);
+    expect(screens.filter((screen) => genericLabels.has(screen.primary))).toEqual([]);
+  });
 });

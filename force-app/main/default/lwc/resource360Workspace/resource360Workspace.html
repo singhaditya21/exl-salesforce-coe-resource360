@@ -46,7 +46,7 @@
             </aside>
 
             <main class="content">
-                <template lwc:if={showStandardExperience}>
+                <template lwc:if={showStandardShell}>
                 <section class="metric-grid" aria-label="Resource 360 summary">
                     <template for:each={summaryCards} for:item="card">
                         <article key={card.label} class="metric-card"><p>{card.label}</p><strong>{card.value}</strong><span>{card.note}</span></article>
@@ -70,7 +70,10 @@
                 <template lwc:if={showEngagementMasterExperience}>
                     <c-resource360-engagement-experience screen-id={selectedScreenId} data={data} active-role={activeRole} recording-mode={recordingMode} onnavigate={handleExperienceNavigate}></c-resource360-engagement-experience>
                 </template>
-                <template lwc:if={showStandardExperience}>
+                <template lwc:if={showDomainMasterExperience}>
+                    <c-resource360-domain-experience screen-id={selectedScreenId} screen={selectedScreen} data={data} active-role={activeRole} recording-mode={recordingMode} onnavigate={handleExperienceNavigate}></c-resource360-domain-experience>
+                </template>
+                <template lwc:if={showStandardShell}>
                 <section class="contract-panel" aria-label="Governed screen contract">
                     <div class="contract-grid">
                         <div><span>Delivery</span><strong>{selectedScreen.delivery}</strong></div>

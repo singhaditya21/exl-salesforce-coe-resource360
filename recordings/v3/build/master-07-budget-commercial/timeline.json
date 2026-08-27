@@ -1,0 +1,131 @@
+{
+  "totalDurationSeconds": 1170.169388,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 30.906395
+    },
+    {
+      "slug": "01-budui-01",
+      "screen": "BUDUI-01",
+      "title": "Budget portfolio and projects",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 30.906395,
+      "durationSeconds": 140.97882099999998,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "02-budui-02",
+      "screen": "BUDUI-02",
+      "title": "Budget details",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 171.88521599999999,
+      "durationSeconds": 134.43950099999998,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "03-budui-03",
+      "screen": "BUDUI-03",
+      "title": "Phase plan",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 306.32471699999996,
+      "durationSeconds": 72.601678,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "04-budui-04",
+      "screen": "BUDUI-04",
+      "title": "Resource plan grid",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 378.92639499999996,
+      "durationSeconds": 72.430839,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "05-budui-05",
+      "screen": "BUDUI-05",
+      "title": "WBS and P&L summary",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 451.35723399999995,
+      "durationSeconds": 129.179955,
+      "rawFrames": 24,
+      "uniqueFrames": 17
+    },
+    {
+      "slug": "06-budui-06",
+      "screen": "BUDUI-06",
+      "title": "Versions and timeline",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 580.5371889999999,
+      "durationSeconds": 73.220181,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "07-budui-07",
+      "screen": "BUDUI-07",
+      "title": "Version comparison",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 653.7573699999999,
+      "durationSeconds": 122.80712,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "08-budui-08",
+      "screen": "BUDUI-08",
+      "title": "Submit and routing",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 776.56449,
+      "durationSeconds": 101.288662,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "09-budui-09",
+      "screen": "BUDUI-09",
+      "title": "Approval queue",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 877.853152,
+      "durationSeconds": 71.70521500000001,
+      "rawFrames": 20,
+      "uniqueFrames": 10
+    },
+    {
+      "slug": "10-budui-10",
+      "screen": "BUDUI-10",
+      "title": "Approval detail and decision",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 949.5583670000001,
+      "durationSeconds": 73.684172,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "11-budui-11",
+      "screen": "BUDUI-11",
+      "title": "Budget import and export",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 1023.2425390000001,
+      "durationSeconds": 74.030975,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "12-budui-12",
+      "screen": "BUDUI-12",
+      "title": "Budget administration",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 1097.273514,
+      "durationSeconds": 72.803855,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    }
+  ]
+}
