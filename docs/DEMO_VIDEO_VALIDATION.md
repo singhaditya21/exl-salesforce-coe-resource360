@@ -2,7 +2,7 @@
 
 ## Decision
 
-The narrated v2.0 master programme started on 27 August 2026. Master 01 is an 8:05, 1920×1080, 30 fps H.264 recording with AAC narration, embedded English subtitles and a WebVTT sidecar. Its twelve source frames were captured from the authenticated Salesforce Lightning tab after real screen-rail selections covering `GLB-01` through `GLB-06`. Browser chrome, unrelated tabs, session URLs and credentials are excluded.
+The narrated v2.0 master programme started on 27 August 2026. Master 01 is an 8:05 authenticated Salesforce recording covering `GLB-01` through `GLB-06`. Master 02 is a 13:32 authenticated Salesforce recording covering `ENG-01` through `ENG-08`. Both are 1920×1080, 30 fps H.264 recordings with AAC narration, embedded English subtitles and WebVTT sidecars. Their source frames were captured from the authenticated Salesforce Lightning tab after real screen-rail selections. Browser chrome, unrelated tabs, session URLs and credentials are excluded.
 
 Five silent, captioned 1280×720 GitHub Pages micro-walkthroughs from 24 August 2026 remain published as explicitly labelled legacy functional evidence while the twelve-master, 103-screen suite is completed. All identities, engagements, economics and decisions shown are fictional. The machine-readable `manifest.json` records source surface, screen coverage, format, duration, file size, SHA-256 and validated outcome. `pnpm test:videos` fails if a video, poster or WebVTT caption file is missing, malformed, replaced or truncated.
 
@@ -11,6 +11,7 @@ Five silent, captioned 1280×720 GitHub Pages micro-walkthroughs from 24 August 
 | Recording | Personas shown | Executed evidence | Validated outcome |
 | --- | --- | --- | --- |
 | `master-01-global-entry-home-access.mp4` | All personas; Administrator narration | Authenticated Salesforce screen-rail traversal of `GLB-01`–`GLB-06`; overview slide; summary and workbench states | Secure entry, role-aware home, accountable notifications, governed search, effective role/scope and preferences/help are narrated and visible |
+| `master-02-engagement-360.mp4` | Project Manager, COE Staffer, Budget Approver, Portfolio Manager, Account Owner, Finance/PMO, Operations, Auditor and executive roles; Administrator narration | Authenticated Salesforce screen-rail traversal of `ENG-01`–`ENG-08`; overview slide; summary and workbench states | Twenty projects, commercial lineage, current roster, budget economics, actuals, WBS/milestones, risks/actions and allocation history are narrated and visible |
 | `01-product-overview.mp4` | Administrator | Role-aware home, all-screen directory, command center | All 103 screen contracts are discoverable; four executive KPIs render |
 | `02-skills-and-talent.mp4` | COE Staffer | Role switch, talent search, profile and claim form | Five candidates rank for MuleSoft; governed capability claim is available |
 | `03-staffing-decision.mp4` | COE Staffer | Requirement, soft request, queue, review and explicit decision | `SR-1842` becomes Accepted and displays committed decision evidence |
@@ -21,6 +22,9 @@ Five silent, captioned 1280×720 GitHub Pages micro-walkthroughs from 24 August 
 
 - Master 01 reports H.264 video at 1920×1080/30 fps, narrated AAC audio and English subtitle streams.
 - Master 01 is 485.33 seconds, 21,092,288 bytes and has SHA-256 `90937bfa20dab10595e07b648aba21ac8d427ec3013a733621a574f50b2656a4`.
+- Master 02 reports H.264 video at 1920×1080/30 fps, narrated AAC audio and English subtitle streams.
+- Master 02 is 811.89 seconds, 33,911,596 bytes and has SHA-256 `19f77be2dd6448c86a26ae0520096b4908977983a40b5bec860f9e3cca008d74`.
+- Master 02 scene-level frames confirm the opening coverage slide and each of `ENG-01` through `ENG-08`; full decode, black-frame and long-silence checks pass.
 - Scene-level frames confirm the opening coverage slide and each of `GLB-01` through `GLB-06`; black-frame and long-silence checks report no runs.
 - A tab-native capture path prevents unrelated desktop or browser content from appearing while preserving genuine Salesforce states after real navigation selections; the authenticated display name is replaced in source frames by the fictional label `Demo User`.
 - Live browser interaction showed the expected role restrictions and authorized routes.

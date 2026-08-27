@@ -1,0 +1,389 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.725
+Welcome to Master Recording 02 for EXL Salesforce COE Resource 360.
+
+2
+00:00:04.725 --> 00:00:13.745
+This walkthrough covers the complete Engagement 360 module, from ENG-01 through ENG-08, using the authenticated Salesforce application and fictional demonstration data.
+
+3
+00:00:13.745 --> 00:00:27.920
+The operating chain is straightforward: an account can sponsor multiple projects; each project is represented as an engagement and can carry multiple commercial references, budgets, resources, timesheets, work units, risks and allocation versions.
+
+4
+00:00:27.920 --> 00:00:39.947
+In this recording we will inspect that chain through the portfolio list, commercial overview, current roster, budget economics, delivery actuals, work plan, accountable risk register and allocation history.
+
+5
+00:00:39.947 --> 00:00:50.685
+The current demo baseline contains ten accounts and twenty rich engagement records, with sixty active resources and the related records needed to show project governance.
+
+6
+00:00:50.685 --> 00:00:56.699
+Every screen is server scoped by role, portfolio, confidentiality, effective dates and source freshness.
+
+7
+00:00:56.699 --> 00:00:59.706
+Salesforce is the transactional system of record.
+
+8
+00:00:59.706 --> 00:01:03.142
+GitHub Pages is only the synchronized, read-only showcase.
+
+9
+00:01:03.142 --> 00:01:13.451
+The name visible in the authenticated header has been replaced with Demo User; no credential, production identity, browser chrome or unrelated tab is recorded.
+
+10
+00:01:14.451 --> 00:01:17.998
+We begin at ENG-01, the scoped engagement portfolio.
+
+11
+00:01:17.998 --> 00:01:31.300
+The module rail on the left confirms that this is the first of eight Engagement 360 screens, and the summary cards retain enterprise capacity and commercial context while we navigate.
+
+12
+00:01:31.300 --> 00:01:36.178
+The workbench is returning twenty engagement records through Salesforce user-mode scope.
+
+13
+00:01:36.178 --> 00:01:49.036
+The seeded portfolio spans industries such as automotive, banking, healthcare, insurance, consumer goods, education, energy, retail, high technology, hospitality, life sciences, transportation, manufacturing, media, government, telecommunications, travel and utilities.
+
+14
+00:01:49.036 --> 00:01:58.791
+Each row carries the engagement name, project identifier and owner context, delivery state, Salesforce cloud or solution tower, industry and effective date.
+
+15
+00:01:58.791 --> 00:02:08.103
+Active and completed records appear together so portfolio and account leaders can separate current delivery from historical work without losing lineage.
+
+16
+00:02:08.103 --> 00:02:17.414
+Global Retail Cloud, for example, is an active Data Cloud retail engagement, while completed projects remain discoverable for audit and reference.
+
+17
+00:02:17.414 --> 00:02:30.273
+The governed contract authorizes Project Managers, COE Staffers, Portfolio Managers, Account Owners, Finance, Operations, Auditors and executive roles, but the visible row set is still determined on the server.
+
+18
+00:02:30.273 --> 00:02:37.811
+The primary action is a new engagement view, and route, record drill-down and engagement-open events remain traceable.
+
+19
+00:02:38.811 --> 00:02:41.704
+ENG-02 brings commercial and delivery context together.
+
+20
+00:02:41.704 --> 00:02:52.863
+The workbench shows forty-one commercial references related to the twenty engagements, demonstrating that one project can carry more than one SOW, purchase order, amendment or change order.
+
+21
+00:02:52.863 --> 00:02:58.649
+That one-to-many relationship is essential: commercial authorization can evolve without overwriting the original contract.
+
+22
+00:02:58.649 --> 00:03:01.542
+The newest rows make the lineage tangible.
+
+23
+00:03:01.542 --> 00:03:10.635
+Global Retail Cloud retains an eight point four crore SOW, a sixty-lakh amendment and a ninety-lakh change order as separate governed references.
+
+24
+00:03:10.635 --> 00:03:19.727
+Consumer Loyalty Transformation carries its own six point nine crore SOW, and the wider seeded portfolio includes active and expired reference states.
+
+25
+00:03:19.727 --> 00:03:28.820
+The screen reconciles engagement, SOW or PO context, state, evidence value and source cutoff before downstream staffing or budgeting actions are allowed.
+
+26
+00:03:28.820 --> 00:03:31.300
+This is not a browser-side join.
+
+27
+00:03:31.300 --> 00:03:40.806
+The server contract uses scoped engagement selectors and user-mode SOQL, with portfolio, confidentiality, freshness and effective-date checks applied before records reach the component.
+
+28
+00:03:40.806 --> 00:03:48.245
+The primary route from this overview is Open Staffing, linking commercial authority to the resource demand it funds.
+
+29
+00:03:48.245 --> 00:04:00.644
+For an Account Owner or Project Manager, this screen is the 360-degree answer to what was sold, which project it supports, whether it is current and what evidence authorizes delivery.
+
+30
+00:04:01.644 --> 00:04:06.725
+On ENG-03 we move from commercial intent to the current engagement roster.
+
+31
+00:04:06.725 --> 00:04:11.806
+Salesforce returns one hundred thirty-eight accepted allocation records across sixty active resources.
+
+32
+00:04:11.806 --> 00:04:19.852
+Each row preserves the practitioner, engagement, delivery role, commercial classification, daily hours, allocation version, acceptance state and effective date.
+
+33
+00:04:19.852 --> 00:04:30.861
+That means the same person can be assigned to more than one project and every project can have multiple resources, while each assignment remains independently governed.
+
+34
+00:04:30.861 --> 00:04:43.564
+The seeded data includes Salesforce developers, Service Cloud leads, Data Cloud architects, MuleSoft architects and developers, program managers, quality engineers, integration developers, Experience Cloud leads, analytics specialists and AI consultants.
+
+35
+00:04:43.564 --> 00:04:49.492
+Classification distinguishes Billing from WAR, IFB or PO Awaited, Training and other operating states.
+
+36
+00:04:49.492 --> 00:05:03.041
+The current capacity policy is visible in the module KPIs: all sixty active resources reach at least eight aggregate hours, fifty are exactly balanced, and ten are deliberately overallocated under controlled exception.
+
+37
+00:05:03.041 --> 00:05:15.744
+A single allocation line cannot exceed eight hours, but valid split assignments can sum across projects; approved over-allocation is permitted up to twelve hours with warning, reason, approver and audit.
+
+38
+00:05:15.744 --> 00:05:19.978
+ENG-03 therefore shows staffing truth, not a flat contact list.
+
+39
+00:05:19.978 --> 00:05:28.447
+The Add Resource action begins governed placement, while later staffing masters will demonstrate matching by industry, functional and technical skill.
+
+40
+00:05:29.447 --> 00:05:32.685
+ENG-04 exposes current budget economics for every project.
+
+41
+00:05:32.685 --> 00:05:40.376
+Twenty budget records are visible, and only the signed current version is allowed to drive staffing and profitability controls.
+
+42
+00:05:40.376 --> 00:05:48.877
+The table carries the budget number, engagement and version, approval state, approved revenue, calculated gross margin, approval evidence and as-of date.
+
+43
+00:05:48.877 --> 00:06:02.235
+Global Retail Cloud is on version four with eight point four crore approved revenue and a thirty-two point three eight percent margin; it has been auto-approved because it clears the configured thirty-percent threshold.
+
+44
+00:06:02.235 --> 00:06:15.593
+Consumer Loyalty Transformation is on version three with six point nine crore revenue and a twenty-six point two seven percent margin, so it remains Pending Approval and is routed to the Portfolio Manager.
+
+45
+00:06:15.593 --> 00:06:19.640
+Other seeded projects carry approved governed economics for cross-industry comparison.
+
+46
+00:06:19.640 --> 00:06:22.069
+This screen makes three rules explicit.
+
+47
+00:06:22.069 --> 00:06:26.522
+First, revisions create versions instead of silently changing the signed baseline.
+
+48
+00:06:26.522 --> 00:06:33.808
+Second, the approval state is evidence, not decoration: a pending or rejected version cannot become the staffing authority.
+
+49
+00:06:33.808 --> 00:06:44.332
+Third, revenue and margin are calculated from the governed commercial and cost model, giving Project Managers, Budget Approvers, Finance and Portfolio Managers a shared financial truth.
+
+50
+00:06:44.332 --> 00:06:54.047
+One budget is actionable now in this view, and Open Budget moves directly into the approval and work-breakdown workflow covered in a later master.
+
+51
+00:06:55.047 --> 00:06:59.736
+ENG-05 connects the delivery plan to submitted and approved actual effort.
+
+52
+00:06:59.736 --> 00:07:04.424
+Twenty-five timesheet records are currently visible, with two items requiring action.
+
+53
+00:07:04.424 --> 00:07:10.818
+Every row retains the resource, week, workflow state, exception or approval evidence and accountability date.
+
+54
+00:07:10.818 --> 00:07:21.474
+The examples include submitted weeks ready for review, approved weeks that passed allocation and daily-capacity checks, and a correction-pending record routed to the Timesheet Approver.
+
+55
+00:07:21.474 --> 00:07:28.720
+This separation matters because an allocation is permission and intent, while a timesheet is actual work performed.
+
+56
+00:07:28.720 --> 00:07:39.376
+Resource 360 allows controlled planned over-allocation, but actual timesheet entry remains capped at eight hours per day unless a separately governed overtime policy is enabled.
+
+57
+00:07:39.376 --> 00:07:46.621
+Approval therefore reconciles the submitted hours with the effective allocation, project, work unit, calendar and capacity ledger.
+
+58
+00:07:46.621 --> 00:07:51.310
+Exceptions are named and attributable rather than buried in a total.
+
+59
+00:07:51.310 --> 00:08:06.228
+Project Managers use the view to understand delivery consumption; People Managers and Timesheet Approvers use it to act; Finance and PMO use approved actuals for margin and utilization reporting; practitioners see only their authorized records.
+
+60
+00:08:06.228 --> 00:08:10.491
+The Export Actuals action preserves a controlled downstream evidence path.
+
+61
+00:08:10.491 --> 00:08:17.737
+Later timesheet masters will show preparation, submission, correction, approval, reminders, reconciliation and the audit history in detail.
+
+62
+00:08:18.737 --> 00:08:21.978
+ENG-06 is the work plan and milestone view.
+
+63
+00:08:21.978 --> 00:08:32.919
+It contains one hundred twenty-two work-unit records across the portfolio, showing how a project is decomposed into manageable delivery scope rather than tracked as one undifferentiated engagement.
+
+64
+00:08:32.919 --> 00:08:40.213
+Each row carries the work-unit or milestone name, parent engagement, delivery phase, current state, WBS code and date.
+
+65
+00:08:40.213 --> 00:08:55.206
+In Global Retail Cloud, Discovery and retail journeys and Data Cloud architecture are complete; Service Cloud build and the MuleSoft integration factory are active; and a cancelled Data Cloud Foundation item remains visible instead of being erased.
+
+66
+00:08:55.206 --> 00:09:02.094
+This hierarchy supports project modules, work units, milestones and the budgets and timesheets that refer to them.
+
+67
+00:09:02.094 --> 00:09:07.767
+The WBS code is the common key that aligns scope, cost and actual effort.
+
+68
+00:09:07.767 --> 00:09:16.277
+Phase values such as Discover, Design and Build allow the Gantt and dashboards to roll individual activities into a project trajectory.
+
+69
+00:09:16.277 --> 00:09:23.165
+Status history distinguishes planned, active, complete, cancelled and blocked work, while owner context and dates establish accountability.
+
+70
+00:09:23.165 --> 00:09:26.407
+The primary Add Milestone action is role governed.
+
+71
+00:09:26.407 --> 00:09:34.916
+Project Managers can maintain the delivery plan, while Portfolio, Finance, Operations and audit personas receive the appropriate read or exception view.
+
+72
+00:09:34.916 --> 00:09:39.779
+This becomes the backbone for schedule publication, completion tracking and earned-value analysis.
+
+73
+00:09:40.779 --> 00:09:42.805
+ENG-07 makes operational exceptions accountable.
+
+74
+00:09:42.805 --> 00:09:48.885
+The risk and action register shows ten current records, nine of them open and actionable.
+
+75
+00:09:48.885 --> 00:09:58.613
+Rather than presenting a generic warning badge, every item retains the original trigger, severity, assigned owner, first-seen time, current state and eventual closure evidence.
+
+76
+00:09:58.613 --> 00:10:19.284
+The visible examples cover a critical integration exception caused by fictional People Master validation failures, a high-priority budget decision assigned to the Executive Approver, a staffing decision inside its twelve-hour service level, a timesheet approval due for the People Manager and an expired staffing request routed back to the Project Manager.
+
+77
+00:10:19.284 --> 00:10:24.554
+These records bridge project delivery with the cross-functional work required to resolve it.
+
+78
+00:10:24.554 --> 00:10:33.876
+Severity supports triage, the owner establishes who must act, and the timestamp prevents the service-level clock from resetting when an item changes hands.
+
+79
+00:10:33.876 --> 00:10:37.524
+Closed items remain available for audit and recurring-pattern analysis.
+
+80
+00:10:37.524 --> 00:10:48.062
+The Add Action route lets an authorized role create a managed response, but scope and confidentiality are still enforced by Salesforce before write authority is granted.
+
+81
+00:10:48.062 --> 00:11:02.654
+For a Project Manager this is the daily control list; for Operations it is the exception queue; for executives it is an aggregated risk posture; and for auditors it is attributable evidence from trigger to closure.
+
+82
+00:11:03.654 --> 00:11:07.868
+The final Engagement 360 screen, ENG-08, preserves effective-dated allocation history.
+
+83
+00:11:07.868 --> 00:11:12.926
+One hundred thirty-eight allocation rows are available in the current seeded baseline.
+
+84
+00:11:12.926 --> 00:11:23.041
+The table repeats the familiar practitioner, engagement, role, commercial classification, daily hours, version, acceptance state and date because those fields form the staffing lineage.
+
+85
+00:11:23.041 --> 00:11:28.099
+What changes over time is never collapsed into an unexplained current percentage.
+
+86
+00:11:28.099 --> 00:11:37.371
+The originating staffing request, allocation version, state transition and effective window can be followed from proposal to acceptance, amendment, expiry or release.
+
+87
+00:11:37.371 --> 00:11:41.586
+This is particularly important for split assignments and controlled over-allocation.
+
+88
+00:11:41.586 --> 00:11:57.602
+A practitioner might carry separate project lines that together equal the standard eight-hour day, or exceed it under an approved exception; each line keeps its own project, hours and dates while the central capacity ledger evaluates the aggregate.
+
+89
+00:11:57.602 --> 00:12:06.874
+The history also supports billing classification changes, project closeout, utilization reconciliation and proof that an old allocation no longer authorized time entry.
+
+90
+00:12:06.874 --> 00:12:12.353
+Export History provides governed evidence without making the browser the source of truth.
+
+91
+00:12:12.353 --> 00:12:28.790
+Project Managers see the lineage for their engagements, Staffers see placement history, People Managers see resource impact, Finance and PMO reconcile the commercial classification, and Auditors can reconstruct who was assigned where, for how long and under which decision.
+
+92
+00:12:29.790 --> 00:12:34.183
+This completes Master 02 and all eight Engagement 360 routes.
+
+93
+00:12:34.183 --> 00:12:52.630
+We traversed the scoped portfolio of twenty projects, reconciled forty-one commercial references, reviewed one hundred thirty-eight accepted allocations, inspected twenty current budgets and twenty-five timesheets, followed one hundred twenty-two work units, triaged ten risks and actions, and closed with effective-dated allocation history.
+
+94
+00:12:52.630 --> 00:13:02.732
+Together these screens establish the account-to-delivery chain: account, engagement, contract evidence, funded plan, skilled resources, actual effort, work execution, exceptions and auditable change.
+
+95
+00:13:02.732 --> 00:13:11.516
+Every transition shown was selected through the live Salesforce screen rail; no deep-link jump was used between the eight routes.
+
+96
+00:13:11.516 --> 00:13:19.862
+The recording uses fictional demo data, with Salesforce as the transactional system and GitHub Pages as the synchronized showcase.
+
+97
+00:13:19.862 --> 00:13:30.842
+Master 03 continues into Staffing and Allocation, where demand intake, skill-based matching, capacity, Gantt planning, controlled over-allocation and approval decisions are demonstrated end to end.
