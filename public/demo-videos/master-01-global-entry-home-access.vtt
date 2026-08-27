@@ -1,0 +1,253 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:05.126
+Welcome to the first master recording for EXL Salesforce COE Resource 360.
+
+2
+00:00:05.126 --> 00:00:14.524
+This walkthrough covers the six global screens that establish identity, access, navigation and user context before any staffing or delivery transaction begins.
+
+3
+00:00:14.524 --> 00:00:23.495
+Every product view in this recording comes from the authenticated Salesforce Developer Org and uses the visible Resource 360 screen rail.
+
+4
+00:00:23.495 --> 00:00:26.912
+The recording contains only fictional, sanitized demonstration data.
+
+5
+00:00:26.912 --> 00:00:37.164
+We will cover EXL entry assurance, the role-aware home, notifications, governed cross-object search, effective role and portfolio scope, and user preferences with in-product help.
+
+6
+00:00:37.164 --> 00:00:49.125
+Together, these screens demonstrate how Resource 360 provides one governed front door for the eighteen business personas supported by the product, while Salesforce remains the system of record.
+
+7
+00:00:50.125 --> 00:00:55.210
+We begin at GLB-01, the EXL SSO entry and federated-entry assurance screen.
+
+8
+00:00:55.210 --> 00:01:03.260
+In the production design, this is the boundary where EXL identity would be verified by the enterprise identity provider.
+
+9
+00:01:03.260 --> 00:01:11.735
+For this demonstration, the Salesforce Developer Org supplies the authenticated identity, while the product still shows the intended assurance contract.
+
+10
+00:01:11.735 --> 00:01:16.819
+The user is not trusted merely because a browser route is open.
+
+11
+00:01:16.819 --> 00:01:24.870
+Resource 360 resolves the Salesforce user, assigned permission-set groups, effective business role and authorized portfolio scope on the server.
+
+12
+00:01:24.870 --> 00:01:35.039
+The screen distinguishes the demo authentication mechanism from the production SSO integration so there is no false claim that enterprise SSO is already connected.
+
+13
+00:01:35.039 --> 00:01:39.700
+The Continue with EXL SSO action represents the governed entry point.
+
+14
+00:01:39.700 --> 00:01:46.903
+The workbench below records the identity context, status and supporting evidence that would be available for audit.
+
+15
+00:01:46.903 --> 00:01:52.835
+Unauthorized or expired scopes are handled as explicit states rather than silently widening access.
+
+16
+00:01:53.835 --> 00:01:58.659
+The next selection in the screen rail is GLB-02, the role-aware home.
+
+17
+00:01:58.659 --> 00:02:03.885
+This is the first operational landing page after identity and scope are resolved.
+
+18
+00:02:03.885 --> 00:02:09.514
+The headline measures are not decorative: they are derived from the seeded Salesforce data.
+
+19
+00:02:09.514 --> 00:02:20.369
+The current baseline shows all sixty active delivery resources at eight or more planned hours, fifty resources exactly balanced at eight hours, and ten controlled over-allocation cases.
+
+20
+00:02:20.369 --> 00:02:25.193
+It also surfaces approved revenue, weighted gross margin and the billable mix.
+
+21
+00:02:25.193 --> 00:02:33.234
+Below the summary, the home explains the authorized roles, the server contract and the workflow evidence expected for this route.
+
+22
+00:02:33.234 --> 00:02:36.450
+The primary action changes with the acting persona.
+
+23
+00:02:36.450 --> 00:02:46.903
+A staffing user is directed toward staffing demand, a project manager toward planning and delivery work, an approver toward decisions, and an executive toward governed insight.
+
+24
+00:02:46.903 --> 00:02:53.335
+The screen therefore reduces navigation noise while preserving the same underlying Salesforce records and security model.
+
+25
+00:02:54.335 --> 00:02:56.779
+GLB-03 is the governed notification center.
+
+26
+00:02:56.779 --> 00:03:05.741
+A useful notification is more than a message badge, so the product preserves the trigger, severity, owner, first-seen time and closure evidence.
+
+27
+00:03:05.741 --> 00:03:14.295
+The live workbench shows notification categories tied to the Resource 360 operating model, including staffing, budget, credential, schedule and timesheet exceptions.
+
+28
+00:03:14.295 --> 00:03:20.812
+Users can distinguish informational signals from warnings and critical items, then follow the associated business context.
+
+29
+00:03:20.812 --> 00:03:27.737
+Read and closure state are designed to be auditable, which prevents important exceptions from disappearing without ownership.
+
+30
+00:03:27.737 --> 00:03:37.513
+Because the notification query executes in Salesforce user mode, the user sees only notices that are valid for the effective role and record scope.
+
+31
+00:03:37.513 --> 00:03:50.140
+The same rule applies when notifications lead to another screen: a notification cannot become a back door into an engagement, resource or commercial record the user is not allowed to view.
+
+32
+00:03:50.140 --> 00:03:56.250
+This creates a dependable exception inbox for daily operations rather than a generic alert feed.
+
+33
+00:03:57.250 --> 00:04:01.912
+We now move through the visible navigation to GLB-04, global search.
+
+34
+00:04:01.912 --> 00:04:04.878
+Resource 360 search is cross-object but governed.
+
+35
+00:04:04.878 --> 00:04:13.778
+It brings together engagements, accounts, contracts, resources, staffing requests, allocations, work units and other operational records without flattening their security boundaries.
+
+36
+00:04:13.778 --> 00:04:22.677
+The screen shows the search action, a result context and the evidence state used to explain why an item is visible.
+
+37
+00:04:22.677 --> 00:04:29.034
+Search results are evaluated against the authenticated user, effective business role and assigned portfolio scope.
+
+38
+00:04:29.034 --> 00:04:36.662
+Sensitive commercial information therefore remains restricted even when a matching name or identifier exists elsewhere in the org.
+
+39
+00:04:36.662 --> 00:04:48.104
+The intended experience is fast discovery with predictable access: users can search once, understand the object and context, and continue into an authorized three-sixty view or workbench.
+
+40
+00:04:48.104 --> 00:04:57.427
+Empty, filtered-empty, unauthorized and failure conditions are represented deliberately so a user can distinguish no matching data from data hidden by policy.
+
+41
+00:04:57.427 --> 00:05:03.784
+This is especially important for a COE solution shared across multiple accounts, portfolios and sub-portfolios.
+
+42
+00:05:04.784 --> 00:05:09.369
+GLB-05 controls the effective role and scope for the active session.
+
+43
+00:05:09.369 --> 00:05:17.288
+Resource 360 supports eighteen business personas, represented in the constrained demo org through controlled composite users and permission-set groups.
+
+44
+00:05:17.288 --> 00:05:25.207
+A user may hold more than one certified business role, but the browser cannot invent or elevate that role.
+
+45
+00:05:25.207 --> 00:05:31.876
+The server validates the requested role, portfolio, sub-portfolio and any time-bound delegation before applying the context.
+
+46
+00:05:31.876 --> 00:05:38.129
+This screen makes that active context visible, so actions and metrics can be interpreted correctly.
+
+47
+00:05:38.129 --> 00:05:48.132
+A portfolio manager can work across the permitted portfolio, while a project manager is constrained to the engagements and records granted to that context.
+
+48
+00:05:48.132 --> 00:05:51.883
+Finance and approver roles receive their own controlled authority.
+
+49
+00:05:51.883 --> 00:06:01.887
+Applying a scope creates correlated evidence, and negative access remains testable: selecting a label is not enough to obtain records or execute a workflow.
+
+50
+00:06:01.887 --> 00:06:09.806
+This approach makes persona demonstrations practical while preserving the principle that Salesforce authorization, sharing and user-mode queries remain authoritative.
+
+51
+00:06:10.806 --> 00:06:14.983
+The final global screen is GLB-06, user preferences and help.
+
+52
+00:06:14.983 --> 00:06:20.413
+It combines personal display choices with Salesforce-native guidance for the most important journeys.
+
+53
+00:06:20.413 --> 00:06:26.678
+The walkthrough library covers staffing decisions, budget and actuals, demo activation and related operating paths.
+
+54
+00:06:26.678 --> 00:06:36.285
+Preferences are saved as user context rather than as global configuration, so one person’s display or guidance settings do not affect another persona.
+
+55
+00:06:36.285 --> 00:06:45.475
+The screen also establishes the accessibility baseline for the recording programme: keyboard-operable actions, meaningful labels, visible focus, captions and reusable narrative guidance.
+
+56
+00:06:45.475 --> 00:06:52.575
+Help content is tied to governed screens instead of sending the user to an unrelated generic response.
+
+57
+00:06:52.575 --> 00:07:03.435
+This matters in a product with more than one hundred routes because a user should receive guidance for the screen, role and task currently in view.
+
+58
+00:07:03.435 --> 00:07:11.372
+In a production EXL deployment, support links and policy content can be configured without changing the core navigation contract.
+
+59
+00:07:12.372 --> 00:07:16.399
+This completes Master 01 and the six global screens.
+
+60
+00:07:16.399 --> 00:07:31.168
+We entered through a governed identity boundary, reviewed the role-aware operating home, followed exception notifications, searched across authorized Salesforce records, applied role and portfolio context, and finished with user preferences and screen-specific help.
+
+61
+00:07:31.168 --> 00:07:41.461
+The navigation shown here was executed against the live Resource 360 Salesforce app; no deep-link jumps are used between the six product screens.
+
+62
+00:07:41.461 --> 00:07:52.649
+The next master moves from this global foundation into Engagement 360, where accounts, projects, contracts, payments, modules, work units, resources and delivery economics come together.
+
+63
+00:07:52.649 --> 00:08:04.285
+The recording baseline remains the fictional Resource 360 demo dataset, with Salesforce as the transactional system of record and GitHub Pages as the synchronized, read-only showcase.

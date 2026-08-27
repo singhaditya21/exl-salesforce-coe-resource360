@@ -1,8 +1,10 @@
 {
-  "recordedAt": "2026-08-24",
+  "recordedAt": "2026-08-27",
   "source": "https://singhaditya21.github.io/exl-salesforce-coe-resource360/",
   "boundary": "Sanitized demo only",
-  "format": {
+  "recordingBaseline": "resource360-demo-v2.0-recording",
+  "expectedCount": 6,
+  "legacyFormat": {
     "container": "MP4",
     "videoCodec": "H.264",
     "width": 1280,
@@ -11,6 +13,29 @@
     "audio": false
   },
   "recordings": [
+    {
+      "file": "master-01-global-entry-home-access.mp4",
+      "poster": "master-01-global-entry-home-access.jpg",
+      "captions": "master-01-global-entry-home-access.vtt",
+      "title": "Master 01 — Global Entry, Home and Access",
+      "generation": "v2.0 narrated master",
+      "sourceSurface": "Authenticated Salesforce Lightning",
+      "screens": ["GLB-01", "GLB-02", "GLB-03", "GLB-04", "GLB-05", "GLB-06"],
+      "durationSeconds": 485.331973,
+      "sizeBytes": 21092288,
+      "sha256": "90937bfa20dab10595e07b648aba21ac8d427ec3013a733621a574f50b2656a4",
+      "format": {
+        "container": "MP4",
+        "videoCodec": "H.264",
+        "audioCodec": "AAC",
+        "captions": "WebVTT sidecar and embedded English mov_text",
+        "width": 1920,
+        "height": 1080,
+        "framesPerSecond": 30,
+        "audio": true
+      },
+      "validatedOutcome": "Actual Salesforce screen-rail traversal covers all six global screens, with narration, overview slide and captions"
+    },
     {
       "file": "01-product-overview.mp4",
       "poster": "01-product-overview.jpg",

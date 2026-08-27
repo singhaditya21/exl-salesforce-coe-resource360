@@ -4,7 +4,8 @@ import { readFile, stat } from "node:fs/promises";
 const directory = new URL("../public/demo-videos/", import.meta.url);
 const manifest = JSON.parse(await readFile(new URL("manifest.json", directory), "utf8"));
 
-if (manifest.recordings.length !== 5) throw new Error(`Expected five recordings, found ${manifest.recordings.length}.`);
+if (!Number.isInteger(manifest.expectedCount) || manifest.expectedCount < 1) throw new Error("Manifest expectedCount must be a positive integer.");
+if (manifest.recordings.length !== manifest.expectedCount) throw new Error(`Expected ${manifest.expectedCount} recordings, found ${manifest.recordings.length}.`);
 
 for (const recording of manifest.recordings) {
   if (!/^[a-z0-9-]+\.mp4$/.test(recording.file)) throw new Error(`Unsafe recording filename: ${recording.file}`);
@@ -19,6 +20,12 @@ for (const recording of manifest.recordings) {
   if (digest !== recording.sha256) throw new Error(`${recording.file} SHA-256 does not match its manifest.`);
   if (posterStat.size < 10_000) throw new Error(`${recording.poster} is not a usable poster image.`);
   if (!captions.startsWith("WEBVTT\n") || !captions.includes("-->")) throw new Error(`${recording.captions} is not a usable WebVTT caption file.`);
+  if (recording.generation === "v2.0 narrated master") {
+    if (recording.format?.width !== 1920 || recording.format?.height !== 1080 || recording.format?.framesPerSecond !== 30 || recording.format?.audio !== true) {
+      throw new Error(`${recording.file} does not declare the 1080p narrated-master format.`);
+    }
+    if (!Array.isArray(recording.screens) || recording.screens.length === 0) throw new Error(`${recording.file} has no governed screen coverage.`);
+  }
 }
 
 console.log(`Validated ${manifest.recordings.length} Resource360 demo recordings against the integrity manifest.`);

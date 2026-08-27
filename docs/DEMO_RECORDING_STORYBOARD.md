@@ -9,6 +9,7 @@
 - Salesforce identities: eight controlled composite demo users representing eighteen governed business personas
 - Public snapshot: allowlisted, build-time, read-only and free of Salesforce IDs, usernames, email addresses and credentials
 - Capture standard: 1920×1080, 30 fps, 100% browser zoom, visible cursor, narration plus edited English captions
+- Every master opens with one branded coverage slide naming the video, personas, governed screen IDs and demo boundary before product footage begins.
 
 The release tag is the immutable recording source. Do not record from an uncommitted tree or from a branch ahead of that tag.
 
@@ -22,6 +23,38 @@ The release tag is the immutable recording source. Do not record from an uncommi
 6. Confirm the live Pages freshness badge and `CMD-08` cutoff match the deployed snapshot.
 7. Use Salesforce Administrator **Login As** for controlled persona traversal. Do not disclose passwords, setup URLs, session URLs, record IDs or real identities.
 8. Disable desktop notifications, hide bookmarks and unrelated tabs, use the fictional demo browser profile and clear browser-local Resource360 state before each transactional take.
+
+## Authoritative twelve-master coverage plan
+
+The eleven functional masters below cover all 103 governed screens exactly once. Master 12 is the overlapping end-to-end demonstration used for executive playback. A screen counts as covered only when its actual Salesforce or Pages control is used, the resulting route is visible and the narration explains the business purpose, authority and evidence. Query-string screen jumps are not permitted between recorded screens.
+
+| Master | Duration target | Governed screen coverage | Primary narrative |
+| --- | ---: | --- | --- |
+| 01 — Global Entry, Home and Access | 8 min | `GLB-01`–`GLB-06` (6) | Identity assurance, role-aware home, notifications, search, scope, preferences and help |
+| 02 — Engagement 360 | 12 min | `ENG-01`–`ENG-08` (8) | Account/project hierarchy, contracts, payments, modules, work units, resources and delivery economics |
+| 03 — Staffing Demand and Search | 16 min | `STFUI-01`–`STFUI-12` (12) | Demand, availability, eligibility, ranking, explainability and project context |
+| 04 — Staffing Decisions and Capacity | 16 min | `STFUI-13`–`STFUI-24` (12) | Soft demand, human decision, allocation, Gantt publication and controlled over-allocation |
+| 05 — Skills and Credentials I | 16 min | `SKLUI-01`–`SKLUI-12` (12) | Resource skill profile, claims, evidence, credentials, taxonomy and gaps |
+| 06 — Skills and Credentials II | 16 min | `SKLUI-13`–`SKLUI-24` (12) | Reviews, capability supply, readiness, learning, expiry and governance |
+| 07 — Budgeting, WBS and Commercial Control | 18 min | `BUDUI-01`–`BUDUI-12` (12) | Budget versions, roster, approval, EVM, contract-to-cash and exceptions |
+| 08 — Timesheet and Actuals | 12 min | `TIMEUI-01`–`TIMEUI-08` (8) | Eligible time, 8-hour cap, submission, approval, reconciliation and compliance |
+| 09 — Command Center and Forecast | 14 min | `CMD-01`–`CMD-09` (9) | Executive KPIs, capacity heatmaps, forecast, exceptions, data quality and synchronized Pages views |
+| 10 — Administration and Assurance | 14 min | `ADMUI-01`–`ADMUI-08` (8) | Personas, sharing, configuration, source contracts, scheduler, audit and activation |
+| 11 — Planning Intelligence | 8 min | `AIUI-01`–`AIUI-04` (4) | Explainable recommendations, scenario planning, guardrails and human checkpoints |
+| 12 — Executive Golden Path | 15 min | Overlapping end-to-end path | Account-to-project-to-contract-to-resource-to-budget-to-time-to-completion, including Pages synchronization |
+
+Coverage arithmetic: `6 + 8 + 12 + 12 + 12 + 12 + 12 + 8 + 9 + 8 + 4 = 103` unique governed screens.
+
+## Recorded status
+
+| Master | Status | Validated artifact |
+| --- | --- | --- |
+| 01 — Global Entry, Home and Access | Complete | `public/demo-videos/master-01-global-entry-home-access.mp4` · 8:05 · 1080p · narration · captions |
+| 02–12 | Pending recording | Title slide, narration, actual navigation, outcome evidence and QA required |
+
+## Superseded early eight-video outline
+
+The outline below is retained only for historical shot-level detail. The twelve-master coverage plan above is authoritative for recording count, screen completeness and duration.
 
 ## Recording order
 
