@@ -26,6 +26,9 @@ test("publishes two narrated masters and five validated legacy recordings", asyn
   await expect(page.getByRole("heading", { name: "Global Entry, Home and Access" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Engagement 360: Account to Delivery" })).toBeVisible();
   await expect(page.getByText("Master", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("03:07", { exact: true })).toBeVisible();
+  await expect(page.getByText("03:40", { exact: true })).toBeVisible();
+  await expect(page.getByText(/resource360-demo-v2\.1-live-interaction/)).toBeVisible();
   await expect(page.getByRole("link", { name: "Download MP4" })).toHaveCount(7);
   for (const video of await page.locator(".video-library video").all()) {
     await expect(video).toHaveAttribute("poster", /demo-videos\/.+\.jpg$/);
