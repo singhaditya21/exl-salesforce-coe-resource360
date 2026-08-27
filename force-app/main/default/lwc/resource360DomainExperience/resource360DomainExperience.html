@@ -1,0 +1,101 @@
+<template>
+    <section class={rootClass} data-screen={screenId} data-experience={screenId}>
+        <header class="experience-hero">
+            <div class="experience-hero__copy">
+                <div class="hero-kicker"><span>{screenId}</span><span>{domain.label}</span><span>{sourceLabel}</span></div>
+                <h2>{title}</h2>
+                <p>{focus}</p>
+                <div class="progress-track" aria-label={screenPosition}><span style={progressStyle}></span></div>
+            </div>
+            <div class="experience-hero__context"><span>Acting persona</span><strong>{activeRole}</strong><small>{screenPosition}</small></div>
+        </header>
+
+        <nav class="journey" aria-label="Master journey screens">
+            <template for:each={journey} for:item="step">
+                <button key={step.id} class={step.className} data-screen={step.id} onclick={handleJourney} title={step.title}>{step.label}</button>
+            </template>
+        </nav>
+
+        <div class="metric-strip">
+            <template for:each={metrics} for:item="metric">
+                <article key={metric.id}><span>{metric.label}</span><strong>{metric.value}</strong><small>{metric.note}</small></article>
+            </template>
+        </div>
+
+        <div class="workbench-toolbar">
+            <div class="filters" aria-label="Evidence filters"><template for:each={filterOptions} for:item="option"><button key={option.value} class={option.className} data-filter={option.value} onclick={handleFilter}>{option.label}</button></template></div>
+            <lightning-input type="search" variant="label-hidden" label="Search live Salesforce evidence" placeholder="Search live evidence" value={query} onchange={handleQuery}></lightning-input>
+            <button class="evidence-button" onclick={handleEvidence}>{evidenceButtonLabel}</button>
+        </div>
+
+        <template lwc:if={isPlanner}>
+            <section class="canvas canvas_planner" aria-label="Dynamic allocation and delivery planner">
+                <div class="canvas-heading"><div><span>Effective-dated plan</span><h3>{title}</h3></div><span>8h standard · 12h controlled ceiling</span></div>
+                <div class="timeline-scale"><span>Current week</span><span>+2 weeks</span><span>+4 weeks</span><span>+6 weeks</span><span>+8 weeks</span></div>
+                <div class="plan-grid"><template for:each={plannerRows} for:item="row"><button key={row.id} class="plan-row" data-index={row.index} onclick={handleSelect}><span class="plan-label"><strong>{row.primary}</strong><small>{row.secondary}</small></span><span class="plan-track"><i style={row.planStyle}><b>{row.hours}</b></i></span><span class="plan-state">{row.status}</span></button></template></div>
+                <div class="capacity-legend"><span class="legend_full">Exactly 8h</span><span class="legend_over">Approved 8–12h</span><span class="legend_draft">Draft / unpublished</span></div>
+            </section>
+        </template>
+
+        <template lwc:if={isMatrix}>
+            <section class="canvas canvas_matrix" aria-label="Capability and eligibility matrix">
+                <div class="canvas-heading"><div><span>Explainable comparison</span><h3>{title}</h3></div><span>Role + industry + functional + technical + credential</span></div>
+                <div class="matrix-head"><span>Evidence record</span><span>Fit</span><span>Availability</span><span>Readiness</span><span>Outcome</span></div>
+                <template for:each={matrixRows} for:item="row"><button key={row.id} class="matrix-row" data-index={row.index} onclick={handleSelect}><span><strong>{row.primary}</strong><small>{row.secondary}</small></span><span class="score-ring">{row.score}</span><span class="cell-good">8h</span><span><i class="score-bar"><b style={row.barStyle}></b></i></span><span>{row.status}</span></button></template>
+            </section>
+        </template>
+
+        <template lwc:if={isBoard}>
+            <section class="canvas canvas_board" aria-label="Governed decision board">
+                <div class="canvas-heading"><div><span>Accountable workflow</span><h3>{title}</h3></div><span>SLA, authority and evidence retained</span></div>
+                <div class="board"><template for:each={boardColumns} for:item="column"><section key={column.id} class="board-column"><header><strong>{column.label}</strong><span>{column.count}</span></header><template for:each={column.rows} for:item="row"><button key={row.id} class="board-card" data-index={row.index} onclick={handleSelect}><span>{row.status}</span><strong>{row.primary}</strong><small>{row.secondary}</small><p>{row.detail}</p></button></template><template lwc:if={column.empty}><div class="empty-state">No records in this governed state.</div></template></section></template></div>
+            </section>
+        </template>
+
+        <template lwc:if={isDashboard}>
+            <section class="canvas canvas_dashboard" aria-label="Certified KPI dashboard">
+                <div class="canvas-heading"><div><span>Certified operational view</span><h3>{title}</h3></div><span>One Salesforce cutoff · role-aware drill-down</span></div>
+                <div class="dashboard-grid"><div class="chart-card"><h4>Portfolio performance</h4><template for:each={dashboardBars} for:item="bar"><div key={bar.id} class="bar-row"><span>{bar.label}</span><i><b style={bar.style}></b></i><strong>{bar.value}%</strong></div></template></div><div class="donut-card"><div class="donut"><strong>104%</strong><span>Average utilization</span></div><div class="donut-facts"><span><b>50</b> exactly 8h</span><span><b>10</b> approved at 10h</span><span><b>0</b> ceiling breaches</span></div></div></div>
+            </section>
+        </template>
+
+        <template lwc:if={isConsole}>
+            <section class="canvas canvas_console" aria-label="Configuration and assurance console">
+                <div class="canvas-heading"><div><span>Dual-control assurance</span><h3>{title}</h3></div><span>Fictional EXL source contracts</span></div>
+                <div class="console-layout"><div class="console-checks"><template for:each={consoleChecks} for:item="check"><article key={check.id}><span class="check-icon">✓</span><div><strong>{check.label}</strong><small>{check.detail}</small></div><b>{check.state}</b></article></template></div><div class="console-terminal"><span>RESOURCE360 / {screenId}</span><p>scope.verify&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PASS</p><p>source.contract&nbsp;&nbsp;&nbsp;&nbsp;MOCK_ACTIVE</p><p>policy.evaluate&nbsp;&nbsp;&nbsp;&nbsp;PASS</p><p>audit.correlate&nbsp;&nbsp;&nbsp;ENABLED</p><p>external.calls&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0</p></div></div>
+            </section>
+        </template>
+
+        <template lwc:if={isIntelligence}>
+            <section class="canvas canvas_intelligence" aria-label="Explainable planning intelligence">
+                <div class="canvas-heading"><div><span>Human-reviewed intelligence</span><h3>{title}</h3></div><span>No autonomous record writes</span></div>
+                <div class="prompt-box"><span>Authorized planning question</span><strong>{focus}</strong><small>Evidence boundary: active persona, portfolio scope and certified snapshot</small></div>
+                <div class="recommendations"><template for:each={recommendationCards} for:item="card"><article key={card.id} class={card.className}><span>{card.rank}</span><div><strong>{card.title}</strong><p>{card.detail}</p></div><b>{card.score}%</b></article></template></div>
+            </section>
+        </template>
+
+        <template lwc:if={isRecord}>
+            <section class="canvas canvas_record" aria-label="Governed record workspace">
+                <div class="canvas-heading"><div><span>Live Salesforce records</span><h3>{title}</h3></div><span>{domain.noun}</span></div>
+                <template lwc:if={hasRecords}><div class="record-list"><template for:each={records} for:item="row"><button key={row.id} class={row.className} data-index={row.index} onclick={handleSelect}><span><strong>{row.primary}</strong><small>{row.secondary}</small></span><span>{row.status}</span><p>{row.detail}</p><i><b style={row.barStyle}></b></i></button></template></div></template>
+                <template lwc:else><div class="empty-state empty-state_large"><strong>No records in the current filter.</strong><span>Change the filter or reset the seeded Salesforce dataset.</span></div></template>
+            </section>
+        </template>
+
+        <template lwc:if={hasSelection}>
+            <aside class="selection-drawer" aria-label="Selected evidence"><div><span>Selected live evidence</span><strong>{selectedRecord.primary}</strong><small>{selectedRecord.secondary}</small></div><div><span>State</span><strong>{selectedRecord.status}</strong><small>{selectedRecord.detail}</small></div><div><span>Control</span><strong>{sourceLabel}</strong><small>{focus}</small></div></aside>
+        </template>
+
+        <template lwc:if={evidenceMode}>
+            <section class="lineage" aria-label="Evidence lineage"><div><span>Source ownership</span><strong>{screen.source}</strong></div><div><span>Server contract</span><strong>{screen.api}</strong></div><div><span>Policy validation</span><strong>{screen.validations}</strong></div><div><span>Audit event</span><strong>{screen.events}</strong></div></section>
+        </template>
+
+        <template lwc:if={outcome}><div class="outcome" role="status"><span>✓</span><strong>{outcome}</strong></div></template>
+
+        <footer class="experience-actions">
+            <button class="secondary-action" onclick={handlePrevious} disabled={noPrevious}>Previous screen</button>
+            <button class="primary-action" data-action="primary" onclick={handlePrimary}>{actionLabel}</button>
+            <button class="next-action" data-action="next" onclick={handleNext} disabled={noNext}>Continue to next screen</button>
+        </footer>
+    </section>
+</template>

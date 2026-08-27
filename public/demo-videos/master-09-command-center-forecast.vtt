@@ -1,0 +1,273 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:06.369
+Welcome to Master 09 — Command Center & Forecast for EXL Salesforce COE Resource 360.
+
+2
+00:00:06.369 --> 00:00:10.615
+This recording covers 9 governed stages through actual Salesforce navigation.
+
+3
+00:00:10.615 --> 00:00:15.285
+The acting personas are Portfolio Manager · Executive Viewer · Operations.
+
+4
+00:00:15.285 --> 00:00:21.654
+Every stage uses fictional seeded data, visible selection, filtering, evidence lineage and an action outcome.
+
+5
+00:00:21.654 --> 00:00:27.598
+Salesforce remains the transactional system of record; the public companion is read-only and sanitized.
+
+6
+00:00:30.000 --> 00:00:34.848
+CMD-01 is Executive overview, stage 1 in Command Center & Forecast.
+
+7
+00:00:34.848 --> 00:00:39.695
+Headcount, utilization, bench, economics and critical action in one leadership view.
+
+8
+00:00:39.695 --> 00:00:49.391
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+9
+00:00:49.391 --> 00:01:00.849
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Export briefing”.
+
+10
+00:01:00.849 --> 00:01:09.222
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+11
+00:01:09.222 --> 00:01:24.206
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+12
+00:01:24.206 --> 00:01:37.867
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+13
+00:01:39.067 --> 00:01:43.914
+CMD-02 is Utilization explorer, stage 2 in Command Center & Forecast.
+
+14
+00:01:43.914 --> 00:01:49.200
+Drill from geography to portfolio, engagement and employee across allocation and actuals.
+
+15
+00:01:49.200 --> 00:01:58.893
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+16
+00:01:58.893 --> 00:02:10.347
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Open drill-down”.
+
+17
+00:02:10.347 --> 00:02:18.718
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+18
+00:02:18.718 --> 00:02:33.697
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+19
+00:02:33.697 --> 00:02:47.355
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+20
+00:02:48.555 --> 00:02:54.066
+CMD-03 is Supply, demand and capacity, stage 3 in Command Center & Forecast.
+
+21
+00:02:54.066 --> 00:02:59.578
+Compare committed supply, soft demand, bench, roll-offs and role gaps over 90 days.
+
+22
+00:02:59.578 --> 00:03:08.904
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+23
+00:03:08.904 --> 00:03:20.351
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “View demand gaps”.
+
+24
+00:03:20.351 --> 00:03:28.406
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+25
+00:03:28.406 --> 00:03:42.820
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+26
+00:03:42.820 --> 00:03:55.962
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+27
+00:03:57.162 --> 00:04:01.853
+CMD-04 is Unbilled governance, stage 4 in Command Center & Forecast.
+
+28
+00:04:01.853 --> 00:04:06.971
+Govern WAR, IFB, Blocked, Shadow and internal capacity by age and escalation.
+
+29
+00:04:06.971 --> 00:04:16.354
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+30
+00:04:16.354 --> 00:04:27.443
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Assign action”.
+
+31
+00:04:27.443 --> 00:04:35.546
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+32
+00:04:35.546 --> 00:04:50.047
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+33
+00:04:50.047 --> 00:05:03.268
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+34
+00:05:04.468 --> 00:05:13.617
+CMD-05 is Staffing performance, stage 5 in Command Center & Forecast.
+
+35
+00:05:13.617 --> 00:05:21.102
+Measure queue, SLA, decisions, conflicts, expiry and staffer workload.
+
+36
+00:05:21.102 --> 00:05:39.399
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+37
+00:05:39.399 --> 00:06:01.023
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “View overdue”.
+
+38
+00:06:01.023 --> 00:06:16.825
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+39
+00:06:16.825 --> 00:06:45.103
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+40
+00:06:45.103 --> 00:07:10.885
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+41
+00:07:12.085 --> 00:07:17.136
+CMD-06 is Salesforce capability coverage, stage 6 in Command Center & Forecast.
+
+42
+00:07:17.136 --> 00:07:22.607
+See supply depth, credentials, demand gaps and profile readiness by tower and role.
+
+43
+00:07:22.607 --> 00:07:31.867
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+44
+00:07:31.867 --> 00:07:43.231
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Open capability gap”.
+
+45
+00:07:43.231 --> 00:07:51.228
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+46
+00:07:51.228 --> 00:08:05.538
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+47
+00:08:05.538 --> 00:08:18.585
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+48
+00:08:19.785 --> 00:08:24.777
+CMD-07 is Engagement economics, stage 7 in Command Center & Forecast.
+
+49
+00:08:24.777 --> 00:08:29.769
+Track budget, actual, ETC, EAC, margin and erosion alerts across engagements.
+
+50
+00:08:29.769 --> 00:08:39.754
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+51
+00:08:39.754 --> 00:08:52.007
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Review margin risk”.
+
+52
+00:08:52.007 --> 00:09:00.630
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+53
+00:09:00.630 --> 00:09:16.060
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+54
+00:09:16.060 --> 00:09:30.128
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+55
+00:09:31.328 --> 00:09:37.476
+CMD-08 is Data quality and sync operations, stage 8 in Command Center & Forecast.
+
+56
+00:09:37.476 --> 00:09:41.867
+Monitor freshness, volume, duplicates, unmatched joins and failed integration events.
+
+57
+00:09:41.867 --> 00:09:51.527
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+58
+00:09:51.527 --> 00:10:02.944
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Open runbook”.
+
+59
+00:10:02.944 --> 00:10:11.287
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+60
+00:10:11.287 --> 00:10:26.217
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+61
+00:10:26.217 --> 00:10:39.829
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+62
+00:10:41.029 --> 00:10:46.791
+CMD-09 is Audit and override explorer, stage 9 in Command Center & Forecast.
+
+63
+00:10:46.791 --> 00:10:50.779
+Search attributable decisions, changes, overrides and correlated technical events.
+
+64
+00:10:50.779 --> 00:11:00.530
+The acting Portfolio Manager or Executive Viewer or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+65
+00:11:00.530 --> 00:11:12.053
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Export audit”.
+
+66
+00:11:12.053 --> 00:11:20.474
+Role/portfolio scope; KPI cutoff; reconciliation certification The screen retains KPI_DRILLDOWN; EXCEPTION_ASSIGNED so the resulting choice is attributable and reviewable.
+
+67
+00:11:20.474 --> 00:11:35.542
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the command contract rather than a generic call-to-action.
+
+68
+00:11:35.542 --> 00:11:49.282
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.

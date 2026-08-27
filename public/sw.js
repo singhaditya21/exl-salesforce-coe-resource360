@@ -1,4 +1,4 @@
-const CACHE_NAME = "resource360-demo-v2.1";
+const CACHE_NAME = "resource360-demo-v3.0";
 const APP_SHELL = new URL("./", self.location.href).href;
 
 self.addEventListener("install", (event) => {

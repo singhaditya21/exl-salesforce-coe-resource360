@@ -1,0 +1,159 @@
+{
+  "id": "master-12-executive-golden-path",
+  "baseline": "resource360-demo-v3.0-complete-suite",
+  "durationSeconds": 1388.964853,
+  "screenCount": 17,
+  "overviewSlides": 1,
+  "contactSheetFrames": 18,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "GLB-02",
+      "frames": 20,
+      "uniqueFrames": 10,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 70.260272
+    },
+    {
+      "screen": "ENG-01",
+      "frames": 20,
+      "uniqueFrames": 9,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 70.63641700000001
+    },
+    {
+      "screen": "ENG-02",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 71.063129
+    },
+    {
+      "screen": "STFUI-06",
+      "frames": 28,
+      "uniqueFrames": 19,
+      "capturedDurationSeconds": 11.2,
+      "renderedDurationSeconds": 74.899229
+    },
+    {
+      "screen": "STFUI-07",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 74.310884
+    },
+    {
+      "screen": "SKLUI-05",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 74.16494300000001
+    },
+    {
+      "screen": "STFUI-10",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 74.66970500000001
+    },
+    {
+      "screen": "STFUI-13",
+      "frames": 24,
+      "uniqueFrames": 15,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 75.40063500000001
+    },
+    {
+      "screen": "STFUI-21",
+      "frames": 24,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 73.639773
+    },
+    {
+      "screen": "STFUI-23",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 75.165351
+    },
+    {
+      "screen": "BUDUI-05",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 76.04145100000001
+    },
+    {
+      "screen": "BUDUI-10",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 75.470522
+    },
+    {
+      "screen": "TIMEUI-02",
+      "frames": 24,
+      "uniqueFrames": 15,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 170.786848
+    },
+    {
+      "screen": "TIMEUI-06",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 74.616871
+    },
+    {
+      "screen": "CMD-01",
+      "frames": 20,
+      "uniqueFrames": 10,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 71.67124700000001
+    },
+    {
+      "screen": "CMD-08",
+      "frames": 20,
+      "uniqueFrames": 13,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 72.324989
+    },
+    {
+      "screen": "PAGES-CMD-08",
+      "frames": 24,
+      "uniqueFrames": 5,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 79.344444
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "1388.964853"
+    }
+  }
+}

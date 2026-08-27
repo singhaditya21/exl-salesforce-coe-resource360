@@ -28,7 +28,18 @@ for (const recording of manifest.recordings) {
     if (recording.generation === "v2.1 live-interaction master" && !recording.validatedOutcome.includes("Continuous authenticated Salesforce footage")) {
       throw new Error(`${recording.file} does not declare continuous authenticated Salesforce evidence.`);
     }
+    if (recording.generation?.includes("complete-suite") && !recording.validatedOutcome.includes("Continuous")) {
+      throw new Error(`${recording.file} does not declare continuous complete-suite evidence.`);
+    }
   }
+}
+
+if (manifest.recordingBaseline === "resource360-demo-v3.0-complete-suite") {
+  const masters = manifest.recordings.filter((recording) => recording.generation?.includes("master"));
+  if (masters.length !== 12) throw new Error(`Expected 12 narrated masters, found ${masters.length}.`);
+  const functionalScreens = new Set(masters.filter((recording) => !recording.file.startsWith("master-12-")).flatMap((recording) => recording.screens));
+  if (functionalScreens.size !== 103) throw new Error(`Masters 01–11 must cover exactly 103 unique governed screens; found ${functionalScreens.size}.`);
+  if (!manifest.releaseTag || manifest.releaseTag !== manifest.recordingBaseline) throw new Error("The complete suite must declare its immutable release tag.");
 }
 
 console.log(`Validated ${manifest.recordings.length} Resource360 demo recordings against the integrity manifest.`);

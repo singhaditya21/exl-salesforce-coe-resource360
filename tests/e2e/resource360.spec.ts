@@ -18,18 +18,18 @@ test("publishes the complete governed screen directory", async ({ page }) => {
   await expect(directory.locator(".screen-card-grid > button")).toHaveCount(103);
 });
 
-test("publishes two narrated masters and five validated legacy recordings", async ({ page }) => {
+test("publishes twelve narrated masters and five validated legacy recordings", async ({ page }) => {
   await page.goto("/?screen=GLB-06");
-  await expect(page.getByRole("heading", { name: "Narrated masters and legacy functional evidence" })).toBeVisible();
-  await expect(page.locator(".video-library video")).toHaveCount(7);
-  await expect(page.getByText("7 recordings verified", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Complete narrated master suite and legacy evidence" })).toBeVisible();
+  await expect(page.locator(".video-library video")).toHaveCount(17);
+  await expect(page.getByText("17 recordings verified", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Global Entry, Home and Access" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Engagement 360: Account to Delivery" })).toBeVisible();
-  await expect(page.getByText("Master", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("Master", { exact: true })).toHaveCount(12);
   await expect(page.getByText("03:07", { exact: true })).toBeVisible();
   await expect(page.getByText("03:40", { exact: true })).toBeVisible();
-  await expect(page.getByText(/resource360-demo-v2\.1-live-interaction/)).toBeVisible();
-  await expect(page.getByRole("link", { name: "Download MP4" })).toHaveCount(7);
+  await expect(page.getByText(/resource360-demo-v3\.0-complete-suite/)).toBeVisible();
+  await expect(page.getByRole("link", { name: "Download MP4" })).toHaveCount(17);
   for (const video of await page.locator(".video-library video").all()) {
     await expect(video).toHaveAttribute("poster", /demo-videos\/.+\.jpg$/);
     await expect(video.locator("source")).toHaveAttribute("src", /demo-videos\/.+\.mp4$/);

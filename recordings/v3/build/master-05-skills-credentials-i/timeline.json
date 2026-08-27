@@ -1,0 +1,131 @@
+{
+  "totalDurationSeconds": 917.319336,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 31.950522
+    },
+    {
+      "slug": "01-sklui-01",
+      "screen": "SKLUI-01",
+      "title": "Individual skills home",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 31.950522,
+      "durationSeconds": 71.363401,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "02-sklui-02",
+      "screen": "SKLUI-02",
+      "title": "Manager skills home",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 103.31392299999999,
+      "durationSeconds": 71.66090700000001,
+      "rawFrames": 24,
+      "uniqueFrames": 17
+    },
+    {
+      "slug": "03-sklui-03",
+      "screen": "SKLUI-03",
+      "title": "COE and Staffer skills home",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 174.97483,
+      "durationSeconds": 72.495102,
+      "rawFrames": 24,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "04-sklui-04",
+      "screen": "SKLUI-04",
+      "title": "Admin skills home",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 247.469932,
+      "durationSeconds": 70.690748,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "05-sklui-05",
+      "screen": "SKLUI-05",
+      "title": "Profile — particulars",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 318.16068,
+      "durationSeconds": 71.892971,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "06-sklui-06",
+      "screen": "SKLUI-06",
+      "title": "Profile — Salesforce capabilities",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 390.053651,
+      "durationSeconds": 73.789252,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "07-sklui-07",
+      "screen": "SKLUI-07",
+      "title": "Profile — industry skills",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 463.842903,
+      "durationSeconds": 71.264671,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "08-sklui-08",
+      "screen": "SKLUI-08",
+      "title": "Profile — learning",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 535.107574,
+      "durationSeconds": 98.13315200000001,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "09-sklui-09",
+      "screen": "SKLUI-09",
+      "title": "Profile — certifications",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 633.240726,
+      "durationSeconds": 72.216689,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "10-sklui-10",
+      "screen": "SKLUI-10",
+      "title": "Add capability claim",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 705.457415,
+      "durationSeconds": 70.760136,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "11-sklui-11",
+      "screen": "SKLUI-11",
+      "title": "Add certification",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 776.217551,
+      "durationSeconds": 69.64,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "12-sklui-12",
+      "screen": "SKLUI-12",
+      "title": "My team list",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 845.857551,
+      "durationSeconds": 71.330839,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    }
+  ]
+}

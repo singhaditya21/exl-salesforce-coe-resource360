@@ -9,7 +9,6 @@ const targetOrg = targetIndex >= 0 ? process.argv[targetIndex + 1] : process.env
 assert(targetOrg, "Pass --target-org or set RESOURCE360_TARGET_ORG.");
 
 const SCREENS = governedScreens(RAW_SCREENS);
-const MASTER_EXPERIENCE_IDS = new Set(["GLB-01","GLB-02","GLB-03","GLB-04","GLB-05","GLB-06","ENG-01","ENG-02","ENG-03","ENG-04","ENG-05","ENG-06","ENG-07","ENG-08"]);
 const PERSONAS = Object.freeze([
     { alias: "r360pmgr", role: "Project Manager", screen: "ENG-01", minimumRecords: 20 },
     { alias: "r360staf", role: "COE Staffer", screen: "STFUI-21", minimumRecords: 1 },
@@ -170,22 +169,16 @@ try {
             const positiveModule = moduleFor(persona.screen);
             await page.locator(".module-button").filter({ hasText: positiveModule.label }).first().click();
             await page.locator(".screen-button").filter({ hasText: persona.screen }).first().click();
-            if (MASTER_EXPERIENCE_IDS.has(persona.screen)) {
-                await page.locator(`.master-experience[data-experience="${persona.screen}"]`).waitFor({ state: "visible", timeout: 15_000 });
-                assert.equal(await page.locator(".contract-panel").count(), 0, `${persona.alias} fell back to the generic ${persona.screen} contract.`);
-            } else {
-                await page.locator(".screen-id").filter({ hasText: persona.screen }).waitFor({ state: "visible", timeout: 15_000 });
-                assert.equal(await page.locator(".contract-panel").count(), 1, `${persona.alias} did not render the governed ${persona.screen} contract.`);
-            }
+            const activeExperience = page.locator(`.master-experience[data-experience="${persona.screen}"]`);
+            await activeExperience.waitFor({ state: "visible", timeout: 20_000 });
+            assert.equal(await page.locator(".contract-panel").count(), 0, `${persona.alias} fell back to the generic ${persona.screen} contract.`);
 
             let visibleRecords;
             if (persona.minimumRecords !== undefined) {
                 if (persona.screen === "ENG-01") {
                     visibleRecords = await page.locator(".project-card").count();
                 } else {
-                    const visibleFact = page.locator(".route-facts article").filter({ hasText: "Visible records" }).first();
-                    await visibleFact.waitFor({ state: "visible", timeout: 15_000 });
-                    visibleRecords = Number((await visibleFact.locator("strong").innerText()).trim());
+                    visibleRecords = await activeExperience.locator(".plan-row, .matrix-row, .board-card, .record-list > button").count();
                 }
                 assert(
                     visibleRecords >= persona.minimumRecords,

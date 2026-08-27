@@ -76,6 +76,9 @@ test("renders route-specific Pages workbenches instead of module-wide repeated s
   assert.match(synchronized, /Twenty-project selector/);
   assert.match(synchronized, /Sixty-resource selector/);
   assert.doesNotMatch(page, /is available in the browser demo/);
+  assert.match(page, /"CMD-08": "CMD-08"/);
+  assert.match(page, /no unauthorized destination was exposed/);
+  assert.match(page, /Salesforce publication lineage, population counts and freshness evidence verified/);
 });
 
 test("publishes an allowlisted Salesforce snapshot without credentials or record ids", async () => {
@@ -113,12 +116,12 @@ test("the help screen publishes the validated recording library", async () => {
     readFile(new URL("../public/demo-videos/manifest.json", import.meta.url), "utf8").then(JSON.parse),
   ]);
   assert.match(operations, /export function VideoLibrary/);
-  assert.match(operations, /7 recordings verified/);
-  for (const name of ["master-01-global-entry-home-access", "master-02-engagement-360", "01-product-overview", "02-skills-and-talent", "03-staffing-decision", "04-budget-and-actuals", "05-demo-activation"]) assert.match(operations, new RegExp(name));
+  assert.match(operations, /Twelve narrated Salesforce masters/);
+  for (const name of ["master-01-global-entry-home-access", "master-02-engagement-360", "master-03-staffing-demand-resource-search", "master-04-staffing-decisions-allocation-capacity", "master-05-skills-credentials-part-1", "master-06-skills-credentials-part-2", "master-07-budget-wbs-commercial-control", "master-08-timesheet-actuals", "master-09-command-center-forecast", "master-10-administration-configuration-assurance", "master-11-planning-intelligence", "master-12-executive-golden-path", "01-product-overview", "02-skills-and-talent", "03-staffing-decision", "04-budget-and-actuals", "05-demo-activation"]) assert.match(operations, new RegExp(name));
   assert.match(operations, /fetch\(recordingManifestUrl\)/);
   assert.match(operations, /recordingManifestByFile/);
   assert.match(operations, /narratedMasterRuntimeLabel/);
-  assert.equal(recordingManifest.recordingBaseline, "resource360-demo-v2.1-live-interaction");
+  assert.equal(recordingManifest.recordingBaseline, "resource360-demo-v3.0-complete-suite");
   assert.doesNotMatch(operations, /08:05|13:32|twenty-one minutes/);
   assert.match(page, /screen\.id === "GLB-06"/);
 });
@@ -132,7 +135,7 @@ test("includes static-host resilience and repository security controls", async (
     readFile(new URL("../.github/workflows/codeql.yml", import.meta.url), "utf8"),
   ]);
   assert.match(html, /Content-Security-Policy/);
-  assert.match(serviceWorker, /resource360-demo-v2/);
+  assert.match(serviceWorker, /resource360-demo-v3\.0/);
   assert.match(manifest, /standalone/);
   assert.match(security, /must not contain EXL production data/i);
   assert.match(codeql, /javascript-typescript/);

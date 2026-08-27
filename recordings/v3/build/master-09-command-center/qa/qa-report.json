@@ -1,0 +1,103 @@
+{
+  "id": "master-09-command-center",
+  "baseline": "resource360-demo-v3.0-complete-suite",
+  "durationSeconds": 710.569987,
+  "screenCount": 9,
+  "overviewSlides": 1,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "CMD-01",
+      "frames": 20,
+      "uniqueFrames": 13,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 69.067347
+    },
+    {
+      "screen": "CMD-02",
+      "frames": 20,
+      "uniqueFrames": 12,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 69.48761900000001
+    },
+    {
+      "screen": "CMD-03",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 68.60712000000001
+    },
+    {
+      "screen": "CMD-04",
+      "frames": 20,
+      "uniqueFrames": 12,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 67.305805
+    },
+    {
+      "screen": "CMD-05",
+      "frames": 24,
+      "uniqueFrames": 15,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 127.617324
+    },
+    {
+      "screen": "CMD-06",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 67.7
+    },
+    {
+      "screen": "CMD-07",
+      "frames": 20,
+      "uniqueFrames": 13,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 71.54303900000001
+    },
+    {
+      "screen": "CMD-08",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 69.700771
+    },
+    {
+      "screen": "CMD-09",
+      "frames": 20,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 69.452562
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "710.569987"
+    }
+  },
+  "contactSheetFrames": 10
+}

@@ -1,0 +1,101 @@
+{
+  "totalDurationSeconds": 710.569987,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 30
+    },
+    {
+      "slug": "01-cmd-01",
+      "screen": "CMD-01",
+      "title": "Executive overview",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 30,
+      "durationSeconds": 69.067347,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "02-cmd-02",
+      "screen": "CMD-02",
+      "title": "Utilization explorer",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 99.067347,
+      "durationSeconds": 69.48761900000001,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "03-cmd-03",
+      "screen": "CMD-03",
+      "title": "Supply, demand and capacity",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 168.554966,
+      "durationSeconds": 68.60712000000001,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "04-cmd-04",
+      "screen": "CMD-04",
+      "title": "Unbilled governance",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 237.16208600000002,
+      "durationSeconds": 67.305805,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "05-cmd-05",
+      "screen": "CMD-05",
+      "title": "Staffing performance",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 304.467891,
+      "durationSeconds": 127.617324,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "06-cmd-06",
+      "screen": "CMD-06",
+      "title": "Salesforce capability coverage",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 432.085215,
+      "durationSeconds": 67.7,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "07-cmd-07",
+      "screen": "CMD-07",
+      "title": "Engagement economics",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 499.785215,
+      "durationSeconds": 71.54303900000001,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "08-cmd-08",
+      "screen": "CMD-08",
+      "title": "Data quality and sync operations",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 571.328254,
+      "durationSeconds": 69.700771,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "09-cmd-09",
+      "screen": "CMD-09",
+      "title": "Audit and override explorer",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 641.029025,
+      "durationSeconds": 69.452562,
+      "rawFrames": 20,
+      "uniqueFrames": 14
+    }
+  ]
+}

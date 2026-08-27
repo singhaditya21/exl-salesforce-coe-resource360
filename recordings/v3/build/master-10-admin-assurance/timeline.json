@@ -1,0 +1,91 @@
+{
+  "totalDurationSeconds": 620.465039,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 30.671837
+    },
+    {
+      "slug": "01-admui-01",
+      "screen": "ADMUI-01",
+      "title": "Administration landing",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 30.671837,
+      "durationSeconds": 74.789478,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "02-admui-02",
+      "screen": "ADMUI-02",
+      "title": "People and access",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 105.461315,
+      "durationSeconds": 72.680181,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "03-admui-03",
+      "screen": "ADMUI-03",
+      "title": "Role-permission matrix",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 178.14149600000002,
+      "durationSeconds": 72.021179,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "04-admui-04",
+      "screen": "ADMUI-04",
+      "title": "Field values and LOVs",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 250.16267500000004,
+      "durationSeconds": 73.223039,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "05-admui-05",
+      "screen": "ADMUI-05",
+      "title": "Calendars and capacity",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 323.385714,
+      "durationSeconds": 73.48517,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "06-admui-06",
+      "screen": "ADMUI-06",
+      "title": "Approval and escalation policy",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 396.870884,
+      "durationSeconds": 78.166848,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "07-admui-07",
+      "screen": "ADMUI-07",
+      "title": "Integration configuration",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 475.037732,
+      "durationSeconds": 73.62771000000001,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "08-admui-08",
+      "screen": "ADMUI-08",
+      "title": "Import and batch operations",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 548.665442,
+      "durationSeconds": 71.688254,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    }
+  ]
+}

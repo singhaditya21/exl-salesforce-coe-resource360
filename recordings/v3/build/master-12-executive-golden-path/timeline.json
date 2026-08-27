@@ -1,0 +1,181 @@
+{
+  "totalDurationSeconds": 1388.964853,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 34.389206
+    },
+    {
+      "slug": "01-glb-02",
+      "screen": "GLB-02",
+      "title": "Role-aware home",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 34.389206,
+      "durationSeconds": 70.260272,
+      "rawFrames": 20,
+      "uniqueFrames": 10
+    },
+    {
+      "slug": "02-eng-01",
+      "screen": "ENG-01",
+      "title": "Engagement list",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 104.649478,
+      "durationSeconds": 70.63641700000001,
+      "rawFrames": 20,
+      "uniqueFrames": 9
+    },
+    {
+      "slug": "03-eng-02",
+      "screen": "ENG-02",
+      "title": "Engagement 360 overview",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 175.285895,
+      "durationSeconds": 71.063129,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "04-stfui-06",
+      "screen": "STFUI-06",
+      "title": "Requirement builder",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 246.34902400000001,
+      "durationSeconds": 74.899229,
+      "rawFrames": 28,
+      "uniqueFrames": 19
+    },
+    {
+      "slug": "05-stfui-07",
+      "screen": "STFUI-07",
+      "title": "Candidate shortlist",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 321.24825300000003,
+      "durationSeconds": 74.310884,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "06-sklui-05",
+      "screen": "SKLUI-05",
+      "title": "Profile — particulars",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 395.559137,
+      "durationSeconds": 74.16494300000001,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "07-stfui-10",
+      "screen": "STFUI-10",
+      "title": "Scheduling Gantt",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 469.72408,
+      "durationSeconds": 74.66970500000001,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "08-stfui-13",
+      "screen": "STFUI-13",
+      "title": "Request review and submit",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 544.393785,
+      "durationSeconds": 75.40063500000001,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "09-stfui-21",
+      "screen": "STFUI-21",
+      "title": "Staffing queue",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 619.79442,
+      "durationSeconds": 73.639773,
+      "rawFrames": 24,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "10-stfui-23",
+      "screen": "STFUI-23",
+      "title": "Accept or decline decision",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 693.4341929999999,
+      "durationSeconds": 75.165351,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "11-budui-05",
+      "screen": "BUDUI-05",
+      "title": "WBS and P&L summary",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 768.5995439999999,
+      "durationSeconds": 76.04145100000001,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "12-budui-10",
+      "screen": "BUDUI-10",
+      "title": "Approval detail and decision",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 844.640995,
+      "durationSeconds": 75.470522,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "13-timeui-02",
+      "screen": "TIMEUI-02",
+      "title": "Time-entry editor",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 920.1115169999999,
+      "durationSeconds": 170.786848,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "14-timeui-06",
+      "screen": "TIMEUI-06",
+      "title": "Approval detail",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 1090.898365,
+      "durationSeconds": 74.616871,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "15-cmd-01",
+      "screen": "CMD-01",
+      "title": "Executive overview",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 1165.515236,
+      "durationSeconds": 71.67124700000001,
+      "rawFrames": 20,
+      "uniqueFrames": 10
+    },
+    {
+      "slug": "16-cmd-08",
+      "screen": "CMD-08",
+      "title": "Data quality and sync operations",
+      "interaction": "Apply the certified scope filter, select a KPI or exception, expose source lineage and drill toward accountable evidence.",
+      "startSeconds": 1237.186483,
+      "durationSeconds": 72.324989,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "17-pages-cmd-08",
+      "screen": "PAGES-CMD-08",
+      "title": "GitHub Pages synchronized replay",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 1309.511472,
+      "durationSeconds": 79.344444,
+      "rawFrames": 24,
+      "uniqueFrames": 5
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+raw/
+build/*/audio/
+build/*/segments/
+build/*/*-no-captions.mp4
+build/*/concat.txt
+build/*/title-slide.png
+build/*/title-slide.svg
+build/*/*.mp4
+build/*/*.vtt

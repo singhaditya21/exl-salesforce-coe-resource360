@@ -1,0 +1,245 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:06.698
+Welcome to Master 10 — Administration, Configuration & Assurance for EXL Salesforce COE Resource 360.
+
+2
+00:00:06.698 --> 00:00:11.164
+This recording covers 8 governed stages through actual Salesforce navigation.
+
+3
+00:00:11.164 --> 00:00:16.522
+The acting personas are Administrator · Configuration Operator · Auditor · Operations.
+
+4
+00:00:16.522 --> 00:00:23.220
+Every stage uses fictional seeded data, visible selection, filtering, evidence lineage and an action outcome.
+
+5
+00:00:23.220 --> 00:00:29.472
+Salesforce remains the transactional system of record; the public companion is read-only and sanitized.
+
+6
+00:00:30.672 --> 00:00:35.638
+ADMUI-01 is Administration landing, stage 1 in Administration, Configuration & Assurance.
+
+7
+00:00:35.638 --> 00:00:41.507
+Run the five-pillar demo activation for SSO, integrations, fictional data, approvals and operations.
+
+8
+00:00:41.507 --> 00:00:51.891
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+9
+00:00:51.891 --> 00:01:04.081
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Run demo activation”.
+
+10
+00:01:04.081 --> 00:01:14.916
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+11
+00:01:14.916 --> 00:01:30.266
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+12
+00:01:30.266 --> 00:01:44.261
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+13
+00:01:45.461 --> 00:01:50.856
+ADMUI-02 is People and access, stage 2 in Administration, Configuration & Assurance.
+
+14
+00:01:50.856 --> 00:01:54.902
+Manage identity state, roles, scope, delegation and access exceptions.
+
+15
+00:01:54.902 --> 00:02:05.242
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+16
+00:02:05.242 --> 00:02:16.931
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add assignment”.
+
+17
+00:02:16.931 --> 00:02:27.720
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+18
+00:02:27.720 --> 00:02:43.005
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+19
+00:02:43.005 --> 00:02:56.941
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+20
+00:02:58.141 --> 00:03:03.168
+ADMUI-03 is Role-permission matrix, stage 3 in Administration, Configuration & Assurance.
+
+21
+00:03:03.168 --> 00:03:05.909
+Control resource-action-scope permissions with separation-of-duty checks.
+
+22
+00:03:05.909 --> 00:03:16.418
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+23
+00:03:16.418 --> 00:03:28.298
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Preview changes”.
+
+24
+00:03:28.298 --> 00:03:39.263
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+25
+00:03:39.263 --> 00:03:54.798
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+26
+00:03:54.798 --> 00:04:08.963
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+27
+00:04:10.163 --> 00:04:16.051
+ADMUI-04 is Field values and LOVs, stage 4 in Administration, Configuration & Assurance.
+
+28
+00:04:16.051 --> 00:04:19.675
+Maintain effective-dated business values, codes and deactivation impact.
+
+29
+00:04:19.675 --> 00:04:30.094
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+30
+00:04:30.094 --> 00:04:41.871
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add value”.
+
+31
+00:04:41.871 --> 00:04:52.742
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+32
+00:04:52.742 --> 00:05:08.143
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+33
+00:05:08.143 --> 00:05:22.186
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+34
+00:05:23.386 --> 00:05:28.841
+ADMUI-05 is Calendars and capacity, stage 5 in Administration, Configuration & Assurance.
+
+35
+00:05:28.841 --> 00:05:32.933
+Maintain regions, holidays, work patterns, capacity and employee overrides.
+
+36
+00:05:32.933 --> 00:05:43.389
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+37
+00:05:43.389 --> 00:05:55.209
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add calendar”.
+
+38
+00:05:55.209 --> 00:06:06.120
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+39
+00:06:06.120 --> 00:06:21.578
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+40
+00:06:21.578 --> 00:06:35.671
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+41
+00:06:36.871 --> 00:06:43.009
+ADMUI-06 is Approval and escalation policy, stage 6 in Administration, Configuration & Assurance.
+
+42
+00:06:43.009 --> 00:06:48.203
+Configure budget tiers, staffing SLA, time windows, unbilled timers and routes.
+
+43
+00:06:48.203 --> 00:06:59.064
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+44
+00:06:59.064 --> 00:07:11.813
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Create policy version”.
+
+45
+00:07:11.813 --> 00:07:23.145
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+46
+00:07:23.145 --> 00:07:39.200
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+47
+00:07:39.200 --> 00:07:53.838
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+48
+00:07:55.038 --> 00:08:00.080
+ADMUI-07 is Integration configuration, stage 7 in Administration, Configuration & Assurance.
+
+49
+00:08:00.080 --> 00:08:04.206
+Monitor non-secret connector metadata, schedules, health and authorized tests.
+
+50
+00:08:04.206 --> 00:08:14.749
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+51
+00:08:14.749 --> 00:08:26.668
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Test connection”.
+
+52
+00:08:26.668 --> 00:08:37.669
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+53
+00:08:37.669 --> 00:08:53.255
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+54
+00:08:53.255 --> 00:09:07.465
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+55
+00:09:08.665 --> 00:09:14.287
+ADMUI-08 is Import and batch operations, stage 8 in Administration, Configuration & Assurance.
+
+56
+00:09:14.287 --> 00:09:19.044
+Operate governed batches with counts, errors, retry, cancel and correlation history.
+
+57
+00:09:19.044 --> 00:09:28.990
+The acting Administrator or Configuration Operator or Auditor or Operations works only with records returned inside the effective Salesforce role and portfolio scope.
+
+58
+00:09:28.990 --> 00:09:40.666
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “View failed batches”.
+
+59
+00:09:40.666 --> 00:09:51.045
+Administrative custom permission; effective dates; no secrets; immutable evidence The screen retains CONFIG_CHANGED; SYNC_RUN; OUTBOX_RECOVERED; AUDIT_EXPORTED so the resulting choice is attributable and reviewable.
+
+60
+00:09:51.045 --> 00:10:05.748
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the admin contract rather than a generic call-to-action.
+
+61
+00:10:05.748 --> 00:10:19.154
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.

@@ -1,0 +1,51 @@
+{
+  "totalDurationSeconds": 303.855404,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 30
+    },
+    {
+      "slug": "01-aiui-01",
+      "screen": "AIUI-01",
+      "title": "Resource assistant",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 30,
+      "durationSeconds": 67.15460300000001,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "02-aiui-02",
+      "screen": "AIUI-02",
+      "title": "Recommendation detail",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 97.15460300000001,
+      "durationSeconds": 69.35628100000001,
+      "rawFrames": 24,
+      "uniqueFrames": 14
+    },
+    {
+      "slug": "03-aiui-03",
+      "screen": "AIUI-03",
+      "title": "What-if planner",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 166.51088400000003,
+      "durationSeconds": 68.575782,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "04-aiui-04",
+      "screen": "AIUI-04",
+      "title": "Agent operations",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 235.08666600000004,
+      "durationSeconds": 68.696054,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    }
+  ]
+}

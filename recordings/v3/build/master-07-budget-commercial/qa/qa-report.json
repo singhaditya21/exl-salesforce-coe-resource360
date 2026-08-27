@@ -1,0 +1,124 @@
+{
+  "id": "master-07-budget-commercial",
+  "baseline": "resource360-demo-v3.0-complete-suite",
+  "durationSeconds": 1170.169388,
+  "screenCount": 12,
+  "overviewSlides": 1,
+  "contactSheetFrames": 13,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "BUDUI-01",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 140.97882099999998
+    },
+    {
+      "screen": "BUDUI-02",
+      "frames": 20,
+      "uniqueFrames": 12,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 134.43950099999998
+    },
+    {
+      "screen": "BUDUI-03",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 72.601678
+    },
+    {
+      "screen": "BUDUI-04",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 72.430839
+    },
+    {
+      "screen": "BUDUI-05",
+      "frames": 24,
+      "uniqueFrames": 17,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 129.179955
+    },
+    {
+      "screen": "BUDUI-06",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 73.220181
+    },
+    {
+      "screen": "BUDUI-07",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 122.80712
+    },
+    {
+      "screen": "BUDUI-08",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 101.288662
+    },
+    {
+      "screen": "BUDUI-09",
+      "frames": 20,
+      "uniqueFrames": 10,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 71.70521500000001
+    },
+    {
+      "screen": "BUDUI-10",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 73.684172
+    },
+    {
+      "screen": "BUDUI-11",
+      "frames": 20,
+      "uniqueFrames": 13,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 74.030975
+    },
+    {
+      "screen": "BUDUI-12",
+      "frames": 20,
+      "uniqueFrames": 12,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 72.803855
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "1170.169388"
+    }
+  }
+}

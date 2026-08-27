@@ -1,0 +1,91 @@
+{
+  "totalDurationSeconds": 603.680664,
+  "scenes": [
+    {
+      "slug": "00-intro",
+      "screen": "Overview slide",
+      "startSeconds": 0,
+      "durationSeconds": 33.277778000000005
+    },
+    {
+      "slug": "01-timeui-01",
+      "screen": "TIMEUI-01",
+      "title": "Weekly timesheet",
+      "interaction": "Select an effective-dated plan line, compare the eight-hour capacity state, expose control evidence and continue through the visible journey.",
+      "startSeconds": 33.277778000000005,
+      "durationSeconds": 70.402857,
+      "rawFrames": 24,
+      "uniqueFrames": 15
+    },
+    {
+      "slug": "02-timeui-02",
+      "screen": "TIMEUI-02",
+      "title": "Time-entry editor",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 103.680635,
+      "durationSeconds": 70.54217700000001,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    },
+    {
+      "slug": "03-timeui-03",
+      "screen": "TIMEUI-03",
+      "title": "Submit week review",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 174.222812,
+      "durationSeconds": 71.923537,
+      "rawFrames": 20,
+      "uniqueFrames": 10
+    },
+    {
+      "slug": "04-timeui-04",
+      "screen": "TIMEUI-04",
+      "title": "Manager team view",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 246.146349,
+      "durationSeconds": 73.464218,
+      "rawFrames": 20,
+      "uniqueFrames": 10
+    },
+    {
+      "slug": "05-timeui-05",
+      "screen": "TIMEUI-05",
+      "title": "Team summary",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 319.610567,
+      "durationSeconds": 71.518141,
+      "rawFrames": 20,
+      "uniqueFrames": 13
+    },
+    {
+      "slug": "06-timeui-06",
+      "screen": "TIMEUI-06",
+      "title": "Approval detail",
+      "interaction": "Filter the user-mode records, select one evidence item, reveal source and policy lineage and prepare the accountable next action.",
+      "startSeconds": 391.128708,
+      "durationSeconds": 70.841224,
+      "rawFrames": 20,
+      "uniqueFrames": 12
+    },
+    {
+      "slug": "07-timeui-07",
+      "screen": "TIMEUI-07",
+      "title": "Controlled correction",
+      "interaction": "Filter the authorized choices, select live Salesforce evidence, expose validation lineage and prepare the governed primary action.",
+      "startSeconds": 461.96993200000003,
+      "durationSeconds": 70.803537,
+      "rawFrames": 20,
+      "uniqueFrames": 11
+    },
+    {
+      "slug": "08-timeui-08",
+      "screen": "TIMEUI-08",
+      "title": "Timesheet compliance",
+      "interaction": "Filter the certified view, inspect a KPI state, expose the common cutoff and retain the drill-down evidence.",
+      "startSeconds": 532.773469,
+      "durationSeconds": 70.825215,
+      "rawFrames": 24,
+      "uniqueFrames": 16
+    }
+  ]
+}

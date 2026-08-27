@@ -1,0 +1,133 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:05.917
+Welcome to Master 11 — Planning Intelligence for EXL Salesforce COE Resource 360.
+
+2
+00:00:05.917 --> 00:00:10.469
+This recording covers 4 governed stages through actual Salesforce navigation.
+
+3
+00:00:10.469 --> 00:00:15.476
+The acting personas are COE Staffer · Portfolio Manager · Administrator.
+
+4
+00:00:15.476 --> 00:00:22.303
+Every stage uses fictional seeded data, visible selection, filtering, evidence lineage and an action outcome.
+
+5
+00:00:22.303 --> 00:00:28.675
+Salesforce remains the transactional system of record; the public companion is read-only and sanitized.
+
+6
+00:00:30.000 --> 00:00:33.854
+AIUI-01 is Resource assistant, stage 1 in Planning Intelligence.
+
+7
+00:00:33.854 --> 00:00:38.137
+Ask evidence-backed questions across authorized staffing, capability and delivery data.
+
+8
+00:00:38.137 --> 00:00:47.559
+The acting COE Staffer or Portfolio Manager or Administrator works only with records returned inside the effective Salesforce role and portfolio scope.
+
+9
+00:00:47.559 --> 00:00:58.695
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Ask Resource360”.
+
+10
+00:00:58.695 --> 00:01:08.117
+Human confirmation; evidence links; model/version; protected attributes excluded The screen retains AI_QUERY; RECOMMENDATION_REVIEWED; HUMAN_DECISION so the resulting choice is attributable and reviewable.
+
+11
+00:01:08.117 --> 00:01:22.678
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the ai contract rather than a generic call-to-action.
+
+12
+00:01:22.678 --> 00:01:35.955
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+13
+00:01:37.155 --> 00:01:41.138
+AIUI-02 is Recommendation detail, stage 2 in Planning Intelligence.
+
+14
+00:01:41.138 --> 00:01:45.121
+Inspect candidate or reallocation factors, alternatives, impact and feedback.
+
+15
+00:01:45.121 --> 00:01:54.858
+The acting COE Staffer or Portfolio Manager or Administrator works only with records returned inside the effective Salesforce role and portfolio scope.
+
+16
+00:01:54.858 --> 00:02:06.807
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add to review”.
+
+17
+00:02:06.807 --> 00:02:16.544
+Human confirmation; evidence links; model/version; protected attributes excluded The screen retains AI_QUERY; RECOMMENDATION_REVIEWED; HUMAN_DECISION so the resulting choice is attributable and reviewable.
+
+18
+00:02:16.544 --> 00:02:31.591
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the ai contract rather than a generic call-to-action.
+
+19
+00:02:31.591 --> 00:02:45.311
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+20
+00:02:46.511 --> 00:02:50.423
+AIUI-03 is What-if planner, stage 3 in Planning Intelligence.
+
+21
+00:02:50.423 --> 00:02:55.205
+Model isolated demand, capacity, skill and margin scenarios before governed publish.
+
+22
+00:02:55.205 --> 00:03:04.768
+The acting COE Staffer or Portfolio Manager or Administrator works only with records returned inside the effective Salesforce role and portfolio scope.
+
+23
+00:03:04.768 --> 00:03:16.069
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Run scenario”.
+
+24
+00:03:16.069 --> 00:03:25.632
+Human confirmation; evidence links; model/version; protected attributes excluded The screen retains AI_QUERY; RECOMMENDATION_REVIEWED; HUMAN_DECISION so the resulting choice is attributable and reviewable.
+
+25
+00:03:25.632 --> 00:03:40.412
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the ai contract rather than a generic call-to-action.
+
+26
+00:03:40.412 --> 00:03:53.887
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+27
+00:03:55.087 --> 00:03:59.006
+AIUI-04 is Agent operations, stage 4 in Planning Intelligence.
+
+28
+00:03:59.006 --> 00:04:03.796
+Monitor agent health, inputs, tools, approvals, alerts and immutable run history.
+
+29
+00:04:03.796 --> 00:04:13.376
+The acting COE Staffer or Portfolio Manager or Administrator works only with records returned inside the effective Salesforce role and portfolio scope.
+
+30
+00:04:13.376 --> 00:04:24.698
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Pause agent”.
+
+31
+00:04:24.698 --> 00:04:34.278
+Human confirmation; evidence links; model/version; protected attributes excluded The screen retains AI_QUERY; RECOMMENDATION_REVIEWED; HUMAN_DECISION so the resulting choice is attributable and reviewable.
+
+32
+00:04:34.278 --> 00:04:49.084
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the ai contract rather than a generic call-to-action.
+
+33
+00:04:49.084 --> 00:05:02.583
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.

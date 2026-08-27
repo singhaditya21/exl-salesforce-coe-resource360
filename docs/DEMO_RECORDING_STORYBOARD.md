@@ -2,7 +2,7 @@
 
 ## Recording baseline
 
-- Release tag: `resource360-demo-v2.1-live-interaction`
+- Release tag: `resource360-demo-v3.0-complete-suite`
 - Primary runtime: Salesforce Lightning app `Resource360`
 - Public companion: `https://singhaditya21.github.io/exl-salesforce-coe-resource360/`
 - Data boundary: fictional EXL Salesforce COE demo data only
@@ -18,7 +18,7 @@ The release tag is the immutable recording source. Do not record from an uncommi
 1. Confirm the tagged commit has green quality, CodeQL and Pages deployment checks.
 2. Run `pnpm sf:prepare-demo` against `Resource360Hub`.
 3. Run `pnpm sf:test:personas` and retain the machine-readable eight-user result.
-4. Run `pnpm sf:test:ui` and retain the 103-route/57-workbench result.
+4. Run `pnpm sf:test:ui` and retain the 103-route/103-master-experience/44-workbench result.
 5. Export a fresh snapshot with `pnpm sf:export-pages`; confirm 10 accounts, 20 projects, 60 resources, 214 KPI observations, 13 forecast weeks and zero guardrail breaches.
 6. Confirm the live Pages freshness badge and `CMD-08` cutoff match the deployed snapshot.
 7. Use Salesforce Administrator **Login As** for controlled persona traversal. Do not disclose passwords, setup URLs, session URLs, record IDs or real identities.
@@ -51,7 +51,18 @@ Coverage arithmetic: `6 + 8 + 12 + 12 + 12 + 12 + 12 + 8 + 9 + 8 + 4 = 103` uniq
 | --- | --- | --- |
 | 01 — Global Entry, Home and Access | Complete · v2.1 live revision | `public/demo-videos/master-01-global-entry-home-access.mp4` · 3:07 · 1080p · six continuous interactions · narration · captions |
 | 02 — Engagement 360 | Complete · v2.1 live revision | `public/demo-videos/master-02-engagement-360.mp4` · 3:40 · 1080p · eight continuous interactions · narration · captions |
-| 03–12 | Pending recording | Title slide, narration, actual navigation, outcome evidence and QA required |
+| 03 — Staffing Demand and Search | Complete · v3.0 | `public/demo-videos/master-03-staffing-demand-resource-search.mp4` · 14:56 · 12 interactions · narration · captions · 13-state contact sheet |
+| 04 — Staffing Decisions and Capacity | Complete · v3.0 | `public/demo-videos/master-04-staffing-decisions-allocation-capacity.mp4` · 17:45 · 12 interactions · narration · captions · 13-state contact sheet |
+| 05 — Skills and Credentials I | Complete · v3.0 | `public/demo-videos/master-05-skills-credentials-part-1.mp4` · 15:17 · 12 interactions · narration · captions · 13-state contact sheet |
+| 06 — Skills and Credentials II | Complete · v3.0 | `public/demo-videos/master-06-skills-credentials-part-2.mp4` · 15:12 · 12 interactions · narration · captions · 13-state contact sheet |
+| 07 — Budgeting, WBS and Commercial Control | Complete · v3.0 | `public/demo-videos/master-07-budget-wbs-commercial-control.mp4` · 19:30 · 12 interactions · narration · captions · 13-state contact sheet |
+| 08 — Timesheet and Actuals | Complete · v3.0 | `public/demo-videos/master-08-timesheet-actuals.mp4` · 10:04 · eight interactions · narration · captions · nine-state contact sheet |
+| 09 — Command Center and Forecast | Complete · v3.0 | `public/demo-videos/master-09-command-center-forecast.mp4` · 11:51 · nine interactions · narration · captions · ten-state contact sheet |
+| 10 — Administration and Assurance | Complete · v3.0 | `public/demo-videos/master-10-administration-configuration-assurance.mp4` · 10:20 · eight interactions · narration · captions · nine-state contact sheet |
+| 11 — Planning Intelligence | Complete · v3.0 | `public/demo-videos/master-11-planning-intelligence.mp4` · 5:04 · four interactions · narration · captions · five-state contact sheet |
+| 12 — Executive Golden Path | Complete · v3.0 | `public/demo-videos/master-12-executive-golden-path.mp4` · 23:09 · 17 lifecycle interactions · Salesforce + synchronized Pages · narration · captions · 18-state contact sheet |
+
+The twelve narrated masters run for 149:55. Masters 01–11 cover 103 unique governed screens; Master 12 intentionally revisits 16 decisive Salesforce states and closes with one synchronized Pages evidence state. The five earlier Pages micro-walkthroughs remain supplemental and do not change the 12-of-12 completion position.
 
 ## Superseded early eight-video outline
 
@@ -180,7 +191,7 @@ Shot list:
 
 ## Post-production acceptance
 
-- Replace the five legacy recordings; do not mix them with the v2.1 final suite.
+- Keep the five earlier micro-walkthroughs clearly labelled as supplemental legacy evidence; never count them toward the twelve-master completion position.
 - Produce MP4/H.264 video, poster and WebVTT captions for each recording.
 - Update `public/demo-videos/manifest.json` with tagged commit, Salesforce cutoff, duration, dimensions, audio, SHA-256 and validated outcome.
 - Run `pnpm test:videos`, `pnpm test:all`, the Salesforce persona/UI gates and the live Pages spot check.

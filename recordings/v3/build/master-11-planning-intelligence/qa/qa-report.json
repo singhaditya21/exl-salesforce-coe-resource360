@@ -1,0 +1,68 @@
+{
+  "id": "master-11-planning-intelligence",
+  "baseline": "resource360-demo-v3.0-complete-suite",
+  "durationSeconds": 303.855404,
+  "screenCount": 4,
+  "overviewSlides": 1,
+  "contactSheetFrames": 5,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "AIUI-01",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 67.15460300000001
+    },
+    {
+      "screen": "AIUI-02",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 69.35628100000001
+    },
+    {
+      "screen": "AIUI-03",
+      "frames": 24,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 68.575782
+    },
+    {
+      "screen": "AIUI-04",
+      "frames": 20,
+      "uniqueFrames": 12,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 68.696054
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "303.855404"
+    }
+  }
+}

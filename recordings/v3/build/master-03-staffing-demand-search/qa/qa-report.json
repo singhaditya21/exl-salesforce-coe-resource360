@@ -1,0 +1,124 @@
+{
+  "id": "master-03-staffing-demand-search",
+  "baseline": "resource360-demo-v3.0-complete-suite",
+  "durationSeconds": 895.777409,
+  "screenCount": 12,
+  "overviewSlides": 1,
+  "contactSheetFrames": 13,
+  "continuousInteraction": true,
+  "rawCapture": [
+    {
+      "screen": "STFUI-01",
+      "frames": 28,
+      "uniqueFrames": 16,
+      "capturedDurationSeconds": 11.2,
+      "renderedDurationSeconds": 72.13242600000001
+    },
+    {
+      "screen": "STFUI-02",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 72.06367300000001
+    },
+    {
+      "screen": "STFUI-03",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 70.17034
+    },
+    {
+      "screen": "STFUI-04",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 69.37614500000001
+    },
+    {
+      "screen": "STFUI-05",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 71.520998
+    },
+    {
+      "screen": "STFUI-06",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 71.595329
+    },
+    {
+      "screen": "STFUI-07",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 71.100227
+    },
+    {
+      "screen": "STFUI-08",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 72.195828
+    },
+    {
+      "screen": "STFUI-09",
+      "frames": 20,
+      "uniqueFrames": 11,
+      "capturedDurationSeconds": 8,
+      "renderedDurationSeconds": 71.224036
+    },
+    {
+      "screen": "STFUI-10",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 71.24000000000001
+    },
+    {
+      "screen": "STFUI-11",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 70.594694
+    },
+    {
+      "screen": "STFUI-12",
+      "frames": 24,
+      "uniqueFrames": 14,
+      "capturedDurationSeconds": 9.6,
+      "renderedDurationSeconds": 71.462857
+    }
+  ],
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "30/1"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0"
+      },
+      {
+        "index": 2,
+        "codec_name": "mov_text",
+        "codec_type": "subtitle",
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "895.777409"
+    }
+  }
+}

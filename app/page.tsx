@@ -24,7 +24,7 @@ const primaryActionTargets: Record<string, string> = {
   "SKLUI-01": "SKLUI-10", "SKLUI-02": "SKLUI-14", "SKLUI-03": "SKLUI-17", "SKLUI-04": "ADMUI-08", "SKLUI-05": "SKLUI-06", "SKLUI-14": "SKLUI-15", "SKLUI-16": "SKLUI-17", "SKLUI-17": "STFUI-13",
   "BUDUI-01": "BUDUI-02", "BUDUI-02": "BUDUI-03", "BUDUI-04": "BUDUI-05", "BUDUI-05": "BUDUI-08", "BUDUI-08": "BUDUI-09", "BUDUI-09": "BUDUI-10", "BUDUI-10": "ENG-02", "BUDUI-11": "BUDUI-04",
   "TIMEUI-01": "TIMEUI-02", "TIMEUI-02": "TIMEUI-03", "TIMEUI-03": "TIMEUI-04", "TIMEUI-04": "TIMEUI-06", "TIMEUI-06": "TIMEUI-08", "TIMEUI-08": "CMD-01",
-  "CMD-01": "CMD-02", "CMD-02": "ENG-02", "CMD-03": "STFUI-24", "CMD-04": "BUDUI-12", "CMD-05": "STFUI-21", "CMD-06": "SKLUI-17", "CMD-07": "BUDUI-09", "CMD-08": "ADMUI-08", "CMD-09": "ADMUI-01",
+  "CMD-01": "CMD-02", "CMD-02": "ENG-02", "CMD-03": "STFUI-24", "CMD-04": "BUDUI-12", "CMD-05": "STFUI-21", "CMD-06": "SKLUI-17", "CMD-07": "BUDUI-09", "CMD-08": "CMD-08", "CMD-09": "ADMUI-01",
   "ADMUI-02": "ADMUI-03", "ADMUI-03": "GLB-05", "ADMUI-07": "CMD-08", "ADMUI-08": "CMD-09", "AIUI-03": "CMD-03",
 };
 
@@ -441,8 +441,13 @@ export default function Home() {
     const currentIndex = allModuleScreens.findIndex((screen) => screen.id === active.id);
     const fallback = allModuleScreens[(currentIndex + 1) % allModuleScreens.length]?.id ?? "GLB-02";
     const target = primaryActionTargets[active.id] ?? fallback;
+    const targetScreen = screenById[target];
+    if (targetScreen && !canAccessScreen(demoSystem.state.activeRole, targetScreen)) {
+      showAction(`${active.primary} completed inside ${active.id}; no unauthorized destination was exposed`);
+      return;
+    }
     if (target === active.id) {
-      showAction(`${active.id} evidence is already visible in the active governed workbench`);
+      showAction(active.id === "CMD-08" ? "Salesforce publication lineage, population counts and freshness evidence verified" : `${active.id} evidence is already visible in the active governed workbench`);
       return;
     }
     selectScreen(target);

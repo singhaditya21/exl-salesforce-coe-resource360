@@ -1,0 +1,357 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:06.990
+Welcome to Master 07 — Budgeting, WBS & Commercial Control for EXL Salesforce COE Resource 360.
+
+2
+00:00:06.990 --> 00:00:11.358
+This recording covers 12 governed stages through actual Salesforce navigation.
+
+3
+00:00:11.358 --> 00:00:17.037
+The acting personas are Finance / PMO · Project Manager · Budget Approver.
+
+4
+00:00:17.037 --> 00:00:23.590
+Every stage uses fictional seeded data, visible selection, filtering, evidence lineage and an action outcome.
+
+5
+00:00:23.590 --> 00:00:29.706
+Salesforce remains the transactional system of record; the public companion is read-only and sanitized.
+
+6
+00:00:30.906 --> 00:00:42.766
+BUDUI-01 is Budget portfolio and projects, stage 1 in Budgeting, WBS & Commercial Control.
+
+7
+00:00:42.766 --> 00:00:52.085
+Compare project economics, approval state and active versions across the portfolio.
+
+8
+00:00:52.085 --> 00:01:12.416
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+9
+00:01:12.416 --> 00:01:34.442
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Create budget”.
+
+10
+00:01:34.442 --> 00:01:55.621
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+11
+00:01:55.621 --> 00:02:24.424
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+12
+00:02:24.424 --> 00:02:50.685
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+13
+00:02:51.885 --> 00:03:01.694
+BUDUI-02 is Budget details, stage 2 in Budgeting, WBS & Commercial Control.
+
+14
+00:03:01.694 --> 00:03:09.868
+Set governed revenue, uplift, contingency, travel, duration and currency assumptions.
+
+15
+00:03:09.868 --> 00:03:29.487
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+16
+00:03:29.487 --> 00:03:51.557
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Save and continue”.
+
+17
+00:03:51.557 --> 00:04:11.992
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+18
+00:04:11.992 --> 00:04:39.785
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+19
+00:04:39.785 --> 00:05:05.125
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+20
+00:05:06.325 --> 00:05:11.614
+BUDUI-03 is Phase plan, stage 3 in Budgeting, WBS & Commercial Control.
+
+21
+00:05:11.614 --> 00:05:16.021
+Build contiguous delivery phases and validate them against engagement dates.
+
+22
+00:05:16.021 --> 00:05:26.599
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+23
+00:05:26.599 --> 00:05:38.059
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add phase”.
+
+24
+00:05:38.059 --> 00:05:49.078
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+25
+00:05:49.078 --> 00:06:04.063
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+26
+00:06:04.063 --> 00:06:17.726
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+27
+00:06:18.926 --> 00:06:24.573
+BUDUI-04 is Resource plan grid, stage 4 in Budgeting, WBS & Commercial Control.
+
+28
+00:06:24.573 --> 00:06:28.916
+Plan role, location, rate and monthly effort across phase-colored periods.
+
+29
+00:06:28.916 --> 00:06:39.340
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+30
+00:06:39.340 --> 00:06:51.067
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Add plan row”.
+
+31
+00:06:51.067 --> 00:07:01.925
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+32
+00:07:01.925 --> 00:07:16.693
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+33
+00:07:16.693 --> 00:07:30.157
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+34
+00:07:31.357 --> 00:07:42.216
+BUDUI-05 is WBS and P&L summary, stage 5 in Budgeting, WBS & Commercial Control.
+
+35
+00:07:42.216 --> 00:07:50.748
+Reconcile effort, labor, travel, cost, revenue, gross margin and blended cost.
+
+36
+00:07:50.748 --> 00:08:09.363
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+37
+00:08:09.363 --> 00:08:29.530
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Review version”.
+
+38
+00:08:29.530 --> 00:08:48.921
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+39
+00:08:48.921 --> 00:09:15.292
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+40
+00:09:15.292 --> 00:09:39.337
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+41
+00:09:40.537 --> 00:09:46.317
+BUDUI-06 is Versions and timeline, stage 6 in Budgeting, WBS & Commercial Control.
+
+42
+00:09:46.317 --> 00:09:50.318
+Review immutable budget versions, decisions and current economic signature.
+
+43
+00:09:50.318 --> 00:10:00.987
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+44
+00:10:00.987 --> 00:10:12.546
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Compare versions”.
+
+45
+00:10:12.546 --> 00:10:23.660
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+46
+00:10:23.660 --> 00:10:38.776
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+47
+00:10:38.776 --> 00:10:52.557
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+48
+00:10:53.757 --> 00:11:02.710
+BUDUI-07 is Version comparison, stage 7 in Budgeting, WBS & Commercial Control.
+
+49
+00:11:02.710 --> 00:11:10.171
+Explain assumption, phase, resource, cost and margin changes between versions.
+
+50
+00:11:10.171 --> 00:11:28.076
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+51
+00:11:28.076 --> 00:11:48.219
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Return to version”.
+
+52
+00:11:48.219 --> 00:12:06.871
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+53
+00:12:06.871 --> 00:12:32.237
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+54
+00:12:32.237 --> 00:12:55.364
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+55
+00:12:56.564 --> 00:13:04.450
+BUDUI-08 is Submit and routing, stage 8 in Budgeting, WBS & Commercial Control.
+
+56
+00:13:04.450 --> 00:13:11.123
+Preview the active margin policy and route a version for approval.
+
+57
+00:13:11.123 --> 00:13:25.681
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+58
+00:13:25.681 --> 00:13:42.059
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Submit for approval”.
+
+59
+00:13:42.059 --> 00:13:57.224
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+60
+00:13:57.224 --> 00:14:17.849
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+61
+00:14:17.849 --> 00:14:36.653
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+62
+00:14:37.853 --> 00:14:43.012
+BUDUI-09 is Approval queue, stage 9 in Budgeting, WBS & Commercial Control.
+
+63
+00:14:43.012 --> 00:14:47.311
+Prioritize budgets by active approval level, margin, change and age.
+
+64
+00:14:47.311 --> 00:14:57.629
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+65
+00:14:57.629 --> 00:15:09.666
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Review next budget approval”.
+
+66
+00:15:09.666 --> 00:15:20.414
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+67
+00:15:20.414 --> 00:15:35.031
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+68
+00:15:35.031 --> 00:15:48.358
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+69
+00:15:49.558 --> 00:15:55.746
+BUDUI-10 is Approval detail and decision, stage 10 in Budgeting, WBS & Commercial Control.
+
+70
+00:15:55.746 --> 00:16:00.166
+Decide against a read-only version, comparison, exceptions and prior approvals.
+
+71
+00:16:00.166 --> 00:16:10.773
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+72
+00:16:10.773 --> 00:16:22.265
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Approve budget”.
+
+73
+00:16:22.265 --> 00:16:33.314
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+74
+00:16:33.314 --> 00:16:48.341
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+75
+00:16:48.341 --> 00:17:02.043
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+76
+00:17:03.243 --> 00:17:09.498
+BUDUI-11 is Budget import and export, stage 11 in Budgeting, WBS & Commercial Control.
+
+77
+00:17:09.498 --> 00:17:13.519
+Validate controlled workbooks, recalculate server-side and audit every batch.
+
+78
+00:17:13.519 --> 00:17:24.243
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+79
+00:17:24.243 --> 00:17:35.860
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Import workbook”.
+
+80
+00:17:35.860 --> 00:17:47.030
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+81
+00:17:47.030 --> 00:18:02.222
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+82
+00:18:02.222 --> 00:18:16.074
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
+
+83
+00:18:17.274 --> 00:18:22.578
+BUDUI-12 is Budget administration, stage 12 in Budgeting, WBS & Commercial Control.
+
+84
+00:18:22.578 --> 00:18:26.997
+Maintain margin tiers, routes, access, fields and policy effective dates.
+
+85
+00:18:26.997 --> 00:18:37.605
+The acting Finance / PMO or Project Manager or Budget Approver works only with records returned inside the effective Salesforce role and portfolio scope.
+
+86
+00:18:37.605 --> 00:18:49.097
+In this live interaction we use the visible filters, select a specific record or planning state, expose source ownership and server-validation evidence, and prepare “Preview policy”.
+
+87
+00:18:49.097 --> 00:19:00.147
+WBS reconciliation; active commercial value; economic signature; sequential role; no self-approval The screen retains BUDGET_VERSION_CREATED; BUDGET_SUBMITTED; BUDGET_APPROVED/REJECTED/INVALIDATED so the resulting choice is attributable and reviewable.
+
+88
+00:19:00.147 --> 00:19:15.175
+The operational surface differs from the preceding stage because it is designed around this decision: its live dataset, visual model, exception state and primary control follow the budget contract rather than a generic call-to-action.
+
+89
+00:19:15.175 --> 00:19:28.877
+No EXL production identity or integration is invoked; all records are fictional, while the Salesforce metadata, Apex authority, sharing, effective dates and audit behavior are genuine in the Developer Edition demonstration.
