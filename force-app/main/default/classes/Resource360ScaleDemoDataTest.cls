@@ -45,4 +45,12 @@ private class Resource360ScaleDemoDataTest {
         for(Work_Unit__c unit:[SELECT Engagement__c,Project_Module__r.Engagement__c FROM Work_Unit__c WHERE Project_Module__c!=null])System.assertEquals(unit.Engagement__c,unit.Project_Module__r.Engagement__c);
         System.assertEquals(4,[SELECT COUNT() FROM Project_Closeout__c WHERE Closeout_ID__c LIKE 'SCALE-CLOSE-%' AND State__c='Approved']);
     }
+
+    @IsTest
+    static void capacityReconciliationCanReuseAnExistingIdempotencyKey(){
+        Staffing_Request__c existing=[SELECT Id FROM Staffing_Request__c LIMIT 1];
+        Staffing_Request__c replay=Resource360ScaleDemoData.capacityRequestForUpsert(existing,'SCALE-CAP-SR-EXL-TEST-BASE');
+        System.assertEquals(existing.Id,replay.Id);
+        System.assertEquals('SCALE-CAP-SR-EXL-TEST-BASE',replay.Idempotency_Key__c,'External-id upsert requires the idempotency key even when the record Id is already known.');
+    }
 }

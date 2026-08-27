@@ -8,21 +8,6 @@ const experience = (dataset, filter, visual, focus, evidence, target, operation 
  * owns its dataset, filter, visual archetype, operational focus and evidence.
  */
 export const ROUTE_EXPERIENCES = Object.freeze({
-    "GLB-01": experience("identity", "active", "identity", "Federated-entry assurance", "Salesforce session, MFA assumption, mapped group and effective scope are shown separately.", "GLB-02"),
-    "GLB-02": experience("summary", "all", "home", "Role-prioritized work", "Live staffing, economics, utilization and exception metrics determine the next task.", "STFUI-01"),
-    "GLB-04": experience("search", "all", "search", "Cross-object discovery", "Results are limited to records readable under the selected effective role.", null, "refresh"),
-    "GLB-05": experience("roleScopes", "active", "scope", "Effective role and scope", "Certified user, organization, portfolio, validity and assignment source prove authorization.", "ADMUI-02"),
-    "GLB-06": experience("help", "all", "help", "Salesforce-native guidance", "Runbooks, walkthroughs, release boundary and support routes are available without leaving the app.", null, "refresh"),
-
-    "ENG-01": experience("engagements", "active", "list", "Scoped engagement portfolio", "Source freshness, project owner, tower and effective dates support selection.", "ENG-02"),
-    "ENG-02": experience("commercialReferences", "active", "overview", "Commercial and delivery overview", "Engagement, SOW/PO context and source cutoff are reconciled before downstream actions.", "ENG-03"),
-    "ENG-03": experience("allocations", "current", "roster", "Current engagement roster", "Accepted allocation, classification, role and effective window are the staffing truth.", "STFUI-01"),
-    "ENG-04": experience("budgets", "current", "economics", "Current budget economics", "Only the signed current version drives staffing and profitability controls.", "BUDUI-02"),
-    "ENG-05": experience("timesheets", "submittedOrApproved", "actuals", "Approved and submitted actuals", "Weekly actuals retain approval state, exception code and accountable deadline.", "TIMEUI-08"),
-    "ENG-06": experience("workUnits", "active", "milestones", "WBS and delivery milestones", "Work-unit code, phase, owner context and dates align budget and time.", "BUDUI-03"),
-    "ENG-07": experience("notifications", "open", "risk", "Accountable risk and action register", "Original trigger, severity, owner, first-seen time and closure evidence remain attributable.", "GLB-03"),
-    "ENG-08": experience("allocations", "all", "timeline", "Effective-dated allocation history", "Originating request, version, state and dates preserve staffing lineage.", null, "export"),
-
     "STFUI-04": experience("resources", "active", "finder", "Named-practitioner lookup", "Employee identity, role, location and availability lead into the governed schedule.", "STFUI-05"),
     "STFUI-08": experience("resources", "active", "drawer", "Candidate evidence drawer", "Profile, role, tower, manager, location and availability remain source-attributed.", "SKLUI-05"),
     "STFUI-09": experience("classifications", "all", "classification", "Classification and control gate", "Billability, accountable owner, review date and control evidence are server governed.", "STFUI-10"),
@@ -77,7 +62,8 @@ export const ROUTE_EXPERIENCES = Object.freeze({
 
 export const DECLARATIVE_SCREEN_IDS = Object.freeze(Object.keys(ROUTE_EXPERIENCES));
 export const SPECIALIZED_SCREEN_IDS = Object.freeze([
-    "GLB-03","STFUI-01","STFUI-02","STFUI-03","STFUI-05","STFUI-06","STFUI-07","STFUI-10","STFUI-11","STFUI-12","STFUI-15","STFUI-16","STFUI-17",
+    "GLB-01","GLB-02","GLB-03","GLB-04","GLB-05","GLB-06","ENG-01","ENG-02","ENG-03","ENG-04","ENG-05","ENG-06","ENG-07","ENG-08",
+    "STFUI-01","STFUI-02","STFUI-03","STFUI-05","STFUI-06","STFUI-07","STFUI-10","STFUI-11","STFUI-12","STFUI-15","STFUI-16","STFUI-17",
     "SKLUI-01","SKLUI-05","SKLUI-06","SKLUI-07","SKLUI-08","SKLUI-09","SKLUI-10","SKLUI-11","SKLUI-16","SKLUI-17",
     "BUDUI-02","BUDUI-03","BUDUI-04","BUDUI-05","BUDUI-06","BUDUI-07","BUDUI-11","TIMEUI-01","TIMEUI-02","TIMEUI-08",
     "CMD-01","CMD-02","CMD-04","CMD-07","CMD-08","ADMUI-01","ADMUI-02","ADMUI-03","ADMUI-04","ADMUI-06","ADMUI-07","ADMUI-08","AIUI-03"

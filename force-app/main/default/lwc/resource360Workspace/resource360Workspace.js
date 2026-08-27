@@ -121,10 +121,12 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     assistantQuestion = "Which available Salesforce practitioner best fits the next priority request?";
     assistantResponse;
     agentPaused = false;
+    recordingMode = false;
 
     @wire(CurrentPageReference)
     setCurrentPageReference(pageReference) {
         const requested = pageReference?.state?.c__screen;
+        this.recordingMode = pageReference?.state?.c__recording === "1";
         if (requested && SCREENS.some((screen) => screen.id === requested)) {
             this.selectedScreenId = requested;
             this.selectedModule = SCREENS.find((screen) => screen.id === requested).module;
@@ -239,11 +241,11 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     }
 
     get signedInUserName() {
-        return this.data.user?.Name || "Loading identity";
+        return this.recordingMode ? "Demo User" : (this.data.user?.Name || "Loading identity");
     }
 
     get signedInUserId() {
-        return this.data.user?.Id || "";
+        return this.recordingMode ? "" : (this.data.user?.Id || "");
     }
 
     get summaryCards() {
@@ -326,8 +328,12 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
     get showKpiHierarchy() { return ["CMD-01", "CMD-02", "CMD-04", "CMD-07"].includes(this.selectedScreenId); }
     get showCapacityControl() { return ["STFUI-05","STFUI-10","STFUI-12","SKLUI-05","CMD-01","CMD-02","CMD-04","CMD-07"].includes(this.selectedScreenId); }
     get showScenarioPlanner() { return this.selectedScreenId === "AIUI-03"; }
-    get showAlertLifecycle() { return this.selectedScreenId === "GLB-03"; }
-    get showHelpCenter() { return this.selectedScreenId === "GLB-06"; }
+    get showGlobalMasterExperience() { return ["GLB-01","GLB-02","GLB-03","GLB-04","GLB-05","GLB-06"].includes(this.selectedScreenId); }
+    get showEngagementMasterExperience() { return ["ENG-01","ENG-02","ENG-03","ENG-04","ENG-05","ENG-06","ENG-07","ENG-08"].includes(this.selectedScreenId); }
+    get showMasterExperience() { return this.showGlobalMasterExperience || this.showEngagementMasterExperience; }
+    get showStandardExperience() { return !this.showMasterExperience; }
+    get showAlertLifecycle() { return false; }
+    get showHelpCenter() { return false; }
     get helpVideos() { return HELP_VIDEOS; }
     get routeExperience() {
         const configured = routeExperienceFor(this.selectedScreenId);
@@ -340,8 +346,8 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
             panelClass: `route-workbench route-workbench_${configured.visual}`
         };
     }
-    get showRouteWorkbench() { return Boolean(this.routeExperience); }
-    get showDefaultRecords() { return !this.showRouteWorkbench; }
+    get showRouteWorkbench() { return this.showStandardExperience && Boolean(this.routeExperience); }
+    get showDefaultRecords() { return this.showStandardExperience && !this.showRouteWorkbench; }
     get routeSteps() {
         const experience = this.routeExperience;
         if (!experience) return [];
@@ -660,7 +666,23 @@ export default class Resource360Workspace extends NavigationMixin(LightningEleme
 
     handleScreen(event) {
         this.selectedScreenId = event.currentTarget.dataset.screen;
-        this[NavigationMixin.Navigate]({ type: "standard__navItemPage", attributes: { apiName: "Resource360_Workspace" }, state: { c__screen: this.selectedScreenId } });
+        this.navigateToScreen(this.selectedScreenId);
+    }
+    handleExperienceNavigate(event) {
+        const requested = event.detail;
+        const screen = SCREENS.find((item) => item.id === requested);
+        if (!screen) return;
+        this.selectedModule = screen.module;
+        this.selectedScreenId = screen.id;
+        this.navigateToScreen(screen.id);
+    }
+    handleExperienceRole(event) {
+        this.activeRole = event.detail;
+    }
+    navigateToScreen(screenId) {
+        const state = { c__screen: screenId };
+        if (this.recordingMode) state.c__recording = "1";
+        this[NavigationMixin.Navigate]({ type: "standard__navItemPage", attributes: { apiName: "Resource360_Workspace" }, state });
     }
     handleRole(event) {
         this.activeRole = event.detail.value;

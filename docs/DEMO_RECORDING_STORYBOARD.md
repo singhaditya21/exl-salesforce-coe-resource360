@@ -2,13 +2,13 @@
 
 ## Recording baseline
 
-- Release tag: `resource360-demo-v2.0-recording`
+- Release tag: `resource360-demo-v2.1-live-interaction`
 - Primary runtime: Salesforce Lightning app `Resource360`
 - Public companion: `https://singhaditya21.github.io/exl-salesforce-coe-resource360/`
 - Data boundary: fictional EXL Salesforce COE demo data only
 - Salesforce identities: eight controlled composite demo users representing eighteen governed business personas
 - Public snapshot: allowlisted, build-time, read-only and free of Salesforce IDs, usernames, email addresses and credentials
-- Capture standard: 1920×1080, 30 fps, 100% browser zoom, visible cursor, narration plus edited English captions
+- Capture standard: 1920×1080, 30 fps, 100% browser zoom, visible selected/filter/action states, narration plus edited English captions
 - Every master opens with one branded coverage slide naming the video, personas, governed screen IDs and demo boundary before product footage begins.
 
 The release tag is the immutable recording source. Do not record from an uncommitted tree or from a branch ahead of that tag.
@@ -30,8 +30,8 @@ The eleven functional masters below cover all 103 governed screens exactly once.
 
 | Master | Duration target | Governed screen coverage | Primary narrative |
 | --- | ---: | --- | --- |
-| 01 — Global Entry, Home and Access | 8 min | `GLB-01`–`GLB-06` (6) | Identity assurance, role-aware home, notifications, search, scope, preferences and help |
-| 02 — Engagement 360 | 12 min | `ENG-01`–`ENG-08` (8) | Account/project hierarchy, contracts, payments, modules, work units, resources and delivery economics |
+| 01 — Global Entry, Home and Access | 3–4 min | `GLB-01`–`GLB-06` (6) | Identity assurance, role-aware home, notifications, search, scope, preferences and help |
+| 02 — Engagement 360 | 3–5 min | `ENG-01`–`ENG-08` (8) | Account/project hierarchy, commercial lineage, resources, economics, actuals, WBS, risks and allocation history |
 | 03 — Staffing Demand and Search | 16 min | `STFUI-01`–`STFUI-12` (12) | Demand, availability, eligibility, ranking, explainability and project context |
 | 04 — Staffing Decisions and Capacity | 16 min | `STFUI-13`–`STFUI-24` (12) | Soft demand, human decision, allocation, Gantt publication and controlled over-allocation |
 | 05 — Skills and Credentials I | 16 min | `SKLUI-01`–`SKLUI-12` (12) | Resource skill profile, claims, evidence, credentials, taxonomy and gaps |
@@ -49,8 +49,8 @@ Coverage arithmetic: `6 + 8 + 12 + 12 + 12 + 12 + 12 + 8 + 9 + 8 + 4 = 103` uniq
 
 | Master | Status | Validated artifact |
 | --- | --- | --- |
-| 01 — Global Entry, Home and Access | Complete | `public/demo-videos/master-01-global-entry-home-access.mp4` · 8:05 · 1080p · narration · captions |
-| 02 — Engagement 360 | Complete | `public/demo-videos/master-02-engagement-360.mp4` · 13:32 · 1080p · narration · captions |
+| 01 — Global Entry, Home and Access | Complete · v2.1 live revision | `public/demo-videos/master-01-global-entry-home-access.mp4` · 3:07 · 1080p · six continuous interactions · narration · captions |
+| 02 — Engagement 360 | Complete · v2.1 live revision | `public/demo-videos/master-02-engagement-360.mp4` · 3:40 · 1080p · eight continuous interactions · narration · captions |
 | 03–12 | Pending recording | Title slide, narration, actual navigation, outcome evidence and QA required |
 
 ## Superseded early eight-video outline
@@ -180,7 +180,7 @@ Shot list:
 
 ## Post-production acceptance
 
-- Replace the five legacy recordings; do not mix them with the v2.0 final suite.
+- Replace the five legacy recordings; do not mix them with the v2.1 final suite.
 - Produce MP4/H.264 video, poster and WebVTT captions for each recording.
 - Update `public/demo-videos/manifest.json` with tagged commit, Salesforce cutoff, duration, dimensions, audio, SHA-256 and validated outcome.
 - Run `pnpm test:videos`, `pnpm test:all`, the Salesforce persona/UI gates and the live Pages spot check.

@@ -13,8 +13,8 @@ describe("Resource 360 governed Salesforce screen coverage", () => {
 
     it("implements every one of the 103 PRD screens exactly once", () => {
         expect(screens).toHaveLength(103);
-        expect(SPECIALIZED_SCREEN_IDS).toHaveLength(46);
-        expect(DECLARATIVE_SCREEN_IDS).toHaveLength(57);
+        expect(SPECIALIZED_SCREEN_IDS).toHaveLength(59);
+        expect(DECLARATIVE_SCREEN_IDS).toHaveLength(44);
         expect(implementedIds.size).toBe(103);
         expect(screens.map((screen) => screen.id).filter((id) => !implementedIds.has(id))).toEqual([]);
         expect(SPECIALIZED_SCREEN_IDS.filter((id) => DECLARATIVE_SCREEN_IDS.includes(id))).toEqual([]);
@@ -33,7 +33,7 @@ describe("Resource 360 governed Salesforce screen coverage", () => {
     });
 
     it("keeps help, AI and governed write routes explicit", () => {
-        expect(routeExperienceFor("GLB-06")).toMatchObject({ dataset: "help", visual: "help", operation: "refresh" });
+        expect(SPECIALIZED_SCREEN_IDS).toEqual(expect.arrayContaining(["GLB-06", "ENG-01", "ENG-08"]));
         expect(routeExperienceFor("AIUI-01")).toMatchObject({ dataset: "recommendations", operation: "assistant" });
         expect(routeExperienceFor("STFUI-23")).toMatchObject({ dataset: "staffingRequests", operation: "staffingDecision" });
         expect(routeExperienceFor("BUDUI-10")).toMatchObject({ dataset: "budgets", operation: "budgetDecision" });
