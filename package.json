@@ -33,7 +33,7 @@
     "sf:open": "sf org open --target-org Resource360Hub --path /lightning/app/c__Resource360"
   },
   "dependencies": {
-    "react": "19.2.8",
+    "react": "19.3.0",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "@playwright/test": "^1.62.1",
     "@salesforce/sfdx-lwc-jest": "^7.9.0",
     "@types/node": "22.19.19",
-    "@types/react": "19.2.18",
+    "@types/react": "19.3.0",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "eslint": "9.39.4",
